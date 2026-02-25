@@ -1,5 +1,5 @@
 {
-  "name": "context-handoff",
+  "name": "handoff",
   "version": "0.1.0",
   "description": "saves your context before claude compresses it. the one hook everyone needs",
   "author": {

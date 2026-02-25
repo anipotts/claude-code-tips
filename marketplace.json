@@ -1,13 +1,11 @@
 {
   "name": "claude-code-tips",
-  "description": "claude code plugins, hooks, agents, and resources. all tested",
+  "description": "claude code plugins, hooks, agents, skills, and the miner — everything tested",
   "author": "anipotts",
   "repository": "https://github.com/anipotts/claude-code-tips",
   "plugins": [
-    "context-handoff",
-    "panopticon",
-    "subagent-orchestrator",
-    "session-analytics",
+    "miner",
+    "handoff",
     "broadcast"
   ]
 }

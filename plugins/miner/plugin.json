@@ -1,0 +1,17 @@
+{
+  "name": "miner",
+  "version": "0.1.0",
+  "description": "mines every claude code session into a local sqlite database. echo, scar, gauge, imprint.",
+  "author": { "name": "Ani Potts" },
+  "license": "MIT",
+  "hooks": {
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ingest.sh", "async": true }] }],
+    "SubagentStop": [{ "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent.sh" }] }],
+    "PreCompact": [{ "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/compact.sh" }] }],
+    "PostToolUse": [{ "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/tool-log.sh" }] }],
+    "SessionStart": [{ "matcher": "startup", "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/startup.sh" }] }],
+    "PostToolUseFailure": [{ "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scar.sh" }] }],
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/gauge.sh" }] }]
+  },
+  "keywords": ["mining", "analytics", "sqlite", "history", "search", "echo", "scar", "gauge", "imprint"]
+}

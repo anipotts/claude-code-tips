@@ -1,76 +1,39 @@
 # claude-code-tips
 
-claude plugins, hooks, agents, and resources.
+plugins, hooks, agents, skills, and a comprehensive guide for claude code. all tested.
 
 by [ani potts](https://github.com/anipotts)
 
 ## whats here
 
-### [plugins](./plugins/)
-
-installable claude code plugins:
-
-| plugin | what it does |
+| thing | what it does |
 |---|---|
-| [context-handoff](./plugins/context-handoff/) | saves your context to markdown before claude compresses it|
-| [panopticon](./plugins/panopticon/) | logs every single tool action to sqlite. know exactly what claude did |
+| [miner](./plugins/miner/) | flagship plugin. mines every session to sqlite -- echo, scar, gauge, imprint |
+| [handoff](./plugins/handoff/) | saves your context before compression hits |
 | [broadcast](./plugins/broadcast/) | async notifications when claude ships something |
-| [subagent-orchestrator](./plugins/subagent-orchestrator/) | tracks subagent lifecycle and rebalances work when teammates go idle |
-| [session-analytics](./plugins/session-analytics/) | tracks session patterns (duration, frequency, time-of-day, tool usage) |
-
-### [hooks](./hooks/)
-
-ready-to-use hook scripts. copy em in:
-
-- **safety-guard.sh** — blocks force-push to main, `rm -rf /`, DROP TABLE, the stuff that ruins your day
-- **panopticon.sh** — logs every tool action to sqlite
-- **context-save.sh** — saves context before compression so you never lose your plan
-- **rudy-notify.sh** — custom notification routing (macos/slack/twilio template)
-
-### [docs](./docs/)
-
-- [the complete claude code hooks guide](./docs/hooks-guide.md) — every hook event, tested examples, advanced patterns
-- [how to create claude code plugins](./docs/plugin-creation.md) — plugin.json spec, full walkthrough, marketplace publishing
-- [battle-tested subagent patterns](./docs/subagent-patterns.md) — parallel research, specialist delegation, scout pattern, anti-patterns
-
-### [agents](./agents/)
-
-reusable subagent definitions — drop in `.claude/agents/` and go:
-
-| agent | what it does |
-|---|---|
-| [code-sweeper](./agents/code-sweeper.md) | finds dead code, unused imports, stale TODOs — returns a cleanup report |
-| [pr-narrator](./agents/pr-narrator.md) | reads your diff and writes a PR description that actually sounds like you |
-| [dep-checker](./agents/dep-checker.md) | scans deps for outdated versions, security advisories, version conflicts |
-| [vibe-check](./agents/vibe-check.md) | quick architecture review — tells you if something smells off |
-| [test-writer](./agents/test-writer.md) | generates the edge case tests the original dev probably missed |
-
-### [skills](./skills/)
-
-multi-step workflows, one slash command:
-
-| skill | what it does |
-|---|---|
-| [/ship](./skills/ship.md) | stage, commit, push, open a PR in one shot |
-| [/sweep](./skills/sweep.md) | find and clean up dead code with interactive confirmation |
-| [/quicktest](./skills/quicktest.md) | find and run the test file for whatever you're working on |
-
-### [commands](./commands/)
-
-| command | what it does |
-|---|---|
-| [/deps](./commands/deps.md) | check all deps for updates and security issues |
-| [/stats](./commands/stats.md) | project health dashboard — loc, git activity, coverage |
+| [/sift](./skills/sift.md) | search and analyze your session history via miner.db |
+| [/ledger](./commands/ledger.md) | quick session dashboard -- tokens, costs, tools, projects |
+| [/improve](./skills/improve.md) | CLAUDE.md self-improvement from git history |
+| [/ship](./skills/ship.md), [/sweep](./skills/sweep.md), [/quicktest](./skills/quicktest.md) | workflow skills -- commit+PR, dead code cleanup, run relevant tests |
+| [analyst](./agents/analyst.md), [explorer](./agents/explorer.md), [guardian](./agents/guardian.md) + [5 more](./agents/) | reusable subagent definitions |
+| [hooks](./hooks/) | safety-guard, context-save, knowledge-builder, panopticon |
+| [the guide](./docs/guide.md) | comprehensive claude code guide (beginner to crazy) |
 
 ## quick start
 
-copy a hook:
+install the miner plugin:
 
 ```bash
-cp hooks/safety-guard.sh /path/to/your/project/.claude/hooks/
+claude plugin add anipotts/miner
 ```
 
-add to `.claude/settings.json`:
+or copy a hook:
+
+```bash
+cp hooks/safety-guard.sh ~/.claude/hooks/
+```
+
+add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -78,18 +41,29 @@ add to `.claude/settings.json`:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [{"type": "command", "command": ".claude/hooks/safety-guard.sh"}]
+        "hooks": [{"type": "command", "command": "~/.claude/hooks/safety-guard.sh"}]
       }
     ]
   }
 }
 ```
 
-## install as plugin
+## the guide
 
-```bash
-claude plugin add anipotts/claude-code-tips
-```
+[docs/guide.md](./docs/guide.md) -- a three-tier progressive guide to claude code:
+
+- **beginner** -- install, CLAUDE.md, permissions, settings
+- **intermediate** -- extensibility stack, hooks, plugins, subagents, MCP
+- **claude code crazy** -- miner, headless CLI tools, self-improvement loops, daemons, github actions
+
+## docs
+
+- [hooks guide](./docs/hooks-guide.md) -- every hook event, tested examples, advanced patterns
+- [plugin creation](./docs/plugin-creation.md) -- plugin.json spec, full walkthrough, marketplace publishing
+- [subagent patterns](./docs/subagent-patterns.md) -- parallel research, scout pattern, worktree isolation, anti-patterns
+- [mcp servers](./docs/mcp-servers.md) -- playwright, context7, building your own
+- [cli tools](./docs/cli-tools.md) -- headless claude as a shell function factory
+- [automation](./docs/automation.md) -- daemons, cron, file watchers, guardian agent
 
 ## license
 

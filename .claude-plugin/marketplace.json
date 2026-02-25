@@ -5,64 +5,36 @@
     "email": "ani@anipotts.com"
   },
   "metadata": {
-    "description": "claude code plugins, hooks, agents, and resources. all tested",
-    "version": "0.1.0"
+    "description": "claude code plugins, hooks, agents, skills, and the miner — everything tested",
+    "version": "0.2.0"
   },
   "plugins": [
     {
-      "name": "context-handoff",
-      "source": "./plugins/context-handoff",
-      "description": "saves your context before claude compresses it. the one hook everyone needs",
+      "name": "miner",
+      "source": "./plugins/miner",
+      "description": "mines every claude code session into a local sqlite database. echo, scar, gauge, imprint.",
       "version": "0.1.0",
-      "author": {
-        "name": "Ani Potts"
-      },
-      "keywords": ["context", "handoff", "session", "precompact"],
-      "category": "productivity"
+      "author": { "name": "Ani Potts" },
+      "keywords": ["mining", "analytics", "sqlite", "history", "search", "echo", "scar", "gauge"],
+      "category": "analytics"
     },
     {
-      "name": "panopticon",
-      "source": "./plugins/panopticon",
-      "description": "logs every single tool action to sqlite. know exactly what claude did",
+      "name": "handoff",
+      "source": "./plugins/handoff",
+      "description": "saves your context before claude compresses it. the one hook everyone needs",
       "version": "0.1.0",
-      "author": {
-        "name": "Ani Potts"
-      },
-      "keywords": ["logging", "audit", "sqlite", "analytics"],
-      "category": "observability"
+      "author": { "name": "Ani Potts" },
+      "keywords": ["context", "handoff", "session", "precompact"],
+      "category": "productivity"
     },
     {
       "name": "broadcast",
       "source": "./plugins/broadcast",
       "description": "async notifications when claude ships something. slack, discord, wherever — fire and forget",
       "version": "0.1.0",
-      "author": {
-        "name": "Ani Potts"
-      },
+      "author": { "name": "Ani Potts" },
       "keywords": ["notifications", "async", "slack", "discord"],
       "category": "notifications"
-    },
-    {
-      "name": "subagent-orchestrator",
-      "source": "./plugins/subagent-orchestrator",
-      "description": "tracks subagent lifecycle and rebalances work when teammates go idle",
-      "version": "0.1.0",
-      "author": {
-        "name": "Ani Potts"
-      },
-      "keywords": ["subagent", "orchestration", "teams", "scheduling"],
-      "category": "orchestration"
-    },
-    {
-      "name": "session-analytics",
-      "source": "./plugins/session-analytics",
-      "description": "tracks session patterns — duration, frequency, time-of-day, which tools you actually use",
-      "version": "0.1.0",
-      "author": {
-        "name": "Ani Potts"
-      },
-      "keywords": ["analytics", "sessions", "patterns", "tracking"],
-      "category": "analytics"
     }
   ]
 }
