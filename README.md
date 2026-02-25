@@ -12,11 +12,11 @@ installable claude code plugins:
 
 | plugin | what it does |
 |---|---|
-| [context-handoff](./plugins/context-handoff/) | saves your context before claude compresses it. the one hook everyone needs |
+| [context-handoff](./plugins/context-handoff/) | saves your context to markdown before claude compresses it|
 | [panopticon](./plugins/panopticon/) | logs every single tool action to sqlite. know exactly what claude did |
-| [broadcast](./plugins/broadcast/) | async notifications when claude ships something. slack, discord, wherever |
+| [broadcast](./plugins/broadcast/) | async notifications when claude ships something |
 | [subagent-orchestrator](./plugins/subagent-orchestrator/) | tracks subagent lifecycle and rebalances work when teammates go idle |
-| [session-analytics](./plugins/session-analytics/) | tracks session patterns — duration, frequency, time-of-day, tool usage |
+| [session-analytics](./plugins/session-analytics/) | tracks session patterns (duration, frequency, time-of-day, tool usage) |
 
 ### [hooks](./hooks/)
 
@@ -51,7 +51,7 @@ multi-step workflows, one slash command:
 
 | skill | what it does |
 |---|---|
-| [/ship](./skills/ship.md) | stage, commit, push, open a PR — one shot |
+| [/ship](./skills/ship.md) | stage, commit, push, open a PR in one shot |
 | [/sweep](./skills/sweep.md) | find and clean up dead code with interactive confirmation |
 | [/quicktest](./skills/quicktest.md) | find and run the test file for whatever you're working on |
 
