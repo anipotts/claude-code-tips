@@ -183,19 +183,20 @@ LIMIT 15;
 Cache hit ratio — how well prompt caching is working:
 
 ```sql
+-- total_input_tokens is already the non-cached portion (API's input_tokens field)
+-- total input sent to model = input + cache_create + cache_read
 SELECT model,
        SUM(total_cache_read_tokens) AS cache_hits,
        SUM(total_cache_creation_tokens) AS cache_writes,
-       SUM(total_input_tokens - total_cache_read_tokens - total_cache_creation_tokens) AS uncached,
+       SUM(total_input_tokens) AS uncached,
        ROUND(
          SUM(total_cache_read_tokens) * 100.0 /
-         NULLIF(SUM(total_cache_read_tokens + total_cache_creation_tokens +
-                    (total_input_tokens - total_cache_read_tokens - total_cache_creation_tokens)), 0),
+         NULLIF(SUM(total_input_tokens + total_cache_creation_tokens + total_cache_read_tokens), 0),
          1
        ) AS cache_hit_pct
 FROM sessions
 WHERE start_time >= date('now', '-7 days')
-  AND total_input_tokens > 0
+  AND (total_input_tokens + total_cache_creation_tokens + total_cache_read_tokens) > 0
 GROUP BY model
 ORDER BY cache_hit_pct DESC;
 ```

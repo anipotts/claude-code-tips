@@ -1071,8 +1071,70 @@ def print_stats(db_path: pathlib.Path) -> None:
             "SELECT SUM(estimated_cost_usd) FROM session_costs"
         )
         row = cursor.fetchone()
-        if row and row[0]:
-            print(f"\n  Estimated total cost: ${row[0]:.2f}")
+        total_cost = row[0] if row and row[0] else 0
+
+        if total_cost:
+            print(f"\n  Estimated total cost: ${total_cost:,.2f}")
+
+            # Cost by model tier
+            cursor.execute(
+                "SELECT "
+                "  CASE "
+                "    WHEN model LIKE '%opus%' THEN 'opus' "
+                "    WHEN model LIKE '%sonnet%' THEN 'sonnet' "
+                "    WHEN model LIKE '%haiku%' THEN 'haiku' "
+                "    ELSE 'other' "
+                "  END AS tier, "
+                "  COUNT(*) AS sessions, "
+                "  ROUND(SUM(estimated_cost_usd), 2) AS cost "
+                "FROM session_costs "
+                "WHERE model IS NOT NULL AND model <> '<synthetic>' "
+                "GROUP BY tier ORDER BY cost DESC"
+            )
+            rows = cursor.fetchall()
+            if rows:
+                print(f"\n  Cost by model:")
+                for row in rows:
+                    pct = row[2] / total_cost * 100 if total_cost else 0
+                    print(f"    {row[0]:10s} {row[1]:>5} sessions  ${row[2]:>10,.2f}  ({pct:.0f}%)")
+
+            # Top projects by cost
+            cursor.execute(
+                "SELECT project_name, COUNT(*) as sessions, "
+                "  ROUND(SUM(estimated_cost_usd), 2) AS cost "
+                "FROM session_costs "
+                "WHERE project_name IS NOT NULL "
+                "GROUP BY project_name ORDER BY cost DESC LIMIT 10"
+            )
+            rows = cursor.fetchall()
+            if rows:
+                print(f"\n  Top projects (by cost):")
+                for row in rows:
+                    name = row[0] or "(unknown)"
+                    if len(name) > 30:
+                        name = "..." + name[-27:]
+                    pct = row[2] / total_cost * 100 if total_cost else 0
+                    print(f"    {name:30s} {row[1]:>5} sessions  ${row[2]:>10,.2f}  ({pct:.0f}%)")
+
+            # Cache efficiency
+            cursor.execute(
+                "SELECT SUM(total_cache_read_tokens), "
+                "  SUM(total_cache_creation_tokens), "
+                "  SUM(total_input_tokens) "
+                "FROM sessions "
+                "WHERE model IS NOT NULL AND model <> '<synthetic>'"
+            )
+            row = cursor.fetchone()
+            if row and row[0]:
+                cache_read, cache_create, uncached = row[0], row[1], row[2]
+                total_input = cache_read + cache_create + uncached
+                if total_input > 0:
+                    hit_rate = cache_read / total_input * 100
+                    print(f"\n  Cache efficiency: {hit_rate:.1f}% hit rate")
+                if cache_create > 0:
+                    ratio = cache_read / cache_create
+                    print(f"  Cache read:write ratio: {ratio:.1f}x")
+
     except sqlite3.OperationalError:
         pass  # View may not exist
 

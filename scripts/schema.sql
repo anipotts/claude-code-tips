@@ -217,6 +217,53 @@ SELECT
 FROM sessions s;
 
 -- ============================================================
+-- CONVENIENCE VIEWS
+-- ============================================================
+
+-- project-level cost summary (most useful view for dashboards)
+CREATE VIEW IF NOT EXISTS project_costs AS
+SELECT
+    s.project_name,
+    COUNT(*) AS sessions,
+    SUM(CASE WHEN s.is_subagent = 0 THEN 1 ELSE 0 END) AS main_sessions,
+    SUM(CASE WHEN s.is_subagent = 1 THEN 1 ELSE 0 END) AS subagent_sessions,
+    SUM(s.total_input_tokens) AS input_tokens,
+    SUM(s.total_output_tokens) AS output_tokens,
+    SUM(s.total_cache_creation_tokens) AS cache_creation_tokens,
+    SUM(s.total_cache_read_tokens) AS cache_read_tokens,
+    SUM(sc.estimated_cost_usd) AS estimated_cost_usd,
+    MIN(s.start_time) AS first_session,
+    MAX(s.start_time) AS last_session,
+    SUM(s.tool_use_count) AS tool_calls
+FROM sessions s
+JOIN session_costs sc ON s.id = sc.id
+WHERE s.project_name IS NOT NULL
+GROUP BY s.project_name;
+
+-- daily cost summary (for trend analysis)
+CREATE VIEW IF NOT EXISTS daily_costs AS
+SELECT
+    SUBSTR(sc.start_time, 1, 10) AS date,
+    COUNT(*) AS sessions,
+    SUM(sc.total_input_tokens) AS input_tokens,
+    SUM(sc.total_output_tokens) AS output_tokens,
+    SUM(sc.total_cache_read_tokens) AS cache_read_tokens,
+    SUM(sc.estimated_cost_usd) AS estimated_cost_usd
+FROM session_costs sc
+WHERE sc.start_time IS NOT NULL
+GROUP BY SUBSTR(sc.start_time, 1, 10);
+
+-- tool usage summary
+CREATE VIEW IF NOT EXISTS tool_usage AS
+SELECT
+    tool_name,
+    COUNT(*) AS total_uses,
+    COUNT(DISTINCT session_id) AS sessions_used_in,
+    ROUND(COUNT(*) * 1.0 / COUNT(DISTINCT session_id), 1) AS avg_per_session
+FROM tool_calls
+GROUP BY tool_name;
+
+-- ============================================================
 -- INDEXES
 -- ============================================================
 CREATE INDEX IF NOT EXISTS idx_sessions_project ON sessions(project_name);

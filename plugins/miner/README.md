@@ -77,18 +77,72 @@ all features default to enabled. set any to `false` to disable.
 
 ## database
 
-the database lives at `~/.claude/miner.db`. schema is defined in `scripts/schema.sql`. query it directly:
+the database lives at `~/.claude/miner.db`. schema is defined in `scripts/schema.sql`.
+
+### quick stats
+
+```bash
+python3 scripts/mine.py --stats
+```
+
+shows sessions, messages, tool calls, tokens, cost breakdown by model and project, cache efficiency.
+
+### cost tracking
+
+miner tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus $15/$75, sonnet $3/$15, haiku $0.80/$4 per 1M tokens, with cache discounts).
+
+this tells you what your usage _would_ cost at API rates — useful for understanding the value of a Max subscription or tracking actual API spend.
+
+convenience views:
+
+| view | what it does |
+|---|---|
+| `session_costs` | per-session cost estimate with token breakdown |
+| `project_costs` | per-project cost, session count, date range |
+| `daily_costs` | per-day cost and token totals (for trends) |
+| `tool_usage` | tool frequency, sessions used in, avg per session |
+
+```bash
+# total lifetime cost
+sqlite3 ~/.claude/miner.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM session_costs;"
+
+# cost by project
+sqlite3 ~/.claude/miner.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) AS cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
+
+# daily spend this week
+sqlite3 ~/.claude/miner.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) AS cost FROM daily_costs WHERE date >= date('now', '-7 days');"
+
+# cache efficiency
+sqlite3 ~/.claude/miner.db "SELECT printf('%.1f%%', SUM(cache_read_tokens) * 100.0 / SUM(input_tokens + cache_creation_tokens + cache_read_tokens)) AS hit_rate FROM project_costs;"
+```
+
+### how costs are calculated
+
+the API reports four token buckets per request:
+
+| bucket | what it is | opus price |
+|---|---|---|
+| `input_tokens` | non-cached input | $15/1M |
+| `cache_read_input_tokens` | context re-read from cache | $1.50/1M (90% off) |
+| `cache_creation_input_tokens` | new context written to cache | $18.75/1M (25% premium) |
+| `output_tokens` | claude's response | $75/1M |
+
+in a typical claude code session, **90%+ of the cost is cache tokens** — every tool call re-sends the conversation context. a long opus session with 100+ tool calls can easily generate billions of cache read tokens.
+
+**important:** `input_tokens` is already the non-cached portion. the total input sent to the model = `input_tokens + cache_creation + cache_read`. don't subtract cache from input — they're separate buckets.
+
+### raw queries
 
 ```bash
 # sessions today
 sqlite3 ~/.claude/miner.db "SELECT project_name, model, start_time FROM sessions WHERE date(start_time) = date('now');"
 
 # most used tools
-sqlite3 ~/.claude/miner.db "SELECT tool_name, COUNT(*) as n FROM tool_calls GROUP BY tool_name ORDER BY n DESC LIMIT 10;"
+sqlite3 ~/.claude/miner.db "SELECT tool_name, total_uses FROM tool_usage ORDER BY total_uses DESC LIMIT 10;"
 
-# search past prompts
+# full-text search past prompts
 sqlite3 ~/.claude/miner.db "SELECT content_preview FROM messages_fts WHERE messages_fts MATCH 'streaming';"
 
-# cost per project
-sqlite3 ~/.claude/miner.db "SELECT project_name, printf('$%.2f', SUM(estimated_cost_usd)) FROM session_costs GROUP BY project_name ORDER BY SUM(estimated_cost_usd) DESC;"
+# backfill all history
+python3 scripts/mine.py --workers 8
 ```
