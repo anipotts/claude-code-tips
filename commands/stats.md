@@ -2,6 +2,8 @@
 
 quick project health dashboard. lines of code, file counts, git activity, test coverage if available
 
+> also available as `/ledger project` — same data, single entry point
+
 ## what it does
 
 gives you a snapshot of your project in one command. how big is it, what languages, how active, how tested. the stuff you'd want to know when you open a codebase for the first time
