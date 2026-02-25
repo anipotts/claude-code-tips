@@ -1,14 +1,15 @@
-# mine-stats.tape — shows the full --stats dashboard with cost breakdown
+# mine-stats.tape — the full --stats dashboard with cost breakdown
 # Record: vhs gifs/mine-stats.tape
 
 Output gifs/mine-stats.gif
 Set Theme "Catppuccin Mocha"
 Set FontFamily "JetBrains Mono"
-Set FontSize 14
-Set Width 900
-Set Height 700
+Set FontSize 13
+Set Width 960
+Set Height 1050
 Set Padding 20
+Set TypingSpeed 40ms
 
 Type "python3 scripts/mine.py --stats"
 Enter
-Sleep 5s
+Sleep 4s

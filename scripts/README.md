@@ -1,5 +1,7 @@
 # scripts
 
+<img src="../gifs/mine-stats.gif" width="100%" alt="mine.py --stats dashboard" />
+
 ## mine.py
 
 parses all Claude Code JSONL conversation logs from `~/.claude/projects/` into a normalized SQLite database at `~/.claude/miner.db`. extracts sessions, messages, tool calls, token usage, costs, and subagent relationships with full-text search.

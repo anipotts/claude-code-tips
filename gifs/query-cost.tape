@@ -4,21 +4,20 @@
 Output gifs/query-cost.gif
 Set Theme "Catppuccin Mocha"
 Set FontFamily "JetBrains Mono"
-Set FontSize 14
-Set Width 900
-Set Height 600
+Set FontSize 13
+Set Width 960
+Set Height 560
 Set Padding 20
+Set TypingSpeed 30ms
 
 Type "sqlite3 -header -column ~/.claude/miner.db"
 Enter
-Sleep 1s
+Sleep 500ms
 
-Type "SELECT project_name, sessions, ROUND(estimated_cost_usd, 2) AS cost"
-Enter
-Type "FROM project_costs ORDER BY cost DESC LIMIT 15;"
+Type "SELECT project_name, sessions, ROUND(estimated_cost_usd,2) AS cost FROM project_costs ORDER BY cost DESC LIMIT 15;"
 Enter
 Sleep 3s
 
 Type ".quit"
 Enter
-Sleep 1s
+Sleep 500ms

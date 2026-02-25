@@ -2,6 +2,8 @@
 
 mines every claude code session into a local sqlite database. total recall for your dev work.
 
+<img src="../../gifs/query-cost.gif" width="100%" alt="project_costs VIEW showing spending by project" />
+
 ## what it does
 
 miner runs 7 hooks across the claude code session lifecycle, building a searchable history of everything you do. the database lives at `~/.claude/miner.db` and uses the schema from `scripts/schema.sql`.
@@ -88,6 +90,8 @@ python3 scripts/mine.py --stats
 shows sessions, messages, tool calls, tokens, cost breakdown by model and project, cache efficiency.
 
 ### cost tracking
+
+<img src="../../gifs/query-daily.gif" width="100%" alt="daily_costs VIEW showing spending trend" />
 
 miner tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus $15/$75, sonnet $3/$15, haiku $0.80/$4 per 1M tokens, with cache discounts).
 

@@ -2,6 +2,8 @@
 
 standalone scripts that plug into claude code's hook system. copy to `~/.claude/hooks/` or reference from your project, then wire up in settings.
 
+<img src="../gifs/hook-safety.gif" width="100%" alt="safety-guard hook blocking a force push" />
+
 ## available hooks
 
 | hook | event | description |

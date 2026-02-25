@@ -4,21 +4,20 @@
 Output gifs/query-daily.gif
 Set Theme "Catppuccin Mocha"
 Set FontFamily "JetBrains Mono"
-Set FontSize 14
-Set Width 900
-Set Height 500
+Set FontSize 13
+Set Width 960
+Set Height 560
 Set Padding 20
+Set TypingSpeed 30ms
 
 Type "sqlite3 -header -column ~/.claude/miner.db"
 Enter
-Sleep 1s
+Sleep 500ms
 
-Type "SELECT date, sessions, ROUND(estimated_cost_usd, 2) AS cost"
-Enter
-Type "FROM daily_costs ORDER BY date DESC LIMIT 14;"
+Type "SELECT date, sessions, ROUND(estimated_cost_usd,2) AS cost FROM daily_costs ORDER BY date DESC LIMIT 14;"
 Enter
 Sleep 3s
 
 Type ".quit"
 Enter
-Sleep 1s
+Sleep 500ms

@@ -24,14 +24,29 @@ for tape in gifs/*.tape; do vhs "$tape"; done
 
 ## priority GIFs
 
-| tape file | output | what it shows |
-|---|---|---|
-| `mine-stats.tape` | `mine-stats.gif` | `--stats` dashboard with cost breakdown |
-| `sift-search.tape` | `sift-search.gif` | FTS5 full-text search across sessions |
-| `query-cost.tape` | `query-cost.gif` | project_costs VIEW — spending by project |
-| `query-daily.tape` | `query-daily.gif` | daily_costs VIEW — spending trend |
-| `hook-safety.tape` | `hook-safety.gif` | safety-guard blocking a dangerous command |
-| `plugin-install.tape` | `plugin-install.gif` | `claude plugin add anipotts/miner` |
+### mine-stats — `python3 scripts/mine.py --stats`
+
+<img src="./mine-stats.gif" width="100%" alt="mine.py --stats dashboard" />
+
+### sift-search — FTS5 full-text search
+
+<img src="./sift-search.gif" width="100%" alt="FTS5 search across sessions" />
+
+### query-cost — project spending
+
+<img src="./query-cost.gif" width="100%" alt="project_costs VIEW" />
+
+### query-daily — daily spending trend
+
+<img src="./query-daily.gif" width="100%" alt="daily_costs VIEW" />
+
+### hook-safety — blocking dangerous commands
+
+<img src="./hook-safety.gif" width="100%" alt="safety-guard hook blocking force push" />
+
+### mine-dryrun — first-run preview
+
+<img src="./mine-dryrun.gif" width="100%" alt="mine.py --dry-run" />
 
 ## notes
 
