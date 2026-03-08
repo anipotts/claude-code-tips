@@ -48,6 +48,12 @@ def read_existing_docs() -> dict[str, str]:
         "docs/agent-teams.md",
         "docs/cost-analysis.md",
         "docs/mcp-servers.md",
+        "docs/subagent-patterns.md",
+        "docs/plugin-creation.md",
+        "docs/comparisons/pricing.md",
+        "docs/troubleshooting.md",
+        "docs/glossary.md",
+        "docs/resources.md",
     ]
     for f in files_to_read:
         path = REPO_ROOT / f
@@ -87,6 +93,10 @@ this repo has these docs:
 - docs/mcp-servers.md -- MCP server guide
 - docs/subagent-patterns.md -- subagent patterns
 - docs/plugin-creation.md -- plugin creation guide
+- docs/comparisons/ -- competitor comparison docs (codex, cursor, gemini, antigravity, pricing)
+- docs/troubleshooting.md -- common problems and fixes
+- docs/glossary.md -- key terms
+- docs/resources.md -- curated external resources
 
 current state of key files:
 {docs_context}
@@ -150,6 +160,80 @@ def process_changes(changes: list[dict]) -> list[dict]:
         edits = []
 
     return edits
+
+
+def validate_edits(edits: list[dict]) -> list[dict]:
+    """Validate proposed edits before applying. Returns only valid edits."""
+    valid = []
+    file_cache: dict[str, str] = {}  # cache file contents to avoid duplicate reads
+
+    for i, edit in enumerate(edits):
+        file_str = edit.get("file", "")
+        file_path = REPO_ROOT / file_str
+        action = edit.get("action", "")
+        section = edit.get("section", "")
+        content = edit.get("content", "")
+        reason = edit.get("reason", "")
+
+        # check file path stays within expected directories (string prefix check)
+        allowed_prefixes = ("docs/", "examples/")
+        if not any(file_str.startswith(p) for p in allowed_prefixes):
+            print(f"  VALIDATE SKIP [{i}]: {file_str} outside allowed dirs {allowed_prefixes}", file=sys.stderr)
+            continue
+
+        # path traversal prevention -- resolved path must stay inside repo root
+        try:
+            resolved = file_path.resolve()
+            if not resolved.is_relative_to(REPO_ROOT.resolve()):
+                print(f"  VALIDATE SKIP [{i}]: {file_str} escapes repo root (path traversal)", file=sys.stderr)
+                continue
+        except (ValueError, OSError):
+            print(f"  VALIDATE SKIP [{i}]: {file_str} has invalid path", file=sys.stderr)
+            continue
+
+        # check file exists (except for add_section which could create new content)
+        if not file_path.exists():
+            print(f"  VALIDATE SKIP [{i}]: {file_path} does not exist", file=sys.stderr)
+            continue
+
+        # check content is non-empty
+        if not content.strip():
+            print(f"  VALIDATE SKIP [{i}]: empty content for {file_path}", file=sys.stderr)
+            continue
+
+        # check action is valid
+        if action not in ("append", "replace", "add_section"):
+            print(f"  VALIDATE SKIP [{i}]: unknown action '{action}' for {file_path}", file=sys.stderr)
+            continue
+
+        # read file content (cached)
+        if file_str not in file_cache:
+            file_cache[file_str] = file_path.read_text()
+        current = file_cache[file_str]
+
+        # for replace/append, check section exists in file
+        if action in ("replace", "append") and section:
+            if section not in current:
+                print(f"  VALIDATE SKIP [{i}]: section '{section[:60]}...' not found in {file_path}", file=sys.stderr)
+                continue
+
+        # check content doesn't accidentally nuke structure (replace with much shorter content)
+        if action == "replace" and section:
+            idx = current.index(section)
+            rest = current[idx + len(section):]
+            next_sec = _find_next_section(rest)
+            if next_sec != -1:
+                existing_section_len = next_sec
+                if len(content) < existing_section_len * 0.2 and existing_section_len > 200:
+                    print(f"  VALIDATE WARN [{i}]: replacement is <20% of original section size "
+                          f"({len(content)} vs {existing_section_len}), skipping to be safe", file=sys.stderr)
+                    continue
+
+        print(f"  VALIDATE OK [{i}]: {file_str} ({action}) -- {reason}")
+        valid.append(edit)
+
+    print(f"\nValidation: {len(valid)}/{len(edits)} edits passed")
+    return valid
 
 
 def apply_edits(edits: list[dict]) -> list[str]:
@@ -278,8 +362,13 @@ def main():
 
     modified = []
     if edits:
-        modified = apply_edits(edits)
-        print(f"Modified {len(modified)} files: {modified}")
+        print("\nValidating edits...")
+        edits = validate_edits(edits)
+        if edits:
+            modified = apply_edits(edits)
+            print(f"Modified {len(modified)} files: {modified}")
+        else:
+            print("No valid edits after validation")
 
     write_pr_body(changes, edits, modified)
     print(f"PR body written to {PR_BODY_FILE}")
