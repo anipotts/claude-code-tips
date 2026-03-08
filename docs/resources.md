@@ -15,7 +15,7 @@ curated external resources for claude code. these are genuinely useful -- not an
 ## official SDKs
 
 - [claude-code-sdk-python](https://github.com/anthropics/claude-code-sdk-python) -- official Python SDK for building on claude code programmatically
-- [claude-code-sdk-js](https://github.com/anthropics/claude-code-sdk-js) -- official JS/TS SDK for headless sessions, CI/CD integration, and custom tooling
+- [claude-code-sdk-js](https://www.npmjs.com/package/@anthropic-ai/claude-code) -- official JS/TS SDK for headless sessions, CI/CD integration, and custom tooling
 
 ## community repos
 
@@ -31,7 +31,7 @@ curated external resources for claude code. these are genuinely useful -- not an
 ## tools & integrations
 
 - [context7](https://context7.com) -- MCP server for up-to-date library documentation. keeps claude from hallucinating API details by giving it live docs
-- [playwright MCP](https://github.com/anthropics/claude-code/tree/main/packages/playwright-mcp) -- browser automation via MCP. useful for testing web apps, taking screenshots, and interacting with UIs
+- [playwright MCP](https://www.npmjs.com/package/@anthropic-ai/claude-code-playwright) -- browser automation via MCP. useful for testing web apps, taking screenshots, and interacting with UIs
 - [Piebald-AI](https://github.com/Piebald-AI) -- system prompt extractions and analysis for claude code and competitors
 
 ## this repo's comparison docs

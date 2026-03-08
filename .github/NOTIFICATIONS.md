@@ -43,7 +43,7 @@ when you get a notification:
 1. **tap the PR link** to review the diff on GitHub (or GitHub Mobile)
 2. if it looks good, either:
    - merge directly in GitHub Mobile
-   - or go to [Actions → Quick Merge](../../actions/workflows/quick-merge.yml), tap "Run workflow", enter the PR number
+   - or go to **Actions → Quick Merge** in the repo, tap "Run workflow", enter the PR number
 
 ## required secret (for the pipeline itself)
 

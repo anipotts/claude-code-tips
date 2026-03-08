@@ -203,7 +203,7 @@ sqlite3 ~/.claude/miner.db "SELECT model, COUNT(*) as sessions, printf('%.0f%%',
 
 this gets cached into every session and nudges the right behavior from the start.
 
-> [usage controls docs](https://docs.anthropic.com/en/docs/claude-code/manage-costs)
+> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ---
 

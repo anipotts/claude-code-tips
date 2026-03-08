@@ -289,7 +289,7 @@ claude code has a lot of extension points. this is the hierarchy from simplest t
 - if you want to share hooks with others, make it a plugin
 - if you need to connect to external services, use MCP
 
-> [extending docs](https://docs.anthropic.com/en/docs/claude-code/extending)
+> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ---
 
@@ -588,7 +588,7 @@ MCP (model context protocol) lets claude connect to external tools and data sour
 
 see [mcp-servers.md](./mcp-servers.md) for the deep dive on setup and building your own.
 
-> [MCP docs](https://docs.anthropic.com/en/docs/claude-code/mcp-servers)
+> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ---
 
