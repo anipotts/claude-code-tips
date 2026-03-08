@@ -78,8 +78,8 @@ Run all dashboard queries in one call:
 ```bash
 sqlite3 -header -separator '|' ~/.claude/miner.db <<'SQL'
 SELECT 'TODAY' s, COUNT(*) sessions, COALESCE(SUM(total_input_tokens + total_output_tokens), 0) tokens, COALESCE(SUM(duration_active_seconds), 0) secs FROM sessions WHERE date(start_time) = date('now') AND is_subagent = 0;
-SELECT 'WEEK' s, COALESCE(ROUND(SUM(estimated_cost_usd), 2), 0) cost, COUNT(*) sessions FROM session_costs WHERE start_time >= date('now', '-7 days');
-SELECT 'TOOLS' s, tool_name, COUNT(*) uses FROM tool_calls WHERE timestamp >= date('now', '-7 days') GROUP BY tool_name ORDER BY uses DESC LIMIT 5;
+SELECT 'WEEK' s, COALESCE(ROUND(SUM(estimated_cost_usd), 2), 0) cost, COUNT(*) sessions FROM session_costs WHERE start_time >= date('now', '-7 days') AND is_subagent = 0;
+SELECT 'TOOLS' s, tc.tool_name, COUNT(*) uses FROM tool_calls tc JOIN sessions s2 ON tc.session_id = s2.id WHERE tc.timestamp >= date('now', '-7 days') AND s2.is_subagent = 0 GROUP BY tc.tool_name ORDER BY uses DESC LIMIT 5;
 SELECT 'MODELS' s, model, COUNT(*) sessions FROM sessions WHERE date(start_time) = date('now') AND is_subagent = 0 GROUP BY model;
 SQL
 ```
@@ -95,7 +95,7 @@ SELECT model, COUNT(*) as sessions,
   SUM(total_cache_read_tokens) as cache_read_tok,
   SUM(total_cache_creation_tokens) as cache_write_tok
 FROM sessions
-WHERE model IS NOT NULL AND model != '' AND model != '<synthetic>'
+WHERE model IS NOT NULL AND model != '' AND model != '<synthetic>' AND is_subagent = 0
 GROUP BY model ORDER BY sessions DESC;
 ```
 
@@ -105,15 +105,23 @@ Apply these rates per million tokens:
 - sonnet 4.x: input $3, output $15, cache_read $0.30, cache_write $3.75
 - haiku 4.5: input $1, output $5, cache_read $0.10, cache_write $1.25
 
-Show: per-model table with dollar amounts, category breakdown (input/output/cache), model family summary, ROI vs subscription.
+Show:
+1. Per-model table with dollar amounts and category breakdown (input/output/cache)
+2. Total API inference value across all models
+3. ROI comparison against every plan tier:
+   - `$X total API value → Xx Pro ($20/mo) · Xx Max 5x ($100/mo) · Xx Max 20x ($200/mo)`
+   - Calculate ROI using the number of months the data spans (first session to last session)
+4. Monthly average API value and per-plan ROI
 
 ### COST ("cost", "spent", "spend", "how much", "billing", "expensive")
+
+Show API inference value (not "cost") with plan ROI context. Include a one-line ROI summary at the bottom: `monthly avg: $X API value → Xx Pro · Xx Max 5x · Xx Max 20x`
 
 ```sql
 SELECT project_name, COUNT(*) AS sessions,
        ROUND(SUM(estimated_cost_usd), 2) AS cost_usd
 FROM session_costs
-WHERE start_time >= date('now', 'start of month')
+WHERE start_time >= date('now', 'start of month') AND is_subagent = 0
 GROUP BY project_name ORDER BY cost_usd DESC;
 ```
 
@@ -121,7 +129,7 @@ GROUP BY project_name ORDER BY cost_usd DESC;
 SELECT model, COUNT(*) AS sessions,
        ROUND(SUM(estimated_cost_usd), 2) AS cost_usd
 FROM session_costs
-WHERE start_time >= date('now', 'start of month')
+WHERE start_time >= date('now', 'start of month') AND is_subagent = 0
 GROUP BY model ORDER BY cost_usd DESC;
 ```
 
@@ -146,7 +154,7 @@ SELECT model,
        ROUND(SUM(total_cache_read_tokens) * 100.0 /
          NULLIF(SUM(total_input_tokens + total_cache_creation_tokens + total_cache_read_tokens), 0), 1
        ) AS hit_pct
-FROM sessions WHERE start_time >= date('now', '-7 days')
+FROM sessions WHERE start_time >= date('now', '-7 days') AND is_subagent = 0
   AND (total_input_tokens + total_cache_creation_tokens + total_cache_read_tokens) > 0
 GROUP BY model ORDER BY hit_pct DESC;
 ```
@@ -182,7 +190,7 @@ SELECT model, COUNT(*) AS sessions,
        ROUND(SUM(sc.estimated_cost_usd), 2) AS cost_usd,
        ROUND(AVG(total_output_tokens), 0) AS avg_output
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
-WHERE s.start_time >= date('now', '-30 days')
+WHERE s.start_time >= date('now', '-30 days') AND s.is_subagent = 0
 GROUP BY model ORDER BY sessions DESC;
 ```
 
@@ -195,7 +203,8 @@ SELECT s.project_name, s.start_time,
        (SELECT COUNT(*) FROM errors e WHERE e.session_id = s.id) AS errors,
        SUBSTR(s.first_user_prompt, 1, 80) AS prompt
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
-WHERE (SELECT COUNT(*) FROM errors e WHERE e.session_id = s.id) >= 3
+WHERE s.is_subagent = 0
+  AND (SELECT COUNT(*) FROM errors e WHERE e.session_id = s.id) >= 3
   AND s.total_input_tokens + s.total_output_tokens > 50000
 ORDER BY tokens DESC LIMIT 10;
 ```
@@ -206,7 +215,8 @@ ORDER BY tokens DESC LIMIT 10;
 WITH ordered AS (
   SELECT session_id, tool_name,
          LAG(tool_name) OVER (PARTITION BY session_id ORDER BY timestamp, id) AS prev
-  FROM tool_calls WHERE timestamp >= date('now', '-7 days')
+  FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
+  WHERE tc.timestamp >= date('now', '-7 days') AND s.is_subagent = 0
 )
 SELECT prev || ' -> ' || tool_name AS flow, COUNT(*) AS n
 FROM ordered WHERE prev IS NOT NULL
@@ -221,10 +231,10 @@ FROM project_paths WHERE project_name LIKE '%<name>%';
 
 SELECT s.start_time, s.model,
        s.total_input_tokens + s.total_output_tokens AS tokens,
-       ROUND(sc.estimated_cost_usd, 2) AS cost,
+       ROUND(sc.estimated_cost_usd, 2) AS cost_usd,
        SUBSTR(s.first_user_prompt, 1, 80) AS prompt
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
-WHERE s.project_name LIKE '%<name>%'
+WHERE s.project_name LIKE '%<name>%' AND s.is_subagent = 0
 ORDER BY s.start_time DESC LIMIT 20;
 ```
 
@@ -269,7 +279,32 @@ Output as compact dashboard tables.
 
 If the user's question doesn't match a known intent, construct a reasonable SQL query. The schema has: sessions, messages, tool_calls, subagents, errors, project_paths, session_costs (view), project_costs (view), daily_costs (view), tool_usage (view), messages_fts (FTS5).
 
+## Subscription plan awareness
+
+The `estimated_cost_usd` field is the **API inference value** — what this usage would cost at published per-token API rates. Most Claude Code users are on a subscription, not paying per-token.
+
+**Claude Code plans (current as of 2026):**
+| plan | price | notes |
+|---|---|---|
+| Pro | $20/month | Claude Code included with usage limits |
+| Max 5x | $100/month | 5x the Pro usage allowance |
+| Max 20x | $200/month | 20x the Pro usage allowance |
+| Team | $25-100/user/month | Pro or Max tiers |
+| Enterprise | custom pricing | custom usage tiers |
+| API direct | per-token | billed at published rates |
+
+**How to label costs:**
+- NEVER call the `estimated_cost_usd` value "cost" or "spend" without qualification — subscription users aren't paying that amount
+- Use **"API value"** or **"inference value"** as the primary label (what this usage would cost at API rates)
+- When showing totals, add ROI context: `API value: $2,055 (10.3x your $200/mo Max 20x plan)`
+- For the VALUE intent, always show the ROI comparison against known plan prices
+- If you don't know the user's plan, show the value and list what it would mean across plans:
+  - `$2,055 API value this week → 103x Pro ($20) · 21x Max 5x ($100) · 10x Max 20x ($200)`
+
+**Subsidization context:** Anthropic subsidizes Claude Code subscription usage significantly. A Max 20x user generating $25K of API value paid $200/month — that's ~125x ROI. This is real value. Frame it positively.
+
 ## Rules
+- **All session counts, costs, tokens, and model breakdowns default to user sessions (is_subagent = 0).** Subagent data may be shown as secondary/subtext but never as the primary number
 - Start every output with a data freshness line: `data: <first_date> to <latest_date> (<N> sessions)`
 - Run ALL queries for an intent in ONE Bash call. Present ONE formatted result. No intermediate outputs
 - Format dollar amounts with commas and 2 decimal places
@@ -277,6 +312,7 @@ If the user's question doesn't match a known intent, construct a reasonable SQL 
 - If a query returns no results, say so clearly
 - Read-only. NEVER write to the database (except during backfill via mine.py)
 - Keep output compact — dashboard, not essay
+- Label dollar amounts as "API value" not "cost" — see plan awareness section above
 - When showing API value: real numbers from published anthropic pricing. don't hedge or disclaim
 - If the user asks something you can't answer from the data, say what data would be needed
 - Escape single quotes by doubling them (O'Brien → O''Brien) in SQL strings
