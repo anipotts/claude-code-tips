@@ -1,27 +1,29 @@
 <!-- tested with: claude code v1.0.34 -->
 
-# claude code vs antigravity
+# claude code vs google antigravity
 
-> last verified: 2026-03-08 | sources: [antigravity pricing](https://antigravity.dev/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> last verified: 2026-03-08 | sources: [antigravity official](https://antigravity.google/), [antigravity pricing](https://antigravity.google/pricing), [google developers blog](https://developers.googleblog.com/build-with-google-antigravity-our-new-agentic-development-platform/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing)
 
 ---
 
 ## at a glance
 
-| feature | claude code | antigravity |
-|---------|------------|----------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free tier / $15 pro / $30 teams / $60 enterprise per month |
-| model | opus 4.6, sonnet 4.6, haiku 4.5 | multiple models (claude, GPT, etc.) via credit system |
-| interface | terminal CLI, VS Code, JetBrains | forked VS Code IDE (standalone app) |
-| agentic mode | yes (native -- always agentic) | yes (Cascade -- multi-step agentic flow) |
+| feature | claude code | google antigravity |
+|---------|------------|-------------------|
+| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (public preview) -- future pricing TBD |
+| model | opus 4.6, sonnet 4.6, haiku 4.5 | gemini 3.1 pro, gemini 3 flash, claude sonnet 4.6, claude opus 4.6, GPT-OSS 120B |
+| interface | terminal CLI, VS Code, JetBrains | standalone IDE (VS Code fork) with manager view |
+| agentic mode | yes (native -- always agentic) | yes (agent-first -- parallel autonomous agents) |
 | tab completion | no | yes -- inline completions |
-| extensibility | hooks, plugins, skills, agents, commands, MCP servers | limited, early-stage extension support |
+| extensibility | hooks, plugins, skills, agents, commands, MCP servers | agent skills, MCP (google cloud), early-stage |
 | open source | yes ([anthropics/claude-code](https://github.com/anthropics/claude-code)) | no |
-| ownership | anthropic | cognition AI (acquired from codeium for ~$250M, dec 2025) |
+| owner | anthropic | google (built by former windsurf team within google deepmind) |
 
 ### background
 
-antigravity started as codeium, a code completion tool. it rebranded to antigravity and shipped Cascade, its agentic multi-step coding feature. in late 2025, cognition AI (makers of devin) acquired antigravity for approximately $250M. the product continues under the antigravity name.
+google antigravity launched november 2025 alongside the gemini 3 model family. it was built by a team google hired from windsurf (formerly codeium) in july 2025 as part of a $2.4B deal that brought ~40 senior engineers into google deepmind. the product shares technological ancestry with windsurf but is a distinct google product. windsurf itself continues as a separate product under cognition AI, which acquired windsurf's remaining assets for ~$250M in july 2025.
+
+antigravity is currently in **public preview** and free for individual users. google has not announced post-preview pricing.
 
 ---
 
@@ -29,11 +31,11 @@ antigravity started as codeium, a code completion tool. it rebranded to antigrav
 
 ### terminal-first workflow
 
-claude code lives in your terminal. if your work involves git, docker, ssh, kubectl, makefiles, or any CLI-heavy workflow, claude code meets you where you are. antigravity requires working inside its forked VS Code editor. terminal-native developers lose workflow continuity when they have to switch to a separate IDE.
+claude code lives in your terminal. if your work involves git, docker, ssh, kubectl, makefiles, or any CLI-heavy workflow, claude code meets you where you are. antigravity requires working inside its standalone IDE. terminal-native developers lose workflow continuity when they have to switch to a separate app.
 
 ### extensibility is not comparable
 
-claude code's extensibility stack -- hooks, plugins, skills, agents, commands, MCP servers -- is a full developer platform. you can intercept tool calls before they execute, persist data across sessions, build reusable workflow templates, and run subagent processes. antigravity has Cascade for multi-step tasks but no equivalent extension system for building custom tooling.
+claude code's extensibility stack -- hooks, plugins, skills, agents, commands, MCP servers -- is a full developer platform. you can intercept tool calls before they execute, persist data across sessions, build reusable workflow templates, and run subagent processes. antigravity has agent skills and google cloud MCP integrations but no equivalent extension system for building custom tooling.
 
 ### transparency (open source)
 
@@ -41,7 +43,11 @@ claude code is open source. you can read the code, audit the tool calls, underst
 
 ### not locked to one IDE
 
-claude code works in any terminal, plus VS Code and JetBrains extensions. antigravity is its own IDE -- if you use neovim, emacs, sublime, or a different JetBrains product, antigravity isn't an option.
+claude code works in any terminal, plus VS Code and JetBrains extensions. antigravity is its own standalone IDE -- if you use neovim, emacs, sublime, or a different JetBrains product, antigravity isn't an option.
+
+### production maturity
+
+claude code is production-ready with SOC 2 Type II and ISO 27001 certifications, documented performance data from anthropic's own engineering teams, and a stable API. antigravity is in public preview with no SLAs, no external case studies, and limited production track record.
 
 ### session mining and analysis
 
@@ -51,25 +57,29 @@ every claude code session produces parseable JSON transcripts. the miner plugin 
 
 ## where antigravity wins
 
-### free tier
+### it's free (for now)
 
-antigravity's free tier includes unlimited basic completions and 5 Cascade sessions per day. that's real daily usage, not just a trial. claude code's free tier is more limited. for developers evaluating tools or working on side projects, antigravity's free tier is more practical.
+antigravity is free during public preview with generous rate limits on gemini 3.1 pro. google AI Pro/Ultra subscribers get priority access. this is the lowest barrier to entry of any AI coding tool -- $0/mo vs claude code's $20/mo minimum for useful throughput. caveat: free users have weekly quotas, and google hasn't committed to keeping it free permanently.
 
-### lower price point
+### multi-model access included
 
-antigravity Pro at $15/mo is the cheapest paid tier among major AI coding tools. claude code Pro starts at $20/mo. the $5/mo difference isn't huge, but antigravity also includes 500 credits and unlimited Cascade at that tier.
+antigravity provides free access to claude sonnet 4.6, claude opus 4.6, and GPT-OSS 120B alongside gemini models. getting opus 4.6 access normally requires a $100-200/mo claude code subscription. if you want to try multiple frontier models without paying for each, antigravity bundles them.
+
+### parallel agent execution
+
+antigravity's manager view lets you run multiple autonomous agents in parallel across different tasks. you can kick off a refactoring agent, a test-writing agent, and a documentation agent simultaneously. claude code runs one agent per session -- parallelism requires worktree isolation and explicit subagent setup.
 
 ### visual IDE experience
 
-antigravity inherits the full VS Code experience -- file tree, extensions, terminal panel, debugger, inline diffs, syntax highlighting. AI features are embedded in the editor: inline completions as you type, Cascade in a sidebar, code changes shown as visual diffs. for developers who prefer graphical IDEs, the experience is more polished than a terminal conversation.
+antigravity inherits the full VS Code experience -- file tree, extensions, terminal panel, debugger, inline diffs, syntax highlighting. AI features are embedded in the editor: inline completions as you type, agent sidebar, visual artifacts showing what agents did. for developers who prefer graphical IDEs, the experience is more polished than a terminal conversation.
 
 ### tab completion
 
 antigravity provides inline code completions as you type -- ghost text suggestions for lines and blocks. claude code doesn't do tab completion. if intelligent autocomplete is central to your workflow, antigravity covers it and claude code doesn't.
 
-### Cascade multi-step flows
+### google cloud integration
 
-Cascade is antigravity's agentic feature -- it plans multi-step tasks, executes them sequentially, and shows results. it's similar to claude code's agent mode but presented in a visual IDE context with step-by-step progress. for developers who want to see a visual plan before execution, Cascade's UI is more explicit.
+antigravity has native MCP integration with BigQuery, AlloyDB, Spanner, Cloud SQL, and Looker. if you're in the google cloud ecosystem, antigravity speaks your infrastructure language out of the box.
 
 ---
 
@@ -77,16 +87,14 @@ Cascade is antigravity's agentic feature -- it plans multi-step tasks, executes 
 
 ### pricing breakdown
 
-| plan | claude code | antigravity |
-|------|------------|----------|
-| free | limited usage | unlimited completions, 5 Cascade/day |
-| entry | $20/mo (Pro) | $15/mo (Pro) -- 500 credits |
-| teams | enterprise (API-based) | $30/user/mo |
-| heavy use | $200/mo (Max 20x) | $60/user/mo (Enterprise) |
+| plan | claude code | google antigravity |
+|------|------------|-------------------|
+| free | limited usage | free (public preview) -- weekly quotas |
+| entry | $20/mo (Pro) | $0 (preview) |
+| heavy use | $200/mo (Max 20x) | $0 (preview) |
+| enterprise | API-based | custom (contact sales) |
 
-antigravity is cheaper at every tier. but pricing isn't the only cost -- the extensibility gap means claude code users can build tooling that saves time (and money) over the long run. a hook that prevents expensive mistakes or a plugin that tracks costs can pay for the price difference many times over.
-
-antigravity's credit system means your effective usage depends on which models you choose for Cascade tasks. heavier models burn credits faster.
+pricing comparison is currently moot -- antigravity is free. when google announces post-preview pricing, this section will update. given google's history with developer tools (generous free tiers on firebase, cloud run, etc.), expect a competitive free tier to persist.
 
 ---
 
@@ -97,16 +105,17 @@ antigravity's credit system means your effective usage depends on which models y
 - you want to build custom hooks, plugins, and agents
 - you value open source and transparency
 - you use neovim, emacs, or non-VS-Code editors
+- you need production-grade reliability with SLAs
 - session history mining and analysis matter to you
 
 **choose antigravity if:**
-- you want the lowest-cost entry point ($15/mo)
-- tab completion is important to your workflow
+- you want free access to frontier models (including opus 4.6)
+- parallel agent execution for complex multi-task workflows
 - you prefer a visual IDE experience
-- you want a free tier with real daily usage
-- you're evaluating AI coding tools and want low commitment
+- you're in the google cloud ecosystem
+- you're evaluating AI coding tools and want zero commitment
 
 **use both:**
-some developers use antigravity (or cursor) for in-editor tab completion and visual diffs while using claude code for terminal-heavy tasks, complex refactors, and automation. different tools for different surfaces.
+some developers use antigravity for in-editor tab completion and parallel agent tasks while using claude code for terminal-heavy work, complex refactors, and automation. different tools for different surfaces.
 
 > see also: [pricing comparison across all tools](pricing.md)
