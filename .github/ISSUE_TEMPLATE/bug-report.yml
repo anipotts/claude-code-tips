@@ -1,0 +1,24 @@
+name: Bug Report
+description: Report an issue with a hook, plugin, agent, or guide
+labels: ["bug"]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: Which file or component has the issue?
+      placeholder: e.g., "hooks/safety-guard.sh", "docs/guide.md section 11"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the issue. Include error messages if applicable.
+    validations:
+      required: true
+  - type: input
+    id: claude-version
+    attributes:
+      label: Claude Code version
+      placeholder: e.g., v2.1.71

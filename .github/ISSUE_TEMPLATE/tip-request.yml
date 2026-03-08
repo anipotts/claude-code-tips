@@ -1,0 +1,26 @@
+name: Tip or Guide Request
+description: Suggest a new tip, guide section, or topic to cover
+labels: ["content"]
+body:
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      description: What Claude Code feature or workflow should we cover?
+      placeholder: e.g., "agent teams with tmux", "HTTP hooks for Slack"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why is this useful? What problem does it solve?
+      placeholder: Describe the use case or link to relevant docs
+  - type: dropdown
+    id: level
+    attributes:
+      label: Difficulty level
+      options:
+        - beginner
+        - intermediate
+        - advanced

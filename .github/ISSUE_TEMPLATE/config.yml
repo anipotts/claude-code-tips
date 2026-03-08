@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Claude Code Official Docs
+    url: https://docs.anthropic.com/en/docs/claude-code/overview
+    about: Check official docs first
+  - name: Discussions
+    url: https://github.com/anipotts/claude-code-tips/discussions
+    about: Ask questions or share your own tips
