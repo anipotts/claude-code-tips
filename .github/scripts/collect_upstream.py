@@ -50,6 +50,11 @@ WATCHED_REPOS = [
         "repo": "claude-code-best-practice",
         "check": "commits",        # check recent commits
     },
+    {
+        "owner": "marckrenn",
+        "repo": "claude-code-changelog",
+        "check": "commits",        # tracks system prompt diffs, feature flags
+    },
 ]
 
 # GitHub search query for trending claude code repos
@@ -187,29 +192,45 @@ def check_commits(owner: str, repo: str, state: dict) -> list[dict]:
 
 def check_changelog(state: dict) -> list[dict]:
     """
-    Check Claude Code changelog.
+    Check Claude Code CHANGELOG.md from the official repo.
 
-    The changelog lives at docs.anthropic.com. We fetch the raw page and
-    hash it to detect changes. When it changes, we grab the content for
-    processing.
+    Uses the raw markdown file from GitHub (more reliable than scraping
+    the rendered docs page). Falls back to the docs page if raw fetch fails.
     """
     key = "anthropic/changelog"
-    url = "https://docs.anthropic.com/en/docs/claude-code/changelog"
+    # primary: raw CHANGELOG.md from the repo (structured markdown)
+    raw_url = "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md"
+    # fallback: rendered docs page
+    docs_url = "https://docs.anthropic.com/en/docs/claude-code/changelog"
+
+    text = ""
+    source_url = raw_url
 
     try:
-        resp = requests.get(url, timeout=15, headers={
+        resp = requests.get(raw_url, timeout=15, headers={
             "User-Agent": "claude-code-tips-watcher/1.0"
         })
-        if resp.status_code != 200:
-            print(f"  WARN: changelog returned {resp.status_code}", file=sys.stderr)
-            return []
+        if resp.status_code == 200:
+            text = resp.text
+        else:
+            # fallback to docs page
+            resp = requests.get(docs_url, timeout=15, headers={
+                "User-Agent": "claude-code-tips-watcher/1.0"
+            })
+            if resp.status_code == 200:
+                import re
+                text = re.sub(r'<[^>]+>', ' ', resp.text)
+                text = re.sub(r'\s+', ' ', text).strip()
+                source_url = docs_url
+            else:
+                print(f"  WARN: changelog returned {resp.status_code}", file=sys.stderr)
+                return []
     except Exception as e:
         print(f"  WARN: changelog fetch failed: {e}", file=sys.stderr)
         return []
 
-    # simple content hash to detect changes
     import hashlib
-    content_hash = hashlib.sha256(resp.text.encode()).hexdigest()[:16]
+    content_hash = hashlib.sha256(text.encode()).hexdigest()[:16]
     last_hash = state.get(key, "")
 
     if content_hash == last_hash:
@@ -217,19 +238,14 @@ def check_changelog(state: dict) -> list[dict]:
 
     state[key] = content_hash
 
-    # extract text content (rough -- strip HTML tags)
-    import re
-    text = re.sub(r'<[^>]+>', ' ', resp.text)
-    text = re.sub(r'\s+', ' ', text).strip()
-
-    # grab first ~3000 chars of content as the changelog body
+    # grab first ~3000 chars of content
     return [{
         "source": "anthropic/changelog",
         "type": "changelog",
         "version": content_hash,
         "title": "Claude Code changelog updated",
         "body": text[:3000],
-        "url": url,
+        "url": source_url,
         "published": datetime.now(timezone.utc).isoformat(),
     }]
 
