@@ -12,10 +12,12 @@
     {
       "name": "miner",
       "source": "./plugins/miner",
-      "description": "mines every claude code session into a local sqlite database. echo, scar, gauge, imprint.",
-      "version": "0.1.0",
+      "description": "mines every claude code session into a local sqlite database. tracks costs, tools, errors, subagents, and enables full-text search across your history.",
+      "version": "1.0.0",
       "author": { "name": "Ani Potts" },
-      "keywords": ["mining", "analytics", "sqlite", "history", "search", "echo", "scar", "gauge"],
+      "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/miner",
+      "license": "MIT",
+      "keywords": ["mining", "analytics", "sqlite", "sessions", "costs", "echo", "scar", "gauge", "imprint"],
       "category": "analytics"
     },
     {
