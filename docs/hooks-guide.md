@@ -83,13 +83,14 @@ MCP tools follow the naming pattern `mcp__<server>__<tool>` (e.g., `mcp__memory_
 
 ### Hook Handler Types
 
-Claude Code supports three handler types:
+Claude Code supports four handler types:
 
 | Type | Description | Default Timeout |
 |---|---|---|
 | `command` | Runs a shell command. Receives JSON on stdin, returns via exit codes and stdout | 600s |
 | `prompt` | Sends a prompt to a fast Claude model for single-turn evaluation | 30s |
 | `agent` | Spawns a subagent with access to Read, Grep, Glob for multi-turn verification | 60s |
+| `http` | POSTs JSON payload to a URL, receives JSON response. No shell required | 30s |
 
 Not all events support all types. `prompt` and `agent` hooks are supported for: `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `Stop`, `SubagentStop`, `TaskCompleted`, `UserPromptSubmit`. All other events support only `command` hooks.
 
@@ -1201,6 +1202,69 @@ For complex verification that requires reading files and searching code:
 
 The agent can use Read, Grep, and Glob tools to investigate before returning `{ "ok": true/false }`.
 
+### HTTP Hooks (Remote Endpoints)
+
+as of v2.1.63, hooks can POST to URLs instead of running shell commands. the hook payload is sent as the JSON body, and the response is parsed the same way as command hook stdout.
+
+**config:**
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "http",
+            "url": "https://your-server.com/hooks/on-file-change",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**when to use HTTP hooks instead of command hooks:**
+
+| scenario | command hook | HTTP hook |
+|---|---|---|
+| local scripts, simple logic | yes | overkill |
+| team-shared webhooks | no (machine-specific paths) | yes |
+| notification services (slack, discord) | works but verbose | cleaner |
+| cloud-hosted validation | no | yes |
+| CI/CD integration | bash + curl | native |
+| environments without shell (remote, sandboxed) | won't work | works |
+
+the payload is the same JSON that command hooks receive on stdin -- session_id, tool_name, tool_input, etc. the response should be JSON with the same control fields (decision, hookSpecificOutput, continue, etc.).
+
+**practical example -- slack notification on file changes:**
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "http",
+            "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+note: this sends the raw hook payload to slack. for formatted messages, put a small proxy (cloudflare worker, aws lambda) between claude code and slack that transforms the payload.
+
+**security:** HTTP hooks respect workspace trust settings. untrusted projects cannot add HTTP hooks that fire automatically. the URL must be HTTPS in production.
+
 ### Hooks in Skills and Agents
 
 Hooks can be defined in skill/agent YAML frontmatter, scoped to the component's lifecycle:
@@ -1257,6 +1321,9 @@ These are available to hook scripts:
 | `CLAUDE_ENV_FILE` | File path for persisting env vars (SessionStart only) |
 | `CLAUDE_TOOL_INPUT_FILE_PATH` | File path being written/edited |
 | `CLAUDE_PLUGIN_ROOT` | Plugin's root directory (plugin hooks only) |
+| `CLAUDE_CODE_ACCOUNT_UUID` | Account identification in hooks |
+| `CLAUDE_CODE_USER_EMAIL` | User email in hooks |
+| `CLAUDE_CODE_ORGANIZATION_UUID` | Org identification in hooks |
 
 ---
 
@@ -1297,7 +1364,7 @@ To temporarily disable all hooks without removing them, set `"disableAllHooks": 
 
 ---
 
-*This guide covers Claude Code hooks as of February 2026. For the latest updates, see the [official hooks reference](https://code.claude.com/docs/en/hooks).*
+*This guide covers Claude Code hooks as of March 2026, including HTTP hooks (v2.1.63). For the latest updates, see the [official hooks reference](https://code.claude.com/docs/en/hooks).*
 
 Sources:
 - [Hooks reference - Claude Code Docs](https://code.claude.com/docs/en/hooks)
