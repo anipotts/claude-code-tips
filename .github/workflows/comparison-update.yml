@@ -107,8 +107,10 @@ jobs:
             echo "automated -- verify pricing data before merging."
           } > /tmp/pr-body.md
 
-          gh pr create \
+          if ! gh pr create \
             --title "docs: comparison updates $(date +%Y-%m-%d)" \
             --body-file /tmp/pr-body.md \
             --base main \
-            --draft
+            --draft; then
+            echo "::warning::PR creation failed -- changes are on branch $BRANCH"
+          fi

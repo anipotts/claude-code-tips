@@ -64,10 +64,7 @@ def send_ntfy(message: str, pr_url: str, title: str) -> bool:
             "Priority": "high",
             "Tags": "robot,claude",
             "Click": pr_url,
-            "Actions": f"view, Open PR, {pr_url}; "
-                       f"http, Merge, https://api.github.com/repos/{os.environ.get('GITHUB_REPOSITORY', '')}/pulls/{os.environ.get('PR_NUMBER', '')}/merge, "
-                       f'headers.Authorization=Bearer {os.environ.get("GH_TOKEN", "")}, '
-                       f"method=PUT, clear=true",
+            "Actions": f"view, Open PR, {pr_url}",
         },
     )
 

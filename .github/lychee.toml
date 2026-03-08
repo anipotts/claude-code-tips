@@ -12,19 +12,25 @@ max_concurrency = 4
 # retry failed requests
 max_retries = 3
 
-# exclude localhost and local file references
+# exclude patterns
 exclude = [
+  # localhost / loopback
   "^https?://localhost",
   "^https?://127\\.0\\.0\\.1",
   "^https?://0\\.0\\.0\\.0",
-  # github edit/new-file links break without auth
+  # github links that need auth or are flaky
   "^https://github\\.com/.*/edit/",
   "^https://github\\.com/.*/new/",
-  # github actions badge URLs can be flaky
   "^https://github\\.com/.*/actions/workflows/.*\\.yml/badge\\.svg",
-  # example/placeholder domains
+  # placeholder domains
   "^https?://example\\.com",
   "^https?://your-",
+  # mail links
+  "^mailto:",
+  # shields.io endpoint badges (depend on external gist data)
+  "^https://img\\.shields\\.io/endpoint",
+  # gist raw content (dynamic, may 404 before first push)
+  "^https://gist\\.githubusercontent\\.com",
 ]
 
 # exclude paths that are gitignored or not actual documentation
@@ -35,6 +41,3 @@ exclude_path = [
   ".git/",
   "gifs/",
 ]
-
-# don't check mail links
-exclude_mail = true

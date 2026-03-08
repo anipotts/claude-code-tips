@@ -88,19 +88,31 @@ jobs:
           git add docs/ examples/ 2>/dev/null || true
 
           # bail if nothing to commit
-          git diff --cached --quiet && echo "no changes to commit" && exit 0
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+            exit 0
+          fi
 
           git commit -m "upstream: tier 1 changes $(date +%Y-%m-%d)"
           git push -u origin "$BRANCH"
 
-          PR_URL=$(gh pr create \
+          # create PR -- capture stdout and stderr separately
+          if ! PR_URL=$(gh pr create \
             --title "upstream: claude code updates $(date +%Y-%m-%d)" \
             --body-file /tmp/pr-body.md \
-            --base main 2>&1)
+            --base main 2>/tmp/pr-create-err.txt); then
+            echo "::error::PR creation failed: $(cat /tmp/pr-create-err.txt)"
+            exit 1
+          fi
 
-          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          # validate PR URL format before extracting number
+          if ! echo "$PR_URL" | grep -qE 'github\.com/.+/pull/[0-9]+$'; then
+            echo "::error::unexpected PR URL format: $PR_URL"
+            exit 1
+          fi
 
           PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
           # add auto-merge label and enable auto-merge
@@ -123,20 +135,32 @@ jobs:
           git add docs/ examples/ 2>/dev/null || true
 
           # bail if nothing to commit
-          git diff --cached --quiet && echo "no changes to commit" && exit 0
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+            exit 0
+          fi
 
           git commit -m "draft: upstream changes $(date +%Y-%m-%d)"
           git push -u origin "$BRANCH"
 
-          PR_URL=$(gh pr create \
+          # create PR -- capture stdout and stderr separately
+          if ! PR_URL=$(gh pr create \
             --title "upstream: claude code updates $(date +%Y-%m-%d)" \
             --body-file /tmp/pr-body.md \
             --base main \
-            --draft 2>&1)
+            --draft 2>/tmp/pr-create-err.txt); then
+            echo "::error::PR creation failed: $(cat /tmp/pr-create-err.txt)"
+            exit 1
+          fi
 
-          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          # validate PR URL format before extracting number
+          if ! echo "$PR_URL" | grep -qE 'github\.com/.+/pull/[0-9]+$'; then
+            echo "::error::unexpected PR URL format: $PR_URL"
+            exit 1
+          fi
 
           PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
           # add needs-review label
@@ -220,10 +244,13 @@ jobs:
 
           git push -u origin "$REVERT_BRANCH"
 
-          REVERT_URL=$(gh pr create \
+          if ! REVERT_URL=$(gh pr create \
             --title "revert: upstream PR #$PR_NUMBER (auto-rollback)" \
             --body "auto-rollback of #$PR_NUMBER due to pipeline failure. review before merging." \
-            --base main 2>&1)
+            --base main 2>/tmp/revert-err.txt); then
+            echo "::error::revert PR creation failed: $(cat /tmp/revert-err.txt)"
+            exit 1
+          fi
 
           echo "Revert PR created: $REVERT_URL"
         env:
