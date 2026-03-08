@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # =============================================================================
 # Knowledge Builder -- PostToolUse knowledge graph
 # =============================================================================
@@ -28,8 +29,6 @@
 #     "hooks": [{ "type": "command", "command": "~/.claude/hooks/knowledge-builder.sh" }]
 #   }]
 # =============================================================================
-
-set -euo pipefail
 
 # Read the hook payload from stdin
 INPUT=$(cat)

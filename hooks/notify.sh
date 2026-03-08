@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # =============================================================================
 # Notify — Custom notification routing for Claude Code
 # =============================================================================
@@ -25,8 +26,6 @@
 #
 #   ntfy:      curl -d "$MESSAGE" "https://ntfy.sh/your-topic"
 # =============================================================================
-
-set -euo pipefail
 
 # Read the hook payload from stdin
 INPUT=$(cat)
