@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # hooks
 
 standalone scripts that plug into claude code's hook system. copy to `~/.claude/hooks/` or reference from your project, then wire up in settings.

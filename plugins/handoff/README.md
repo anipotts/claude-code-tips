@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # context-handoff
 
 Session preservation via PreCompact and Stop hooks. Automatically captures your plan, progress, and context before it gets lost.

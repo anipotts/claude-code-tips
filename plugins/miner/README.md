@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # miner
 
 mines every claude code session into a local sqlite database. total recall for your dev work.
