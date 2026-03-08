@@ -27,6 +27,8 @@ exclude = [
   "^https?://your-",
   # mail links
   "^mailto:",
+  # anthropic docs (reorganize frequently, intermittent 500s)
+  "^https://docs\\.anthropic\\.com",
   # shields.io endpoint badges (depend on external gist data)
   "^https://img\\.shields\\.io/endpoint",
   # gist raw content (dynamic, may 404 before first push)
