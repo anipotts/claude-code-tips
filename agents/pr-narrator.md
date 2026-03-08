@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # pr-narrator
 
 writes PR descriptions that actually explain what happened. no "this PR updates X" corporate templates

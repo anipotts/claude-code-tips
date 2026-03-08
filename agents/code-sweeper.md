@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # code-sweeper
 
 dead code finder and cleanup agent. points at your codebase and tells you whats rotting

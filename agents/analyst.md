@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # analyst
 
 free-form investigator for your claude code usage data. you ask questions, it writes and runs the sql

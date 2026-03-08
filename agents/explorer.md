@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # explorer
 
 parallel worktree exploration agent. tries out risky changes, experiments with new approaches, or evaluates alternatives -- all without touching your main working tree.

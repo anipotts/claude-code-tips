@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # test-writer
 
 generates test cases that cover the edge cases you probably missed. boundary conditions, error paths, the stuff that breaks in prod at 2am

@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # dep-checker
 
 scans your dependency files and tells you what's outdated, vulnerable, or conflicting. priority-sorted so you fix the scary stuff first
