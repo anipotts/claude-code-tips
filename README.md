@@ -1,12 +1,15 @@
 # claude-code-tips
 
-[![stars](https://img.shields.io/github/stars/anipotts/claude-code-tips?style=flat)](https://github.com/anipotts/claude-code-tips/stargazers)
-[![last commit](https://img.shields.io/github/last-commit/anipotts/claude-code-tips)](https://github.com/anipotts/claude-code-tips/commits/main)
-[![license](https://img.shields.io/github/license/anipotts/claude-code-tips)](./LICENSE)
-[![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v1.0.34-blue)](https://docs.anthropic.com/en/docs/claude-code)
-[![auto-updated](https://img.shields.io/badge/auto--updated-2x%20daily-brightgreen)](https://github.com/anipotts/claude-code-tips/actions)
+[![stars](https://img.shields.io/github/stars/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](https://github.com/anipotts/claude-code-tips/stargazers)
+[![last commit](https://img.shields.io/github/last-commit/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](https://github.com/anipotts/claude-code-tips/commits/main)
+[![license](https://img.shields.io/github/license/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](./LICENSE)
+[![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v1.0.34-000?style=flat-square&labelColor=D4A574&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
+[![auto-updated](https://img.shields.io/badge/auto--updated-2x%20daily-000?style=flat-square&labelColor=22c55e)](https://github.com/anipotts/claude-code-tips/actions)
+[![sessions tested](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fanipotts%2F09d9588bef3bba1aa6831df12e7629e7%2Fraw%2Fsessions.json&style=flat-square&labelColor=D4A574&color=000&logo=anthropic&logoColor=white)](https://github.com/anipotts/claude-code-tips)
+[![max plan spend](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fanipotts%2F09d9588bef3bba1aa6831df12e7629e7%2Fraw%2Fplan_spend.json&style=flat-square&labelColor=6b7280&color=000)](https://github.com/anipotts/claude-code-tips)
+[![API inference received](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fanipotts%2F09d9588bef3bba1aa6831df12e7629e7%2Fraw%2Fapi_value.json&style=flat-square&labelColor=22c55e&color=000)](https://github.com/anipotts/claude-code-tips)
 
-**4,012 sessions. $9K+ in API inference value. ships working code. updates itself.**
+**ships working code. updates itself.**
 
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine.py --stats dashboard showing sessions, tokens, costs, and projects" />
 <!-- TODO: replace with real terminal demo (hero.tape) -->
@@ -48,6 +51,7 @@ standalone scripts. copy to `~/.claude/hooks/` and wire up in settings:
 | [panopticon](./hooks/panopticon.sh) | PostToolUse | logs every tool action to sqlite |
 | [knowledge-builder](./hooks/knowledge-builder/) | PostToolUse | builds a codebase knowledge graph as claude explores |
 | [notify](./hooks/notify.sh) | Notification | routes to macOS, Slack, Pushover, ntfy |
+| [live-stats](./hooks/live-stats.sh) | SessionEnd | updates live session count, spend, and API value badges after every session |
 
 ```bash
 cp hooks/safety-guard.sh ~/.claude/hooks/
