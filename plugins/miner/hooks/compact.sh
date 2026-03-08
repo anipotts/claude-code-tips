@@ -4,6 +4,7 @@
 # Lightweight counter so you can track how often context gets compressed.
 
 set -euo pipefail
+# tested with: claude code v1.0.34
 
 DB="${HOME}/.claude/miner.db"
 CONFIG="${HOME}/.claude/miner.json"

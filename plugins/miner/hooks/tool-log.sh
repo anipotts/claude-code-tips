@@ -5,6 +5,7 @@
 # No network calls. Minimal sqlite. No jq pipelines beyond field extraction.
 
 set -euo pipefail
+# tested with: claude code v1.0.34
 
 DB="${HOME}/.claude/miner.db"
 CONFIG="${HOME}/.claude/miner.json"

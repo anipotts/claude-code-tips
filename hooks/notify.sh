@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# tested with: claude code v1.0.34
 # =============================================================================
 # Notify — Custom notification routing for Claude Code
 # =============================================================================

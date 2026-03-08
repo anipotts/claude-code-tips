@@ -184,8 +184,9 @@ jobs:
               continue
             fi
 
-            # check all tracked files in these directories
+            # check tracked files (skip .json -- JSON has no comment syntax)
             while IFS= read -r file; do
+              case "$file" in *.json) continue ;; esac
               checked=$((checked + 1))
               if grep -qiE 'tested.with|compatible.with|works.with|verified.with' "$file" 2>/dev/null; then
                 echo "ok: $file"
