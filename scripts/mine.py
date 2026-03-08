@@ -1003,22 +1003,22 @@ def print_stats(db_path: pathlib.Path) -> None:
         for row in rows:
             print(f"    {row[0]:20s} {row[1]:>8,}")
 
-    # Token totals
+    # Token totals (user sessions only)
     cursor.execute(
         "SELECT SUM(total_input_tokens), SUM(total_output_tokens), "
         "SUM(total_cache_creation_tokens), SUM(total_cache_read_tokens) "
-        "FROM sessions"
+        "FROM sessions WHERE is_subagent = 0"
     )
     row = cursor.fetchone()
     if row and row[0]:
-        print(f"\n  Tokens (all sessions):")
+        print(f"\n  Tokens:")
         print(f"    Input:          {row[0]:>14,}")
         print(f"    Output:         {row[1]:>14,}")
         print(f"    Cache creation: {row[2]:>14,}")
         print(f"    Cache read:     {row[3]:>14,}")
 
     # Project counts
-    cursor.execute("SELECT COUNT(DISTINCT project_name) FROM sessions")
+    cursor.execute("SELECT COUNT(DISTINCT project_name) FROM sessions WHERE is_subagent = 0")
     proj_count = cursor.fetchone()[0]
     print(f"\n  Projects: {proj_count}")
 
@@ -1040,16 +1040,16 @@ def print_stats(db_path: pathlib.Path) -> None:
 
     # Date range
     cursor.execute(
-        "SELECT MIN(start_time), MAX(end_time) FROM sessions"
+        "SELECT MIN(start_time), MAX(end_time) FROM sessions WHERE is_subagent = 0"
     )
     row = cursor.fetchone()
     if row and row[0]:
         print(f"\n  Date range: {row[0][:10]} to {row[1][:10]}")
 
-    # Model distribution
+    # Model distribution (user sessions only)
     cursor.execute(
         "SELECT model, COUNT(*) as cnt FROM sessions "
-        "WHERE model IS NOT NULL "
+        "WHERE model IS NOT NULL AND is_subagent = 0 "
         "GROUP BY model ORDER BY cnt DESC"
     )
     rows = cursor.fetchall()
@@ -1065,18 +1065,19 @@ def print_stats(db_path: pathlib.Path) -> None:
     err = cursor.fetchone()[0]
     print(f"\n  Parse log: {ok} ok, {err} errors")
 
-    # Cost estimate (using the view)
+    # API value estimate (using the view)
     try:
         cursor.execute(
-            "SELECT SUM(estimated_cost_usd) FROM session_costs"
+            "SELECT SUM(estimated_cost_usd) FROM session_costs WHERE is_subagent = 0"
         )
         row = cursor.fetchone()
         total_cost = row[0] if row and row[0] else 0
 
         if total_cost:
-            print(f"\n  Estimated total cost: ${total_cost:,.2f}")
+            print(f"\n  API inference value: ${total_cost:,.2f}")
+            print(f"    (what this usage would cost at published API rates)")
 
-            # Cost by model tier
+            # Value by model tier
             cursor.execute(
                 "SELECT "
                 "  CASE "
@@ -1088,27 +1089,27 @@ def print_stats(db_path: pathlib.Path) -> None:
                 "  COUNT(*) AS sessions, "
                 "  ROUND(SUM(estimated_cost_usd), 2) AS cost "
                 "FROM session_costs "
-                "WHERE model IS NOT NULL AND model <> '<synthetic>' "
+                "WHERE model IS NOT NULL AND model <> '<synthetic>' AND is_subagent = 0 "
                 "GROUP BY tier ORDER BY cost DESC"
             )
             rows = cursor.fetchall()
             if rows:
-                print(f"\n  Cost by model:")
+                print(f"\n  API value by model:")
                 for row in rows:
                     pct = row[2] / total_cost * 100 if total_cost else 0
                     print(f"    {row[0]:10s} {row[1]:>5} sessions  ${row[2]:>10,.2f}  ({pct:.0f}%)")
 
-            # Top projects by cost
+            # Top projects by API value
             cursor.execute(
                 "SELECT project_name, COUNT(*) as sessions, "
                 "  ROUND(SUM(estimated_cost_usd), 2) AS cost "
                 "FROM session_costs "
-                "WHERE project_name IS NOT NULL "
+                "WHERE project_name IS NOT NULL AND is_subagent = 0 "
                 "GROUP BY project_name ORDER BY cost DESC LIMIT 10"
             )
             rows = cursor.fetchall()
             if rows:
-                print(f"\n  Top projects (by cost):")
+                print(f"\n  Top projects (by API value):")
                 for row in rows:
                     name = row[0] or "(unknown)"
                     if len(name) > 30:
@@ -1122,7 +1123,7 @@ def print_stats(db_path: pathlib.Path) -> None:
                 "  SUM(total_cache_creation_tokens), "
                 "  SUM(total_input_tokens) "
                 "FROM sessions "
-                "WHERE model IS NOT NULL AND model <> '<synthetic>'"
+                "WHERE model IS NOT NULL AND model <> '<synthetic>' AND is_subagent = 0"
             )
             row = cursor.fetchone()
             if row and row[0]:

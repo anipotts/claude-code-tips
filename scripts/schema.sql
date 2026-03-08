@@ -187,6 +187,7 @@ DROP VIEW IF EXISTS session_costs;
 CREATE VIEW IF NOT EXISTS session_costs AS
 SELECT
     s.id,
+    s.is_subagent,
     s.project_name,
     s.model,
     s.start_time,
@@ -210,6 +211,7 @@ SELECT
             + COALESCE(s.total_cache_read_tokens, 0) * 1.5 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 18.75 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 75.0 / 1e6
+        -- sonnet 4.x / 3.7 / 3.5 ($3/$15 per MTok, cache read $0.30, cache write $3.75)
         WHEN s.model LIKE 'claude-sonnet-4-%' OR s.model LIKE 'claude-3-7-sonnet%' OR s.model LIKE 'claude-3-5-sonnet%' THEN
             COALESCE(s.total_input_tokens, 0) * 3.0 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.30 / 1e6
@@ -256,7 +258,7 @@ JOIN session_costs sc ON s.id = sc.id
 WHERE s.project_name IS NOT NULL
 GROUP BY s.project_name;
 
--- daily cost summary (for trend analysis)
+-- daily cost summary (for trend analysis — user sessions only)
 DROP VIEW IF EXISTS daily_costs;
 CREATE VIEW IF NOT EXISTS daily_costs AS
 SELECT
@@ -267,19 +269,21 @@ SELECT
     SUM(sc.total_cache_read_tokens) AS cache_read_tokens,
     SUM(sc.estimated_cost_usd) AS estimated_cost_usd
 FROM session_costs sc
-WHERE sc.start_time IS NOT NULL
+WHERE sc.start_time IS NOT NULL AND sc.is_subagent = 0
 GROUP BY SUBSTR(sc.start_time, 1, 10);
 
--- tool usage summary
+-- tool usage summary (user sessions only)
 DROP VIEW IF EXISTS tool_usage;
 CREATE VIEW IF NOT EXISTS tool_usage AS
 SELECT
-    tool_name,
+    tc.tool_name,
     COUNT(*) AS total_uses,
-    COUNT(DISTINCT session_id) AS sessions_used_in,
-    ROUND(COUNT(*) * 1.0 / COUNT(DISTINCT session_id), 1) AS avg_per_session
-FROM tool_calls
-GROUP BY tool_name;
+    COUNT(DISTINCT tc.session_id) AS sessions_used_in,
+    ROUND(COUNT(*) * 1.0 / COUNT(DISTINCT tc.session_id), 1) AS avg_per_session
+FROM tool_calls tc
+JOIN sessions s ON tc.session_id = s.id
+WHERE s.is_subagent = 0
+GROUP BY tc.tool_name;
 
 -- ============================================================
 -- INDEXES
@@ -288,6 +292,7 @@ CREATE INDEX IF NOT EXISTS idx_sessions_project ON sessions(project_name);
 CREATE INDEX IF NOT EXISTS idx_sessions_start ON sessions(start_time);
 CREATE INDEX IF NOT EXISTS idx_sessions_model ON sessions(model);
 CREATE INDEX IF NOT EXISTS idx_sessions_cwd ON sessions(cwd);
+CREATE INDEX IF NOT EXISTS idx_sessions_subagent_start ON sessions(is_subagent, start_time);
 CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(session_id);
 CREATE INDEX IF NOT EXISTS idx_messages_type ON messages(type);
 CREATE INDEX IF NOT EXISTS idx_messages_timestamp ON messages(timestamp);
