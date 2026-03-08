@@ -47,7 +47,7 @@ focus on a specific area:
 
 ## the prompt
 
-```
+`````
 When the user runs /improve, analyze recent project history and propose improvements to CLAUDE.md (or create one if it doesn't exist).
 
 ## Phase 1: Gather evidence
@@ -187,7 +187,7 @@ For each finding, propose a specific change to CLAUDE.md:
 - Don't propose rules for one-off mistakes -- only for patterns (2+ occurrences)
 - Keep proposed additions concise -- CLAUDE.md should be a quick reference, not a novel
 - If miner.db isn't available, that's fine -- git history alone is enough
-```
+`````
 
 ## why this exists
 

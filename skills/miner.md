@@ -28,11 +28,12 @@ interprets your intent and runs the right queries against `~/.claude/miner.db`. 
 /miner top projects             → project activity ranking
 /miner this week                → everything from the last 7 days
 /miner compare models           → model usage and cost comparison
+/miner health                   → project health: codebase size, git activity, tests
 ```
 
 ## the prompt
 
-```
+`````
 When the user runs /miner, interpret their intent and query ~/.claude/miner.db accordingly.
 
 If the database doesn't exist:
@@ -234,6 +235,27 @@ ORDER BY s.start_time DESC LIMIT 20;
 
 Apply the time filter to whichever analysis makes sense. If just a time period with no other intent, show a mini dashboard for that period.
 
+### HEALTH / STATS ("health", "stats", "project health", "codebase", "lines of code")
+
+This intent uses the filesystem and git — NOT miner.db. Run these via Bash:
+
+1. File count by type:
+   find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/.next/*' | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -15
+
+2. Lines of code:
+   find . -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.py' -o -name '*.rs' -o -name '*.go' -o -name '*.css' -o -name '*.html' \) -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' | xargs wc -l 2>/dev/null | tail -1
+
+3. Largest files:
+   find . -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.py' -o -name '*.rs' \) -not -path '*/node_modules/*' -not -path '*/.git/*' | xargs wc -l 2>/dev/null | sort -rn | head -6
+
+4. Git activity: git log --oneline -20, shortlog -sn, commits this week, branch count
+
+5. Test coverage: check for coverage reports, count test files
+
+6. Package info: package.json deps/devDeps/scripts, Cargo.toml, pyproject.toml
+
+Output as compact dashboard tables: codebase metrics, largest files, git activity, testing, available scripts.
+
 ### FREEFORM (anything else)
 
 If the user's question doesn't match a known intent, construct a reasonable SQL query that answers their question. The schema has: sessions, messages, tool_calls, subagents, errors, project_paths, session_costs (view), project_costs (view), daily_costs (view), tool_usage (view), messages_fts (FTS5).
@@ -248,7 +270,7 @@ If the user's question doesn't match a known intent, construct a reasonable SQL 
 - When showing API value: these are real numbers from published anthropic pricing applied to actual tokens logged from API responses. don't hedge or disclaim
 - If the user asks something you can't answer from the data, say what data would be needed
 - Always use proper quoting for user-provided search terms -- escape single quotes by doubling them (e.g., O'Brien becomes O''Brien) before inserting into SQL strings
-```
+`````
 
 ## why one command
 
