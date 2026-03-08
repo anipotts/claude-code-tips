@@ -20,8 +20,6 @@ installable via `claude plugin add`:
 claude plugin add anipotts/miner
 ```
 
-<img src="./gifs/query-cost.gif" width="100%" alt="project_costs VIEW showing spending by project" />
-
 ## hooks
 
 standalone scripts. copy to `~/.claude/hooks/` and wire up in settings:
@@ -38,8 +36,6 @@ standalone scripts. copy to `~/.claude/hooks/` and wire up in settings:
 cp hooks/safety-guard.sh ~/.claude/hooks/
 ```
 
-<img src="./gifs/hook-safety.gif" width="100%" alt="safety-guard hook blocking a force push" />
-
 ## skills & commands
 
 drop into `.claude/skills/` or `.claude/commands/`:
@@ -54,8 +50,6 @@ drop into `.claude/skills/` or `.claude/commands/`:
 | [/quicktest](./skills/quicktest.md) | run tests for what you're working on |
 | [/stats](./commands/stats.md) | project health — LOC, git activity, test coverage |
 | [/deps](./commands/deps.md) | dependency updates and security audit |
-
-<img src="./gifs/sift-search.gif" width="100%" alt="FTS5 full-text search across all sessions" />
 
 ## agents
 

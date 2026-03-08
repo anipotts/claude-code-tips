@@ -13,7 +13,7 @@ Claude Code plugins, hooks, agents, skills, and resources. All tested.
 - `skills/` -- sift, improve, ship, sweep, quicktest
 - `commands/` -- ledger, stats, deps
 - `scripts/` -- mine.py (bulk parser), schema.sql, README
-- `gifs/` -- VHS tape files for demo GIF recordings
+- `gifs/` -- VHS tape files and demo recordings
 - `content/` -- GITIGNORED, personal drafts
 - `data/` -- GITIGNORED, local mining data
 
