@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # /stats
 
 quick project health dashboard. lines of code, file counts, git activity, test coverage if available

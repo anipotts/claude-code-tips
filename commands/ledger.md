@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # /ledger
 
 quick dashboard for your claude code usage. sessions, tokens, costs, tools — all from miner.db
