@@ -7,11 +7,10 @@ Claude Code plugins, hooks, agents, skills, and resources. All tested.
 - `plugins/miner/` -- flagship: mines sessions to sqlite (echo, scar, gauge, imprint)
 - `plugins/handoff/` -- context preservation before compaction
 - `plugins/broadcast/` -- async notifications
-- `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, knowledge-builder, notify)
+- `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, notify)
 - `docs/` -- guide, hooks reference, plugin creation, subagent patterns, cli-tools, automation, mcp-servers, comparisons, troubleshooting, glossary, resources
-- `agents/` -- analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check
-- `skills/` -- sift, improve, ship, sweep, quicktest
-- `commands/` -- ledger, stats, deps
+- `.claude/commands/` -- slash commands (miner, improve, ship, sweep, quicktest, stats, deps, sift, ledger, value)
+- `.claude/agents/` -- agents (analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check)
 - `scripts/` -- mine.py (bulk parser), schema.sql, README
 - `gifs/` -- VHS tape files and demo recordings
 - `content/` -- GITIGNORED, personal drafts

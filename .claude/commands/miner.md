@@ -1,8 +1,6 @@
-<!-- tested with: claude code v1.0.34 -->
-
 ---
 name: miner
-description: your claude code usage — ask anything about sessions, costs, value, tools, patterns, projects, or search your history
+description: usage stats, costs, search, tools
 allowed-tools:
   - Bash
   - Read

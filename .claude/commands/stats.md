@@ -1,10 +1,15 @@
-<!-- tested with: claude code v1.0.34 -->
+---
+name: stats
+description: project health dashboard
+allowed-tools:
+  - Bash
+  - Read
+  - Glob
+---
 
 # /stats
 
 quick project health dashboard. lines of code, file counts, git activity, test coverage if available
-
-> also available as `/ledger project` — same data, single entry point
 
 ## what it does
 

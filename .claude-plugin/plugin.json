@@ -16,13 +16,5 @@
     "claude-code-hooks",
     "mcp-server"
   ],
-  "commands": ["./commands/", "./skills/"],
-  "agents": [
-    "./agents/code-sweeper.md",
-    "./agents/pr-narrator.md",
-    "./agents/dep-checker.md",
-    "./agents/vibe-check.md",
-    "./agents/test-writer.md"
-  ],
   "hooks": "./hooks/hooks.json"
 }

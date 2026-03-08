@@ -1,4 +1,11 @@
-<!-- tested with: claude code v1.0.34 -->
+---
+name: deps
+description: dependency updates and security
+allowed-tools:
+  - Bash
+  - Read
+  - Glob
+---
 
 # /deps
 

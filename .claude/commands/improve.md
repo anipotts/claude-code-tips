@@ -1,8 +1,6 @@
-<!-- tested with: claude code v1.0.34 -->
-
 ---
 name: improve
-description: analyze recent sessions and git history to propose CLAUDE.md improvements
+description: improve CLAUDE.md from git history
 allowed-tools:
   - Bash
   - Read
