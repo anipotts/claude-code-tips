@@ -12,7 +12,7 @@ name: PR Quality Gate
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, edited]
 
 permissions:
   contents: read

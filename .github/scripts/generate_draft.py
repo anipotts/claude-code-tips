@@ -168,6 +168,9 @@ def validate_edits(edits: list[dict]) -> list[dict]:
     file_cache: dict[str, str] = {}  # cache file contents to avoid duplicate reads
 
     for i, edit in enumerate(edits):
+        if not isinstance(edit, dict):
+            print(f"  VALIDATE SKIP [{i}]: not a dict, skipping", file=sys.stderr)
+            continue
         file_str = edit.get("file", "")
         file_path = REPO_ROOT / file_str
         action = edit.get("action", "")

@@ -41,7 +41,7 @@ jobs:
             "https://github.com/features/copilot copilot"; do
             URL=$(echo "$url_name" | cut -d' ' -f1)
             NAME=$(echo "$url_name" | cut -d' ' -f2)
-            curl -sL "$URL" 2>/dev/null \
+            curl -sL --connect-timeout 10 --max-time 30 "$URL" 2>/dev/null \
               | python3 -c "import sys,re; t=sys.stdin.read(); t=re.sub(r'<script[^>]*>.*?</script>','',t,flags=re.S); t=re.sub(r'<style[^>]*>.*?</style>','',t,flags=re.S); t=re.sub(r'<[^>]+>',' ',t); t=re.sub(r'\s+',' ',t).strip(); print(t[:8000])" \
               > "/tmp/competitor-data/${NAME}-pricing.txt" || true
           done
@@ -64,7 +64,7 @@ jobs:
           read the current comparison docs in docs/comparisons/.
           then read the freshly fetched pricing text in /tmp/competitor-data/.
 
-          for each competitor (cursor, antigravity, copilot, gemini, codex):
+          for each competitor (cursor, antigravity, copilot):
           1. extract current pricing tiers and key features from the fetched text
           2. compare against what's in docs/comparisons/
           3. if anything changed (prices, tier names, features, limits), update the comparison doc
@@ -83,7 +83,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if git diff --quiet; then
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
             echo "no comparison changes detected"
             exit 0
           fi

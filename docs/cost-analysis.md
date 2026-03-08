@@ -40,7 +40,7 @@ ranked by impact:
 
 **1. long sessions.** the number one cost driver. by turn 30, every message sends 100K+ tokens of context. cache helps, but the sheer volume adds up. a 1-hour session can cost 10-50x what five 12-minute sessions cost for the same work.
 
-**2. opus usage.** opus is ~2x sonnet for the same work. a 30-minute opus session costs roughly what 2 hours of sonnet costs.
+**2. opus usage.** opus is ~1.7x sonnet on both input and output pricing. a 30-minute opus session costs roughly what a longer sonnet session costs for comparable work.
 
 **3. subagents and agent teams.** each subagent has its own context window. three subagents = three separate billing streams running in parallel. agent teams multiply this further.
 

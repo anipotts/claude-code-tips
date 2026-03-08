@@ -195,6 +195,7 @@ jobs:
       # ---- notify ----
       - name: Send notification
         if: steps.collect.outputs.has_changes == 'true' && steps.pr_info.outputs.pr_url
+        continue-on-error: true
         run: python .github/scripts/notify.py
         env:
           PR_URL: ${{ steps.pr_info.outputs.pr_url }}

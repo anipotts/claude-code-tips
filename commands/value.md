@@ -24,7 +24,7 @@ with time range:
 
 ## the prompt
 
-```
+````
 When the user runs /value, query ~/.claude/miner.db and calculate the full API inference value of their Claude Code usage.
 
 If the database doesn't exist, tell the user to install the miner plugin first and stop.
@@ -114,9 +114,7 @@ For each model row, calculate:
 
 ## Calculate ROI
 
-Ask or infer the user's plan:
-- If total sessions > 1000 or heavy opus usage → likely Max 20x ($200/mo)
-- Otherwise assume Pro ($20/mo)
+Ask the user which plan they're on. If they don't specify, show the calculation with both $20/mo (Pro) and $200/mo (Max) as examples so they can pick the right one.
 - Calculate months from first_session to last_session
 - ROI = total_value / (monthly_cost × months)
 
@@ -175,7 +173,7 @@ ROI:
 - If a model has no matching rate (unknown model), skip it and note it
 - Read-only. Never write to the database
 - This is the real number. Don't hedge or disclaim -- the rates are from anthropic's published API pricing. the tokens are from the actual API responses logged in the session transcripts
-```
+````
 
 ## why cache tokens dominate
 

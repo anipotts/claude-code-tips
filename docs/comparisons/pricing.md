@@ -64,7 +64,7 @@ subscription pricing tells you the monthly bill. but effective cost depends on h
 
 ### claude code session economics
 
-a typical 30-minute claude code session on sonnet 4.6 costs roughly $1-5 in API tokens (if you were paying API rates). on the $20/mo Pro plan, you'd need to do 4-20 sessions/day to "exhaust" the value. on Max 20x at $200/mo, anthropic is subsidizing heavy users -- a full day of opus sessions can exceed $200 in raw API costs.
+session cost varies widely based on model, duration, and cache efficiency -- use `/miner` to see your actual per-session costs. on the $20/mo Pro plan, even moderate usage typically exceeds the subscription cost in raw API value. on Max 20x at $200/mo, anthropic is subsidizing heavy users -- a full day of opus sessions can exceed $200 in raw API costs.
 
 the miner plugin in this repo tracks actual per-session costs, so you can measure this precisely.
 

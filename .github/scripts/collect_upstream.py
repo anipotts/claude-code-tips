@@ -487,7 +487,7 @@ def check_community(state: dict) -> list[dict]:
             print(f"    WARN: community {name} check failed: {e}", file=sys.stderr)
             continue
 
-        state[key] = list(seen)[:100]  # cap stored list
+        state[key] = sorted(seen)[:100]  # cap stored list
 
     return all_changes
 
@@ -540,7 +540,7 @@ def check_trending(state: dict) -> list[dict]:
             "tier": 2,
         })
 
-    state[key] = list(seen)[:200]  # cap stored list
+    state[key] = sorted(seen)[:200]  # cap stored list
 
     return changes
 

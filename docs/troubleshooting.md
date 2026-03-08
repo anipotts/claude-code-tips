@@ -90,7 +90,7 @@ common problems and fixes. organized by feature area.
 - test manually:
 
 ```bash
-echo '{"tool":"Bash","input":{"command":"ls"}}' | bash hooks/safety-guard.sh
+echo '{"tool_name":"Bash","tool_input":{"command":"ls"}}' | bash hooks/safety-guard.sh
 echo $?  # 0 = allow, 2 = block
 ```
 

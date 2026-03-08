@@ -30,11 +30,11 @@ claude code's hook/plugin/agent/skill/command stack is production-tested across 
 
 ### proven code generation quality
 
-multiple third-party benchmarks (SWE-bench, HumanEval) consistently rank claude models at or near the top for code generation tasks. gemini models are strong and improving fast, but claude code's code quality -- especially for complex multi-file edits -- has a track record. this is subjective territory and benchmarks aren't everything, but it's worth noting.
+based on our testing, claude models consistently perform well for code generation tasks, especially complex multi-file edits. third-party benchmarks (SWE-bench, HumanEval) also rank claude models at or near the top. gemini models are strong and improving fast, but based on our testing, claude code's code quality has an edge for multi-file edits. benchmarks aren't everything and this is subjective territory, but it's worth noting.
 
 ### session history and mining
 
-claude code sessions are JSON transcripts you can parse, search, and mine. the miner plugin builds sqlite databases from session data. gemini has conversation checkpointing but no equivalent export/analysis ecosystem.
+based on our testing, claude code sessions as JSON transcripts you can parse, search, and mine offer a significant advantage for workflow optimization. the miner plugin builds sqlite databases from session data. gemini has conversation checkpointing but no equivalent export/analysis ecosystem.
 
 ### IDE extensions
 

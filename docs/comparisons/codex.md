@@ -55,7 +55,7 @@ codex ships as a CLI, VS Code extension, Cursor extension, Windsurf extension, a
 
 ### token efficiency
 
-third-party benchmarks report codex uses 2-3x fewer tokens for comparable results in some tasks. this translates to lower API costs if you're on pay-per-token pricing. real-world results vary by task type.
+codex reportedly uses fewer tokens per task for comparable results, based on community reports. this could translate to lower API costs if you're on pay-per-token pricing. real-world results vary by task type.
 
 ### async cloud agent
 

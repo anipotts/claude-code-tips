@@ -183,6 +183,7 @@ END;
 -- ============================================================
 -- COSTS VIEW: auto-computed USD per session
 -- ============================================================
+DROP VIEW IF EXISTS session_costs;
 CREATE VIEW IF NOT EXISTS session_costs AS
 SELECT
     s.id,
@@ -209,7 +210,7 @@ SELECT
             + COALESCE(s.total_cache_read_tokens, 0) * 1.5 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 18.75 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 75.0 / 1e6
-        WHEN s.model LIKE 'claude-sonnet-4-%' OR s.model LIKE 'claude-sonnet-3-%' THEN
+        WHEN s.model LIKE 'claude-sonnet-4-%' OR s.model LIKE 'claude-3-7-sonnet%' OR s.model LIKE 'claude-3-5-sonnet%' THEN
             COALESCE(s.total_input_tokens, 0) * 3.0 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.30 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 3.75 / 1e6
@@ -221,7 +222,7 @@ SELECT
             + COALESCE(s.total_cache_creation_tokens, 0) * 1.25 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 5.0 / 1e6
         -- haiku 3.5 ($0.80/$4 per MTok)
-        WHEN s.model LIKE 'claude-haiku-3%' OR s.model LIKE 'claude-3-haiku%' THEN
+        WHEN s.model LIKE 'claude-3-5-haiku%' OR s.model LIKE 'claude-3-haiku%' THEN
             COALESCE(s.total_input_tokens, 0) * 0.80 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.08 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 1.0 / 1e6
@@ -235,6 +236,7 @@ FROM sessions s;
 -- ============================================================
 
 -- project-level cost summary (most useful view for dashboards)
+DROP VIEW IF EXISTS project_costs;
 CREATE VIEW IF NOT EXISTS project_costs AS
 SELECT
     s.project_name,
@@ -255,6 +257,7 @@ WHERE s.project_name IS NOT NULL
 GROUP BY s.project_name;
 
 -- daily cost summary (for trend analysis)
+DROP VIEW IF EXISTS daily_costs;
 CREATE VIEW IF NOT EXISTS daily_costs AS
 SELECT
     SUBSTR(sc.start_time, 1, 10) AS date,
@@ -268,6 +271,7 @@ WHERE sc.start_time IS NOT NULL
 GROUP BY SUBSTR(sc.start_time, 1, 10);
 
 -- tool usage summary
+DROP VIEW IF EXISTS tool_usage;
 CREATE VIEW IF NOT EXISTS tool_usage AS
 SELECT
     tool_name,

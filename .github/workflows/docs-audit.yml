@@ -49,6 +49,8 @@ jobs:
           4. outdated CLI flags or tool names that dont match current claude code
           5. missing cross-references (e.g. hooks-guide should link to safety-guard.sh)
 
+          important: only fix issues you can verify from the files in this repo. do not rely on your training data for current CLI flags or tool names -- if you're not sure, flag it but don't change it.
+
           for each issue found:
           - fix it directly in the file if you can (add missing stamps, fix links)
           - use lowercase voice, no fluff

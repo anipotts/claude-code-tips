@@ -247,6 +247,7 @@ If the user's question doesn't match a known intent, construct a reasonable SQL 
 - Keep output compact — dashboard, not essay
 - When showing API value: these are real numbers from published anthropic pricing applied to actual tokens logged from API responses. don't hedge or disclaim
 - If the user asks something you can't answer from the data, say what data would be needed
+- Always use proper quoting for user-provided search terms -- escape single quotes by doubling them (e.g., O'Brien becomes O''Brien) before inserting into SQL strings
 ```
 
 ## why one command

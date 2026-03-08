@@ -23,7 +23,8 @@
 
 ### cursor's credit system (june 2025+)
 
-cursor switched from "500 fast requests/mo" to a credit-based system. every paid plan includes a credit pool equal to your subscription cost. AI features consume credits based on the model used and request complexity. this means your effective usage depends on which models you lean on -- heavy claude opus usage burns credits faster than cursor-small.
+<!-- verify against cursor.com/pricing before merging -->
+Cursor uses a credit-based system -- check cursor.com/pricing for current limits. every paid plan includes a credit pool equal to your subscription cost. AI features consume credits based on the model used and request complexity. this means your effective usage depends on which models you lean on -- heavy claude opus usage burns credits faster than cursor-small.
 
 ---
 

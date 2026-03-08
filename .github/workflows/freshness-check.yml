@@ -103,7 +103,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          REPORT=$(cat /tmp/freshness-report.md)
           ISSUE_TITLE="stale content: freshness check $(date +%Y-%m-%d)"
 
           # close any previous freshness check issues to avoid duplicates
