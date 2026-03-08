@@ -1,0 +1,21 @@
+// markdownlint config for claude-code-tips
+// keeps things reasonable -- no line-length policing, no HTML bans
+{
+  // line length -- not enforced, many docs have long command examples
+  "MD013": false,
+
+  // inline HTML -- we use <img>, <details>, <summary> etc.
+  "MD033": false,
+
+  // first line heading -- some files start with frontmatter or comments
+  "MD041": false,
+
+  // allow duplicate headings in different sections (e.g., ## Usage under each plugin)
+  "MD024": { "siblings_only": true },
+
+  // bare URLs are fine in a tips repo
+  "MD034": false,
+
+  // don't require blank lines around lists -- too noisy
+  "MD032": false
+}
