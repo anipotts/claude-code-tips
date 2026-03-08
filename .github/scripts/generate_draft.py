@@ -30,7 +30,7 @@ import anthropic
 # config
 # ---------------------------------------------------------------------------
 
-MODEL = "claude-haiku-4-5-20250315"
+MODEL = "claude-haiku-4-5-20251001"
 MAX_INPUT_CHARS = 15000   # ~4000 tokens
 PR_BODY_FILE = Path("/tmp/pr-body.md")
 REPO_ROOT = Path(".")
