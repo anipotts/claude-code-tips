@@ -6,14 +6,14 @@
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v1.0.34-blue)](https://docs.anthropic.com/en/docs/claude-code)
 [![auto-updated](https://img.shields.io/badge/auto--updated-2x%20daily-brightgreen)](https://github.com/anipotts/claude-code-tips/actions)
 
-**4000+ sessions tested. ships working code. updates itself.**
+**4,012 sessions. $25K+ in API inference value. ships working code. updates itself.**
 
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine.py --stats dashboard showing sessions, tokens, costs, and projects" />
 <!-- TODO: replace with real terminal demo (hero.tape) -->
 
 ## why this repo
 
-- **tested across 4000+ sessions** -- not tutorial code, production patterns extracted from real daily usage
+- **tested across 4,012 sessions ($25K+ in API inference)** -- not tutorial code, production patterns extracted from real daily usage
 - **ships working code** -- every hook, plugin, agent, and skill is copy-paste ready
 - **updates itself** -- upstream watcher monitors official releases, competitor changes, and community trends, then merges autonomously when CI passes
 
@@ -66,6 +66,7 @@ drop into `.claude/skills/` or `.claude/commands/`:
 | [/sweep](./skills/sweep.md) | find and clean dead code |
 | [/quicktest](./skills/quicktest.md) | run tests for what you're working on |
 | [/stats](./commands/stats.md) | project health -- LOC, git activity, test coverage |
+| [/value](./commands/value.md) | per-model API inference value, cost breakdown, ROI |
 | [/deps](./commands/deps.md) | dependency updates and security audit |
 
 ### agents
