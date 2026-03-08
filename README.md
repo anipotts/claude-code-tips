@@ -9,12 +9,10 @@
 [![max plan spend](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fanipotts%2F09d9588bef3bba1aa6831df12e7629e7%2Fraw%2Fplan_spend.json&style=flat-square&labelColor=6b7280&color=000)](https://github.com/anipotts/claude-code-tips)
 [![API inference received](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fanipotts%2F09d9588bef3bba1aa6831df12e7629e7%2Fraw%2Fapi_value.json&style=flat-square&labelColor=22c55e&color=000)](https://github.com/anipotts/claude-code-tips)
 
-**ships working code. updates itself.**
-
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine.py --stats dashboard showing sessions, tokens, costs, and projects" />
 <!-- TODO: replace with real terminal demo (hero.tape) -->
 
-## why this repo
+## why i made this repo
 
 - **tested across 4,012 sessions ($9K+ in API inference)** -- not tutorial code, production patterns extracted from real daily usage
 - **ships working code** -- every hook, plugin, agent, and skill is copy-paste ready
