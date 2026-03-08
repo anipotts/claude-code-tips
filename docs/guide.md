@@ -240,9 +240,9 @@ this is real money. here's what the models cost:
 
 | model | input (per M tokens) | output (per M tokens) | best for |
 |---|---|---|---|
-| haiku 4.5 | $0.80 | $4.00 | lookups, file reads, simple tasks, scouting |
+| haiku 4.5 | $1.00 | $5.00 | lookups, file reads, simple tasks, scouting |
 | sonnet 4.6 | $3.00 | $15.00 | code generation, refactoring, most work |
-| opus 4.6 | $15.00 | $75.00 | architecture, complex reasoning, multi-file design |
+| opus 4.6 | $5.00 | $25.00 | architecture, complex reasoning, multi-file design |
 
 the `/model` command switches models mid-conversation. this is one of the most underused features:
 
@@ -952,10 +952,10 @@ after thousands of sessions, here's what actually moves the needle on costs:
 
 | task type | recommended model | why |
 |---|---|---|
-| file lookups, simple questions | haiku ($0.80/$4) | 19x cheaper input than sonnet, fast |
+| file lookups, simple questions | haiku ($1/$5) | 3x cheaper input than sonnet, fast |
 | code generation, refactoring | sonnet ($3/$15) | the workhorse, best cost/quality ratio |
-| architecture, complex design | opus ($15/$75) | 5x more than sonnet, worth it for the hard 10% |
-| codebase scouting (subagents) | haiku ($0.80/$4) | scout with haiku, strike with sonnet |
+| architecture, complex design | opus ($5/$25) | ~2x more than sonnet, worth it for the hard 10% |
+| codebase scouting (subagents) | haiku ($1/$5) | scout with haiku, strike with sonnet |
 
 **other optimizations:**
 - prompt caching (see above) -- 90% discount on repeated content

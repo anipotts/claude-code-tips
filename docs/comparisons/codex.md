@@ -39,7 +39,7 @@ this matters bc extensibility is what turns a coding tool into *your* coding too
 
 ### model switching mid-session
 
-`/model` switches between opus, sonnet, and haiku mid-conversation. use haiku for lookups, sonnet for implementation, opus for architecture -- all in one session. codex supports `/model` for switching between GPT models too, but claude code's tiered pricing (haiku at $0.80/M input vs opus at $15/M) gives you more cost control.
+`/model` switches between opus, sonnet, and haiku mid-conversation. use haiku for lookups, sonnet for implementation, opus for architecture -- all in one session. codex supports `/model` for switching between GPT models too, but claude code's tiered pricing (haiku at $1/M input vs opus at $5/M) gives you more cost control.
 
 ---
 
@@ -82,9 +82,9 @@ both entry tiers at $20/mo are comparable in value. the difference is in the mid
 
 | model | input (per M tokens) | output (per M tokens) |
 |-------|---------------------|----------------------|
-| claude haiku 4.5 | $0.80 | $4.00 |
+| claude haiku 4.5 | $1.00 | $5.00 |
 | claude sonnet 4.6 | $3.00 | $15.00 |
-| claude opus 4.6 | $15.00 | $75.00 |
+| claude opus 4.6 | $5.00 | $25.00 |
 | codex-mini-latest | $1.50 | $6.00 |
 | GPT-5 | $1.25 | $10.00 |
 

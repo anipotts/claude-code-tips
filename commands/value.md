@@ -81,7 +81,13 @@ FROM sessions;
 
 Apply these rates per million tokens (official anthropic API pricing):
 
-### opus 4.x (claude-opus-4-6, claude-opus-4-5-*)
+### opus 4.5/4.6 (claude-opus-4-6, claude-opus-4-5-*)
+- input: $5.00/MTok
+- output: $25.00/MTok
+- cache read: $0.50/MTok
+- cache write: $6.25/MTok
+
+### opus 4.0/4.1 (claude-opus-4-20250514, claude-opus-4-1-*)
 - input: $15.00/MTok
 - output: $75.00/MTok
 - cache read: $1.50/MTok
@@ -94,10 +100,10 @@ Apply these rates per million tokens (official anthropic API pricing):
 - cache write: $3.75/MTok
 
 ### haiku 4.5 (claude-haiku-4-5-*)
-- input: $0.80/MTok
-- output: $4.00/MTok
-- cache read: $0.08/MTok
-- cache write: $1.00/MTok
+- input: $1.00/MTok
+- output: $5.00/MTok
+- cache read: $0.10/MTok
+- cache write: $1.25/MTok
 
 For each model row, calculate:
 - input_cost = input_tokens × rate / 1,000,000
@@ -129,36 +135,36 @@ Example:
 
 | model | sessions | input $ | output $ | cache read $ | cache write $ | total $ |
 |-------|----------|---------|----------|--------------|---------------|---------|
-| claude-opus-4-6 | 1,466 | $87.58 | $368.32 | $9,091.73 | $7,015.10 | $16,562.73 |
-| claude-opus-4-5 | 560 | $75.66 | $119.18 | $3,772.55 | $4,090.93 | $8,058.32 |
-| claude-haiku-4-5 | 1,473 | $6.57 | $2.44 | $242.33 | $378.72 | $630.06 |
+| claude-opus-4-6 | 1,466 | $29.19 | $122.77 | $3,030.58 | $2,338.37 | $5,520.91 |
+| claude-opus-4-5 | 560 | $25.22 | $39.73 | $1,257.52 | $1,363.64 | $2,686.11 |
+| claude-haiku-4-5 | 1,473 | $8.21 | $3.05 | $302.92 | $473.40 | $787.58 |
 | claude-sonnet-4-5 | 208 | $1.84 | $7.02 | $120.04 | $142.24 | $271.14 |
 | claude-sonnet-4-6 | 21 | $0.17 | $1.03 | $21.84 | $32.33 | $55.37 |
 
-**total API value: $25,577.61**
+**total API value: $9,321.11**
 
 cost breakdown:
 | category | amount | % |
 |----------|--------|---|
-| cache read tokens | $13,248.50 | 51.8% |
-| cache write tokens | $11,659.32 | 45.6% |
-| output tokens | $497.99 | 1.9% |
-| input tokens | $171.81 | 0.7% |
+| cache read tokens | $4,732.90 | 50.8% |
+| cache write tokens | $4,349.98 | 46.7% |
+| output tokens | $173.60 | 1.9% |
+| input tokens | $64.63 | 0.7% |
 
 model families:
 | family | sessions | value | avg/session |
 |--------|----------|-------|-------------|
-| opus | 2,026 | $24,621.05 (96.3%) | $12.15 |
-| haiku | 1,473 | $630.06 (2.5%) | $0.43 |
-| sonnet | 229 | $326.50 (1.3%) | $1.43 |
+| opus | 2,026 | $8,207.02 (88.1%) | $4.05 |
+| haiku | 1,473 | $787.58 (8.4%) | $0.53 |
+| sonnet | 229 | $326.51 (3.5%) | $1.43 |
 
 ROI:
 | metric | value |
 |--------|-------|
 | subscription | ~$1,200 (6 months × $200/mo Max 20x) |
-| API inference value | $25,577.61 |
-| ROI | 21x |
-| you saved | $24,377.61 |
+| API inference value | $9,321.11 |
+| ROI | 7.8x |
+| you saved | $8,121.11 |
 
 ## Rules
 - Format all dollar amounts with commas and 2 decimal places

@@ -99,9 +99,10 @@ GROUP BY model ORDER BY sessions DESC;
 ```
 
 Apply these rates per million tokens:
-- opus 4.x: input $15, output $75, cache_read $1.50, cache_write $18.75
+- opus 4.5/4.6: input $5, output $25, cache_read $0.50, cache_write $6.25
+- opus 4.0/4.1: input $15, output $75, cache_read $1.50, cache_write $18.75
 - sonnet 4.x: input $3, output $15, cache_read $0.30, cache_write $3.75
-- haiku 4.5: input $0.80, output $4, cache_read $0.08, cache_write $1.0
+- haiku 4.5: input $1, output $5, cache_read $0.10, cache_write $1.25
 
 Show: per-model table with dollar amounts, category breakdown (input/output/cache), model family summary, ROI vs subscription.
 

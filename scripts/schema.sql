@@ -197,17 +197,31 @@ SELECT
     -- so no subtraction needed — just price each bucket separately
     -- model names include version suffixes (e.g. claude-opus-4-5-20251101) so use LIKE
     CASE
-        WHEN s.model LIKE 'claude-opus-4-%' THEN
+        -- opus 4.5+ ($5/$25 per MTok, cache read $0.50, cache write $6.25)
+        WHEN s.model LIKE 'claude-opus-4-5%' OR s.model LIKE 'claude-opus-4-6%' THEN
+            COALESCE(s.total_input_tokens, 0) * 5.0 / 1e6
+            + COALESCE(s.total_cache_read_tokens, 0) * 0.50 / 1e6
+            + COALESCE(s.total_cache_creation_tokens, 0) * 6.25 / 1e6
+            + COALESCE(s.total_output_tokens, 0) * 25.0 / 1e6
+        -- opus 4.0/4.1 ($15/$75 per MTok, cache read $1.50, cache write $18.75)
+        WHEN s.model LIKE 'claude-opus-4%' THEN
             COALESCE(s.total_input_tokens, 0) * 15.0 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 1.5 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 18.75 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 75.0 / 1e6
-        WHEN s.model LIKE 'claude-sonnet-4-%' THEN
+        WHEN s.model LIKE 'claude-sonnet-4-%' OR s.model LIKE 'claude-sonnet-3-%' THEN
             COALESCE(s.total_input_tokens, 0) * 3.0 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.30 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 3.75 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 15.0 / 1e6
-        WHEN s.model LIKE 'claude-haiku-4-%' THEN
+        -- haiku 4.5 ($1/$5 per MTok, cache read $0.10, cache write $1.25)
+        WHEN s.model LIKE 'claude-haiku-4%' THEN
+            COALESCE(s.total_input_tokens, 0) * 1.0 / 1e6
+            + COALESCE(s.total_cache_read_tokens, 0) * 0.10 / 1e6
+            + COALESCE(s.total_cache_creation_tokens, 0) * 1.25 / 1e6
+            + COALESCE(s.total_output_tokens, 0) * 5.0 / 1e6
+        -- haiku 3.5 ($0.80/$4 per MTok)
+        WHEN s.model LIKE 'claude-haiku-3%' OR s.model LIKE 'claude-3-haiku%' THEN
             COALESCE(s.total_input_tokens, 0) * 0.80 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.08 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 1.0 / 1e6

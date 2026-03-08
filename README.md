@@ -6,14 +6,14 @@
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v1.0.34-blue)](https://docs.anthropic.com/en/docs/claude-code)
 [![auto-updated](https://img.shields.io/badge/auto--updated-2x%20daily-brightgreen)](https://github.com/anipotts/claude-code-tips/actions)
 
-**4,012 sessions. $25K+ in API inference value. ships working code. updates itself.**
+**4,012 sessions. $9K+ in API inference value. ships working code. updates itself.**
 
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine.py --stats dashboard showing sessions, tokens, costs, and projects" />
 <!-- TODO: replace with real terminal demo (hero.tape) -->
 
 ## why this repo
 
-- **tested across 4,012 sessions ($25K+ in API inference)** -- not tutorial code, production patterns extracted from real daily usage
+- **tested across 4,012 sessions ($9K+ in API inference)** -- not tutorial code, production patterns extracted from real daily usage
 - **ships working code** -- every hook, plugin, agent, and skill is copy-paste ready
 - **updates itself** -- upstream watcher monitors official releases, competitor changes, and community trends, then merges autonomously when CI passes
 

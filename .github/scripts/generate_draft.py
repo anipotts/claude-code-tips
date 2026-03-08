@@ -11,7 +11,7 @@ The PR diff shows exactly what changed in the docs. Drafts/analysis
 stay out of the repo -- only instructional content gets committed.
 
 Cost:
-  - Uses claude-haiku-4-5-20250315 ($0.80/MTok in, $4/MTok out)
+  - Uses claude-haiku-4-5-20251001 ($1/MTok in, $5/MTok out)
   - Single API call per run
   - Typical run: ~3000 input + ~2000 output tokens = ~$0.01
 """
