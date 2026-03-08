@@ -17,7 +17,7 @@ we use claude code daily and know it best. that means we can be specific about i
 | openai codex CLI | terminal agent, async-first, cloud sandbox | [codex.md](codex.md) |
 | cursor | IDE-first, forked VS Code, tab completion | [cursor.md](cursor.md) |
 | gemini | google's terminal agent, generous free tier | [gemini.md](gemini.md) |
-| antigravity | IDE-first (formerly codeium), cascade agent | [antigravity.md](antigravity.md) |
+| antigravity | google's agent-first IDE, free preview, multi-model | [antigravity.md](antigravity.md) |
 
 ## pricing matrix
 
@@ -43,4 +43,4 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 - [gemini](https://github.com/google-gemini/gemini-cli)
 - [gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)
 - [google AI subscriptions](https://gemini.google/subscriptions/)
-- [antigravity pricing](https://antigravity.dev/pricing)
+- [antigravity](https://antigravity.google/pricing)
