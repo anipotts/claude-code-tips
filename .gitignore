@@ -1,5 +1,7 @@
 content/
 data/
+AUDIT.md
+docs/upstream-watcher-design.md
 .claude/
 node_modules/
 .DS_Store
