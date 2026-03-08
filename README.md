@@ -59,14 +59,15 @@ drop into `.claude/skills/` or `.claude/commands/`:
 
 | name | description |
 |---|---|
-| [/sift](./skills/sift.md) | search and analyze session history -- costs, tools, patterns, FTS5 search |
+| **[/miner](./skills/miner.md)** | **ask anything about your usage -- costs, value, search, tools, projects. one command, plain language** |
+| [/sift](./skills/sift.md) | explicit subcommands for session history (search, cache, workflows, wasted) |
 | [/ledger](./commands/ledger.md) | quick usage dashboard -- tokens, costs, tools, projects |
+| [/value](./commands/value.md) | per-model API inference value, cost breakdown, ROI |
 | [/improve](./skills/improve.md) | CLAUDE.md self-improvement from git history |
 | [/ship](./skills/ship.md) | stage, commit, push, open a PR |
 | [/sweep](./skills/sweep.md) | find and clean dead code |
 | [/quicktest](./skills/quicktest.md) | run tests for what you're working on |
 | [/stats](./commands/stats.md) | project health -- LOC, git activity, test coverage |
-| [/value](./commands/value.md) | per-model API inference value, cost breakdown, ROI |
 | [/deps](./commands/deps.md) | dependency updates and security audit |
 
 ### agents
