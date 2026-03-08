@@ -8,7 +8,7 @@ Claude Code plugins, hooks, agents, skills, and resources. All tested.
 - `plugins/handoff/` -- context preservation before compaction
 - `plugins/broadcast/` -- async notifications
 - `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, knowledge-builder, notify)
-- `docs/` -- guide, hooks reference, plugin creation, subagent patterns, cli-tools, automation, mcp-servers
+- `docs/` -- guide, hooks reference, plugin creation, subagent patterns, cli-tools, automation, mcp-servers, comparisons, troubleshooting, glossary, resources
 - `agents/` -- analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check
 - `skills/` -- sift, improve, ship, sweep, quicktest
 - `commands/` -- ledger, stats, deps
@@ -24,3 +24,6 @@ Claude Code plugins, hooks, agents, skills, and resources. All tested.
 - Exit codes: 0 = allow, 2 = block
 - Documentation is practical and opinionated -- no fluff
 - Lowercase voice, "bc" not "because"
+- Comparison docs: diplomatic, data-driven. cite sources (pricing pages, changelogs). no FUD, no unsourced claims
+- Every doc/hook/plugin should include "tested with Claude Code vX.Y.Z"
+- CI validates: markdown lint, link check, hook syntax, JSON, python syntax
