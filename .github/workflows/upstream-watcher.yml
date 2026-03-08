@@ -1,0 +1,120 @@
+name: Upstream Watcher
+
+# ---------------------------------------------------------------
+# daily autonomous pipeline:
+#   - polls upstream sources for claude code changes
+#   - processes through Claude API (Haiku) for draft content
+#   - applies proposed edits to actual docs files
+#   - opens draft PR for human review
+#   - sends SMS/push notification with merge link
+#
+# cost: ~$0/mo GitHub Actions + ~$0.01-0.05/run Claude API
+#        + ~$1/mo Twilio SMS (optional, ntfy.sh is free)
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    # twice daily: 06:00 UTC and 18:00 UTC
+    - cron: '0 6,18 * * *'
+  workflow_dispatch:       # manual trigger for testing
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+jobs:
+  watch-and-draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10    # hard cap so a runaway job can't eat minutes
+
+    steps:
+      # ---- setup ----
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      # ---- collect upstream changes ----
+      - name: Collect upstream changes
+        id: collect
+        run: python .github/scripts/collect_upstream.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- persist state so we don't re-process same changes ----
+      - name: Persist state
+        run: |
+          git config user.name "upstream-watcher[bot]"
+          git config user.email "upstream-watcher[bot]@users.noreply.github.com"
+          git add .github/state/
+          git diff --cached --quiet && echo "no state changes" && exit 0
+          git commit -m "chore: update upstream watcher state"
+          git push origin main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- process through Haiku and apply edits ----
+      - name: Generate draft content
+        if: steps.collect.outputs.has_changes == 'true'
+        run: python .github/scripts/generate_draft.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      # ---- create draft PR ----
+      - name: Create draft PR
+        id: create_pr
+        if: steps.collect.outputs.has_changes == 'true'
+        run: |
+          BRANCH="auto/upstream-$(date +%Y%m%d-%H%M)"
+          git checkout -b "$BRANCH"
+
+          # stage only public-facing docs, not content/ or audit files
+          git add docs/ examples/ 2>/dev/null || true
+
+          # bail if nothing to commit
+          git diff --cached --quiet && echo "no changes to commit" && exit 0
+
+          git commit -m "draft: upstream changes $(date +%Y-%m-%d)"
+          git push -u origin "$BRANCH"
+
+          PR_URL=$(gh pr create \
+            --title "upstream: claude code updates $(date +%Y-%m-%d)" \
+            --body-file /tmp/pr-body.md \
+            --base main \
+            --draft 2>&1)
+
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+
+          # extract PR number from URL
+          PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+          echo "Draft PR created: $PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- notify ----
+      - name: Send notification
+        if: steps.collect.outputs.has_changes == 'true' && steps.create_pr.outputs.pr_url
+        run: python .github/scripts/notify.py
+        env:
+          PR_URL: ${{ steps.create_pr.outputs.pr_url }}
+          PR_NUMBER: ${{ steps.create_pr.outputs.pr_number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # SMS -- set these 4 secrets for Twilio
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+          NOTIFY_PHONE_NUMBER: ${{ secrets.NOTIFY_PHONE_NUMBER }}
+          # push notifications -- set this 1 secret for ntfy.sh (free)
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}

@@ -1,0 +1,60 @@
+name: Quick Merge
+
+# ---------------------------------------------------------------
+# one-tap merge from your phone.
+#
+# bookmark this URL in your phone browser:
+#   https://github.com/anipotts/claude-code-tips/actions/workflows/quick-merge.yml
+#
+# when you get a notification about a new draft PR:
+#   1. open the PR link to review the diff
+#   2. if it looks good, come here and tap "Run workflow"
+#   3. enter the PR number → merged
+#
+# or use GitHub Mobile app to merge the PR directly.
+# ---------------------------------------------------------------
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to merge'
+        required: true
+        type: string
+      merge_method:
+        description: 'Merge method'
+        required: false
+        default: 'squash'
+        type: choice
+        options:
+          - squash
+          - merge
+          - rebase
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mark PR as ready and merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUM: ${{ inputs.pr_number }}
+          MERGE_METHOD: ${{ inputs.merge_method }}
+        run: |
+          echo "Merging PR #${PR_NUM} via ${MERGE_METHOD}..."
+
+          # convert from draft to ready
+          gh pr ready "$PR_NUM" 2>/dev/null || true
+
+          # merge
+          gh pr merge "$PR_NUM" \
+            --"$MERGE_METHOD" \
+            --delete-branch
+
+          echo "PR #${PR_NUM} merged successfully"
