@@ -39,6 +39,24 @@
 
 15. **session management** -- renaming sessions, resuming with `--continue`, session lifecycle. scattered mentions but no dedicated coverage
 
+16. **LSP (language server protocol) support** -- native LSP integration giving claude go-to-definition, find-references, and diagnostics. 11+ languages natively, community marketplace covers 20+. ~50ms for find-all-references vs ~45 seconds with text search (900x improvement). plugins can include `.lsp.json` to configure custom language servers. you have zero coverage of this
+
+17. **`/batch` command** -- simpler alternative to agent teams for independent, parallelizable changes with automatic worktree isolation. not documented
+
+18. **auto mode** -- research preview (expected ~mar 12) that lets claude automatically handle permission prompts during coding. not documented
+
+19. **skills/commands unification** -- skills and slash commands are now the same system. files in `.claude/commands/` still work but skills with `SKILL.md` are the recommended pattern. your repo has both directories but doesn't explain the unification or that `disable-model-invocation: true` frontmatter exists
+
+20. **new hook events** -- `TeammateIdle` and `TaskCompleted` events for agent teams coordination. your hooks-guide doesn't list these
+
+21. **`claude install`** -- now the recommended installation method over npm. your guide still shows `npm install -g @anthropic-ai/claude-code`
+
+22. **history-based autocomplete** -- type partial commands in bash mode and press Tab to complete from bash history. not documented
+
+23. **claude agent SDK** -- renamed from "claude code SDK". available in both TypeScript and Python. not documented
+
+24. **compaction improvements** -- now preserves images in the summarizer request, enabling prompt cache reuse for faster/cheaper compaction. your handoff plugin should be aware of this
+
 ### the last 2 weeks in detail (v2.1.51 → v2.1.71, feb 22 - mar 7)
 
 14 releases shipped. here's what you're not covering, organized by what matters most:
@@ -217,13 +235,15 @@ claude-code-tips/
 │   ├── 07-plugins.md                  # consolidated from docs/plugin-creation.md
 │   ├── 08-mcp-servers.md              # consolidated from docs/mcp-servers.md
 │   ├── 09-subagents.md                # consolidated from docs/subagent-patterns.md
-│   ├── 10-agent-teams.md              # NEW: multi-agent orchestration, tmux, worktrees
-│   ├── 11-cli-and-automation.md       # consolidated cli-tools + automation
-│   ├── 12-cost-optimization.md        # NEW: tokens, caching, cost strategies
-│   ├── 13-voice-and-remote.md         # NEW: voice mode, remote control, scheduled tasks
-│   ├── 14-session-management.md       # NEW: sessions, checkpointing, /rewind, /doctor
-│   ├── 15-cross-model-workflows.md    # NEW: RPI, claude + codex, multi-model patterns
-│   └── 16-going-crazy.md             # miner, self-improvement loops, daemons, advanced
+│   ├── 10-agent-teams.md              # NEW: multi-agent orchestration, tmux, worktrees, /batch
+│   ├── 11-lsp.md                      # NEW: language server protocol, go-to-definition, custom LSP configs
+│   ├── 12-cli-and-automation.md       # consolidated cli-tools + automation
+│   ├── 13-cost-optimization.md        # NEW: tokens, caching, cost strategies
+│   ├── 14-voice-and-remote.md         # NEW: voice mode, remote control, scheduled tasks
+│   ├── 15-session-management.md       # NEW: sessions, checkpointing, /rewind, /doctor, auto-memory
+│   ├── 16-cross-model-workflows.md    # NEW: RPI, claude + codex, multi-model patterns
+│   ├── 17-agent-sdk.md                # NEW: claude agent SDK (typescript + python)
+│   └── 18-going-crazy.md             # miner, self-improvement loops, daemons, advanced
 │
 ├── tips/                              # NEW SECTION: scannable tips (compete with shanraisshan)
 │   ├── README.md                      # all tips index
@@ -425,6 +445,18 @@ year 5-10 (2030-2036): the patterns you document today become the foundation of 
 10. [ ] update README.md to reflect new structure and vision
 11. [ ] add a CONTRIBUTING.md
 12. [ ] enable github discussions
+
+---
+
+---
+
+## part 7: business context (why this matters now)
+
+claude code hit a **$2.5 billion annualized run rate** as of february 2026, more than doubling since the start of the year (bloomberg). it went from a side project to anthropic's primary revenue engine. the plugin marketplace is live, LSP support makes it a real IDE competitor, agent teams make it a platform, and voice mode + remote control make it accessible to non-terminal users.
+
+the window for becoming _the_ claude code resource is right now. the tool is growing faster than the documentation ecosystem around it. shanraisshan has the reference guide at 12.3k stars. you have the working tools. the person who combines both -- comprehensive documentation + working code + data-backed analysis -- becomes the canonical resource.
+
+claude code is not a CLI tool anymore. it's an agentic development platform. your repo should reflect that shift.
 
 ---
 
