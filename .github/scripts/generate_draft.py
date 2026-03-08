@@ -220,13 +220,15 @@ def validate_edits(edits: list[dict]) -> list[dict]:
         # check content doesn't accidentally nuke structure (replace with much shorter content)
         if action == "replace" and section:
             idx = current.index(section)
+            # rest = everything after the section header; _find_next_section returns
+            # the char offset to the next heading, which equals the section body length
             rest = current[idx + len(section):]
-            next_sec = _find_next_section(rest)
-            if next_sec != -1:
-                existing_section_len = next_sec
-                if len(content) < existing_section_len * 0.2 and existing_section_len > 200:
-                    print(f"  VALIDATE WARN [{i}]: replacement is <20% of original section size "
-                          f"({len(content)} vs {existing_section_len}), skipping to be safe", file=sys.stderr)
+            next_heading_offset = _find_next_section(rest)
+            if next_heading_offset != -1:
+                section_body_len = next_heading_offset
+                if len(content) < section_body_len * 0.2 and section_body_len > 200:
+                    print(f"  VALIDATE WARN [{i}]: replacement is <20% of original section body "
+                          f"({len(content)} vs {section_body_len} chars), skipping to be safe", file=sys.stderr)
                     continue
 
         print(f"  VALIDATE OK [{i}]: {file_str} ({action}) -- {reason}")
