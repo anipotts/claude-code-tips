@@ -39,6 +39,95 @@
 
 15. **session management** -- renaming sessions, resuming with `--continue`, session lifecycle. scattered mentions but no dedicated coverage
 
+### the last 2 weeks in detail (v2.1.51 → v2.1.71, feb 22 - mar 7)
+
+14 releases shipped. here's what you're not covering, organized by what matters most:
+
+**new commands & workflows you should document:**
+
+| feature | version | date | your coverage |
+|---|---|---|---|
+| `/loop` command + cron scheduling | v2.1.71 | mar 7 | none -- your guardian agent is a manual version of this |
+| auto-memory + `/memory` command | v2.1.59 | feb 26 | none -- this changes how CLAUDE.md works fundamentally |
+| `/copy` command (interactive code block picker) | v2.1.59 | feb 26 | none |
+| `/simplify` bundled slash command | v2.1.63 | feb 28 | none |
+| `/batch` bundled slash command | v2.1.63 | feb 28 | none |
+| `/claude-api` built-in skill | v2.1.69 | mar 5 | none |
+| `/debug` toggle (mid-session debug logging) | v2.1.70 | mar 6 | none |
+| `claude remote-control` subcommand | v2.1.51 | feb 24 | none |
+
+**model changes you should explain:**
+
+| change | version | date | why it matters |
+|---|---|---|---|
+| opus 4.6 defaults to medium effort | v2.1.68 | mar 4 | changes how people should think about model selection |
+| "ultrathink" keyword for high effort | v2.1.68 | mar 4 | your guide doesn't mention effort levels at all |
+| opus 4 and 4.1 removed, auto-migrated to 4.6 | v2.1.68 | mar 4 | affects your gauge agent's model recommendations |
+| effort level displayed in logo/spinner | v2.1.69 | mar 5 | visual feedback users should know about |
+
+**hooks & plugin system changes you should cover:**
+
+| change | version | date | relevance to your repo |
+|---|---|---|---|
+| **HTTP hooks** (`"type": "http"`) | v2.1.63 | feb 28 | huge -- your hooks are all bash scripts, but hooks can now POST JSON to URLs. your broadcast plugin could be simpler |
+| hook security fixes (workspace trust) | v2.1.51 | feb 24 | your hooks-guide should mention trust model |
+| nested skill discovery security fix | v2.1.69 | mar 5 | affects your skills |
+| plugin marketplace git timeout configurable | v2.1.51 | feb 24 | `CLAUDE_CODE_PLUGIN_GIT_TIMEOUT_MS` -- your plugin-creation guide should mention |
+| custom npm registries for plugins | v2.1.51 | feb 24 | your plugin-creation guide should mention |
+| plugin installations lost with multiple instances | v2.1.70 | mar 6 | known issue to document |
+
+**MCP updates you should cover:**
+
+| change | version | date | relevance |
+|---|---|---|---|
+| `ENABLE_CLAUDEAI_MCP_SERVERS=false` env var | v2.1.63 | feb 28 | your mcp-servers guide should mention |
+| MCP OAuth token refresh fixes | v2.1.59 | feb 26 | affects authenticated MCP servers |
+| MCP binary content handling (PDFs, Office, audio) | v2.1.69 | mar 5 | new MCP capabilities |
+| prompt-cache bust fix with MCP servers | v2.1.70 | mar 6 | performance impact |
+| native `/mcp` management dialog in VS Code | v2.1.70 | mar 6 | IDE integration |
+
+**voice mode expansion:**
+
+| change | version | date |
+|---|---|---|
+| 10 new STT languages (20 total) | v2.1.69 | mar 5 |
+| rebindable push-to-talk (`voice:pushToTalk` in keybindings.json) | v2.1.71 | mar 7 |
+
+**IDE / VS Code features:**
+
+| change | version | date |
+|---|---|---|
+| spark icon in activity bar listing all sessions | v2.1.70 | mar 6 |
+| full markdown plan view with comment support | v2.1.70 | mar 6 |
+| native `/mcp` server management dialog | v2.1.70 | mar 6 |
+
+**new environment variables you should document:**
+
+| variable | version | purpose |
+|---|---|---|
+| `CLAUDE_CODE_ACCOUNT_UUID` | v2.1.51 | account identification in hooks |
+| `CLAUDE_CODE_USER_EMAIL` | v2.1.51 | user email in hooks |
+| `CLAUDE_CODE_ORGANIZATION_UUID` | v2.1.51 | org identification in hooks |
+| `ENABLE_CLAUDEAI_MCP_SERVERS` | v2.1.63 | opt out of claude.ai MCP servers |
+| `CLAUDE_CODE_PLUGIN_GIT_TIMEOUT_MS` | v2.1.51 | plugin install timeout |
+
+**performance & behavior changes worth noting:**
+
+- project configs and auto-memory now shared across git worktrees (v2.1.63) -- affects your explorer agent
+- prompt input re-renders reduced ~74% (v2.1.71)
+- startup memory reduced ~426KB (v2.1.71)
+- memory leak fixes saving 35MB+ in long sessions (v2.1.69)
+- tool results >50KB persisted to disk (v2.1.51) -- affects your panopticon logging
+- extended bash auto-approval allowlist: `fmt`, `comm`, `cmp`, `numfmt`, `expr`, `test`, `printf`, `getconf`, `seq`, `tsort`, `pr` (v2.1.71)
+- `/rename` now works mid-processing (v2.1.71)
+- agent name displayed in terminal title (v2.1.69)
+
+**the single biggest thing you're missing: HTTP hooks.** your entire hooks infrastructure is bash scripts reading JSON from stdin. as of v2.1.63, hooks can be `"type": "http"` -- they POST JSON to a URL and receive JSON back. this means your broadcast plugin, your notify hook, and potentially your miner ingest could be rewritten as HTTP endpoints. you should at minimum document this in your hooks guide and consider whether any of your hooks benefit from the HTTP model.
+
+**the second biggest thing: auto-memory.** `/memory` changes the CLAUDE.md story fundamentally. claude now records and recalls context automatically. your guide's section on CLAUDE.md needs to be updated to explain how auto-memory interacts with manual CLAUDE.md instructions, and when to use which.
+
+---
+
 ### features you cover but could go deeper
 
 1. **CLAUDE.md** -- you explain it well in the guide but shanraisshan's repo points out keeping it under 200 lines, using multiple CLAUDE.md files for monorepos, and using `.claude/rules/` for overflow. your guide doesn't cover any of this
