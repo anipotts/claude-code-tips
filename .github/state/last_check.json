@@ -4,15 +4,15 @@
   "marckrenn/claude-code-changelog/commits": "9d706d12e288c00f89fdbfb19d613ba2aa1eadc2",
   "anthropic/changelog": "61102e0f574ddb9f",
   "trending/seen_repos": [
-    "wshobson/agents",
-    "nextlevelbuilder/ui-ux-pro-max-skill",
-    "musistudio/claude-code-router",
-    "code-yeongyu/oh-my-openagent",
-    "thedotmack/claude-mem",
-    "ComposioHQ/awesome-claude-skills",
-    "affaan-m/everything-claude-code",
-    "x1xhlol/system-prompts-and-models-of-ai-tools",
     "anthropics/claude-code",
-    "CherryHQ/cherry-studio"
+    "musistudio/claude-code-router",
+    "thedotmack/claude-mem",
+    "affaan-m/everything-claude-code",
+    "ComposioHQ/awesome-claude-skills",
+    "code-yeongyu/oh-my-openagent",
+    "CherryHQ/cherry-studio",
+    "x1xhlol/system-prompts-and-models-of-ai-tools",
+    "nextlevelbuilder/ui-ux-pro-max-skill",
+    "wshobson/agents"
   ]
 }
