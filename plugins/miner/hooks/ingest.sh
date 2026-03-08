@@ -7,7 +7,11 @@ set -euo pipefail
 # tested with: claude code v1.0.34
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MINE_PY="${SCRIPT_DIR}/../../scripts/mine.py"
+# plugin-local first (marketplace installs), then repo layout fallback
+MINE_PY="${SCRIPT_DIR}/../scripts/mine.py"
+if [[ ! -f "$MINE_PY" ]]; then
+  MINE_PY="${SCRIPT_DIR}/../../scripts/mine.py"
+fi
 DB="${HOME}/.claude/miner.db"
 CONFIG="${HOME}/.claude/miner.json"
 

@@ -13,11 +13,13 @@ CONFIG="${HOME}/.claude/miner.json"
 ECHO_ENABLED=true
 IMPRINT_ENABLED=true
 MOVE_DETECT_ENABLED=true
+BACKFILL_ENABLED=true
 
 if [[ -f "$CONFIG" ]]; then
   ECHO_ENABLED=$(jq -r '.echo // true' "$CONFIG" 2>/dev/null || echo "true")
   IMPRINT_ENABLED=$(jq -r '.imprint // true' "$CONFIG" 2>/dev/null || echo "true")
   MOVE_DETECT_ENABLED=$(jq -r '.move_detect // true' "$CONFIG" 2>/dev/null || echo "true")
+  BACKFILL_ENABLED=$(jq -r '.auto_backfill // true' "$CONFIG" 2>/dev/null || echo "true")
 fi
 
 # bail if db does not exist yet (no history to surface)
@@ -37,6 +39,43 @@ fi
 PROJECT_NAME=$(basename "$CWD")
 SAFE_PROJECT=$(echo "$PROJECT_NAME" | sed "s/'/''/g")
 SAFE_CWD=$(echo "$CWD" | sed "s/'/''/g")
+
+# ============================================================
+# 0. FRESHNESS CHECK + AUTO-BACKFILL
+# ============================================================
+if [[ "$BACKFILL_ENABLED" == "true" ]]; then
+  LATEST_SESSION=$(sqlite3 "$DB" "
+    SELECT MAX(start_time) FROM sessions WHERE is_subagent = 0;
+  " 2>/dev/null || echo "")
+
+  if [[ -n "$LATEST_SESSION" && "$LATEST_SESSION" != "" ]]; then
+    # cross-platform epoch conversion
+    if [[ "$(uname)" == "Darwin" ]]; then
+      LATEST_EPOCH=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${LATEST_SESSION%%.*}" "+%s" 2>/dev/null || echo "0")
+    else
+      LATEST_EPOCH=$(date -d "${LATEST_SESSION}" "+%s" 2>/dev/null || echo "0")
+    fi
+    NOW_EPOCH=$(date "+%s")
+    GAP=$(( NOW_EPOCH - LATEST_EPOCH ))
+
+    if [[ "$GAP" -gt 86400 ]]; then
+      # resolve mine.py: plugin-local first, then repo layout
+      SCRIPT_DIR_SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+      BF_MINE_PY="${SCRIPT_DIR_SELF}/../scripts/mine.py"
+      if [[ ! -f "$BF_MINE_PY" ]]; then
+        BF_MINE_PY="${SCRIPT_DIR_SELF}/../../scripts/mine.py"
+      fi
+
+      if [[ -f "$BF_MINE_PY" ]]; then
+        GAP_DAYS=$(( GAP / 86400 ))
+        echo "[miner:heal] data is ${GAP_DAYS}d stale. backfilling in background..."
+
+        # background backfill — does not block session start
+        (python3 "$BF_MINE_PY" --incremental >> "${HOME}/.claude/miner-backfill.log" 2>&1) &
+      fi
+    fi
+  fi
+fi
 
 # ============================================================
 # 1. PROJECT MOVE DETECTION
