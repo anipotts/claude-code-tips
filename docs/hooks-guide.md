@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # The Complete Claude Code Hooks Guide
 
 **A practical reference for every hook event, with tested examples.**

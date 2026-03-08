@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # the claude code guide
 
 **beginner to claude-code-crazy in one document.**

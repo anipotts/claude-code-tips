@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # agent teams
 
 **run 2-5 claude instances in parallel on the same codebase using git worktrees.**

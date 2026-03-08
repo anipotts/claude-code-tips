@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # claude code cost analysis
 
 **understand where your tokens go and stop overspending.**
