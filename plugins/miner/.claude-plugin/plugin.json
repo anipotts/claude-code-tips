@@ -1,0 +1,12 @@
+{
+  "name": "miner",
+  "version": "1.0.0",
+  "description": "mines every claude code session into a local sqlite database. tracks costs, tools, errors, subagents, and enables full-text search across your history.",
+  "author": {
+    "name": "Ani Potts"
+  },
+  "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/miner",
+  "repository": "https://github.com/anipotts/claude-code-tips",
+  "license": "MIT",
+  "keywords": ["mining", "analytics", "sqlite", "history", "search", "costs", "sessions", "echo", "scar", "gauge", "imprint"]
+}
