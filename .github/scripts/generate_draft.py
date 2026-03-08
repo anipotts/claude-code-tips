@@ -226,10 +226,13 @@ def validate_edits(edits: list[dict]) -> list[dict]:
             next_heading_offset = _find_next_section(rest)
             if next_heading_offset != -1:
                 section_body_len = next_heading_offset
-                if len(content) < section_body_len * 0.2 and section_body_len > 200:
-                    print(f"  VALIDATE WARN [{i}]: replacement is <20% of original section body "
-                          f"({len(content)} vs {section_body_len} chars), skipping to be safe", file=sys.stderr)
-                    continue
+            else:
+                # last section in file -- body is everything after the header
+                section_body_len = len(rest)
+            if section_body_len > 200 and len(content) < section_body_len * 0.2:
+                print(f"  VALIDATE WARN [{i}]: replacement is <20% of original section body "
+                      f"({len(content)} vs {section_body_len} chars), skipping to be safe", file=sys.stderr)
+                continue
 
         print(f"  VALIDATE OK [{i}]: {file_str} ({action}) -- {reason}")
         valid.append(edit)
