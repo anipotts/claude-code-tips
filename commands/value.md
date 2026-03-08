@@ -183,7 +183,7 @@ most of your inference value comes from cache tokens, not input/output. here's w
 
 claude code uses prompt caching aggressively -- your system prompt, CLAUDE.md, file contents, and conversation history get cached. every turn re-reads that cache (cache_read_tokens) and occasionally updates it (cache_creation_tokens). a single 30-turn session might accumulate 50M+ cache read tokens.
 
-at API rates, cache reads are 90% cheaper than input tokens, but the volume is enormous. 12B cache read tokens at opus rates ($1.50/MTok) = $18K. your subscription absorbs all of this.
+at API rates, cache reads are 90% cheaper than input tokens, but the volume is enormous. 12B cache read tokens at opus 4.5+ rates ($0.50/MTok) = $6K. your subscription absorbs all of this.
 
 ## pairing with /ledger
 

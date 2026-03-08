@@ -51,7 +51,6 @@ standalone scripts. copy to `~/.claude/hooks/` and wire up in settings:
 | [panopticon](./hooks/panopticon.sh) | PostToolUse | logs every tool action to sqlite |
 | [knowledge-builder](./hooks/knowledge-builder/) | PostToolUse | builds a codebase knowledge graph as claude explores |
 | [notify](./hooks/notify.sh) | Notification | routes to macOS, Slack, Pushover, ntfy |
-| [live-stats](./hooks/live-stats.sh) | SessionEnd | updates live session count, spend, and API value badges after every session |
 
 ```bash
 cp hooks/safety-guard.sh ~/.claude/hooks/
