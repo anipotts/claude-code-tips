@@ -1,0 +1,125 @@
+name: Claude Responder
+
+# ---------------------------------------------------------------
+# auto-triages new issues and reviews external PRs.
+# uses headless claude -p to generate contextual responses.
+#
+# security: all user content flows through files, never shell
+# interpolation. LLM output written to files and passed via
+# --body-file to avoid injection.
+#
+# cost: ~$0.01-0.03 per invocation (haiku)
+# ---------------------------------------------------------------
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+env:
+  CLAUDE_MODEL: claude-haiku-4-5-20251001
+
+jobs:
+  # -----------------------------------------------------------------
+  # triage new issues -- label, link relevant docs, suggest next steps
+  # -----------------------------------------------------------------
+  triage-issue:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Triage issue
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          # fetch issue content via API (never interpolate user content in shell)
+          ISSUE_TITLE=$(gh issue view "$ISSUE_NUMBER" --json title -q '.title')
+          ISSUE_BODY=$(gh issue view "$ISSUE_NUMBER" --json body -q '.body')
+
+          # build prompt safely -- quoted heredoc prevents shell expansion
+          cat > /tmp/prompt.txt <<'PROMPT_EOF'
+          you are triaging issues for the claude-code-tips repo.
+          this repo has:
+          - plugins: miner (session mining to sqlite), handoff (context preservation), broadcast (async notifications)
+          - hooks: safety-guard, context-save, panopticon, knowledge-builder, notify
+          - agents: analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check
+          - skills: sift, improve, ship, sweep, quicktest
+          - docs: guide, hooks-guide, plugin-creation, subagent-patterns, cli-tools, automation, mcp-servers, comparisons/
+
+          triage the issue below and write a helpful response:
+
+          rules:
+          - be concise and helpful, lowercase voice, no fluff
+          - link to relevant docs if the question is covered (use relative paths like docs/guide.md)
+          - if it's a bug report, suggest diagnostic steps
+          - if it's a feature request, note if it aligns with existing patterns
+          - end with 'this is an automated response -- @anipotts will follow up'
+          - output ONLY the response text, no markdown fences wrapping it
+          PROMPT_EOF
+
+          # append user content as data (not shell-interpolated)
+          printf '\ntitle: %s\nbody: %s\n' "$ISSUE_TITLE" "$ISSUE_BODY" >> /tmp/prompt.txt
+
+          # generate response and write to file (avoid shell interpretation of LLM output)
+          claude -p --model "$CLAUDE_MODEL" < /tmp/prompt.txt > /tmp/response.md
+          gh issue comment "$ISSUE_NUMBER" --body-file /tmp/response.md
+
+  # -----------------------------------------------------------------
+  # review external PRs -- check accuracy, style, safety
+  # -----------------------------------------------------------------
+  review-pr:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.user.login != github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Review PR
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # fetch PR content via API (safe -- no user content in shell)
+          PR_TITLE=$(gh pr view "$PR_NUMBER" --json title -q '.title')
+          gh pr diff "$PR_NUMBER" > /tmp/pr-diff.txt
+
+          # build prompt safely -- quoted heredoc prevents shell expansion
+          cat > /tmp/prompt.txt <<'PROMPT_EOF'
+          you are reviewing a PR for the claude-code-tips repo. review this diff for:
+          1. accuracy -- does it match official claude code behavior?
+          2. style -- lowercase voice, no fluff, practical and opinionated
+          3. completeness -- does it include a 'tested with' version stamp?
+          4. safety -- no secrets, no dangerous patterns, no --dangerously-skip-permissions without guardrails
+          5. conventions -- hooks use #!/usr/bin/env bash with set -euo pipefail
+
+          write a concise PR review comment. be specific about issues found.
+          end with 'automated review -- @anipotts will do final review'.
+          output ONLY the review text.
+          PROMPT_EOF
+
+          # append PR content as data
+          printf '\nPR title: %s\n\ndiff:\n' "$PR_TITLE" >> /tmp/prompt.txt
+          cat /tmp/pr-diff.txt >> /tmp/prompt.txt
+
+          # generate review and write to file
+          claude -p --model "$CLAUDE_MODEL" < /tmp/prompt.txt > /tmp/review.md
+          gh pr review "$PR_NUMBER" --comment --body-file /tmp/review.md
