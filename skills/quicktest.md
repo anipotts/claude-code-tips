@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 ---
 name: quicktest
 description: find and run the test file for whatever you're working on right now

@@ -1,0 +1,252 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # markdown lint -- catches formatting issues, broken structure
+  # ---------------------------------------------------------------------------
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            **/*.md
+            !content/**
+            !data/**
+            !node_modules/**
+            !.github/**
+
+  # ---------------------------------------------------------------------------
+  # link check -- verify URLs in docs aren't broken
+  # ---------------------------------------------------------------------------
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links with lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --config .github/lychee.toml
+            --no-progress
+            "**/*.md"
+          fail: true
+
+  # ---------------------------------------------------------------------------
+  # hook syntax -- validate all shell scripts
+  # ---------------------------------------------------------------------------
+  hook-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate shell scripts
+        run: |
+          errors=0
+
+          # collect all .sh files tracked by git (excludes gitignored dirs)
+          mapfile -t scripts < <(git ls-files '*.sh')
+
+          if [ ${#scripts[@]} -eq 0 ]; then
+            echo "No .sh files found"
+            exit 0
+          fi
+
+          echo "Found ${#scripts[@]} shell scripts"
+          echo "---"
+
+          for script in "${scripts[@]}"; do
+            echo "Checking: $script"
+
+            # --- shebang check ---
+            shebang=$(head -1 "$script")
+            if [[ "$shebang" == "#!/usr/bin/env bash" ]]; then
+              echo "  shebang: ok (#!/usr/bin/env bash)"
+            elif [[ "$shebang" == "#!/bin/bash" ]]; then
+              # accept but warn -- convention prefers #!/usr/bin/env bash
+              echo "  shebang: warn -- uses #!/bin/bash (prefer #!/usr/bin/env bash)"
+            else
+              echo "  shebang: FAIL -- expected bash shebang, got: $shebang"
+              errors=$((errors + 1))
+            fi
+
+            # --- set -euo pipefail check ---
+            # check first 10 lines (allows for comment headers)
+            if head -10 "$script" | grep -q 'set -euo pipefail'; then
+              echo "  strict mode: ok"
+            else
+              echo "  strict mode: warn -- missing 'set -euo pipefail' in first 10 lines"
+              # warn only, not an error -- some scripts may have reasons to omit
+            fi
+
+            # --- bash -n syntax check ---
+            if bash -n "$script" 2>&1; then
+              echo "  syntax: ok"
+            else
+              echo "  syntax: FAIL"
+              errors=$((errors + 1))
+            fi
+
+            # --- executable permission check ---
+            if [ -x "$script" ]; then
+              echo "  executable: ok"
+            else
+              echo "  executable: FAIL -- missing +x permission"
+              errors=$((errors + 1))
+            fi
+
+            echo ""
+          done
+
+          echo "---"
+          if [ $errors -gt 0 ]; then
+            echo "FAILED: $errors error(s) found"
+            exit 1
+          else
+            echo "All shell script checks passed"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # json validation -- ensure plugin manifests and other JSON are well-formed
+  # ---------------------------------------------------------------------------
+  json-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          errors=0
+
+          # collect JSON files tracked by git (excludes gitignored dirs)
+          mapfile -t json_files < <(git ls-files '*.json')
+
+          if [ ${#json_files[@]} -eq 0 ]; then
+            echo "No JSON files found"
+            exit 0
+          fi
+
+          echo "Found ${#json_files[@]} JSON files"
+          echo "---"
+
+          for f in "${json_files[@]}"; do
+            if python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$f" 2>&1; then
+              echo "ok: $f"
+            else
+              echo "FAIL: $f"
+              errors=$((errors + 1))
+            fi
+          done
+
+          echo "---"
+          if [ $errors -gt 0 ]; then
+            echo "FAILED: $errors invalid JSON file(s)"
+            exit 1
+          else
+            echo "All JSON files valid"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # version stamps -- aspirational check for "tested with" annotations
+  # this is a soft gate -- failures don't block merge
+  # ---------------------------------------------------------------------------
+  version-stamps:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for version stamps
+        run: |
+          missing=0
+          checked=0
+          dirs="docs hooks plugins agents skills commands"
+
+          echo "Checking for 'tested with' stamps..."
+          echo "(this is aspirational -- failures here are informational)"
+          echo "---"
+
+          for dir in $dirs; do
+            if [ ! -d "$dir" ]; then
+              continue
+            fi
+
+            # check tracked files (skip .json -- JSON has no comment syntax)
+            while IFS= read -r file; do
+              case "$file" in *.json) continue ;; esac
+              checked=$((checked + 1))
+              if grep -qiE 'tested.with|compatible.with|works.with|verified.with' "$file" 2>/dev/null; then
+                echo "ok: $file"
+              else
+                echo "missing: $file"
+                missing=$((missing + 1))
+              fi
+            done < <(git ls-files "$dir")
+          done
+
+          echo "---"
+          echo "Checked $checked files, $missing missing version stamps"
+
+          if [ $missing -gt 0 ]; then
+            echo ""
+            echo "hint: add a line like '<!-- tested with: claude code v1.0.x -->' to each file"
+            exit 1
+          fi
+
+  # ---------------------------------------------------------------------------
+  # python syntax -- compile-check all .py files in .github/scripts/ and scripts/
+  # ---------------------------------------------------------------------------
+  python-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check Python syntax
+        run: |
+          errors=0
+
+          # check .github/scripts/ and scripts/
+          mapfile -t py_files < <(git ls-files '.github/scripts/*.py' 'scripts/*.py')
+
+          if [ ${#py_files[@]} -eq 0 ]; then
+            echo "No Python files found in target directories"
+            exit 0
+          fi
+
+          echo "Found ${#py_files[@]} Python files"
+          echo "---"
+
+          for f in "${py_files[@]}"; do
+            if python3 -m py_compile "$f" 2>&1; then
+              echo "ok: $f"
+            else
+              echo "FAIL: $f"
+              errors=$((errors + 1))
+            fi
+          done
+
+          echo "---"
+          if [ $errors -gt 0 ]; then
+            echo "FAILED: $errors file(s) with syntax errors"
+            exit 1
+          else
+            echo "All Python files compile cleanly"
+          fi

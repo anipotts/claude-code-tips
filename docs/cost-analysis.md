@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # claude code cost analysis
 
 **understand where your tokens go and stop overspending.**
@@ -22,9 +24,9 @@ every claude code interaction is an API call. you send tokens in (your prompt + 
 
 | model | input (per M tokens) | output (per M tokens) | cache read | cache write |
 |---|---|---|---|---|
-| haiku 4.5 | $0.80 | $4.00 | $0.08 | $1.00 |
+| haiku 4.5 | $1.00 | $5.00 | $0.10 | $1.25 |
 | sonnet 4.6 | $3.00 | $15.00 | $0.30 | $3.75 |
-| opus 4.6 | $15.00 | $75.00 | $1.50 | $18.75 |
+| opus 4.6 | $5.00 | $25.00 | $0.50 | $6.25 |
 
 the API reports four token buckets per request: `input_tokens` (non-cached input), `cache_read_input_tokens` (90% discount), `cache_creation_input_tokens` (25% premium), and `output_tokens`. in a typical session, 90%+ of cost comes from cache tokens bc every tool call re-sends the conversation context.
 
@@ -38,7 +40,7 @@ ranked by impact:
 
 **1. long sessions.** the number one cost driver. by turn 30, every message sends 100K+ tokens of context. cache helps, but the sheer volume adds up. a 1-hour session can cost 10-50x what five 12-minute sessions cost for the same work.
 
-**2. opus usage.** opus is 5x sonnet for the same work. thats not 5% more -- its 500% more. a 30-minute opus session costs what a full day of sonnet costs.
+**2. opus usage.** opus is ~1.7x sonnet on both input and output pricing. a 30-minute opus session costs roughly what a longer sonnet session costs for comparable work.
 
 **3. subagents and agent teams.** each subagent has its own context window. three subagents = three separate billing streams running in parallel. agent teams multiply this further.
 
@@ -60,7 +62,7 @@ the biggest lever you have. use `/model` mid-session:
 /model opus      # architecture, complex multi-file design
 ```
 
-haiku is 19x cheaper than sonnet on input. sonnet is 5x cheaper than opus. match the model to the task, not the session.
+haiku is 3x cheaper than sonnet on input. sonnet is ~2x cheaper than opus. match the model to the task, not the session.
 
 ### session hygiene
 
@@ -201,7 +203,7 @@ sqlite3 ~/.claude/miner.db "SELECT model, COUNT(*) as sessions, printf('%.0f%%',
 
 this gets cached into every session and nudges the right behavior from the start.
 
-> [usage controls docs](https://docs.anthropic.com/en/docs/claude-code/manage-costs)
+> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ---
 

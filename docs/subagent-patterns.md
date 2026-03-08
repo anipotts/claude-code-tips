@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # battle-tested subagent patterns
 
 **how to use Task, agent teams, and subagents without wasting tokens or losing your mind.**

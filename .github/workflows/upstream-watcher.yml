@@ -3,10 +3,17 @@ name: Upstream Watcher
 # ---------------------------------------------------------------
 # daily autonomous pipeline:
 #   - polls upstream sources for claude code changes
+#   - classifies changes by tier (1=auto-merge, 2=human review)
 #   - processes through Claude API (Haiku) for draft content
-#   - applies proposed edits to actual docs files
-#   - opens draft PR for human review
-#   - sends SMS/push notification with merge link
+#   - validates proposed edits before applying
+#   - routes based on tier:
+#     tier 1: create ready PR → auto-merge → notify after merge
+#     tier 2: create draft PR → notify → wait for human review
+#   - includes rollback: if validation fails post-merge, creates revert PR
+#
+# sources:
+#   tier 1: official releases, docs changes, competitor releases
+#   tier 2: reddit, HN, trending repos, community content
 #
 # cost: ~$0/mo GitHub Actions + ~$0.01-0.05/run Claude API
 #        + ~$1/mo Twilio SMS (optional, ntfy.sh is free)
@@ -69,10 +76,10 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
-      # ---- create draft PR ----
-      - name: Create draft PR
-        id: create_pr
-        if: steps.collect.outputs.has_changes == 'true'
+      # ---- tier 1: create ready PR with auto-merge ----
+      - name: Create tier 1 PR (auto-merge)
+        id: create_pr_tier1
+        if: steps.collect.outputs.has_changes == 'true' && steps.collect.outputs.route_tier == '1'
         run: |
           BRANCH="auto/upstream-$(date +%Y%m%d-%H%M)"
           git checkout -b "$BRANCH"
@@ -81,34 +88,119 @@ jobs:
           git add docs/ examples/ 2>/dev/null || true
 
           # bail if nothing to commit
-          git diff --cached --quiet && echo "no changes to commit" && exit 0
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+            exit 0
+          fi
+
+          git commit -m "upstream: tier 1 changes $(date +%Y-%m-%d)"
+          git push -u origin "$BRANCH"
+
+          # create PR -- capture stdout and stderr separately
+          if ! PR_URL=$(gh pr create \
+            --title "upstream: claude code updates $(date +%Y-%m-%d)" \
+            --body-file /tmp/pr-body.md \
+            --base main 2>/tmp/pr-create-err.txt); then
+            echo "::error::PR creation failed: $(cat /tmp/pr-create-err.txt)"
+            exit 1
+          fi
+
+          # validate PR URL format before extracting number
+          if ! echo "$PR_URL" | grep -qE 'github\.com/.+/pull/[0-9]+$'; then
+            echo "::error::unexpected PR URL format: $PR_URL"
+            exit 1
+          fi
+
+          PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+          # add auto-merge label and enable auto-merge
+          gh pr edit "$PR_NUMBER" --add-label "auto-merge" 2>/dev/null || true
+          gh pr merge "$PR_NUMBER" --auto --squash 2>/dev/null || echo "auto-merge not available (branch protection may not be configured)"
+
+          echo "Tier 1 PR created with auto-merge: $PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- tier 2: create draft PR for human review ----
+      - name: Create tier 2 PR (draft)
+        id: create_pr_tier2
+        if: steps.collect.outputs.has_changes == 'true' && steps.collect.outputs.route_tier == '2'
+        run: |
+          BRANCH="auto/upstream-$(date +%Y%m%d-%H%M)"
+          git checkout -b "$BRANCH"
+
+          # stage only public-facing docs, not content/ or audit files
+          git add docs/ examples/ 2>/dev/null || true
+
+          # bail if nothing to commit
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+            exit 0
+          fi
 
           git commit -m "draft: upstream changes $(date +%Y-%m-%d)"
           git push -u origin "$BRANCH"
 
-          PR_URL=$(gh pr create \
+          # create PR -- capture stdout and stderr separately
+          if ! PR_URL=$(gh pr create \
             --title "upstream: claude code updates $(date +%Y-%m-%d)" \
             --body-file /tmp/pr-body.md \
             --base main \
-            --draft 2>&1)
+            --draft 2>/tmp/pr-create-err.txt); then
+            echo "::error::PR creation failed: $(cat /tmp/pr-create-err.txt)"
+            exit 1
+          fi
 
-          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          # validate PR URL format before extracting number
+          if ! echo "$PR_URL" | grep -qE 'github\.com/.+/pull/[0-9]+$'; then
+            echo "::error::unexpected PR URL format: $PR_URL"
+            exit 1
+          fi
 
-          # extract PR number from URL
           PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
-          echo "Draft PR created: $PR_URL"
+          # add needs-review label
+          gh pr edit "$PR_NUMBER" --add-label "needs-review" 2>/dev/null || true
+
+          echo "Tier 2 draft PR created: $PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- resolve PR outputs from whichever tier ran ----
+      - name: Resolve PR info
+        id: pr_info
+        if: steps.collect.outputs.has_changes == 'true'
+        run: |
+          # one of the two tier steps ran -- grab its outputs
+          T1_URL="${{ steps.create_pr_tier1.outputs.pr_url }}"
+          T2_URL="${{ steps.create_pr_tier2.outputs.pr_url }}"
+          if [ -n "$T1_URL" ]; then
+            echo "pr_url=$T1_URL" >> "$GITHUB_OUTPUT"
+            echo "pr_number=${{ steps.create_pr_tier1.outputs.pr_number }}" >> "$GITHUB_OUTPUT"
+            echo "tier=1" >> "$GITHUB_OUTPUT"
+          elif [ -n "$T2_URL" ]; then
+            echo "pr_url=$T2_URL" >> "$GITHUB_OUTPUT"
+            echo "pr_number=${{ steps.create_pr_tier2.outputs.pr_number }}" >> "$GITHUB_OUTPUT"
+            echo "tier=2" >> "$GITHUB_OUTPUT"
+          else
+            echo "no PR created"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ---- notify ----
       - name: Send notification
-        if: steps.collect.outputs.has_changes == 'true' && steps.create_pr.outputs.pr_url
+        if: steps.collect.outputs.has_changes == 'true' && steps.pr_info.outputs.pr_url
+        continue-on-error: true
         run: python .github/scripts/notify.py
         env:
-          PR_URL: ${{ steps.create_pr.outputs.pr_url }}
-          PR_NUMBER: ${{ steps.create_pr.outputs.pr_number }}
+          PR_URL: ${{ steps.pr_info.outputs.pr_url }}
+          PR_NUMBER: ${{ steps.pr_info.outputs.pr_number }}
+          PR_TIER: ${{ steps.pr_info.outputs.tier }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # SMS -- set these 4 secrets for Twilio
@@ -118,3 +210,49 @@ jobs:
           NOTIFY_PHONE_NUMBER: ${{ secrets.NOTIFY_PHONE_NUMBER }}
           # push notifications -- set this 1 secret for ntfy.sh (free)
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+
+      # ---- rollback: if a merged tier-1 PR breaks validation, create revert PR ----
+      - name: Rollback on failure
+        if: failure() && steps.pr_info.outputs.tier == '1' && steps.pr_info.outputs.pr_number
+        run: |
+          PR_NUMBER="${{ steps.pr_info.outputs.pr_number }}"
+
+          # check if the PR was already merged
+          PR_STATE=$(gh pr view "$PR_NUMBER" --json state --jq '.state')
+          if [ "$PR_STATE" != "MERGED" ]; then
+            echo "PR not merged, no rollback needed"
+            exit 0
+          fi
+
+          # get merge commit SHA
+          MERGE_SHA=$(gh pr view "$PR_NUMBER" --json mergeCommit --jq '.mergeCommit.oid')
+          if [ -z "$MERGE_SHA" ]; then
+            echo "could not find merge commit SHA"
+            exit 1
+          fi
+
+          # create revert branch
+          git fetch origin main
+          git checkout origin/main
+          REVERT_BRANCH="auto/revert-upstream-$PR_NUMBER"
+          git checkout -b "$REVERT_BRANCH"
+
+          # revert the merge commit
+          git revert --no-edit "$MERGE_SHA" || {
+            echo "revert failed -- manual intervention needed"
+            exit 1
+          }
+
+          git push -u origin "$REVERT_BRANCH"
+
+          if ! REVERT_URL=$(gh pr create \
+            --title "revert: upstream PR #$PR_NUMBER (auto-rollback)" \
+            --body "auto-rollback of #$PR_NUMBER due to pipeline failure. review before merging." \
+            --base main 2>/tmp/revert-err.txt); then
+            echo "::error::revert PR creation failed: $(cat /tmp/revert-err.txt)"
+            exit 1
+          fi
+
+          echo "Revert PR created: $REVERT_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

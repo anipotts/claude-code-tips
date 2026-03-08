@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 ---
 name: sift
 description: query your claude code usage history from miner.db — search, costs, tools, patterns

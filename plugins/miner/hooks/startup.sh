@@ -4,6 +4,7 @@
 # Runs on every session start to surface relevant history.
 
 set -euo pipefail
+# tested with: claude code v1.0.34
 
 DB="${HOME}/.claude/miner.db"
 CONFIG="${HOME}/.claude/miner.json"

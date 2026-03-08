@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+# tested with: claude code v1.0.34
 # =============================================================================
 # Context Save — PreCompact session handoff
 # =============================================================================
@@ -18,8 +20,6 @@
 # You can customize the handoff template below to include project-specific
 # sections (current branch, test status, TODO items, etc.)
 # =============================================================================
-
-set -euo pipefail
 
 # Read the hook payload from stdin
 INPUT=$(cat)

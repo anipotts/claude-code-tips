@@ -1,0 +1,116 @@
+name: Comparison Update
+
+# ---------------------------------------------------------------
+# weekly check of competitor pricing and feature pages.
+# fetches current data, strips HTML to text (saves tokens),
+# compares against docs/comparisons/, opens a PR if changed.
+#
+# cost: ~$0.02-0.05 per run (haiku, stripped text input)
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: '0 12 * * 3'  # every wednesday at 12:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  CLAUDE_MODEL: claude-haiku-4-5-20251001
+
+jobs:
+  check-comparisons:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Fetch competitor pricing pages
+        run: |
+          mkdir -p /tmp/competitor-data
+
+          # fetch and strip HTML to text (saves 80-90% of tokens)
+          for url_name in \
+            "https://www.cursor.com/pricing cursor" \
+            "https://antigravity.google/pricing antigravity" \
+            "https://github.com/features/copilot copilot"; do
+            URL=$(echo "$url_name" | cut -d' ' -f1)
+            NAME=$(echo "$url_name" | cut -d' ' -f2)
+            curl -sL --connect-timeout 10 --max-time 30 "$URL" 2>/dev/null \
+              | python3 -c "import sys,re; t=sys.stdin.read(); t=re.sub(r'<script[^>]*>.*?</script>','',t,flags=re.S); t=re.sub(r'<style[^>]*>.*?</style>','',t,flags=re.S); t=re.sub(r'<[^>]+>',' ',t); t=re.sub(r'\s+',' ',t).strip(); print(t[:8000])" \
+              > "/tmp/competitor-data/${NAME}-pricing.txt" || true
+          done
+
+          # verify at least one file has content
+          TOTAL=$(cat /tmp/competitor-data/*.txt 2>/dev/null | wc -c)
+          if [ "$TOTAL" -lt 100 ]; then
+            echo "no competitor data fetched -- all curls failed"
+            exit 0
+          fi
+          echo "fetched $TOTAL chars of competitor data"
+
+      - name: Compare against current docs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p --model "$CLAUDE_MODEL" \
+            "you are checking if competitor pricing/features have changed.
+
+          read the current comparison docs in docs/comparisons/.
+          then read the freshly fetched pricing text in /tmp/competitor-data/.
+
+          for each competitor (cursor, antigravity, copilot):
+          1. extract current pricing tiers and key features from the fetched text
+          2. compare against what's in docs/comparisons/
+          3. if anything changed (prices, tier names, features, limits), update the comparison doc
+
+          rules:
+          - only update facts that clearly changed -- dont rewrite style
+          - keep the existing doc structure and voice (lowercase, no fluff)
+          - add a comment like '<!-- updated YYYY-MM-DD -->' near changed sections
+          - if a fetch failed (empty file), skip that competitor
+
+          write a summary of changes to /tmp/comparison-changes.txt.
+          if nothing changed, write 'no changes detected'." \
+            --allowedTools Read,Write,Edit,Glob,Grep
+
+      - name: Create PR if changes exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "no comparison changes detected"
+            exit 0
+          fi
+
+          BRANCH="auto/comparison-update-$(date +%Y%m%d)"
+          git config user.name "comparison-bot[bot]"
+          git config user.email "comparison-bot[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add docs/comparisons/
+          git diff --cached --quiet && echo "nothing to commit" && exit 0
+          git commit -m "docs: update competitor comparisons $(date +%Y-%m-%d)"
+          git push -u origin "$BRANCH"
+
+          # use --body-file to avoid shell injection from LLM content
+          {
+            echo "## automated comparison check"
+            echo ""
+            cat /tmp/comparison-changes.txt 2>/dev/null || echo "see diff"
+            echo ""
+            echo "---"
+            echo "automated -- verify pricing data before merging."
+          } > /tmp/pr-body.md
+
+          if ! gh pr create \
+            --title "docs: comparison updates $(date +%Y-%m-%d)" \
+            --body-file /tmp/pr-body.md \
+            --base main \
+            --draft; then
+            echo "::warning::PR creation failed -- changes are on branch $BRANCH"
+          fi

@@ -1,0 +1,96 @@
+name: Docs Audit
+
+# ---------------------------------------------------------------
+# weekly docs audit -- reads all docs and checks for:
+#   - outdated information vs official claude code docs
+#   - missing cross-references between related docs
+#   - missing "tested with" version stamps
+#   - structural inconsistencies
+#
+# if issues found, opens a PR with fixes.
+# cost: ~$0.05-0.15 per run (haiku, larger context)
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: '0 10 * * 0'  # every sunday at 10:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  CLAUDE_MODEL: claude-haiku-4-5-20251001
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run docs audit
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p --model "$CLAUDE_MODEL" \
+            "you are auditing the docs/ directory of the claude-code-tips repo.
+
+          read every file in docs/, plugins/*/README.md, hooks/README.md, agents/*.md, and skills/*.md.
+
+          check for:
+          1. missing 'tested with' version stamps (every doc should have one)
+          2. broken cross-references (links to files that dont exist)
+          3. inconsistent structure (some docs have ## sections others dont)
+          4. outdated CLI flags or tool names that dont match current claude code
+          5. missing cross-references (e.g. hooks-guide should link to safety-guard.sh)
+
+          important: only fix issues you can verify from the files in this repo. do not rely on your training data for current CLI flags or tool names -- if you're not sure, flag it but don't change it.
+
+          for each issue found:
+          - fix it directly in the file if you can (add missing stamps, fix links)
+          - use lowercase voice, no fluff
+
+          write a summary of all changes to /tmp/audit-findings.txt.
+          if no issues found, write 'no issues found' to that file." \
+            --allowedTools Read,Write,Edit,Glob,Grep
+
+      - name: Create PR if changes exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "no changes from audit"
+            exit 0
+          fi
+
+          BRANCH="auto/docs-audit-$(date +%Y%m%d)"
+          git config user.name "docs-audit[bot]"
+          git config user.email "docs-audit[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add docs/ plugins/ hooks/ agents/ skills/
+          git diff --cached --quiet && echo "nothing to commit" && exit 0
+          git commit -m "docs: weekly audit fixes $(date +%Y-%m-%d)"
+          git push -u origin "$BRANCH"
+
+          # use --body-file to avoid shell injection from LLM-generated content
+          {
+            echo "## automated docs audit"
+            echo ""
+            cat /tmp/audit-findings.txt 2>/dev/null || echo "see diff for details"
+            echo ""
+            echo "---"
+            echo "automated -- review before merging."
+          } > /tmp/pr-body.md
+
+          if ! gh pr create \
+            --title "docs: weekly audit fixes $(date +%Y-%m-%d)" \
+            --body-file /tmp/pr-body.md \
+            --base main \
+            --draft; then
+            echo "::warning::PR creation failed -- changes are on branch $BRANCH"
+          fi

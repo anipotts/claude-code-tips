@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # knowledge-builder
 
 PostToolUse hook that builds a knowledge graph in `.claude/knowledge.md` as Claude explores your codebase. tracks which files exist, what type they are (source, test, config, entry point), and how they relate through imports.

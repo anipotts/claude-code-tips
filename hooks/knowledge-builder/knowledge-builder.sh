@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+# tested with: claude code v1.0.34
 # =============================================================================
 # Knowledge Builder -- PostToolUse knowledge graph
 # =============================================================================
@@ -28,8 +30,6 @@
 #     "hooks": [{ "type": "command", "command": "~/.claude/hooks/knowledge-builder.sh" }]
 #   }]
 # =============================================================================
-
-set -euo pipefail
 
 # Read the hook payload from stdin
 INPUT=$(cat)

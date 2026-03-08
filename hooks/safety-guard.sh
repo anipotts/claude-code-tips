@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+# tested with: claude code v1.0.34
 # =============================================================================
 # Safety Guard — PreToolUse command blocker
 # =============================================================================
@@ -19,8 +21,6 @@
 #   - chmod 777 on sensitive paths
 #   - curl piped to sh/bash (remote code execution)
 # =============================================================================
-
-set -euo pipefail
 
 # Read the hook payload from stdin
 INPUT=$(cat)

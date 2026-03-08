@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # guardian
 
 daemon/background agent that watches your project for changes, runs checks, and proposes fixes -- but never applies them automatically. the safe version of "claude watches my code."

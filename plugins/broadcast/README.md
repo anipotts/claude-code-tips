@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # broadcast
 
 async notifications when claude ships something

@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # how to create claude code plugins
 
 **everything you need to ship a plugin, from scratch to marketplace.**

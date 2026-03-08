@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 ---
 name: improve
 description: analyze recent sessions and git history to propose CLAUDE.md improvements

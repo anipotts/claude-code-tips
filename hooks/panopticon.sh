@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+# tested with: claude code v1.0.34
 # =============================================================================
 # Panopticon — PostToolUse audit trail
 # =============================================================================
@@ -18,8 +20,6 @@
 #   sqlite3 ~/.claude/panopticon.db "SELECT * FROM actions ORDER BY timestamp DESC LIMIT 20;"
 #   sqlite3 ~/.claude/panopticon.db "SELECT tool_name, COUNT(*) FROM actions GROUP BY tool_name;"
 # =============================================================================
-
-set -euo pipefail
 
 DB="$HOME/.claude/panopticon.db"
 

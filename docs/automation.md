@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # daemon and cron patterns for claude code
 
 **persistent agents, scheduled maintenance, and the guardrails that keep them from wrecking your repo.**

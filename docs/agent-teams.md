@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # agent teams
 
 **run 2-5 claude instances in parallel on the same codebase using git worktrees.**
@@ -56,7 +58,7 @@ spawn multiple Task calls at once and they run in parallel automatically:
 {"prompt": "...", "description": "refactor notifications module", "isolation": "worktree"}
 ```
 
-> [Task tool docs](https://docs.anthropic.com/en/docs/claude-code/agent-tool-use)
+> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ---
 

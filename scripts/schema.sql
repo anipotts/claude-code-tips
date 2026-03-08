@@ -183,6 +183,7 @@ END;
 -- ============================================================
 -- COSTS VIEW: auto-computed USD per session
 -- ============================================================
+DROP VIEW IF EXISTS session_costs;
 CREATE VIEW IF NOT EXISTS session_costs AS
 SELECT
     s.id,
@@ -197,17 +198,31 @@ SELECT
     -- so no subtraction needed — just price each bucket separately
     -- model names include version suffixes (e.g. claude-opus-4-5-20251101) so use LIKE
     CASE
-        WHEN s.model LIKE 'claude-opus-4-%' THEN
+        -- opus 4.5+ ($5/$25 per MTok, cache read $0.50, cache write $6.25)
+        WHEN s.model LIKE 'claude-opus-4-5%' OR s.model LIKE 'claude-opus-4-6%' THEN
+            COALESCE(s.total_input_tokens, 0) * 5.0 / 1e6
+            + COALESCE(s.total_cache_read_tokens, 0) * 0.50 / 1e6
+            + COALESCE(s.total_cache_creation_tokens, 0) * 6.25 / 1e6
+            + COALESCE(s.total_output_tokens, 0) * 25.0 / 1e6
+        -- opus 4.0/4.1 ($15/$75 per MTok, cache read $1.50, cache write $18.75)
+        WHEN s.model LIKE 'claude-opus-4%' THEN
             COALESCE(s.total_input_tokens, 0) * 15.0 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 1.5 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 18.75 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 75.0 / 1e6
-        WHEN s.model LIKE 'claude-sonnet-4-%' THEN
+        WHEN s.model LIKE 'claude-sonnet-4-%' OR s.model LIKE 'claude-3-7-sonnet%' OR s.model LIKE 'claude-3-5-sonnet%' THEN
             COALESCE(s.total_input_tokens, 0) * 3.0 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.30 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 3.75 / 1e6
             + COALESCE(s.total_output_tokens, 0) * 15.0 / 1e6
-        WHEN s.model LIKE 'claude-haiku-4-%' THEN
+        -- haiku 4.5 ($1/$5 per MTok, cache read $0.10, cache write $1.25)
+        WHEN s.model LIKE 'claude-haiku-4%' THEN
+            COALESCE(s.total_input_tokens, 0) * 1.0 / 1e6
+            + COALESCE(s.total_cache_read_tokens, 0) * 0.10 / 1e6
+            + COALESCE(s.total_cache_creation_tokens, 0) * 1.25 / 1e6
+            + COALESCE(s.total_output_tokens, 0) * 5.0 / 1e6
+        -- haiku 3.5 ($0.80/$4 per MTok)
+        WHEN s.model LIKE 'claude-3-5-haiku%' OR s.model LIKE 'claude-3-haiku%' THEN
             COALESCE(s.total_input_tokens, 0) * 0.80 / 1e6
             + COALESCE(s.total_cache_read_tokens, 0) * 0.08 / 1e6
             + COALESCE(s.total_cache_creation_tokens, 0) * 1.0 / 1e6
@@ -221,6 +236,7 @@ FROM sessions s;
 -- ============================================================
 
 -- project-level cost summary (most useful view for dashboards)
+DROP VIEW IF EXISTS project_costs;
 CREATE VIEW IF NOT EXISTS project_costs AS
 SELECT
     s.project_name,
@@ -241,6 +257,7 @@ WHERE s.project_name IS NOT NULL
 GROUP BY s.project_name;
 
 -- daily cost summary (for trend analysis)
+DROP VIEW IF EXISTS daily_costs;
 CREATE VIEW IF NOT EXISTS daily_costs AS
 SELECT
     SUBSTR(sc.start_time, 1, 10) AS date,
@@ -254,6 +271,7 @@ WHERE sc.start_time IS NOT NULL
 GROUP BY SUBSTR(sc.start_time, 1, 10);
 
 -- tool usage summary
+DROP VIEW IF EXISTS tool_usage;
 CREATE VIEW IF NOT EXISTS tool_usage AS
 SELECT
     tool_name,

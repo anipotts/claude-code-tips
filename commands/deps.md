@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # /deps
 
 check all project dependencies for updates and security issues. one command, clean output

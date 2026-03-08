@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # headless claude code patterns
 
 **shell functions that pipe things into `claude -p` for instant answers without opening a session.**

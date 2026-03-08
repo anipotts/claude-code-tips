@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # MCP servers for claude code
 
 **practical guide to connecting claude code to external tools via MCP.**
@@ -384,4 +386,4 @@ some MCP servers need credentials. put them in `.claude/settings.local.json` (gi
 
 ---
 
-*for MCP server development, see the [MCP specification](https://spec.modelcontextprotocol.io/) and the [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk). for claude code's MCP integration, see the [official docs](https://docs.anthropic.com/en/docs/claude-code/mcp-servers).*
+*for MCP server development, see the [MCP specification](https://modelcontextprotocol.io/) and the [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk). for claude code's MCP integration, see the [official docs](https://docs.anthropic.com/en/docs/claude-code/overview).*

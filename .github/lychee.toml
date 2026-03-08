@@ -1,0 +1,45 @@
+# lychee link checker config for claude-code-tips
+
+# accept these status codes as valid (429 = rate limited, 403 = auth-walled)
+accept = [200, 204, 301, 302, 403, 429]
+
+# timeout per request
+timeout = 30
+
+# max concurrent requests (be polite)
+max_concurrency = 4
+
+# retry failed requests
+max_retries = 3
+
+# exclude patterns
+exclude = [
+  # localhost / loopback
+  "^https?://localhost",
+  "^https?://127\\.0\\.0\\.1",
+  "^https?://0\\.0\\.0\\.0",
+  # github links that need auth or are flaky
+  "^https://github\\.com/.*/edit/",
+  "^https://github\\.com/.*/new/",
+  "^https://github\\.com/.*/actions/workflows/.*\\.yml/badge\\.svg",
+  # placeholder domains
+  "^https?://example\\.com",
+  "^https?://your-",
+  # mail links
+  "^mailto:",
+  # anthropic docs (reorganize frequently, intermittent 500s)
+  "^https://docs\\.anthropic\\.com",
+  # shields.io endpoint badges (depend on external gist data)
+  "^https://img\\.shields\\.io/endpoint",
+  # gist raw content (dynamic, may 404 before first push)
+  "^https://gist\\.githubusercontent\\.com",
+]
+
+# exclude paths that are gitignored or not actual documentation
+exclude_path = [
+  "content/",
+  "data/",
+  "node_modules/",
+  ".git/",
+  "gifs/",
+]

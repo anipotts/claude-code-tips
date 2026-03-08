@@ -1,0 +1,117 @@
+name: Freshness Check
+
+# ---------------------------------------------------------------
+# weekly stale content check.
+# scans docs/, hooks/, plugins/ for "tested with" version stamps,
+# flags files where the stamp is more than 2 versions behind.
+# creates a single tracking issue (no duplicates).
+#
+# cost: ~$0.01 per run (mostly shell, minimal claude usage)
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: '0 10 * * 1'  # every monday at 10:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get latest Claude Code version
+        id: latest
+        run: |
+          # npm view works without installing the package
+          LATEST=$(npm view @anthropic-ai/claude-code version 2>/dev/null || echo "unknown")
+          echo "version=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "Latest Claude Code version: $LATEST"
+
+      - name: Scan for stale stamps
+        id: scan
+        env:
+          LATEST_VERSION: ${{ steps.latest.outputs.version }}
+        run: |
+          STALE_FILES=""
+          MISSING_FILES=""
+          CHECKED=0
+          DIRS="docs hooks plugins agents skills commands"
+
+          for dir in $DIRS; do
+            [ ! -d "$dir" ] && continue
+            while IFS= read -r file; do
+              CHECKED=$((CHECKED + 1))
+              # look for version stamps like "tested with: claude code v1.0.x"
+              STAMP=$(grep -ioE 'tested.with[: ]+claude.code.v?[0-9]+\.[0-9]+\.[0-9]+' "$file" 2>/dev/null || true)
+              if [ -z "$STAMP" ]; then
+                MISSING_FILES="$MISSING_FILES\n- \`$file\` -- no stamp"
+              else
+                # extract version number from stamp
+                STAMP_VER=$(echo "$STAMP" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+                if [ -n "$STAMP_VER" ] && [ -n "$LATEST_VERSION" ] && [ "$LATEST_VERSION" != "unknown" ]; then
+                  # compare major.minor (ignore patch)
+                  STAMP_MAJOR=$(echo "$STAMP_VER" | cut -d. -f1)
+                  STAMP_MINOR=$(echo "$STAMP_VER" | cut -d. -f2)
+                  LATEST_MAJOR=$(echo "$LATEST_VERSION" | cut -d. -f1)
+                  LATEST_MINOR=$(echo "$LATEST_VERSION" | cut -d. -f2)
+                  # stale if minor version is 2+ behind (same major) or major behind
+                  if [ "$STAMP_MAJOR" -lt "$LATEST_MAJOR" ] 2>/dev/null || \
+                     { [ "$STAMP_MAJOR" -eq "$LATEST_MAJOR" ] && [ $((LATEST_MINOR - STAMP_MINOR)) -ge 2 ]; } 2>/dev/null; then
+                    STALE_FILES="$STALE_FILES\n- \`$file\` -- stamped v$STAMP_VER, latest v$LATEST_VERSION"
+                  fi
+                fi
+              fi
+            done < <(git ls-files "$dir")
+          done
+
+          echo "Checked $CHECKED files"
+
+          # write report
+          if [ -n "$STALE_FILES" ] || [ -n "$MISSING_FILES" ]; then
+            {
+              echo "## freshness report $(date +%Y-%m-%d)"
+              echo ""
+              echo "latest claude code: v$LATEST_VERSION"
+              echo ""
+              if [ -n "$STALE_FILES" ]; then
+                echo "### stale stamps (2+ versions behind)"
+                echo -e "$STALE_FILES"
+                echo ""
+              fi
+              if [ -n "$MISSING_FILES" ]; then
+                echo "### missing stamps"
+                echo -e "$MISSING_FILES"
+                echo ""
+              fi
+              echo "---"
+              echo "automated check -- update stamps after re-testing with current version."
+            } > /tmp/freshness-report.md
+            echo "has_stale=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "all stamps are current"
+            echo "has_stale=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update tracking issue
+        if: steps.scan.outputs.has_stale == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_TITLE="stale content: freshness check $(date +%Y-%m-%d)"
+
+          # close any previous freshness check issues to avoid duplicates
+          EXISTING=$(gh issue list --label "freshness-check" --state open --json number -q '.[].number' 2>/dev/null || true)
+          for num in $EXISTING; do
+            gh issue close "$num" --comment "superseded by new freshness check" 2>/dev/null || true
+          done
+
+          gh issue create \
+            --title "$ISSUE_TITLE" \
+            --body-file /tmp/freshness-report.md \
+            --label "freshness-check"

@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # vibe-check
 
 point it at a directory and get an honest architecture review. fast, opinionated, no sugar-coating

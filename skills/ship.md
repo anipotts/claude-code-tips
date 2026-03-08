@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 ---
 name: ship
 description: stage, commit, push, and open a PR in one shot

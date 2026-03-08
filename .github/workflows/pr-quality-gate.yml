@@ -1,0 +1,127 @@
+name: PR Quality Gate
+
+# ---------------------------------------------------------------
+# checks PRs for repo conventions:
+#   - new/modified docs have "tested with" stamps
+#   - new hooks follow conventions (shebang, pipefail)
+#   - PR description isn't empty
+# posts a summary comment with pass/fail per check.
+#
+# cost: $0 (no claude API calls, pure shell checks)
+# ---------------------------------------------------------------
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run quality checks
+        id: checks
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          PASS=0
+          FAIL=0
+          REPORT=""
+
+          # --- check 1: PR description isn't empty ---
+          # fetch body via gh API to avoid injection from PR body content
+          BODY_LEN=$(gh pr view "$PR_NUMBER" --json body -q '.body | length')
+          if [ "$BODY_LEN" -lt 10 ] 2>/dev/null; then
+            REPORT="$REPORT\n- :x: **PR description** -- missing or too short (min 10 chars)"
+            FAIL=$((FAIL + 1))
+          else
+            REPORT="$REPORT\n- :white_check_mark: **PR description** -- present"
+            PASS=$((PASS + 1))
+          fi
+
+          # --- check 2: new/modified docs have "tested with" stamps ---
+          DOC_FILES=$(git diff --name-only "$BASE_SHA"...HEAD -- 'docs/' 'plugins/' 'hooks/' 'agents/' 'skills/' | grep -E '\.(md|sh)$' || true)
+          STAMP_MISSING=""
+          if [ -n "$DOC_FILES" ]; then
+            while IFS= read -r file; do
+              [ ! -f "$file" ] && continue
+              if ! grep -qiE 'tested.with|compatible.with|works.with|verified.with' "$file" 2>/dev/null; then
+                STAMP_MISSING="$STAMP_MISSING  - \`$file\`\n"
+              fi
+            done <<< "$DOC_FILES"
+          fi
+
+          if [ -n "$STAMP_MISSING" ]; then
+            REPORT="$REPORT\n- :x: **version stamps** -- missing from:\n$STAMP_MISSING"
+            FAIL=$((FAIL + 1))
+          elif [ -n "$DOC_FILES" ]; then
+            REPORT="$REPORT\n- :white_check_mark: **version stamps** -- all docs stamped"
+            PASS=$((PASS + 1))
+          else
+            REPORT="$REPORT\n- :white_check_mark: **version stamps** -- no doc files changed"
+            PASS=$((PASS + 1))
+          fi
+
+          # --- check 3: new hooks follow conventions ---
+          HOOK_FILES=$(git diff --name-only "$BASE_SHA"...HEAD -- '*.sh' || true)
+          HOOK_ISSUES=""
+          if [ -n "$HOOK_FILES" ]; then
+            while IFS= read -r file; do
+              [ ! -f "$file" ] && continue
+              SHEBANG=$(head -1 "$file")
+              if [[ "$SHEBANG" != "#!/usr/bin/env bash" ]] && [[ "$SHEBANG" != "#!/bin/bash" ]]; then
+                HOOK_ISSUES="$HOOK_ISSUES  - \`$file\` -- bad shebang: \`$SHEBANG\`\n"
+              fi
+              if ! head -10 "$file" | grep -q 'set -euo pipefail'; then
+                HOOK_ISSUES="$HOOK_ISSUES  - \`$file\` -- missing \`set -euo pipefail\`\n"
+              fi
+            done <<< "$HOOK_FILES"
+          fi
+
+          if [ -n "$HOOK_ISSUES" ]; then
+            REPORT="$REPORT\n- :x: **hook conventions** -- issues found:\n$HOOK_ISSUES"
+            FAIL=$((FAIL + 1))
+          elif [ -n "$HOOK_FILES" ]; then
+            REPORT="$REPORT\n- :white_check_mark: **hook conventions** -- all hooks follow conventions"
+            PASS=$((PASS + 1))
+          else
+            REPORT="$REPORT\n- :white_check_mark: **hook conventions** -- no shell scripts changed"
+            PASS=$((PASS + 1))
+          fi
+
+          # --- build summary ---
+          if [ $FAIL -gt 0 ]; then
+            HEADER="## quality gate: $FAIL issue(s) found"
+          else
+            HEADER="## quality gate: all checks passed"
+          fi
+
+          {
+            echo "$HEADER"
+            echo ""
+            echo -e "$REPORT"
+            echo ""
+            echo "---"
+            echo "*automated check -- see [conventions](docs/guide.md) for details.*"
+          } > /tmp/quality-report.md
+
+          echo "failures=$FAIL" >> "$GITHUB_OUTPUT"
+
+      - name: Post summary comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # add sentinel for future --edit-last dedup
+          echo '<!-- quality-gate-bot -->' >> /tmp/quality-report.md
+          gh pr comment "$PR_NUMBER" --body-file /tmp/quality-report.md

@@ -1,3 +1,5 @@
+<!-- tested with: claude code v1.0.34 -->
+
 # miner
 
 mines every claude code session into a local sqlite database. total recall for your dev work.
@@ -89,7 +91,7 @@ shows sessions, messages, tool calls, tokens, cost breakdown by model and projec
 
 ### cost tracking
 
-miner tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus $15/$75, sonnet $3/$15, haiku $0.80/$4 per 1M tokens, with cache discounts).
+miner tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus 4.5+ $5/$25, sonnet $3/$15, haiku 4.5 $1/$5 per 1M tokens, with cache discounts). older opus 4.0/4.1 sessions use the legacy $15/$75 rates.
 
 this tells you what your usage _would_ cost at API rates — useful for understanding the value of a Max subscription or tracking actual API spend.
 
@@ -122,10 +124,10 @@ the API reports four token buckets per request:
 
 | bucket | what it is | opus price |
 |---|---|---|
-| `input_tokens` | non-cached input | $15/1M |
-| `cache_read_input_tokens` | context re-read from cache | $1.50/1M (90% off) |
-| `cache_creation_input_tokens` | new context written to cache | $18.75/1M (25% premium) |
-| `output_tokens` | claude's response | $75/1M |
+| `input_tokens` | non-cached input | $5/1M (opus 4.5+) |
+| `cache_read_input_tokens` | context re-read from cache | $0.50/1M (90% off) |
+| `cache_creation_input_tokens` | new context written to cache | $6.25/1M (25% premium) |
+| `output_tokens` | claude's response | $25/1M (opus 4.5+) |
 
 in a typical claude code session, **90%+ of the cost is cache tokens** — every tool call re-sends the conversation context. a long opus session with 100+ tool calls can easily generate billions of cache read tokens.
 

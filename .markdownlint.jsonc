@@ -1,0 +1,53 @@
+// markdownlint config for claude-code-tips
+//
+// this repo is prompt-heavy -- agents, skills, and commands contain
+// embedded markdown examples, compact tables, and bare code blocks.
+// rules are tuned for this content type, not traditional docs.
+{
+  // --- disabled: inappropriate for prompt-heavy content ---
+
+  // line length -- long command examples, SQL queries, URLs
+  "MD013": false,
+
+  // inline HTML -- <img>, <details>, <summary>
+  "MD033": false,
+
+  // first line heading -- files start with frontmatter or comments
+  "MD041": false,
+
+  // bare URLs -- fine in a tips repo
+  "MD034": false,
+
+  // blank lines around lists -- too noisy in prompt templates
+  "MD032": false,
+
+  // fenced code blocks without language -- intentional in prompt templates
+  // (112 occurrences, all in agent/skill/command definitions)
+  "MD040": false,
+
+  // blanks around fences -- compact formatting in prompt files
+  "MD031": false,
+
+  // blanks around headings -- prompt templates use compact structure
+  "MD022": false,
+
+  // blanks around tables -- compact table formatting in prompts
+  "MD058": false,
+
+  // unordered list indentation -- varies by content type
+  "MD007": false,
+
+  // ordered list marker style -- lists restart numbering in prompts
+  "MD029": false,
+
+  // emphasis instead of heading -- bold text as section markers is intentional
+  "MD036": false,
+
+  // spaces inside emphasis markers -- too strict for this content
+  "MD037": false,
+
+  // --- kept: these catch real issues ---
+
+  // duplicate headings -- allow in different sections
+  "MD024": { "siblings_only": true }
+}
