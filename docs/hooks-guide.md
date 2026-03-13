@@ -112,6 +112,10 @@ Every hook receives these fields via stdin as JSON:
 
 Each event adds its own fields on top of these.
 
+
+
+**hook source field:** v2.1.75 adds `hook_source` to permission prompts, showing whether a hook came from settings, a plugin, or a skill. useful for understanding which tools require confirmation.
+
 ### JSON Output (Advanced Control)
 
 Instead of just using exit codes, you can `exit 0` and print a JSON object to stdout for finer-grained control:

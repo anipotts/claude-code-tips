@@ -8,6 +8,22 @@ common problems and fixes. organized by feature area.
 
 ## general
 
+
+
+
+
+### bash commands with pipes and special chars fail
+
+- cause: claude code was mangling `!` characters in piped commands (e.g., `jq 'select(.x != .y)'`)
+- fix: v2.1.75 resolves this -- piped commands with `!=`, `!==`, etc. now work correctly
+- if still broken: report it with the exact command in verbose mode
+
+### voice mode not activating on fresh install
+
+- cause: voice mode requires toggling twice on first install
+- fix: run `/voice` once, wait for it to complete, then run `/voice` again
+- it will activate correctly on the second toggle
+
 ### "permission denied" when running hooks
 
 - cause: hook scripts aren't executable
@@ -43,6 +59,14 @@ common problems and fixes. organized by feature area.
 ---
 
 ## plugins
+
+
+
+### managed-disabled plugins still showing in UI
+
+- cause: plugins force-disabled by organization admin were visible in /plugin installed tab
+- fix: v2.1.75 hides managed-disabled plugins completely
+- if you see a plugin you don't have permission to use, contact your org admin
 
 ### miner plugin won't install
 
@@ -81,6 +105,14 @@ common problems and fixes. organized by feature area.
 ---
 
 ## hooks
+
+
+
+### hook completion messages cluttering output
+
+- v2.1.75 suppresses async hook completion messages by default
+- to see them, use `--verbose` flag or check transcript mode
+- this reduces noise in normal sessions while preserving visibility when debugging
 
 ### hook doesn't fire
 
@@ -126,6 +158,14 @@ tool=$(echo "$input" | jq -r '.tool')
 ---
 
 ## agents
+
+
+
+### agent team footer showing wrong hint
+
+- cause: footer was showing "↓ to expand" instead of correct shortcut
+- fix: v2.1.75 corrects this to "shift + ↓ to expand" for agent teams
+- applies to sessions with multiple agents working in parallel
 
 ### subagent times out
 

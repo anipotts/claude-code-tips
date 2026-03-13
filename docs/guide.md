@@ -51,12 +51,10 @@ first session tips:
 - use `/help` for available commands, `/model` to check/change the model
 - `Ctrl+C` to interrupt, `Escape` to cancel the current input
 - `--continue` resumes your last session right where you left off
+- `/color` lets you set a custom prompt bar color for easy session identification
+- `/rename` gives your session a name displayed on the prompt bar
 
 the default model is sonnet. you can change it per-session with `/model` or globally in settings.
-
-> [quickstart docs](https://docs.anthropic.com/en/docs/claude-code/overview)
-
----
 
 ### 3. CLAUDE.md -- your project's brain
 
@@ -88,6 +86,10 @@ CLAUDE.md is the single most important file in your project for shaping claude's
 # my-project
 
 typescript monorepo. pnpm workspaces. vitest for testing.
+
+
+
+**memory file timestamps:** claude can now see when each memory was last modified, helping it reason about which memories are fresh vs. stale. if you update a memory file, the timestamp updates automatically.
 
 ## structure
 - packages/api/ -- express backend
@@ -152,6 +154,10 @@ this auto-approves test/lint/git-read commands and all file reads while still pr
 > [permissions docs](https://docs.anthropic.com/en/docs/claude-code/security)
 
 ---
+
+
+
+**note on token estimation:** v2.1.75 fixed token counting for thinking blocks and tool_use blocks, which was over-counting and triggering premature context compaction. sessions should now better maintain context until you actually need to compact.
 
 ### 5. settings.json
 
@@ -642,6 +648,12 @@ breaking work into phases prevents claude from diving into implementation before
 ---
 
 ## claude code crazy
+
+
+
+### 1M context window for Opus
+
+v2.1.75 adds 1M context window for Opus 4.6 by default on Max, Team, and Enterprise plans (previously required extra usage). this means longer, more complex sessions without hitting context limits. opus is still expensive -- use it for architecture decisions, not everyday refactoring.
 
 ### 17. the miner -- total recall for your dev work
 
