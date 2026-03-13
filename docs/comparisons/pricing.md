@@ -117,6 +117,13 @@ currently free during public preview. weekly quotas limit heavy usage but most d
 
 ## recommendation by budget
 
+
+
+
+### note on competitor activity (march 2026)
+
+openai codex continues alpha releases (0.115.0-alpha.15-17) but no stable version bumps. gemini-cli active development with oauth2 and headless fixes. no pricing changes detected across codex, gemini, or antigravity. claude code remains the dominant terminal agent for cost-conscious teams.
+
 ### $0/mo (free)
 use antigravity (free preview, includes frontier models) as your primary tool. supplement with gemini free tier for terminal workflows.
 
