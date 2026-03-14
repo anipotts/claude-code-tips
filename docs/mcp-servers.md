@@ -6,6 +6,53 @@
 
 ---
 
+
+
+---
+
+## MCP elicitation
+
+**new in v2.1.76** -- MCP servers can now request structured input mid-task. instead of hardcoding API keys or credentials in settings, an MCP server can ask the user for them interactively via form fields or browser URL.
+
+### how it works
+
+1. MCP server fires an elicitation request (form fields, URL, text prompt)
+2. claude code shows an interactive dialog
+3. user responds
+4. the `ElicitationResult` hook fires, allowing you to validate or transform the response
+5. the response goes back to the MCP server
+
+### use cases
+
+- **one-time credential entry** -- MCP server requests API key once, uses it for the session
+- **user confirmation** -- MCP server asks "should i deploy to production?" and waits for yes/no
+- **dynamic input** -- MCP server requests different fields based on previous context
+
+### example: intercepting elicitation with a hook
+
+```json
+{
+  "hooks": {
+    "Elicitation": [
+      {
+        "matcher": "my_custom_server",
+        "type": "command",
+        "command": "~/.claude/hooks/validate-api-key.sh"
+      }
+    ],
+    "ElicitationResult": [
+      {
+        "matcher": "my_custom_server",
+        "type": "command",
+        "command": "~/.claude/hooks/log-credentials.sh"
+      }
+    ]
+  }
+}
+```
+
+the hook can validate format (e.g., "api key must start with sk-") and block invalid input with `exit 2`.
+
 ## what MCP servers are and why they matter
 
 model context protocol. it lets claude call tools hosted by external servers -- browsers, databases, APIs, documentation lookups, whatever. an MCP server exposes tools with a schema, claude discovers them at session start, and calls them like built-in tools. the tool shows up as `mcp__<server>__<tool>` in hooks and logs.

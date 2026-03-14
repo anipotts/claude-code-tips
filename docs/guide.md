@@ -30,6 +30,18 @@ you are the architect. claude is the implementer.
 
 ---
 
+
+
+**effort levels** -- use `/effort` to control model reasoning depth. higher effort means more computation and higher cost, but better results on complex problems:
+
+```
+/effort low      # fast, cheaper, for straightforward tasks
+/effort medium   # balanced (default)
+/effort high     # deeper reasoning, higher cost
+```
+
+this is the equivalent of claude's "extended thinking" modes. useful for architecture decisions, complex refactors, or tricky bugs that need deep analysis.
+
 ### 2. installing and first run
 
 ```bash
@@ -57,6 +69,16 @@ the default model is sonnet. you can change it per-session with `/model` or glob
 > [quickstart docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ---
+
+
+
+use the `-n` flag to name your session at startup:
+
+```bash
+claude -n "auth refactor session"
+```
+
+the session name appears in logs and transcripts, making it easier to search through past work with miner.
 
 ### 3. CLAUDE.md -- your project's brain
 
@@ -177,6 +199,10 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 > [settings docs](https://docs.anthropic.com/en/docs/claude-code/settings)
 
 ---
+
+
+| `--effort` | set model effort level (affects reasoning depth and cost) |
+| `-n` / `--name` | set a display name for the session at startup |
 
 ### 6. your first real task
 

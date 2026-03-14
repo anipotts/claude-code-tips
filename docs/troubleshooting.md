@@ -8,6 +8,37 @@ common problems and fixes. organized by feature area.
 
 ## general
 
+
+
+
+
+### auto-compaction retrying indefinitely
+
+- cause: compaction failures were triggering infinite retries
+- fix: upgrade to v2.1.76+, which implements a 3-attempt circuit breaker
+
+### voice mode keypresses swallowed
+
+- cause: voice mode wasn't releasing keypresses while permission or plan editor dialogs were open
+- fix: upgrade to v2.1.76+
+
+### /voice not working on windows
+
+- cause: npm-installed claude code on windows had issues with voice startup
+- fix: upgrade to v2.1.76+
+
+### "deferred tools losing schemas after compaction"
+
+- cause: tools loaded via ToolSearch had input schemas dropped during context compaction
+- fix: upgrade to v2.1.76+
+- workaround: avoid long sessions with deferred tools, or use `/compact` less frequently
+
+### "don't ask again" shows full raw command
+
+- cause: permission dialogs were showing the full unparsed command for pipes and compound commands
+- fix: upgrade to v2.1.76+
+- this makes it easier to review what you're approving
+
 ### "permission denied" when running hooks
 
 - cause: hook scripts aren't executable

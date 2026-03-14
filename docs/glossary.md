@@ -67,3 +67,10 @@ terms used across this repo and claude code docs.
 **UserPromptSubmit** -- hook event that fires when the user submits a prompt. useful for prompt classification, routing, or pre-processing.
 
 **worktree** -- a git feature that creates a separate working directory sharing the same repo history. claude code uses worktrees to let subagents work on code without conflicting with the main session's working directory.
+
+
+**elicitation** -- a request from an MCP server for structured user input (form fields, browser URL, or text prompt) mid-task. replaces hardcoding credentials or config in settings. see [MCP servers](./mcp-servers.md#mcp-elicitation).
+
+**PostCompact** -- hook event that fires after context compaction completes. useful for logging, validation, or post-compaction analysis. see [hooks guide](./hooks-guide.md#postcompact).
+
+**sparse-checkout** -- git feature that checks out only specified directories in a worktree, reducing I/O on large monorepos. configured via `worktree.sparsePaths` in settings.

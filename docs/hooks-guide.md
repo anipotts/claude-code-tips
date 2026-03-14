@@ -136,6 +136,81 @@ Instead of just using exit codes, you can `exit 0` and print a JSON object to st
 
 ## All Hook Events -- Complete Reference
 
+
+
+### PostCompact
+
+**When it fires:** After context compaction completes successfully.
+
+**Matcher:** Not supported (fires on every successful compaction).
+
+**Use it for:** Logging compaction events, triggering post-compaction analysis, or validating that important context was preserved.
+
+**Input JSON:**
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/Users/.../.claude/projects/.../transcript.jsonl",
+  "cwd": "/Users/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "PostCompact",
+  "original_turn_count": 42,
+  "compacted_turn_count": 15
+}
+```
+
+**Can block?** No. PostCompact fires after compaction is already complete.
+
+### Elicitation
+
+**When it fires:** When an MCP server requests structured input via interactive dialog (form fields or browser URL).
+
+**Matcher:** MCP server name (e.g., `some_mcp_server`).
+
+**Use it for:** Intercepting and validating user responses to MCP prompts, or overriding responses programmatically.
+
+**Input JSON:**
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/Users/.../.claude/projects/.../transcript.jsonl",
+  "cwd": "/Users/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "Elicitation",
+  "mcp_server": "example_server",
+  "prompt": "Enter API key",
+  "input_type": "text"
+}
+```
+
+**Can block?** Yes. Exit 2 blocks the elicitation and returns error to MCP server.
+
+### ElicitationResult
+
+**When it fires:** After the user responds to an MCP elicitation request.
+
+**Matcher:** MCP server name.
+
+**Use it for:** Post-processing user responses, validating input format, or logging sensitive interactions.
+
+**Input JSON:**
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/Users/.../.claude/projects/.../transcript.jsonl",
+  "cwd": "/Users/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "ElicitationResult",
+  "mcp_server": "example_server",
+  "user_response": "<user input>"
+}
+```
+
+**Can block?** Yes. Exit 2 rejects the response and asks user to try again.
+
 ### SessionStart
 
 **When it fires:** When a session begins, resumes, or restarts after `/clear` or compaction.

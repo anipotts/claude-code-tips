@@ -62,6 +62,24 @@ spawn multiple Task calls at once and they run in parallel automatically:
 
 ---
 
+
+
+**large monorepos** -- use `worktree.sparsePaths` in settings to tell git sparse-checkout which directories each worktree needs. this speeds up worktree creation on repos with thousands of files:
+
+```json
+{
+  "worktree": {
+    "sparsePaths": [
+      "packages/api/**",
+      "packages/shared/**",
+      ".github/**"
+    ]
+  }
+}
+```
+
+worktrees will only check out these paths, drastically reducing I/O on large monorepos.
+
 ## the /batch command
 
 if you dont need a coordinator agent orchestrating things, `/batch` is the simpler path. describe multiple independent tasks and claude runs them in parallel worktrees. you review the diffs.
