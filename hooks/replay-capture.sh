@@ -30,10 +30,10 @@ set -euo pipefail
 # read hook payload from stdin
 INPUT=$(cat)
 
-# only act on file-mutating tools
+# only act on file-mutating tools and Bash
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
 case "$TOOL_NAME" in
-  Edit|Write) ;;
+  Edit|Write|Bash) ;;
   *) exit 0 ;;
 esac
 
@@ -42,9 +42,18 @@ if [[ -z "$SESSION_ID" ]]; then
   exit 0
 fi
 
-FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
-if [[ -z "$FILE_PATH" ]]; then
-  exit 0
+# for Bash tool calls, log the command instead of file_path
+if [[ "$TOOL_NAME" == "Bash" ]]; then
+  BASH_COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+  if [[ -z "$BASH_COMMAND" ]]; then
+    exit 0
+  fi
+  FILE_PATH=""
+else
+  FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+  if [[ -z "$FILE_PATH" ]]; then
+    exit 0
+  fi
 fi
 
 # estimate lines changed based on tool type
@@ -56,6 +65,10 @@ case "$TOOL_NAME" in
   Write)
     # count newlines in content
     LINES_CHANGED=$(echo "$INPUT" | jq -r '.tool_input.content // ""' | wc -l | tr -d ' ')
+    ;;
+  Bash)
+    # count output lines as a rough proxy
+    LINES_CHANGED=$(echo "$INPUT" | jq -r '.tool_output // ""' | wc -l | tr -d ' ')
     ;;
   *)
     LINES_CHANGED=0
@@ -73,12 +86,23 @@ REPLAY_DIR="${HOME}/.claude/replay"
 mkdir -p "$REPLAY_DIR"
 
 # append one JSON line -- use jq -c for compact, valid JSON
-jq -n -c \
-  --arg ts "$TS" \
-  --arg tool "$TOOL_NAME" \
-  --arg file "$FILE_PATH" \
-  --argjson lines "${LINES_CHANGED:-0}" \
-  '{ts: $ts, tool: $tool, file: $file, lines_changed: $lines}' \
-  >> "${REPLAY_DIR}/${SESSION_ID}.jsonl"
+if [[ "$TOOL_NAME" == "Bash" ]]; then
+  jq -n -c \
+    --arg ts "$TS" \
+    --arg tool "$TOOL_NAME" \
+    --arg cmd "$BASH_COMMAND" \
+    --argjson lines "${LINES_CHANGED:-0}" \
+    '{ts: $ts, tool: $tool, command: $cmd, lines_changed: $lines}' \
+    >> "${REPLAY_DIR}/${SESSION_ID}.jsonl"
+else
+  jq -n -c \
+    --arg ts "$TS" \
+    --arg tool "$TOOL_NAME" \
+    --arg file "$FILE_PATH" \
+    --argjson lines "${LINES_CHANGED:-0}" \
+    '{ts: $ts, tool: $tool, file: $file, lines_changed: $lines}' \
+    >> "${REPLAY_DIR}/${SESSION_ID}.jsonl"
+fi
 
 exit 0
+# on macOS, VHS tapes auto-open with: open output.gif
