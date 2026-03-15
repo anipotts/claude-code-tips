@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scar.sh -- PostToolUseFailure (mistake memory)
+# mistakes.sh -- PostToolUseFailure (mistake memory)
 # Records every tool failure and surfaces patterns of repeated mistakes.
 # If the same tool has failed with similar input in this project before,
 # prints a warning so Claude can avoid the same trap.
@@ -7,12 +7,12 @@
 set -euo pipefail
 # tested with: claude code v1.0.34
 
-DB="${HOME}/.claude/miner.db"
-CONFIG="${HOME}/.claude/miner.json"
+DB="${HOME}/.claude/mine.db"
+CONFIG="${HOME}/.claude/mine.json"
 
 # check feature toggle
 if [[ -f "$CONFIG" ]]; then
-  ENABLED=$(jq -r '.scar // true' "$CONFIG" 2>/dev/null || echo "true")
+  ENABLED=$(jq -r '.mistakes // true' "$CONFIG" 2>/dev/null || echo "true")
   if [[ "$ENABLED" == "false" ]]; then
     exit 0
   fi
@@ -85,7 +85,7 @@ if [[ -n "$PROJECT_NAME" ]]; then
     FAILURE_COUNT=$(echo "$PAST_FAILURES" | wc -l | tr -d ' ')
 
     # stdout goes to Claude as context
-    echo "[miner:scar] ${TOOL_NAME} has failed ${FAILURE_COUNT} time(s) before in '${PROJECT_NAME}'."
+    echo "[mine:mistakes] ${TOOL_NAME} has failed ${FAILURE_COUNT} time(s) before in '${PROJECT_NAME}'."
 
     # show the most recent past failure for context
     LAST_FAILURE=$(echo "$PAST_FAILURES" | head -1)
@@ -94,7 +94,7 @@ if [[ -n "$PROJECT_NAME" ]]; then
     LAST_TIME=$(echo "$LAST_FAILURE" | cut -d'|' -f3)
 
     if [[ -n "$LAST_ERROR" ]]; then
-      echo "[miner:scar] Previous failure (${LAST_TIME}): input='${LAST_INPUT}' error='${LAST_ERROR}'"
+      echo "[mine:mistakes] Previous failure (${LAST_TIME}): input='${LAST_INPUT}' error='${LAST_ERROR}'"
     fi
   fi
 fi
@@ -102,5 +102,5 @@ fi
 # always record the current failure
 sqlite3 "$DB" "INSERT INTO errors (session_id, tool_name, input_summary, error_message, is_interrupt, timestamp) VALUES ('${S_SESSION}', '${S_TOOL}', '${S_INPUT}', '${S_ERROR}', 0, '${S_TIMESTAMP}');"
 
-echo "[miner] scar: recorded ${TOOL_NAME} failure" >&2
+echo "[mine] mistakes: recorded ${TOOL_NAME} failure" >&2
 exit 0
