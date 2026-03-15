@@ -12,7 +12,7 @@ common problems and fixes. organized by feature area.
 
 - cause: hook scripts aren't executable
 - fix: `chmod +x hooks/*.sh`
-- for miner: `chmod +x plugins/miner/hooks/*.sh`
+- for mine: `chmod +x plugins/mine/hooks/*.sh`
 
 ### claude code hangs on startup
 
@@ -38,32 +38,32 @@ common problems and fixes. organized by feature area.
 
 - check: `/model` in-session to see what's active
 - some models require specific API plans
-- gauge (miner feature) may suggest a model switch -- it's a suggestion, not a change
+- burn (mine feature) may flag cost anomalies -- it's an alert, not a change
 
 ---
 
 ## plugins
 
-### miner plugin won't install
+### mine plugin won't install
 
 - check: `claude plugin list` to see what's installed
-- try: `claude plugin remove miner && claude plugin add anipotts/miner`
+- try: `claude plugin remove mine && claude plugin add anipotts/mine`
 - verify: sqlite3 is available -- `which sqlite3`
 - verify: jq is available -- `which jq`
 
-### miner database is empty
+### mine database is empty
 
 - check: the session hooks are wired up in settings
-- run: `sqlite3 ~/.claude/miner.db "SELECT count(*) FROM sessions;"`
+- run: `sqlite3 ~/.claude/mine.db "SELECT count(*) FROM sessions;"`
 - if 0 rows: run a session, exit cleanly, then check again -- ingest fires on SessionEnd
-- if the table doesn't exist: run `sqlite3 ~/.claude/miner.db < scripts/schema.sql`
+- if the table doesn't exist: run `sqlite3 ~/.claude/mine.db < scripts/schema.sql`
 
-### miner echo/scar/gauge not firing
+### mine search/mistakes/burn not firing
 
-- echo and imprint fire on SessionStart -- they won't show mid-session
-- scar fires on PostToolUseFailure -- it only activates when a tool fails
-- gauge fires on UserPromptSubmit -- it needs at least one prior session to have data
-- check: `sqlite3 ~/.claude/miner.db "SELECT session_id, event FROM hook_log ORDER BY ts DESC LIMIT 20;"`
+- search and hotspots fire on SessionStart -- they won't show mid-session
+- mistakes fires on PostToolUseFailure -- it only activates when a tool fails
+- burn fires on PreCompact -- it only activates when context compaction is triggered
+- check: `sqlite3 ~/.claude/mine.db "SELECT session_id, event FROM hook_log ORDER BY ts DESC LIMIT 20;"`
 
 ### plugin.json validation errors
 
@@ -182,9 +182,9 @@ tool=$(echo "$input" | jq -r '.tool')
 
 ### /sift returns no results
 
-- check: miner database exists and has data
-- try: `sqlite3 ~/.claude/miner.db "SELECT count(*) FROM sessions;"`
-- if the database exists but queries return nothing, you may need to re-ingest -- see miner docs
+- check: mine database exists and has data
+- try: `sqlite3 ~/.claude/mine.db "SELECT count(*) FROM sessions;"`
+- if the database exists but queries return nothing, you may need to re-ingest -- see mine docs
 
 ### custom command not found
 
@@ -234,5 +234,5 @@ nvm use 20
 
 - run with verbose mode (`Ctrl+O`) to see detailed hook and tool execution
 - check `~/.claude/logs/` for session logs
-- search past sessions with miner: use the `/sift` skill or query the database directly
+- search past sessions with mine: use the `/sift` skill or query the database directly
 - open an issue on this repo with your settings (redact secrets) and the error output

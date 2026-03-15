@@ -77,7 +77,7 @@ how to hit the minimum:
 - `@path` imports pulling in additional context files
 - tools and MCP server definitions count toward cached content
 
-measure your cache hit rate with `/sift cache efficiency` (requires miner). above 60% is good, above 80% is excellent.
+measure your cache hit rate with `/sift cache efficiency` (requires mine). above 60% is good, above 80% is excellent.
 
 ### targeted file reads
 
@@ -105,9 +105,9 @@ dont compact after every 5 turns -- the compaction itself costs a full round tri
 
 ---
 
-## tracking costs with miner
+## tracking costs with mine
 
-the [miner plugin](../plugins/miner/) logs every session to sqlite at `~/.claude/miner.db`. it tracks input tokens, output tokens, cache creation, and cache read -- per session, per model, per project.
+the [mine plugin](../plugins/mine/) logs every session to sqlite at `~/.claude/mine.db`. it tracks input tokens, output tokens, cache creation, and cache read -- per session, per model, per project.
 
 ### quick commands
 
@@ -123,34 +123,34 @@ the [miner plugin](../plugins/miner/) logs every session to sqlite at `~/.claude
 **how much did i spend this week?**
 
 ```sql
-sqlite3 ~/.claude/miner.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM session_costs WHERE start_time >= date('now', '-7 days');"
+sqlite3 ~/.claude/mine.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM session_costs WHERE start_time >= date('now', '-7 days');"
 ```
 
 **whats my average cost per session?**
 
 ```sql
-sqlite3 ~/.claude/miner.db "SELECT printf('\$%,.2f', AVG(estimated_cost_usd)) FROM session_costs WHERE start_time >= date('now', '-30 days');"
+sqlite3 ~/.claude/mine.db "SELECT printf('\$%,.2f', AVG(estimated_cost_usd)) FROM session_costs WHERE start_time >= date('now', '-30 days');"
 ```
 
 **which model am i using most?**
 
 ```sql
-sqlite3 ~/.claude/miner.db "SELECT model, COUNT(*) as sessions, printf('\$%,.2f', SUM(estimated_cost_usd)) as cost FROM session_costs WHERE start_time >= date('now', '-30 days') GROUP BY model ORDER BY cost DESC;"
+sqlite3 ~/.claude/mine.db "SELECT model, COUNT(*) as sessions, printf('\$%,.2f', SUM(estimated_cost_usd)) as cost FROM session_costs WHERE start_time >= date('now', '-30 days') GROUP BY model ORDER BY cost DESC;"
 ```
 
 **daily spend trend:**
 
 ```sql
-sqlite3 ~/.claude/miner.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) as cost FROM daily_costs WHERE date >= date('now', '-14 days');"
+sqlite3 ~/.claude/mine.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) as cost FROM daily_costs WHERE date >= date('now', '-14 days');"
 ```
 
 **cost by project:**
 
 ```sql
-sqlite3 ~/.claude/miner.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) as cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
+sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) as cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
 ```
 
-miner also exposes convenience views: `session_costs`, `project_costs`, `daily_costs`, and `tool_usage`. see the [miner README](../plugins/miner/) for the full schema.
+mine also exposes convenience views: `session_costs`, `project_costs`, `daily_costs`, and `tool_usage`. see the [mine README](../plugins/mine/) for the full schema.
 
 ---
 
@@ -179,7 +179,7 @@ thats not a suggestion -- its what cost-effective usage actually looks like. if 
 check your model mix:
 
 ```sql
-sqlite3 ~/.claude/miner.db "SELECT model, COUNT(*) as sessions, printf('%.0f%%', COUNT(*) * 100.0 / (SELECT COUNT(*) FROM sessions WHERE start_time >= date('now', '-30 days'))) as pct FROM sessions WHERE start_time >= date('now', '-30 days') GROUP BY model ORDER BY sessions DESC;"
+sqlite3 ~/.claude/mine.db "SELECT model, COUNT(*) as sessions, printf('%.0f%%', COUNT(*) * 100.0 / (SELECT COUNT(*) FROM sessions WHERE start_time >= date('now', '-30 days'))) as pct FROM sessions WHERE start_time >= date('now', '-30 days') GROUP BY model ORDER BY sessions DESC;"
 ```
 
 ---
@@ -190,7 +190,7 @@ sqlite3 ~/.claude/miner.db "SELECT model, COUNT(*) as sessions, printf('%.0f%%',
 
 **restrict opus via managed policies.** if you're managing a team, use organization policies to limit opus access to senior engineers or specific use cases. most team members dont need it.
 
-**monitor with miner.** the miner plugin works per-machine, but the sqlite database can be aggregated across team members for org-wide visibility. set up a cron job that ships `~/.claude/miner.db` snapshots to a shared location.
+**monitor with mine.** the mine plugin works per-machine, but the sqlite database can be aggregated across team members for org-wide visibility. set up a cron job that ships `~/.claude/mine.db` snapshots to a shared location.
 
 **establish model guidelines in CLAUDE.md.** add something like:
 
@@ -207,4 +207,4 @@ this gets cached into every session and nudges the right behavior from the start
 
 ---
 
-*for deeper cost tracking, see the [miner plugin](../plugins/miner/). for model-switching patterns with subagents, see [subagent-patterns.md](./subagent-patterns.md). for the full cost overview in the guide, see [section 24](./guide.md#24-cost-optimization----real-numbers).*
+*for deeper cost tracking, see the [mine plugin](../plugins/mine/). for model-switching patterns with subagents, see [subagent-patterns.md](./subagent-patterns.md). for the full cost overview in the guide, see [section 24](./guide.md#24-cost-optimization----real-numbers).*

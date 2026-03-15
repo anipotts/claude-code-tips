@@ -46,7 +46,7 @@ claude code works in any terminal, plus VS Code and JetBrains extensions. cursor
 
 ### full conversation history and mining
 
-every claude code session is a JSON transcript you can parse, search, and analyze. the miner plugin in this repo builds a sqlite database from session history -- searchable by file, tool, cost, model, duration. cursor has conversation history in its UI but no equivalent export/analysis layer.
+every claude code session is a JSON transcript you can parse, search, and analyze. the mine plugin in this repo builds a sqlite database from session history -- searchable by file, tool, cost, model, duration. cursor has conversation history in its UI but no equivalent export/analysis layer.
 
 ### transparency
 

@@ -10,7 +10,7 @@ Set Height 480
 Set Padding 20
 Set TypingSpeed 30ms
 
-Type "sqlite3 -header -column ~/.claude/miner.db"
+Type "sqlite3 -header -column ~/.claude/mine.db"
 Enter
 Sleep 500ms
 

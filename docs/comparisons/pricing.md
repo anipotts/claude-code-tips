@@ -64,9 +64,9 @@ subscription pricing tells you the monthly bill. but effective cost depends on h
 
 ### claude code session economics
 
-session cost varies widely based on model, duration, and cache efficiency -- use `/miner` to see your actual per-session costs. on the $20/mo Pro plan, even moderate usage typically exceeds the subscription cost in raw API value. on Max 20x at $200/mo, anthropic is subsidizing heavy users -- a full day of opus sessions can exceed $200 in raw API costs.
+session cost varies widely based on model, duration, and cache efficiency -- use `/mine` to see your actual per-session costs. on the $20/mo Pro plan, even moderate usage typically exceeds the subscription cost in raw API value. on Max 20x at $200/mo, anthropic is subsidizing heavy users -- a full day of opus sessions can exceed $200 in raw API costs.
 
-the miner plugin in this repo tracks actual per-session costs, so you can measure this precisely.
+the mine plugin in this repo tracks actual per-session costs, so you can measure this precisely.
 
 ### cursor session economics
 
@@ -142,6 +142,6 @@ use antigravity (free preview, includes frontier models) as your primary tool. s
 **ChatGPT Pro**: best for openai ecosystem access beyond just coding
 
 ### $200+/mo
-if you're spending this much, you should be tracking per-session costs. use the [miner plugin](../../plugins/miner/) to measure actual usage and optimize model selection.
+if you're spending this much, you should be tracking per-session costs. use the [mine plugin](../../plugins/mine/) to measure actual usage and optimize model selection.
 
 > individual comparison docs: [codex](codex.md) | [cursor](cursor.md) | [gemini](gemini.md) | [antigravity](antigravity.md)

@@ -12,7 +12,7 @@ everything here is tested. opinions are earned. links go to official docs and to
 
 - [beginner](#beginner) -- install, CLAUDE.md, permissions, settings, your first real task, understanding costs
 - [intermediate](#intermediate) -- extensibility stack, hooks, plugins, commands, skills, agents, subagents, MCP
-- [claude code crazy](#claude-code-crazy) -- miner, headless CLI, self-improvement loops, daemons, parallel exploration, cost optimization
+- [claude code crazy](#claude-code-crazy) -- mine, headless CLI, self-improvement loops, daemons, parallel exploration, cost optimization
 
 ---
 
@@ -257,7 +257,7 @@ the `/model` command switches models mid-conversation. this is one of the most u
 - sonnet for most actual coding work. its the workhorse
 - opus when you're stuck or designing something complex. save it for the 10% that actually needs it
 - prompt caching saves money -- long system prompts (CLAUDE.md, few-shot examples) that exceed 4,096 tokens get cached. subsequent turns read from cache at 90% discount
-- watch your token usage with `/sift cost this month` (requires the miner plugin)
+- watch your token usage with `/sift cost this month` (requires the mine plugin)
 
 > [pricing docs](https://docs.anthropic.com/en/docs/about-claude/models)
 
@@ -480,7 +480,7 @@ plugins package hooks into installable bundles. no config needed -- the plugin h
 **install:**
 
 ```bash
-claude plugin add anipotts/miner
+claude plugin add anipotts/mine
 ```
 
 **create your own:**
@@ -643,14 +643,14 @@ breaking work into phases prevents claude from diving into implementation before
 
 ## claude code crazy
 
-### 17. the miner -- total recall for your dev work
+### 17. mine -- total recall for your dev work
 
-the flagship plugin in this repo. every session you run gets parsed and stored in a local sqlite database at `~/.claude/miner.db`. it runs 7 hooks across the session lifecycle, building a searchable history of everything you do.
+the flagship plugin in this repo. every session you run gets parsed and stored in a local sqlite database at `~/.claude/mine.db`. it runs 7 hooks across the session lifecycle, building a searchable history of everything you do.
 
 **install:**
 
 ```bash
-claude plugin add anipotts/miner
+claude plugin add anipotts/mine
 ```
 
 **what the database captures:**
@@ -666,27 +666,28 @@ claude plugin add anipotts/miner
 | `session_costs` | auto-computed USD cost per session (view) |
 | `messages_fts` | FTS5 full-text search across all conversation content |
 
-**the four named features:**
+**the named features:**
 
-- **echo** (solution recall) -- fires on SessionStart. queries past sessions for this project and surfaces recent context so claude knows what you were working on. no more re-explaining
-- **scar** (mistake memory) -- fires on PostToolUseFailure. records tool failures and looks for patterns. if the same tool has failed the same way before, it warns claude before it repeats the mistake
-- **gauge** (model advisor) -- fires on UserPromptSubmit. classifies your prompt as simple or complex and nudges you if your current model is overkill or underpowered
-- **imprint** (stack recall) -- fires on SessionStart. detects your project stack from manifest files and connects it to patterns from your other projects
+- **search** (solution recall) -- fires on SessionStart. queries past sessions for this project and surfaces recent context so claude knows what you were working on. no more re-explaining
+- **mistakes** (mistake memory) -- fires on PostToolUseFailure. records tool failures and looks for patterns. if the same tool has failed the same way before, it warns claude before it repeats the mistake
+- **burn** (cost anomaly detection) -- fires on PreCompact. detects cost anomalies and alerts you when a session is burning tokens faster than expected
+- **hotspots** (most-edited file analysis) -- fires on SessionStart. analyzes which files you edit most frequently via `/mine` and connects it to patterns from your other projects
+- **loops** (repeated pattern detection) -- detects repeated patterns in your workflow via `/mine` and surfaces them so you can automate or avoid them
 
 **querying your history:**
 
 ```bash
 # sessions today
-sqlite3 ~/.claude/miner.db "SELECT project_name, model, start_time FROM sessions WHERE date(start_time) = date('now');"
+sqlite3 ~/.claude/mine.db "SELECT project_name, model, start_time FROM sessions WHERE date(start_time) = date('now');"
 
 # most used tools
-sqlite3 ~/.claude/miner.db "SELECT tool_name, COUNT(*) as n FROM tool_calls GROUP BY tool_name ORDER BY n DESC LIMIT 10;"
+sqlite3 ~/.claude/mine.db "SELECT tool_name, COUNT(*) as n FROM tool_calls GROUP BY tool_name ORDER BY n DESC LIMIT 10;"
 
 # full-text search across all conversations
-sqlite3 ~/.claude/miner.db "SELECT content_preview FROM messages_fts WHERE messages_fts MATCH 'streaming';"
+sqlite3 ~/.claude/mine.db "SELECT content_preview FROM messages_fts WHERE messages_fts MATCH 'streaming';"
 
 # cost per project
-sqlite3 ~/.claude/miner.db "SELECT project_name, printf('\$%.2f', SUM(estimated_cost_usd)) FROM session_costs GROUP BY project_name ORDER BY SUM(estimated_cost_usd) DESC;"
+sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%.2f', SUM(estimated_cost_usd)) FROM session_costs GROUP BY project_name ORDER BY SUM(estimated_cost_usd) DESC;"
 ```
 
 **the `/sift` skill** wraps these into canned subcommands: `/sift search <term>`, `/sift cost this month`, `/sift top tools`, `/sift cache efficiency`, `/sift wasted`, `/sift workflows`. see [sift.md](../skills/sift.md).
@@ -701,7 +702,7 @@ sqlite3 ~/.claude/miner.db "SELECT project_name, printf('\$%.2f', SUM(estimated_
 /agent analyst compare my sonnet vs haiku usage
 ```
 
-see [miner README](../plugins/miner/README.md) for install details and [analyst.md](../agents/analyst.md) for the agent definition.
+see [mine README](../plugins/mine/README.md) for install details and [analyst.md](../agents/analyst.md) for the agent definition.
 
 ---
 
@@ -773,7 +774,7 @@ your CLAUDE.md should get better over time. the `/improve` skill automates this:
 
 1. analyzes recent git history for revert patterns (where claude made a change and you undid it)
 2. finds rapid fix cycles (a fix committed 2 minutes after the initial change = something was wrong)
-3. cross-references miner.db error patterns if available
+3. cross-references mine.db error patterns if available
 4. proposes specific additions, removals, and edits to CLAUDE.md
 5. you review and approve -- it never auto-commits
 
@@ -938,7 +939,7 @@ prompt caching gives you a 90% discount on input tokens for content that stays t
 /sift cache efficiency
 ```
 
-this queries miner.db for cache read vs creation vs uncached tokens. above 60% is good, above 80% is excellent. below 40% means your system prompts aren't hitting the 4,096 token minimum.
+this queries mine.db for cache read vs creation vs uncached tokens. above 60% is good, above 80% is excellent. below 40% means your system prompts aren't hitting the 4,096 token minimum.
 
 **real numbers:** on a project with a 200-line CLAUDE.md and 20 few-shot examples, cache hit rates typically run 70-85%. on a minimal CLAUDE.md (under 4,096 tokens), cache hits are near zero and you're paying full price for every turn.
 
@@ -973,7 +974,7 @@ after thousands of sessions, here's what actually moves the needle on costs:
 
 you rename a directory. or you clone the repo to a different path. or you switch machines. suddenly all your session history is orphaned because claude code uses the filesystem path to identify projects.
 
-the `project_paths` table in miner.db solves this. it tracks every location a project has ever lived:
+the `project_paths` table in mine.db solves this. it tracks every location a project has ever lived:
 
 ```sql
 SELECT project_name, project_dir, cwd, session_count, first_seen, last_seen
@@ -981,7 +982,7 @@ FROM project_paths
 WHERE project_name = 'my-project';
 ```
 
-the miner's `startup.sh` hook detects when a project has moved (same name, different path) and links the new path to existing history. your sessions follow the project, not the directory.
+mine's `startup.sh` hook detects when a project has moved (same name, different path) and links the new path to existing history. your sessions follow the project, not the directory.
 
 `/sift project my-project` queries across ALL paths the project has ever lived at.
 
