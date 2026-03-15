@@ -5,19 +5,19 @@
     "email": "ani@anipotts.com"
   },
   "metadata": {
-    "description": "claude code plugins, hooks, agents, skills, and the miner — everything tested",
+    "description": "claude code plugins, hooks, agents, skills, and mine — everything tested",
     "version": "0.2.0"
   },
   "plugins": [
     {
-      "name": "miner",
-      "source": "./plugins/miner",
+      "name": "mine",
+      "source": "./plugins/mine",
       "description": "mines every claude code session into a local sqlite database. tracks costs, tools, errors, subagents, and enables full-text search across your history.",
       "version": "1.0.0",
       "author": { "name": "Ani Potts" },
-      "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/miner",
+      "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/mine",
       "license": "MIT",
-      "keywords": ["mining", "analytics", "sqlite", "sessions", "costs", "echo", "scar", "gauge", "imprint"],
+      "keywords": ["mining", "analytics", "sqlite", "sessions", "costs", "search", "mistakes", "burn", "hotspots", "loops"],
       "category": "analytics"
     },
     {
