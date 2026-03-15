@@ -1,41 +1,41 @@
 ---
-name: miner
+name: mine
 description: usage stats, costs, search, tools
 allowed-tools:
   - Bash
   - Read
 ---
 
-# /miner
+# /mine
 
 one command for everything in your usage data. just ask what you want to know in plain language
 
 ## examples
 
 ```
-/miner                          → dashboard: today's sessions, weekly cost, top tools
-/miner how much have i spent    → cost breakdown by project, model, time period
-/miner value                    → full API inference value at published rates, ROI
-/miner search "websocket"       → full-text search across all conversations
-/miner what's my cache hit rate → cache efficiency analysis
-/miner wasted sessions          → expensive failures with high errors
-/miner top projects             → project activity ranking
-/miner this week                → everything from the last 7 days
-/miner compare models           → model usage and cost comparison
-/miner health                   → project health: codebase size, git activity, tests
-/miner backfill                 → re-mine recent sessions into the database
+/mine                          → dashboard: today's sessions, weekly cost, top tools
+/mine how much have i spent    → cost breakdown by project, model, time period
+/mine value                    → full API inference value at published rates, ROI
+/mine search "websocket"       → full-text search across all conversations
+/mine what's my cache hit rate → cache efficiency analysis
+/mine wasted sessions          → expensive failures with high errors
+/mine top projects             → project activity ranking
+/mine this week                → everything from the last 7 days
+/mine compare models           → model usage and cost comparison
+/mine health                   → project health: codebase size, git activity, tests
+/mine backfill                 → re-mine recent sessions into the database
 ```
 
-<!-- PROMPT:START — keep in sync with plugins/miner/skills/miner/SKILL.md -->
+<!-- PROMPT:START — keep in sync with plugins/mine/skills/mine/SKILL.md -->
 `````
-When the user runs /miner, interpret their intent and query ~/.claude/miner.db accordingly.
+When the user runs /mine, interpret their intent and query ~/.claude/mine.db accordingly.
 
 ## Step 0: Check database exists and is fresh
 
 Run this FIRST as a single Bash call:
 
 ```bash
-DB=~/.claude/miner.db
+DB=~/.claude/mine.db
 if [ ! -f "$DB" ]; then
   echo "NO_DB"
   exit 0
@@ -47,8 +47,8 @@ NEWEST_JSONL=$(find ~/.claude/projects -name "*.jsonl" -newer "$DB" 2>/dev/null 
 if [ -n "$NEWEST_JSONL" ]; then
   echo "STALE|$FIRST|$LATEST|$TOTAL"
   # try to auto-backfill
-  for p in ./scripts/mine.py ./plugins/miner/scripts/mine.py \
-    $(find ~/.claude/plugins -path "*/miner/scripts/mine.py" 2>/dev/null | head -1); do
+  for p in ./scripts/mine.py ./plugins/mine/scripts/mine.py \
+    $(find ~/.claude/plugins -path "*/mine/scripts/mine.py" 2>/dev/null | head -1); do
     if [ -f "$p" ]; then python3 "$p" --incremental 2>&1; break; fi
   done
   # re-read after backfill
@@ -61,7 +61,7 @@ else
 fi
 ```
 
-- If NO_DB: tell the user "no miner.db found — install the miner plugin or run `python3 scripts/mine.py` from the repo"
+- If NO_DB: tell the user "no mine.db found — install the mine plugin or run `python3 scripts/mine.py` from the repo"
 - If STALE: the backfill ran automatically. note it briefly ("backfilled X sessions") then proceed
 - If FRESH: proceed directly
 - Save FIRST, LATEST, TOTAL for the freshness line
@@ -76,7 +76,7 @@ Interpret the user's message and choose the appropriate analysis. If no argument
 
 Run all dashboard queries in one call:
 ```bash
-sqlite3 -header -separator '|' ~/.claude/miner.db <<'SQL'
+sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
 SELECT 'TODAY' s, COUNT(*) sessions, COALESCE(SUM(total_input_tokens + total_output_tokens), 0) tokens, COALESCE(SUM(duration_active_seconds), 0) secs FROM sessions WHERE date(start_time) = date('now') AND is_subagent = 0;
 SELECT 'WEEK' s, COALESCE(ROUND(SUM(estimated_cost_usd), 2), 0) cost, COUNT(*) sessions FROM session_costs WHERE start_time >= date('now', '-7 days') AND is_subagent = 0;
 SELECT 'TOOLS' s, tc.tool_name, COUNT(*) uses FROM tool_calls tc JOIN sessions s2 ON tc.session_id = s2.id WHERE tc.timestamp >= date('now', '-7 days') AND s2.is_subagent = 0 GROUP BY tc.tool_name ORDER BY uses DESC LIMIT 5;
@@ -246,8 +246,8 @@ Apply the time filter to whichever analysis makes sense. If just a time period w
 
 Explicitly re-mine recent sessions:
 ```bash
-for p in ./scripts/mine.py ./plugins/miner/scripts/mine.py \
-  $(find ~/.claude/plugins -path "*/miner/scripts/mine.py" 2>/dev/null | head -1); do
+for p in ./scripts/mine.py ./plugins/mine/scripts/mine.py \
+  $(find ~/.claude/plugins -path "*/mine/scripts/mine.py" 2>/dev/null | head -1); do
   if [ -f "$p" ]; then python3 "$p" --incremental 2>&1; break; fi
 done
 ```
@@ -256,7 +256,7 @@ Show the backfill output, then a mini dashboard with the updated data.
 
 ### HEALTH / STATS ("health", "stats", "project health", "codebase", "lines of code")
 
-This intent uses the filesystem and git — NOT miner.db. Run these via Bash:
+This intent uses the filesystem and git — NOT mine.db. Run these via Bash:
 
 1. File count by type:
    find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/.next/*' | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -15
@@ -274,6 +274,71 @@ This intent uses the filesystem and git — NOT miner.db. Run these via Bash:
 6. Package info: package.json deps/devDeps/scripts, Cargo.toml, pyproject.toml
 
 Output as compact dashboard tables.
+
+### HOTSPOTS ("hotspots", "hot files", "most edited", "complexity")
+
+```sql
+SELECT tc.input_summary AS file_path,
+       COUNT(*) AS edits,
+       COUNT(DISTINCT tc.session_id) AS sessions
+FROM tool_calls tc
+JOIN sessions s ON tc.session_id = s.id
+WHERE tc.tool_name IN ('Edit', 'Write')
+  AND s.is_subagent = 0
+  AND tc.input_summary IS NOT NULL
+  AND tc.timestamp >= date('now', '-30 days')
+GROUP BY tc.input_summary
+ORDER BY edits DESC LIMIT 15;
+```
+
+Also show most-read files:
+```sql
+SELECT tc.input_summary AS file_path,
+       COUNT(*) AS reads,
+       COUNT(DISTINCT tc.session_id) AS sessions
+FROM tool_calls tc
+JOIN sessions s ON tc.session_id = s.id
+WHERE tc.tool_name = 'Read'
+  AND s.is_subagent = 0
+  AND tc.input_summary IS NOT NULL
+  AND tc.timestamp >= date('now', '-30 days')
+GROUP BY tc.input_summary
+ORDER BY reads DESC LIMIT 15;
+```
+
+Present as "files you keep touching" (edit/write) and "files you keep reading" — the former suggests complexity magnets, the latter suggests unclear code.
+
+### LOOPS ("loops", "repeated", "retries", "stuck")
+
+Detect repeated tool calls on the same input within a session:
+```sql
+SELECT s.project_name, tc.tool_name, tc.input_summary,
+       COUNT(*) AS repeats, s.start_time
+FROM tool_calls tc
+JOIN sessions s ON tc.session_id = s.id
+WHERE s.is_subagent = 0
+  AND tc.input_summary IS NOT NULL
+  AND tc.timestamp >= date('now', '-7 days')
+GROUP BY tc.session_id, tc.tool_name, tc.input_summary
+HAVING repeats >= 3
+ORDER BY repeats DESC LIMIT 15;
+```
+
+Also detect error loops:
+```sql
+SELECT s.project_name, e.tool_name,
+       SUBSTR(e.error_message, 1, 100) AS error,
+       COUNT(*) AS repeats
+FROM errors e
+JOIN sessions s ON e.session_id = s.id
+WHERE s.is_subagent = 0
+  AND e.timestamp >= date('now', '-7 days')
+GROUP BY s.project_name, e.tool_name, e.error_message
+HAVING repeats >= 2
+ORDER BY repeats DESC LIMIT 10;
+```
+
+Present as "tool call loops" and "error loops" — these surface where you or Claude are stuck.
 
 ### FREEFORM (anything else)
 

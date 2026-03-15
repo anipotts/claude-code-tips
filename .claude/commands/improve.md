@@ -19,7 +19,7 @@ credit: Boris Cherny tip #2 (self-improvement loops).
 1. reads git log for the last N commits (default 20)
 2. identifies patterns -- what got reverted, what got fixed immediately after, what caused loops
 3. reads your CLAUDE.md and checks if it covers the patterns it found
-4. cross-references miner.db session data if available (error patterns, wasted sessions)
+4. cross-references mine.db session data if available (error patterns, wasted sessions)
 5. proposes additions, removals, and edits to CLAUDE.md
 6. presents the diff for your approval -- **never auto-commits**
 
@@ -81,9 +81,9 @@ When the user runs /improve, analyze recent project history and propose improvem
    git log --all --oneline -50 | grep -iE 'style|format|convention|pattern|always|never|dont|do not'
    ```
 
-7. If ~/.claude/miner.db exists, check for error patterns:
+7. If ~/.claude/mine.db exists, check for error patterns:
    ```bash
-   sqlite3 -header -column ~/.claude/miner.db "
+   sqlite3 -header -column ~/.claude/mine.db "
      SELECT tool_name, error_message, COUNT(*) as occurrences
      FROM errors
      WHERE session_id IN (
@@ -99,7 +99,7 @@ When the user runs /improve, analyze recent project history and propose improvem
 
 8. Check for wasted sessions (high tokens + many errors):
    ```bash
-   sqlite3 -header -column ~/.claude/miner.db "
+   sqlite3 -header -column ~/.claude/mine.db "
      SELECT s.first_user_prompt,
             s.total_input_tokens + s.total_output_tokens AS tokens,
             (SELECT COUNT(*) FROM errors e WHERE e.session_id = s.id) AS errors
@@ -184,7 +184,7 @@ For each finding, propose a specific change to CLAUDE.md:
 - Be specific -- "always run tests" is useless. "run `npm test -- --watch` before committing changes to lib/" is actionable
 - Don't propose rules for one-off mistakes -- only for patterns (2+ occurrences)
 - Keep proposed additions concise -- CLAUDE.md should be a quick reference, not a novel
-- If miner.db isn't available, that's fine -- git history alone is enough
+- If mine.db isn't available, that's fine -- git history alone is enough
 `````
 
 ## why this exists

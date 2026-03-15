@@ -7,24 +7,26 @@
 
 plugins, hooks, slash commands, agents, and docs for claude code. everything is copy-paste ready.
 
+**flagship: [mine](./plugins/mine/)** — mines every session to sqlite. costs, search, patterns. `claude plugin add anipotts/mine`
+
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine.py --stats dashboard showing sessions, tokens, costs, and projects" />
 
-## miner plugin
+## mine plugin
 
-the flagship. mines every claude code session to sqlite -- tracks costs, tokens, cache efficiency, and gives you four power features: **echo** (solution recall), **scar** (mistake memory), **gauge** (model advisor), and **imprint** (stack recall).
+the flagship. mines every claude code session to sqlite -- tracks costs, tokens, cache efficiency, and gives you five power features: **search** (solution recall), **mistakes** (error memory), **burn** (cost anomaly detection), **hotspots** (file edit analysis), and **loops** (repeated pattern detection).
 
 ```bash
-claude plugin add anipotts/miner
+claude plugin add anipotts/mine
 ```
 
-once installed, use `/miner` in any session to query your usage in plain language:
+once installed, use `/mine` in any session to query your usage in plain language:
 
 ```
-/miner                          → dashboard: today's sessions, weekly cost, top tools
-/miner how much have i spent    → cost breakdown by project, model, time period
-/miner value                    → API inference value at published rates
-/miner search "websocket"       → full-text search across all conversations
-/miner what's my cache hit rate → cache efficiency analysis
+/mine                          → dashboard: today's sessions, weekly cost, top tools
+/mine how much have i spent    → cost breakdown by project, model, time period
+/mine value                    → API inference value at published rates
+/mine search "websocket"       → full-text search across all conversations
+/mine what's my cache hit rate → cache efficiency analysis
 ```
 
 ## plugins
@@ -33,7 +35,7 @@ installable via `claude plugin add`:
 
 | plugin | description |
 |---|---|
-| **[miner](./plugins/miner/)** | mines sessions to sqlite with FTS5 search, cost tracking, and four power features |
+| **[mine](./plugins/mine/)** | mines sessions to sqlite with FTS5 search, cost tracking, and five power features |
 | [handoff](./plugins/handoff/) | saves context before compression -- never lose your plan |
 | [broadcast](./plugins/broadcast/) | async notifications when claude ships something |
 
@@ -43,7 +45,7 @@ these live in `.claude/commands/` and are auto-discovered by claude code. clone 
 
 | command | description |
 |---|---|
-| `/miner` | query your usage data in plain language -- costs, sessions, search, tools, projects |
+| `/mine` | query your usage data in plain language -- costs, sessions, search, tools, projects |
 | `/improve` | analyze recent sessions and git history to propose CLAUDE.md improvements |
 | `/ship` | stage, commit, push, and open a PR in one shot |
 | `/sweep` | find and clean dead code, unused imports, stale TODOs |
@@ -51,7 +53,7 @@ these live in `.claude/commands/` and are auto-discovered by claude code. clone 
 | `/stats` | project health -- LOC, git activity, test coverage |
 | `/deps` | dependency updates and security audit (node, python, rust, go) |
 
-deprecated commands (`/sift`, `/ledger`, `/value`) still work but route through `/miner` now.
+deprecated commands (`/sift`, `/ledger`, `/value`, `/miner`) still work but route through `/mine` now.
 
 ## agents
 
@@ -59,7 +61,7 @@ these live in `.claude/agents/` and are auto-discovered. use them for longer-run
 
 | agent | description |
 |---|---|
-| [analyst](./.claude/agents/analyst.md) | free-form SQL investigator against your miner.db |
+| [analyst](./.claude/agents/analyst.md) | free-form SQL investigator against your mine.db |
 | [explorer](./.claude/agents/explorer.md) | parallel worktree exploration -- try risky changes safely |
 | [guardian](./.claude/agents/guardian.md) | daemon that watches your project and proposes fixes |
 | [code-sweeper](./.claude/agents/code-sweeper.md) | finds dead code, unused imports, stale TODOs |
@@ -94,7 +96,7 @@ then add it to `~/.claude/settings.json` under the appropriate hook event. see [
 
 - **beginner** -- install, CLAUDE.md, permissions, settings
 - **intermediate** -- hooks, plugins, subagents, MCP
-- **advanced** -- miner, headless CLI tools, self-improvement loops, daemons, github actions
+- **advanced** -- mine, headless CLI tools, self-improvement loops, daemons, github actions
 
 reference docs:
 
@@ -108,7 +110,7 @@ reference docs:
 ## repo structure
 
 ```
-plugins/miner/       miner plugin (installable via marketplace)
+plugins/mine/        mine plugin (installable via marketplace)
 plugins/handoff/     handoff plugin
 plugins/broadcast/   broadcast plugin
 .claude/commands/    slash commands (auto-discovered)
