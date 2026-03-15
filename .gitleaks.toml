@@ -1,0 +1,7 @@
+# gitleaks configuration
+# test fixtures contain fake secrets for sanitizer testing — allow them
+
+[allowlist]
+  paths = [
+    '''tests/fixtures/.*''',
+  ]
