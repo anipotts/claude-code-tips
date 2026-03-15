@@ -1,47 +1,47 @@
 <!-- tested with: claude code v1.0.34 -->
 
-# miner
+# mine
 
 mines every claude code session into a local sqlite database. total recall for your dev work.
 
 ## what it does
 
-miner runs 7 hooks across the claude code session lifecycle, building a searchable history of everything you do. the database lives at `~/.claude/miner.db` and uses the schema from `scripts/schema.sql`.
+mine runs 7 hooks across the claude code session lifecycle, building a searchable history of everything you do. the database lives at `~/.claude/mine.db` and uses the schema from `scripts/schema.sql`.
 
-four named features surface that history back to you:
+three hooks surface that history back to you, plus two query intents available via `/mine`:
 
-### echo (solution recall)
+### search (solution recall)
 
 fires on SessionStart. queries your past sessions for this project and surfaces recent prompts and context so claude knows what you were working on. no more re-explaining.
 
-### scar (mistake memory)
+### mistakes (error memory)
 
-fires on PostToolUseFailure. records every tool failure and looks for patterns. if the same tool has failed the same way before in this project, it warns claude before it makes the same mistake again.
+fires on PostToolUseFailure. records every tool failure and warns when the same tool has failed before in this project. prevents claude from repeating the same mistake.
 
-### gauge (model advisor)
+### burn (cost anomaly detection)
 
-fires on UserPromptSubmit. classifies your prompt as simple or complex and nudges you if your current model is overkill or underpowered. saves money on lookups, saves time on architecture.
+fires on PreCompact. compares current session token usage against your project average and warns if this session is burning significantly more than usual.
 
-### imprint (stack recall)
+### query intents
 
-fires on SessionStart. detects your project stack from manifest files (package.json, Cargo.toml, requirements.txt, go.mod) and connects it to patterns from your other projects.
+use `/mine hotspots` for most-edited files, `/mine loops` for repeated patterns. these are query intents handled by the `/mine` skill, not hooks.
 
 ## all hooks
 
 | hook | event | behavior |
 |---|---|---|
-| `ingest.sh` | SessionEnd (async) | parses session + subagent transcripts into miner.db |
+| `ingest.sh` | SessionEnd (async) | parses session + subagent transcripts into mine.db |
 | `subagent.sh` | SubagentStop | parses a single subagent transcript on completion |
 | `compact.sh` | PreCompact | increments compaction_count for the session |
 | `tool-log.sh` | PostToolUse | logs every tool call (<100ms, fires on every tool) |
-| `startup.sh` | SessionStart | project move detection + echo + imprint (3-in-1) |
-| `scar.sh` | PostToolUseFailure | mistake memory + pattern surfacing |
-| `gauge.sh` | UserPromptSubmit | model advisor |
+| `startup.sh` | SessionStart | project move detection + search (2-in-1) |
+| `mistakes.sh` | PostToolUseFailure | error memory + pattern surfacing |
+| `burn.sh` | PreCompact | cost anomaly detection |
 
 ## install
 
 ```bash
-claude plugin add anipotts/claude-code-tips --plugin miner
+claude plugin add anipotts/claude-code-tips --plugin mine
 ```
 
 or manually copy the plugin directory and add to `.claude/settings.json`.
@@ -49,20 +49,19 @@ or manually copy the plugin directory and add to `.claude/settings.json`.
 after installing, make the hooks executable:
 
 ```bash
-chmod +x plugins/miner/hooks/*.sh
+chmod +x plugins/mine/hooks/*.sh
 ```
 
 ## config
 
-create `~/.claude/miner.json` to toggle individual features:
+create `~/.claude/mine.json` to toggle individual features:
 
 ```json
 {
   "ingest": true,
-  "echo": true,
-  "scar": true,
-  "gauge": true,
-  "imprint": true,
+  "search": true,
+  "mistakes": true,
+  "burn": true,
   "move_detect": true,
   "tool_log": true,
   "compact": true
@@ -79,7 +78,7 @@ all features default to enabled. set any to `false` to disable.
 
 ## database
 
-the database lives at `~/.claude/miner.db`. schema is defined in `scripts/schema.sql`.
+the database lives at `~/.claude/mine.db`. schema is defined in `scripts/schema.sql`.
 
 ### quick stats
 
@@ -91,7 +90,7 @@ shows sessions, messages, tool calls, tokens, cost breakdown by model and projec
 
 ### cost tracking
 
-miner tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus 4.5+ $5/$25, sonnet $3/$15, haiku 4.5 $1/$5 per 1M tokens, with cache discounts). older opus 4.0/4.1 sessions use the legacy $15/$75 rates.
+mine tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus 4.5+ $5/$25, sonnet $3/$15, haiku 4.5 $1/$5 per 1M tokens, with cache discounts). older opus 4.0/4.1 sessions use the legacy $15/$75 rates.
 
 this tells you what your usage _would_ cost at API rates — useful for understanding the value of a Max subscription or tracking actual API spend.
 
@@ -106,16 +105,16 @@ convenience views:
 
 ```bash
 # total lifetime cost
-sqlite3 ~/.claude/miner.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM session_costs;"
+sqlite3 ~/.claude/mine.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM session_costs;"
 
 # cost by project
-sqlite3 ~/.claude/miner.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) AS cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
+sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) AS cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
 
 # daily spend this week
-sqlite3 ~/.claude/miner.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) AS cost FROM daily_costs WHERE date >= date('now', '-7 days');"
+sqlite3 ~/.claude/mine.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) AS cost FROM daily_costs WHERE date >= date('now', '-7 days');"
 
 # cache efficiency
-sqlite3 ~/.claude/miner.db "SELECT printf('%.1f%%', SUM(cache_read_tokens) * 100.0 / SUM(input_tokens + cache_creation_tokens + cache_read_tokens)) AS hit_rate FROM project_costs;"
+sqlite3 ~/.claude/mine.db "SELECT printf('%.1f%%', SUM(cache_read_tokens) * 100.0 / SUM(input_tokens + cache_creation_tokens + cache_read_tokens)) AS hit_rate FROM project_costs;"
 ```
 
 ### how costs are calculated
@@ -137,13 +136,13 @@ in a typical claude code session, **90%+ of the cost is cache tokens** — every
 
 ```bash
 # sessions today
-sqlite3 ~/.claude/miner.db "SELECT project_name, model, start_time FROM sessions WHERE date(start_time) = date('now');"
+sqlite3 ~/.claude/mine.db "SELECT project_name, model, start_time FROM sessions WHERE date(start_time) = date('now');"
 
 # most used tools
-sqlite3 ~/.claude/miner.db "SELECT tool_name, total_uses FROM tool_usage ORDER BY total_uses DESC LIMIT 10;"
+sqlite3 ~/.claude/mine.db "SELECT tool_name, total_uses FROM tool_usage ORDER BY total_uses DESC LIMIT 10;"
 
 # full-text search past prompts
-sqlite3 ~/.claude/miner.db "SELECT content_preview FROM messages_fts WHERE messages_fts MATCH 'streaming';"
+sqlite3 ~/.claude/mine.db "SELECT content_preview FROM messages_fts WHERE messages_fts MATCH 'streaming';"
 
 # backfill all history
 python3 scripts/mine.py --workers 8

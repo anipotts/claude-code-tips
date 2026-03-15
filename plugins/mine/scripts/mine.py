@@ -4,7 +4,7 @@
 mine.py -- Parse Claude Code JSONL conversation files into SQLite.
 
 Reads all JSONL session logs from ~/.claude/projects/ and populates a
-normalized SQLite database at ~/.claude/miner.db with sessions, messages,
+normalized SQLite database at ~/.claude/mine.db with sessions, messages,
 tool calls, subagent tracking, and full-text search.
 
 Usage:
@@ -43,9 +43,9 @@ from typing import Any
 
 CLAUDE_DIR = pathlib.Path.home() / ".claude"
 PROJECTS_DIR = CLAUDE_DIR / "projects"
-DEFAULT_DB_PATH = CLAUDE_DIR / "miner.db"
+DEFAULT_DB_PATH = CLAUDE_DIR / "mine.db"
 SCHEMA_PATH = pathlib.Path(__file__).resolve().parent / "schema.sql"
-MINERIGNORE_PATH = CLAUDE_DIR / ".minerignore"
+MINEIGNORE_PATH = CLAUDE_DIR / ".mineignore"
 
 # Content preview limits
 USER_PREVIEW_LIMIT = 2000
@@ -545,12 +545,12 @@ def parse_jsonl_file(args: tuple[str, bool]) -> dict[str, Any]:
 # File discovery
 # ---------------------------------------------------------------------------
 
-def load_minerignore() -> list[str]:
-    """Load patterns from ~/.claude/.minerignore (one per line)."""
-    if not MINERIGNORE_PATH.exists():
+def load_mineignore() -> list[str]:
+    """Load patterns from ~/.claude/.mineignore (one per line)."""
+    if not MINEIGNORE_PATH.exists():
         return []
     patterns: list[str] = []
-    with open(MINERIGNORE_PATH, "r") as f:
+    with open(MINEIGNORE_PATH, "r") as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#"):
@@ -588,7 +588,7 @@ def discover_jsonl_files(
         print(f"Error: projects directory not found: {PROJECTS_DIR}", file=sys.stderr)
         sys.exit(1)
 
-    ignore_patterns = load_minerignore()
+    ignore_patterns = load_mineignore()
     files: list[tuple[str, bool]] = []
 
     for project_dir in sorted(PROJECTS_DIR.iterdir()):
@@ -601,7 +601,7 @@ def discover_jsonl_files(
         if project_filter and project_filter.lower() not in dir_name.lower():
             continue
 
-        # Apply minerignore
+        # Apply mineignore
         if should_ignore(dir_name, ignore_patterns):
             continue
 
