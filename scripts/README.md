@@ -2,7 +2,7 @@
 
 ## mine.py
 
-parses all Claude Code JSONL conversation logs from `~/.claude/projects/` into a normalized SQLite database at `~/.claude/miner.db`. extracts sessions, messages, tool calls, token usage, costs, and subagent relationships with full-text search.
+parses all Claude Code JSONL conversation logs from `~/.claude/projects/` into a normalized SQLite database at `~/.claude/mine.db`. extracts sessions, messages, tool calls, token usage, costs, and subagent relationships with full-text search.
 
 ### quick start
 
@@ -43,12 +43,48 @@ python3 scripts/mine.py --stats
 - top 10 projects by estimated cost
 - cache efficiency (hit rate, savings multiplier)
 
+## dashboard.py
+
+live terminal dashboard (TUI) that watches `~/.claude/projects/` and shows real-time stats as you work in Claude Code. auto-detects the most recently active session and tails the JSONL transcript.
+
+### quick start
+
+```bash
+pip install textual
+python3 scripts/dashboard.py
+```
+
+### what it shows
+
+- **current session** -- session id, project, start time, ticking duration
+- **throughput** -- rolling tools/min with text sparkline (30s buckets)
+- **tool breakdown** -- Read, Write, Edit, Bash, Grep, Glob, Agent counts with bar charts
+- **files mutated** -- count + last 5 files changed by Write/Edit
+- **time saved** -- CC elapsed time vs estimated human-equivalent time (Write/Edit = 5 min, Bash = 2 min, Agent = 15 min)
+- **session history** -- last 5 sessions with duration, tool count, files changed
+- **live indicator** -- green when session file modified in last 30s
+
+### flags
+
+| flag | description | default |
+|---|---|---|
+| `--refresh N` | poll interval in seconds | 2 |
+
+### keybindings
+
+| key | action |
+|---|---|
+| `q` | quit |
+| `r` | force refresh (re-scan all sessions) |
+
+tested with Claude Code v2.1.74
+
 ## schema.sql
 
 defines the full SQLite schema. applied automatically by mine.py, or manually:
 
 ```bash
-sqlite3 ~/.claude/miner.db < scripts/schema.sql
+sqlite3 ~/.claude/mine.db < scripts/schema.sql
 ```
 
 ### tables
@@ -78,17 +114,17 @@ sqlite3 ~/.claude/miner.db < scripts/schema.sql
 
 ```bash
 # total spend
-sqlite3 ~/.claude/miner.db "SELECT ROUND(SUM(estimated_cost_usd), 2) FROM session_costs"
+sqlite3 ~/.claude/mine.db "SELECT ROUND(SUM(estimated_cost_usd), 2) FROM session_costs"
 
 # top projects by cost
-sqlite3 ~/.claude/miner.db "SELECT project_name, ROUND(estimated_cost_usd, 2) AS cost FROM project_costs ORDER BY cost DESC LIMIT 10"
+sqlite3 ~/.claude/mine.db "SELECT project_name, ROUND(estimated_cost_usd, 2) AS cost FROM project_costs ORDER BY cost DESC LIMIT 10"
 
 # daily spending
-sqlite3 ~/.claude/miner.db "SELECT * FROM daily_costs ORDER BY date DESC LIMIT 7"
+sqlite3 ~/.claude/mine.db "SELECT * FROM daily_costs ORDER BY date DESC LIMIT 7"
 
 # full-text search
-sqlite3 ~/.claude/miner.db "SELECT m.session_id, m.content_preview FROM messages m JOIN messages_fts f ON m.id = f.rowid WHERE messages_fts MATCH 'streaming bug' LIMIT 5"
+sqlite3 ~/.claude/mine.db "SELECT m.session_id, m.content_preview FROM messages m JOIN messages_fts f ON m.id = f.rowid WHERE messages_fts MATCH 'streaming bug' LIMIT 5"
 
 # most used tools
-sqlite3 ~/.claude/miner.db "SELECT * FROM tool_usage ORDER BY total_uses DESC LIMIT 10"
+sqlite3 ~/.claude/mine.db "SELECT * FROM tool_usage ORDER BY total_uses DESC LIMIT 10"
 ```
