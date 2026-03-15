@@ -1,0 +1,2 @@
+{"type":"user","sessionId":"sess-opus","cwd":"/Users/test/expensive","timestamp":"2025-03-01T10:00:00Z","uuid":"u1","message":{"role":"user","content":"Expensive task"},"userType":"external"}
+{"type":"assistant","sessionId":"sess-opus","timestamp":"2025-03-01T10:00:30Z","uuid":"a1","requestId":"req-001","message":{"role":"assistant","model":"claude-opus-4-6-20250901","content":"Done with expensive task.","stop_reason":"end_turn","usage":{"input_tokens":10000,"output_tokens":5000,"cache_creation_input_tokens":2000,"cache_read_input_tokens":8000}}}

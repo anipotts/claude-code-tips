@@ -1,0 +1,5 @@
+{"type":"user","sessionId":"sess-skip","cwd":"/Users/test/project","timestamp":"2025-03-01T10:00:00Z","uuid":"u1","message":{"role":"user","content":"Do something"},"userType":"external"}
+{"type":"progress","sessionId":"sess-skip","timestamp":"2025-03-01T10:00:02Z"}
+{"type":"file-history-snapshot","sessionId":"sess-skip","timestamp":"2025-03-01T10:00:03Z","files":["/a.py","/b.py"]}
+{"type":"queue-operation","sessionId":"sess-skip","timestamp":"2025-03-01T10:00:04Z"}
+{"type":"assistant","sessionId":"sess-skip","timestamp":"2025-03-01T10:00:05Z","uuid":"a1","requestId":"req-001","message":{"role":"assistant","model":"claude-sonnet-4-6-20250514","content":"Done.","stop_reason":"end_turn","usage":{"input_tokens":100,"output_tokens":20}}}
