@@ -24,11 +24,11 @@ on:
       merge_method:
         description: 'Merge method'
         required: false
-        default: 'squash'
+        default: 'merge'
         type: choice
         options:
-          - squash
           - merge
+          - squash
           - rebase
 
 permissions:

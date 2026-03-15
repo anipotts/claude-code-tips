@@ -17,6 +17,10 @@ name: Upstream Watcher
 #
 # cost: ~$0/mo GitHub Actions + ~$0.01-0.05/run Claude API
 #        + ~$1/mo Twilio SMS (optional, ntfy.sh is free)
+#
+# requires: repo Settings → Actions → General → "Allow GitHub Actions
+#           to create and approve pull requests" must be enabled,
+#           otherwise PR creation steps will fail with permission denied.
 # ---------------------------------------------------------------
 
 on:

@@ -224,7 +224,7 @@ jobs:
           errors=0
 
           # check .github/scripts/ and scripts/
-          mapfile -t py_files < <(git ls-files '.github/scripts/*.py' 'scripts/*.py')
+          mapfile -t py_files < <(git ls-files '.github/scripts/*.py' 'scripts/*.py' 'tests/*.py')
 
           if [ ${#py_files[@]} -eq 0 ]; then
             echo "No Python files found in target directories"
@@ -250,3 +250,22 @@ jobs:
           else
             echo "All Python files compile cleanly"
           fi
+
+  # ---------------------------------------------------------------------------
+  # pytest -- test mine.py parser, DB writes, cost calculations
+  # ---------------------------------------------------------------------------
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Run tests
+        run: python -m pytest tests/ -v
