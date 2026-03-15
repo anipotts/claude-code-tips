@@ -51,7 +51,7 @@ claude code is production-ready with SOC 2 Type II and ISO 27001 certifications,
 
 ### session mining and analysis
 
-every claude code session produces parseable JSON transcripts. the miner plugin builds sqlite databases from session data -- searchable by file, tool, cost, model, duration. antigravity has conversation history in its UI but no export or analysis layer.
+every claude code session produces parseable JSON transcripts. the mine plugin builds sqlite databases from session data -- searchable by file, tool, cost, model, duration. antigravity has conversation history in its UI but no export or analysis layer.
 
 ---
 

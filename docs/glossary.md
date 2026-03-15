@@ -20,11 +20,11 @@ terms used across this repo and claude code docs.
 
 **context-save** -- hook in this repo. automatically preserves important context before compaction so you don't lose key decisions or findings.
 
-**echo** -- miner plugin feature. recalls past solutions to similar problems by searching session history via FTS5. fires on SessionStart.
+**search** -- mine plugin feature (formerly echo). recalls past solutions to similar problems by searching session history via FTS5. fires on SessionStart.
 
-**FTS5** -- sqlite full-text search extension. used by the miner plugin for fast searching across session transcripts and tool logs.
+**FTS5** -- sqlite full-text search extension. used by the mine plugin for fast searching across session transcripts and tool logs.
 
-**gauge** -- miner plugin feature. analyzes your prompt complexity and current model, then suggests whether you're overpaying or underpowered. fires on UserPromptSubmit.
+**burn** -- mine plugin feature (formerly gauge). detects cost anomalies and alerts you when a session is burning tokens faster than expected. fires on PreCompact.
 
 **handoff** -- plugin in this repo. preserves conversation context before compaction or between sessions. writes structured summaries so the next session picks up where you left off.
 
@@ -32,11 +32,13 @@ terms used across this repo and claude code docs.
 
 **hook event** -- the trigger point for a hook. current events: PreToolUse, PostToolUse, PreCompact, Notification, Stop, SubagentStop, SessionStart, SessionEnd, UserPromptSubmit.
 
-**imprint** -- miner plugin feature. detects your project's tech stack from manifest files and connects it to patterns from your other projects. fires on SessionStart.
+**hotspots** -- mine plugin feature (formerly imprint). analyzes which files you edit most frequently via `/mine` and connects it to patterns from your other projects. fires on SessionStart.
 
 **MCP (model context protocol)** -- a standard for connecting AI models to external tools and data sources. MCP servers expose tools that claude code discovers at session start and calls like built-in tools. see [MCP servers](./mcp-servers.md).
 
-**miner** -- the flagship plugin in this repo. mines every claude code session into a local sqlite database, enabling cost tracking, solution recall, mistake memory, and model recommendations. see [miner README](../plugins/miner/README.md).
+**loops** -- mine plugin feature. detects repeated patterns in your workflow via `/mine` and surfaces them so you can automate or avoid them.
+
+**mine** -- the flagship plugin in this repo (formerly miner). mines every claude code session into a local sqlite database, enabling cost tracking, solution recall, mistake memory, and cost anomaly detection. see [mine README](../plugins/mine/README.md).
 
 **panopticon** -- hook in this repo. logs all tool calls for audit and analysis. fires on PostToolUse.
 
@@ -52,9 +54,9 @@ terms used across this repo and claude code docs.
 
 **safety-guard** -- hook in this repo. blocks dangerous Bash commands (rm -rf, sudo, etc.) before execution via PreToolUse.
 
-**scar** -- miner plugin feature. remembers past tool failures and their fixes. when the same failure pattern appears, it warns claude before it repeats the mistake. fires on PostToolUseFailure.
+**mistakes** -- mine plugin feature (formerly scar). remembers past tool failures and their fixes. when the same failure pattern appears, it warns claude before it repeats the mistake. fires on PostToolUseFailure.
 
-**SessionEnd** -- hook event that fires when a session ends. miner uses this for ingesting the full session transcript.
+**SessionEnd** -- hook event that fires when a session ends. mine uses this for ingesting the full session transcript.
 
 **SessionStart** -- hook event that fires when a new session begins. useful for loading context, checking environment, or surfacing past work.
 

@@ -51,6 +51,6 @@ for tape in gifs/*.tape; do vhs "$tape"; done
 ## notes
 
 - all tapes use Catppuccin Mocha theme + JetBrains Mono font
-- most demos require a populated `~/.claude/miner.db` — run `python3 scripts/mine.py` first
+- most demos require a populated `~/.claude/mine.db` — run `python3 scripts/mine.py` first
 - `.gif` outputs are committed to the repo; `.tape` source files are also committed
 - 65 additional GIF ideas cataloged — start with these 6 priority demos

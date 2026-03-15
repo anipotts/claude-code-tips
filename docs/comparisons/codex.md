@@ -31,7 +31,7 @@ this matters bc extensibility is what turns a coding tool into *your* coding too
 
 ### conversation continuity
 
-`claude --continue` resumes your last session exactly where you left off. `--resume` lets you pick any past session. combined with the miner plugin, you get a searchable sqlite database of every session, every tool call, every file touched. codex has session history but no equivalent mining/analysis layer.
+`claude --continue` resumes your last session exactly where you left off. `--resume` lets you pick any past session. combined with the mine plugin, you get a searchable sqlite database of every session, every tool call, every file touched. codex has session history but no equivalent mining/analysis layer.
 
 ### established patterns at scale
 
