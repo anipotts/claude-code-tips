@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # compact.sh -- PreCompact
-# Increments the compaction_count for this session in miner.db.
+# Increments the compaction_count for this session in mine.db.
 # Lightweight counter so you can track how often context gets compressed.
 
 set -euo pipefail
 # tested with: claude code v1.0.34
 
-DB="${HOME}/.claude/miner.db"
-CONFIG="${HOME}/.claude/miner.json"
+DB="${HOME}/.claude/mine.db"
+CONFIG="${HOME}/.claude/mine.json"
 
 # check feature toggle
 if [[ -f "$CONFIG" ]]; then
@@ -23,12 +23,12 @@ INPUT=$(cat)
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty')
 
 if [[ -z "$SESSION_ID" ]]; then
-  echo "[miner] compact: no session_id in payload, skipping" >&2
+  echo "[mine] compact: no session_id in payload, skipping" >&2
   exit 0
 fi
 
 if [[ ! -f "$DB" ]]; then
-  echo "[miner] compact: database not found at $DB, skipping" >&2
+  echo "[mine] compact: database not found at $DB, skipping" >&2
   exit 0
 fi
 
@@ -37,5 +37,5 @@ SAFE_SESSION_ID=$(echo "$SESSION_ID" | sed "s/'/''/g")
 
 sqlite3 "$DB" "UPDATE sessions SET compaction_count = compaction_count + 1 WHERE id = '${SAFE_SESSION_ID}';"
 
-echo "[miner] compact: incremented compaction_count for session $SESSION_ID" >&2
+echo "[mine] compact: incremented compaction_count for session $SESSION_ID" >&2
 exit 0

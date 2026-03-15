@@ -7,8 +7,8 @@
 set -euo pipefail
 # tested with: claude code v1.0.34
 
-DB="${HOME}/.claude/miner.db"
-CONFIG="${HOME}/.claude/miner.json"
+DB="${HOME}/.claude/mine.db"
+CONFIG="${HOME}/.claude/mine.json"
 
 # check feature toggle
 if [[ -f "$CONFIG" ]]; then
