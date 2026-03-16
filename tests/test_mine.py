@@ -1008,7 +1008,9 @@ class TestEdgeCases:
 def tmp_fixture_with_nested_cache() -> pathlib.Path:
     """Create a temp fixture that uses nested cache_creation object."""
     import tempfile
-    f = pathlib.Path(tempfile.mktemp(suffix=".jsonl"))
+    tmp = tempfile.NamedTemporaryFile(suffix=".jsonl", delete=False)
+    tmp.close()
+    f = pathlib.Path(tmp.name)
     f.write_text(json.dumps({
         "type": "assistant",
         "sessionId": "sess-nested",

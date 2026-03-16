@@ -1,6 +1,6 @@
 {
   "name": "claude-code-tips",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "claude code plugins, hooks, agents, and resources. all tested",
   "author": {
     "name": "Ani Potts",
@@ -16,5 +16,4 @@
     "claude-code-hooks",
     "mcp-server"
   ],
-  "hooks": "./hooks/hooks.json"
 }
