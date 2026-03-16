@@ -961,7 +961,7 @@ def print_stats(db_path: pathlib.Path) -> None:
     cursor = conn.cursor()
 
     print(f"\n{'='*60}")
-    print(f"  Claude Code Miner -- Database Summary")
+    print(f"  Claude Code Mine -- Database Summary")
     print(f"  {db_path}")
     print(f"{'='*60}\n")
 

@@ -8,5 +8,5 @@
   "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/mine",
   "repository": "https://github.com/anipotts/claude-code-tips",
   "license": "MIT",
-  "keywords": ["mining", "analytics", "sqlite", "history", "search", "costs", "sessions", "search", "mistakes", "burn", "hotspots", "loops"]
+  "keywords": ["mining", "analytics", "sqlite", "history", "search", "costs", "sessions", "mistakes", "burn", "hotspots", "loops"]
 }
