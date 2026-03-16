@@ -6,15 +6,31 @@
 set -euo pipefail
 # tested with: claude code v1.0.34
 
+# dependency check
+for cmd in jq sqlite3 python3; do
+  if ! command -v "$cmd" &>/dev/null; then
+    echo "[mine] error: $cmd not found. install with: brew install $cmd" >&2
+    exit 0  # don't block session
+  fi
+done
+
 DB="${HOME}/.claude/mine.db"
 CONFIG="${HOME}/.claude/mine.json"
 
 # one-time migration: miner → mine
 if [[ -f "${HOME}/.claude/miner.db" && ! -f "$DB" ]]; then
-  mv "${HOME}/.claude/miner.db" "$DB"
-  [[ -f "${HOME}/.claude/miner.json" ]] && mv "${HOME}/.claude/miner.json" "$CONFIG"
-  [[ -f "${HOME}/.claude/.minerignore" ]] && mv "${HOME}/.claude/.minerignore" "${HOME}/.claude/.mineignore"
+  mv -n "${HOME}/.claude/miner.db" "$DB" 2>/dev/null || true
+  [[ -f "${HOME}/.claude/miner.json" ]] && mv -n "${HOME}/.claude/miner.json" "$CONFIG" 2>/dev/null || true
+  [[ -f "${HOME}/.claude/.minerignore" ]] && mv -n "${HOME}/.claude/.minerignore" "${HOME}/.claude/.mineignore" 2>/dev/null || true
   echo "[mine] migrated miner.db → mine.db"
+fi
+
+# first-run feedback
+if [[ -f "$DB" ]]; then
+  SESSION_COUNT=$(sqlite3 "$DB" "SELECT COUNT(*) FROM sessions;" 2>/dev/null || echo "0")
+  if [[ "$SESSION_COUNT" == "0" ]]; then
+    echo "[mine] first session — tracking starts now" >&2
+  fi
 fi
 
 # feature toggles (default: all enabled)

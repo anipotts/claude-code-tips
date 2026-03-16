@@ -53,6 +53,7 @@ if [[ -z "$CURRENT" ]]; then
 fi
 
 CURRENT_TOKENS=$(echo "$CURRENT" | cut -d'|' -f1)
+CURRENT_TOKENS="${CURRENT_TOKENS:-0}"
 PROJECT_NAME=$(echo "$CURRENT" | cut -d'|' -f2)
 
 if [[ -z "$PROJECT_NAME" || "$CURRENT_TOKENS" -eq 0 ]]; then
@@ -75,6 +76,8 @@ AVG_TOKENS=$(sqlite3 "$DB" "
     AND id != '${S_SESSION}';
 " 2>/dev/null || echo "")
 
+AVG_TOKENS="${AVG_TOKENS:-0}"
+
 # if no historical data, compare against global average
 if [[ -z "$AVG_TOKENS" || "$AVG_TOKENS" == "" || "$AVG_TOKENS" -eq 0 ]]; then
   AVG_TOKENS=$(sqlite3 "$DB" "
@@ -88,6 +91,8 @@ if [[ -z "$AVG_TOKENS" || "$AVG_TOKENS" == "" || "$AVG_TOKENS" -eq 0 ]]; then
       AND id != '${S_SESSION}';
   " 2>/dev/null || echo "")
 fi
+
+AVG_TOKENS="${AVG_TOKENS:-0}"
 
 # still no data — skip (first sessions ever)
 if [[ -z "$AVG_TOKENS" || "$AVG_TOKENS" == "" || "$AVG_TOKENS" -eq 0 ]]; then

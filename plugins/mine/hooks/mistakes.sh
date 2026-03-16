@@ -100,7 +100,7 @@ if [[ -n "$PROJECT_NAME" ]]; then
 fi
 
 # always record the current failure
-sqlite3 "$DB" "INSERT INTO errors (session_id, tool_name, input_summary, error_message, is_interrupt, timestamp) VALUES ('${S_SESSION}', '${S_TOOL}', '${S_INPUT}', '${S_ERROR}', 0, '${S_TIMESTAMP}');"
+sqlite3 "$DB" ".timeout 5000" "INSERT INTO errors (session_id, tool_name, input_summary, error_message, is_interrupt, timestamp) VALUES ('${S_SESSION}', '${S_TOOL}', '${S_INPUT}', '${S_ERROR}', 0, '${S_TIMESTAMP}');"
 
 echo "[mine] mistakes: recorded ${TOOL_NAME} failure" >&2
 exit 0
