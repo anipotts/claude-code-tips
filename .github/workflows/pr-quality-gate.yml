@@ -12,11 +12,15 @@ name: PR Quality Gate
 
 on:
   pull_request:
-    types: [opened, synchronize, edited]
+    types: [opened, synchronize]
 
 permissions:
   contents: read
   pull-requests: write
+
+concurrency:
+  group: "quality-gate-pr-${{ github.event.pull_request.number }}"
+  cancel-in-progress: true
 
 jobs:
   quality-checks:

@@ -3,11 +3,26 @@ name: Validate
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/state/**'
+      - 'content/**'
+      - 'data/**'
+      - 'handoffs/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '.github/state/**'
+      - 'content/**'
+      - 'data/**'
+      - 'handoffs/**'
+  merge_group:
 
 permissions:
   contents: read
+
+concurrency:
+  group: "validate-${{ github.event.pull_request.number || github.sha }}"
+  cancel-in-progress: true
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -263,9 +278,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: 'pip'
 
       - name: Install pytest
-        run: pip install pytest
+        run: pip install pytest==8.3.4
 
       - name: Run tests
         run: python -m pytest tests/ -v

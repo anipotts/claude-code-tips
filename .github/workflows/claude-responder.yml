@@ -22,6 +22,10 @@ permissions:
   issues: write
   pull-requests: write
 
+concurrency:
+  group: "claude-respond-${{ github.event.issue.number || github.event.pull_request.number }}"
+  cancel-in-progress: true
+
 env:
   CLAUDE_MODEL: claude-haiku-4-5-20251001
 
@@ -74,7 +78,7 @@ jobs:
           printf '\ntitle: %s\nbody: %s\n' "$ISSUE_TITLE" "$ISSUE_BODY" >> /tmp/prompt.txt
 
           # generate response and write to file (avoid shell interpretation of LLM output)
-          claude -p --model "$CLAUDE_MODEL" < /tmp/prompt.txt > /tmp/response.md
+          claude -p --model "$CLAUDE_MODEL" --allowedTools Read,Grep,Glob,Write,Edit < /tmp/prompt.txt > /tmp/response.md
           gh issue comment "$ISSUE_NUMBER" --body-file /tmp/response.md
 
   # -----------------------------------------------------------------
@@ -121,5 +125,5 @@ jobs:
           cat /tmp/pr-diff.txt >> /tmp/prompt.txt
 
           # generate review and write to file
-          claude -p --model "$CLAUDE_MODEL" < /tmp/prompt.txt > /tmp/review.md
+          claude -p --model "$CLAUDE_MODEL" --allowedTools Read,Grep,Glob,Write,Edit < /tmp/prompt.txt > /tmp/review.md
           gh pr review "$PR_NUMBER" --comment --body-file /tmp/review.md

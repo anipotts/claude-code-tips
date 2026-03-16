@@ -20,6 +20,10 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: "docs-audit"
+  cancel-in-progress: false
+
 env:
   CLAUDE_MODEL: claude-haiku-4-5-20251001
 
