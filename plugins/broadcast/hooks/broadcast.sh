@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 # tested with: claude code v1.0.34
@@ -59,20 +59,24 @@ if [[ -n "${BROADCAST_WEBHOOK:-}" ]]; then
 
   # discord webhook
   elif echo "$BROADCAST_WEBHOOK" | grep -q "discord.com"; then
-    curl -s -X POST -H 'Content-Type: application/json' \
-      -d "{\"content\": \"$MSG\"}" "$BROADCAST_WEBHOOK" &>/dev/null &
+    PAYLOAD=$(jq -n --arg content "$MSG" '{content: $content}')
+    curl -s -X POST -H 'Content-Type: application/json' -d "$PAYLOAD" "$BROADCAST_WEBHOOK" &>/dev/null &
 
   # generic webhook (POST with json body)
   else
-    curl -s -X POST -H 'Content-Type: application/json' \
-      -d "{\"message\": \"$MSG\", \"project\": \"$PROJECT\", \"branch\": \"$BRANCH\"}" \
-      "$BROADCAST_WEBHOOK" &>/dev/null &
+    PAYLOAD=$(jq -n --arg message "$MSG" --arg project "$PROJECT" --arg branch "$BRANCH" \
+      '{message: $message, project: $project, branch: $branch}')
+    curl -s -X POST -H 'Content-Type: application/json' -d "$PAYLOAD" "$BROADCAST_WEBHOOK" &>/dev/null &
   fi
 fi
 
 # macos notification (always fires if on mac)
 if command -v osascript &>/dev/null; then
-  osascript -e "display notification \"$MSG\" with title \"claude code\"" &>/dev/null &
+  osascript - "$MSG" <<'APPLESCRIPT' &>/dev/null &
+on run argv
+  display notification (item 1 of argv) with title "claude code"
+end run
+APPLESCRIPT
 fi
 
 exit 0

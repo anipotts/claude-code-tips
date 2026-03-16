@@ -44,6 +44,7 @@ SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // "unknown"')
 TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input | tostring' | head -c 500)
 EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_output.exit_code // 0')
+EXIT_CODE=$(echo "$EXIT_CODE" | grep -oE '^[0-9]+$' || echo "0")
 
 # Escape single quotes for safe SQL insertion
 SAFE_INPUT=$(echo "$TOOL_INPUT" | sed "s/'/''/g")
@@ -51,7 +52,7 @@ SAFE_SESSION=$(echo "$SESSION_ID" | sed "s/'/''/g")
 SAFE_TOOL=$(echo "$TOOL_NAME" | sed "s/'/''/g")
 
 # Insert the record
-sqlite3 "$DB" "INSERT INTO actions (session_id, tool_name, tool_input, exit_code)
-  VALUES ('$SAFE_SESSION', '$SAFE_TOOL', '$SAFE_INPUT', $EXIT_CODE);"
+sqlite3 "$DB" ".timeout 5000" "INSERT INTO actions (session_id, tool_name, tool_input, exit_code)
+  VALUES ('$SAFE_SESSION', '$SAFE_TOOL', '$SAFE_INPUT', '$EXIT_CODE');"
 
 exit 0

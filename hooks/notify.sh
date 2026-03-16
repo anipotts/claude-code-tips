@@ -40,7 +40,11 @@ SHORT_SESSION="${SESSION_ID:0:8}"
 # macOS notification banner (replace this block with your own integration)
 # ---------------------------------------------------------------------------
 if command -v osascript &> /dev/null; then
-  osascript -e "display notification \"$MESSAGE\" with title \"Claude Code\" subtitle \"Session: $SHORT_SESSION\""
+  osascript - "$MESSAGE" "$SHORT_SESSION" <<'APPLESCRIPT'
+on run argv
+  display notification (item 1 of argv) with title "Claude Code" subtitle ("Session: " & item 2 of argv)
+end run
+APPLESCRIPT
 fi
 
 # Optional: play a notification sound (macOS)

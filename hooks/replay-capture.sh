@@ -42,6 +42,11 @@ if [[ -z "$SESSION_ID" ]]; then
   exit 0
 fi
 
+# validate session ID to prevent path traversal
+if [[ ! "$SESSION_ID" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+  exit 0
+fi
+
 # for Bash tool calls, log the command instead of file_path
 if [[ "$TOOL_NAME" == "Bash" ]]; then
   BASH_COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
