@@ -78,6 +78,6 @@ S_TOOL_NAME=$(escape "$TOOL_NAME")
 S_INPUT_SUMMARY=$(escape "$INPUT_SUMMARY")
 S_TIMESTAMP=$(escape "${TIMESTAMP:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}")
 
-sqlite3 "$DB" "INSERT INTO tool_calls (session_id, tool_use_id, tool_name, input_summary, timestamp) VALUES ('${S_SESSION}', '${S_TOOL_USE_ID}', '${S_TOOL_NAME}', '${S_INPUT_SUMMARY}', '${S_TIMESTAMP}');"
+sqlite3 "$DB" ".timeout 5000" "INSERT INTO tool_calls (session_id, tool_use_id, tool_name, input_summary, timestamp) VALUES ('${S_SESSION}', '${S_TOOL_USE_ID}', '${S_TOOL_NAME}', '${S_INPUT_SUMMARY}', '${S_TIMESTAMP}');"
 
 exit 0

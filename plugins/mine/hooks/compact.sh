@@ -35,7 +35,7 @@ fi
 # escape single quotes for sqlite
 SAFE_SESSION_ID=$(echo "$SESSION_ID" | sed "s/'/''/g")
 
-sqlite3 "$DB" "UPDATE sessions SET compaction_count = compaction_count + 1 WHERE id = '${SAFE_SESSION_ID}';"
+sqlite3 "$DB" ".timeout 5000" "UPDATE sessions SET compaction_count = compaction_count + 1 WHERE id = '${SAFE_SESSION_ID}';"
 
 echo "[mine] compact: incremented compaction_count for session $SESSION_ID" >&2
 exit 0

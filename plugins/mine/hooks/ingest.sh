@@ -12,7 +12,6 @@ MINE_PY="${SCRIPT_DIR}/../scripts/mine.py"
 if [[ ! -f "$MINE_PY" ]]; then
   MINE_PY="${SCRIPT_DIR}/../../scripts/mine.py"
 fi
-DB="${HOME}/.claude/mine.db"
 CONFIG="${HOME}/.claude/mine.json"
 
 # check feature toggle
