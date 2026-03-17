@@ -1,12 +1,11 @@
 {
   "name": "claude-code-tips",
   "owner": {
-    "name": "Ani Potts",
-    "email": "ani@anipotts.com"
+    "name": "Ani Potts"
   },
   "metadata": {
-    "description": "claude code plugins, hooks, agents, skills, and mine — everything tested",
-    "version": "0.2.0"
+    "description": "claude code toolkit — mine plugin, hooks, agents, and docs. everything tested.",
+    "version": "0.3.0"
   },
   "plugins": [
     {
@@ -19,24 +18,6 @@
       "license": "MIT",
       "keywords": ["mining", "analytics", "sqlite", "sessions", "costs", "search", "mistakes", "burn", "hotspots", "loops"],
       "category": "analytics"
-    },
-    {
-      "name": "handoff",
-      "source": "./plugins/handoff",
-      "description": "saves your context before claude compresses it. the one hook everyone needs",
-      "version": "0.1.0",
-      "author": { "name": "Ani Potts" },
-      "keywords": ["context", "handoff", "session", "precompact"],
-      "category": "productivity"
-    },
-    {
-      "name": "broadcast",
-      "source": "./plugins/broadcast",
-      "description": "async notifications when claude ships something. slack, discord, wherever — fire and forget",
-      "version": "0.1.0",
-      "author": { "name": "Ani Potts" },
-      "keywords": ["notifications", "async", "slack", "discord"],
-      "category": "notifications"
     }
   ]
 }

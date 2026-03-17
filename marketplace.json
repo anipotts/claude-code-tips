@@ -1,11 +1,9 @@
 {
   "name": "claude-code-tips",
-  "description": "claude code plugins, hooks, agents, skills, and mine — everything tested",
+  "description": "claude code toolkit — mine plugin, hooks, agents, and docs. everything tested.",
   "author": "anipotts",
   "repository": "https://github.com/anipotts/claude-code-tips",
   "plugins": [
-    "mine",
-    "handoff",
-    "broadcast"
+    "mine"
   ]
 }

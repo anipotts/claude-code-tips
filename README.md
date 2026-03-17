@@ -1,28 +1,21 @@
 # claude-code-tips
 
 [![CI](https://github.com/anipotts/claude-code-tips/actions/workflows/validate.yml/badge.svg)](https://github.com/anipotts/claude-code-tips/actions/workflows/validate.yml)
-[![stars](https://img.shields.io/github/stars/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](https://github.com/anipotts/claude-code-tips/stargazers)
 [![last commit](https://img.shields.io/github/last-commit/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](https://github.com/anipotts/claude-code-tips/commits/main)
 [![license](https://img.shields.io/github/license/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](./LICENSE)
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v2.1.77-000?style=flat-square&labelColor=D4A574&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 
-a toolkit for claude code power users. one installable plugin, a library of hooks/agents/commands you can copy, and docs that go deeper than the official ones.
+an installable plugin, a library of hooks and agents, and docs that go deeper than the official ones. not a tips list — a toolkit. built from 500+ real sessions.
 
-built from 500+ real sessions. everything is tested and opinionated.
+<img src="./gifs/mine-stats.gif" width="100%" alt="mine stats showing sessions, tokens, costs, and projects" />
 
----
-
-## mine — the plugin
-
-mines every claude code session into a local sqlite database. costs, search, error memory, pattern detection.
+## get started
 
 ```bash
 claude plugin add anipotts/claude-code-tips
 ```
 
-<img src="./gifs/mine-stats.gif" width="100%" alt="mine stats showing sessions, tokens, costs, and projects" />
-
-once installed, `/mine` becomes your single entry point:
+this installs **mine** — a plugin that mines every claude code session into a local sqlite database. costs, search, error memory, pattern detection.
 
 ```
 /mine                          → today's sessions, weekly cost, top tools
@@ -33,41 +26,48 @@ once installed, `/mine` becomes your single entry point:
 /mine mistakes                 → error patterns claude keeps repeating
 ```
 
-7 hooks across the full session lifecycle. zero config after install. data stays local at `~/.claude/mine.db`.
+7 hooks, zero config after install. data stays local at `~/.claude/mine.db`.
 
 **[full mine docs →](./plugins/mine/README.md)**
 
 ---
 
-## hooks
+## what's in here
 
-standalone scripts. copy one, wire it up, done.
+### hooks — copy one, wire it up, done
+
+**safety**
 
 | hook | event | what it does |
 |---|---|---|
 | [safety-guard](./hooks/safety-guard.sh) | PreToolUse | blocks force push, `rm -rf /`, DROP TABLE |
-| [context-save](./hooks/context-save.sh) | PreCompact | saves context before compression |
+| [no-squash](./hooks/no-squash.sh) | PreToolUse | blocks squash merges |
+
+**observability**
+
+| hook | event | what it does |
+|---|---|---|
 | [panopticon](./hooks/panopticon.sh) | PostToolUse | logs every tool call to sqlite |
 | [knowledge-builder](./hooks/knowledge-builder/) | PostToolUse | builds a codebase knowledge graph |
-| [notify](./hooks/notify.sh) | Notification | routes to macOS, Slack, Pushover, ntfy |
-| [no-squash](./hooks/no-squash.sh) | PreToolUse | blocks squash merges |
-| [version-stamp](./hooks/version-stamp.sh) | SessionEnd | auto-updates tested-with stamps |
-| [md-lint-fix](./hooks/md-lint-fix.sh) | PostToolUse | auto-fixes markdown lint on save |
-| [stale-branch](./hooks/stale-branch.sh) | SessionStart | warns about gone tracking branches |
-| [commit-nudge](./hooks/commit-nudge.sh) | PostToolUse | reminds you to commit after N edits |
 | [replay-capture](./hooks/replay-capture.sh) | PostToolUse | captures file changes for VHS replays |
 
-```bash
-cp hooks/safety-guard.sh ~/.claude/hooks/
-```
+**preservation**
 
-then add to your `~/.claude/settings.json`. see the [hooks guide](./docs/hooks-guide.md) for setup.
+| hook | event | what it does |
+|---|---|---|
+| [context-save](./hooks/context-save.sh) | PreCompact | saves context before compression |
+| [notify](./hooks/notify.sh) | Notification | routes to macOS, Slack, Pushover, ntfy |
 
----
+**hygiene**
 
-## agents
+| hook | event | what it does |
+|---|---|---|
+| [commit-nudge](./hooks/commit-nudge.sh) | PostToolUse | reminds you to commit after N edits |
+| [md-lint-fix](./hooks/md-lint-fix.sh) | PostToolUse | auto-fixes markdown lint on save |
+| [stale-branch](./hooks/stale-branch.sh) | SessionStart | warns about gone tracking branches |
+| [version-stamp](./hooks/version-stamp.sh) | SessionEnd | auto-updates tested-with stamps |
 
-autonomous subagents for longer-running tasks. drop into `.claude/agents/` and they're auto-discovered.
+### agents — autonomous subagents for longer tasks
 
 | agent | model | what it does |
 |---|---|---|
@@ -82,15 +82,7 @@ autonomous subagents for longer-running tasks. drop into `.claude/agents/` and t
 | [dep-checker](./.claude/agents/dep-checker.md) | haiku | outdated deps and security advisories |
 | [vibe-check](./.claude/agents/vibe-check.md) | haiku | quick, opinionated architecture review |
 
-```
-/agent explorer try three approaches to this refactor
-```
-
----
-
-## commands
-
-slash commands auto-discovered from `.claude/commands/`.
+### commands — slash commands, auto-discovered
 
 | command | what it does |
 |---|---|
@@ -107,25 +99,21 @@ slash commands auto-discovered from `.claude/commands/`.
 
 ## docs
 
-[docs/guide.md](./docs/guide.md) — three-tier progressive guide from beginner to advanced.
-
-| doc | what it covers |
+| starting point | what you'll learn |
 |---|---|
-| [hooks guide](./docs/hooks-guide.md) | every hook event, tested examples, advanced patterns |
-| [plugin creation](./docs/plugin-creation.md) | plugin.json spec, full walkthrough, marketplace publishing |
-| [subagent patterns](./docs/subagent-patterns.md) | parallel research, scout pattern, worktree isolation |
-| [mcp servers](./docs/mcp-servers.md) | playwright, context7, building your own |
-| [cli tools](./docs/cli-tools.md) | headless `claude -p` as a shell function factory |
-| [automation](./docs/automation.md) | daemons, cron, file watchers, guardian agent |
-| [cost analysis](./docs/cost-analysis.md) | token economics, cache mechanics, budget strategies |
-| [agent teams](./docs/agent-teams.md) | multi-agent coordination patterns |
-| [comparisons](./docs/comparisons/) | vs cursor, codex, gemini — data-driven, no FUD |
+| new to claude code? | [guide.md](./docs/guide.md) — beginner to advanced, one doc |
+| building a plugin? | [plugin-creation.md](./docs/plugin-creation.md) — full walkthrough |
+| want hook examples? | [hooks-guide.md](./docs/hooks-guide.md) — every event, tested patterns |
+| multi-agent patterns? | [subagent-patterns.md](./docs/subagent-patterns.md) — parallel research, worktrees |
+| headless CLI automation? | [cli-tools.md](./docs/cli-tools.md) — `claude -p` as a function factory |
+| understanding costs? | [cost-analysis.md](./docs/cost-analysis.md) — token economics, cache mechanics |
+| vs cursor / codex / gemini? | [comparisons/](./docs/comparisons/) — data-driven, no FUD |
 
 ---
 
 ## examples
 
-reference implementations you can study and adapt:
+reference implementations to study and adapt:
 
 - [CLAUDE.md templates](./examples/claude-md/) — starter configs for TypeScript, Python, Rust, Next.js
 - [handoff plugin](./examples/plugins/handoff/) — PreCompact context preservation
@@ -133,19 +121,12 @@ reference implementations you can study and adapt:
 
 ---
 
-## structure
+## what's new (march 2026)
 
-```
-plugins/mine/        the mine plugin (installable)
-hooks/               standalone hook scripts (copy-paste ready)
-.claude/agents/      autonomous subagents
-.claude/commands/    slash commands
-docs/                guides and reference
-examples/            CLAUDE.md templates, demo plugins
-scripts/             mine.py parser, schema.sql, dashboard
-tests/               125 tests for mine.py
-gifs/                demo recordings
-```
+- **mine v1.0** — burn (cost anomaly detection), hotspots (file edit analysis), loops (pattern detection)
+- **10 CI workflows** — release automation, plugin smoke test, upstream watcher
+- **11 standalone hooks** — safety, observability, preservation, hygiene categories
+- **10 agents** — changelog-writer, link-checker, explorer with worktree isolation
 
 ---
 
@@ -156,3 +137,7 @@ PRs welcome. see [CONTRIBUTING.md](./CONTRIBUTING.md).
 ## license
 
 MIT
+
+---
+
+<sub>built by [anipotts](https://anipotts.com/claude) from 500+ real claude code sessions</sub>
