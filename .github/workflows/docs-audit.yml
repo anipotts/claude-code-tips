@@ -76,7 +76,7 @@ jobs:
           git config user.name "docs-audit[bot]"
           git config user.email "docs-audit[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add docs/ plugins/ hooks/ .claude/agents/ .claude/skills/ scripts/
+          git add docs/ plugins/ hooks/ scripts/ .claude/ 2>/dev/null || true
           git diff --cached --quiet && echo "nothing to commit" && exit 0
           git commit -m "docs: weekly audit fixes $(date +%Y-%m-%d)"
           git push -u origin "$BRANCH"

@@ -40,6 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check API key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::ANTHROPIC_API_KEY not available -- skipping"
+            exit 1
+          fi
+
       - name: Install Claude Code
         run: npm install -g @anthropic-ai/claude-code
 
@@ -87,7 +96,8 @@ jobs:
   review-pr:
     if: >-
       github.event_name == 'pull_request' &&
-      github.event.pull_request.user.login != github.repository_owner
+      github.event.pull_request.user.login != github.repository_owner &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
