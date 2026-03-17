@@ -2,7 +2,7 @@
 
 common problems and fixes. organized by feature area.
 
-<!-- tested with: claude code v1.0.34 -->
+<!-- tested with: claude code v2.1.77 -->
 
 ---
 
@@ -22,7 +22,7 @@ common problems and fixes. organized by feature area.
 
 ### context window fills up too fast
 
-- use the [handoff plugin](../plugins/handoff/) to save context before compaction
+- use the [handoff plugin](../examples/plugins/handoff/) to save context before compaction
 - use the [context-save hook](../hooks/context-save.sh) for automatic preservation
 - consider splitting large tasks into smaller sessions
 - check if verbose MCP servers are dumping large payloads into context

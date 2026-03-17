@@ -1,4 +1,4 @@
-<!-- tested with: claude code v1.0.34 -->
+<!-- tested with: claude code v2.1.77 -->
 
 # the claude code guide
 
@@ -230,7 +230,7 @@ when compaction happens:
 - file contents claude read earlier are gone from context
 - the summary retains key decisions and progress
 
-you can manually trigger this with `/compact`. pair it with the [handoff plugin](../plugins/handoff/) to preserve the full transcript before compression.
+you can manually trigger this with `/compact`. pair it with the [handoff plugin](../examples/plugins/handoff/) to preserve the full transcript before compression.
 
 ---
 
