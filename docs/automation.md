@@ -1,4 +1,4 @@
-<!-- tested with: claude code v1.0.34 -->
+<!-- tested with: claude code v2.1.77 -->
 
 # daemon and cron patterns for claude code
 

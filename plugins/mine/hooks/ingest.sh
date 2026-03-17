@@ -4,7 +4,7 @@
 # Runs async so it never blocks the session teardown.
 
 set -euo pipefail
-# tested with: claude code v1.0.34
+# tested with: claude code v2.1.77
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # plugin-local first (marketplace installs), then repo layout fallback

@@ -2,7 +2,7 @@
 
 terms used across this repo and claude code docs.
 
-<!-- tested with: claude code v1.0.34 -->
+<!-- tested with: claude code v2.1.77 -->
 
 ---
 

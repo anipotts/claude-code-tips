@@ -5,7 +5,7 @@
 # prints a warning so Claude can avoid the same trap.
 
 set -euo pipefail
-# tested with: claude code v1.0.34
+# tested with: claude code v2.1.77
 
 DB="${HOME}/.claude/mine.db"
 CONFIG="${HOME}/.claude/mine.json"
