@@ -1,5 +1,6 @@
 content/
 data/
+handoffs/
 AUDIT.md
 docs/upstream-watcher-design.md
 .claude/*
