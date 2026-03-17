@@ -2,7 +2,7 @@
 
 curated external resources for claude code. these are genuinely useful -- not an exhaustive link dump.
 
-<!-- tested with: claude code v1.0.34 -->
+<!-- tested with: claude code v2.1.77 -->
 
 ---
 

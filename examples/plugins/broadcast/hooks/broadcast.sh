@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# tested with: claude code v1.0.34
+# tested with: claude code v2.1.77
 # broadcast — async notification on git commit/push
 # fires a webhook and exits immediately. completely non-blocking.
 #

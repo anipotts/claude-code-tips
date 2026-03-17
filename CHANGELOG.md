@@ -38,4 +38,4 @@
 - 8 CI workflows for autonomous maintenance
 - standalone hooks: safety-guard, panopticon, context-save, notify
 
-<!-- tested with: claude code v1.0.34+ -->
+<!-- tested with: claude code v2.1.77+ -->

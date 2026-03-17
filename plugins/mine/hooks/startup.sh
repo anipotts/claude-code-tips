@@ -4,7 +4,7 @@
 # Runs on every session start to surface relevant history.
 
 set -euo pipefail
-# tested with: claude code v1.0.34
+# tested with: claude code v2.1.77
 
 # dependency check
 for cmd in jq sqlite3 python3; do
