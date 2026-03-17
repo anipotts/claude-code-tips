@@ -1,17 +1,17 @@
 # claude-code-tips
 
-Claude Code plugins, hooks, agents, skills, and resources. All tested.
+Claude Code toolkit: one installable plugin (mine), a reference library of hooks/agents/commands, and docs.
 
 ## Structure
 
 - `plugins/mine/` -- flagship: mines sessions to sqlite (search, mistakes, burn, hotspots, loops)
-- `plugins/handoff/` -- context preservation before compaction
-- `plugins/broadcast/` -- async notifications
-- `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge)
-- `docs/` -- guide, hooks reference, plugin creation, subagent patterns, cli-tools, automation, mcp-servers, comparisons, troubleshooting, glossary, resources
-- `.claude/commands/` -- slash commands (mine, improve, ship, sweep, quicktest, stats, deps, sift, ledger, value)
+- `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge, replay-capture, knowledge-builder)
 - `.claude/agents/` -- agents (analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check, changelog-writer, link-checker)
-- `scripts/` -- mine.py (bulk parser), schema.sql, README
+- `.claude/commands/` -- slash commands (mine, improve, ship, sweep, quicktest, stats, deps, replay)
+- `docs/` -- guide, hooks reference, plugin creation, subagent patterns, cli-tools, automation, mcp-servers, comparisons, troubleshooting, glossary, resources
+- `examples/` -- CLAUDE.md templates, demo plugins (handoff, broadcast)
+- `scripts/` -- mine.py (bulk parser), schema.sql, dashboard.py
+- `tests/` -- 125 tests for mine.py
 - `gifs/` -- VHS tape files and demo recordings
 - `content/` -- GITIGNORED, personal drafts
 - `data/` -- GITIGNORED, local mining data
@@ -26,4 +26,4 @@ Claude Code plugins, hooks, agents, skills, and resources. All tested.
 - Lowercase voice, "bc" not "because"
 - Comparison docs: diplomatic, data-driven. cite sources (pricing pages, changelogs). no FUD, no unsourced claims
 - Every doc/hook/plugin should include "tested with Claude Code vX.Y.Z"
-- CI validates: markdown lint, link check, hook syntax, JSON, python syntax
+- CI validates: markdown lint, link check, hook syntax, JSON, python syntax, plugin smoke test
