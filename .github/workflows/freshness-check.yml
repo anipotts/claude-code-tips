@@ -105,6 +105,9 @@ jobs:
         run: |
           ISSUE_TITLE="stale content: freshness check $(date +%Y-%m-%d)"
 
+          # ensure label exists (self-healing)
+          gh label create "freshness-check" --color "FBCA04" --description "automated freshness check" 2>/dev/null || true
+
           # close any previous freshness check issues to avoid duplicates
           EXISTING=$(gh issue list --label "freshness-check" --state open --json number -q '.[].number' 2>/dev/null || true)
           for num in $EXISTING; do
