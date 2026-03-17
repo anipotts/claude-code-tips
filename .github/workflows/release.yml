@@ -1,0 +1,100 @@
+name: Release
+
+# ---------------------------------------------------------------
+# auto-creates a GitHub release when a version tag is pushed.
+# bumps plugin.json version to match the tag, commits, and
+# generates a changelog from merged PRs since last release.
+#
+# usage: git tag v1.1.0 && git push origin v1.1.0
+#
+# cost: $0 (no claude API calls)
+# ---------------------------------------------------------------
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
+          echo "tag=v$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Update plugin.json version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          PLUGIN_JSON="plugins/mine/.claude-plugin/plugin.json"
+          if [ -f "$PLUGIN_JSON" ]; then
+            python3 -c "
+          import json, sys
+          with open(sys.argv[1], 'r') as f:
+              data = json.load(f)
+          data['version'] = sys.argv[2]
+          with open(sys.argv[1], 'w') as f:
+              json.dump(data, f, indent=2)
+              f.write('\n')
+          " "$PLUGIN_JSON" "$VERSION"
+            echo "Updated $PLUGIN_JSON to $VERSION"
+          fi
+
+      - name: Generate changelog
+        id: changelog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # find previous tag
+          PREV_TAG=$(git tag --sort=-version:refname | sed -n '2p' || echo "")
+
+          if [ -n "$PREV_TAG" ]; then
+            RANGE="$PREV_TAG..HEAD"
+            echo "Generating changelog for $RANGE"
+          else
+            RANGE=""
+            echo "First release — generating full changelog"
+          fi
+
+          {
+            echo "## what's new"
+            echo ""
+
+            # merged PRs since last tag
+            if [ -n "$PREV_TAG" ]; then
+              SINCE=$(git log -1 --format=%cI "$PREV_TAG")
+              gh pr list --state merged --search "merged:>=$SINCE" --json number,title --jq '.[] | "- \(.title) (#\(.number))"' 2>/dev/null || true
+            fi
+
+            echo ""
+
+            # commits grouped by type
+            echo "## commits"
+            echo ""
+            git log ${RANGE} --oneline --no-merges | while IFS= read -r line; do
+              echo "- $line"
+            done
+          } > /tmp/changelog.md
+
+          cat /tmp/changelog.md
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --notes-file /tmp/changelog.md
