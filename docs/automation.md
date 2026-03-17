@@ -226,7 +226,7 @@ done
 
 ## the guardian agent pattern
 
-a safer alternative to raw daemons. the guardian agent watches for test failures and proposes fixes, but never applies them automatically. see [agents/guardian.md](../agents/guardian.md) for the full agent definition.
+a safer alternative to raw daemons. the guardian agent watches for test failures and proposes fixes, but never applies them automatically. see [agents/guardian.md](../.claude/agents/guardian.md) for the full agent definition.
 
 ### how it works
 

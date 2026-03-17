@@ -326,7 +326,7 @@ When the user runs /ship, do the following:
 4. Push and create a PR with `gh pr create`
 ```
 
-skills are for multi-step workflows: [/ship](../skills/ship.md) (commit and PR), [/sweep](../skills/sweep.md) (dead code cleanup), [/quicktest](../skills/quicktest.md) (run the right test), [/sift](../skills/sift.md) (query your history), [/improve](../skills/improve.md) (evolve CLAUDE.md).
+skills are for multi-step workflows: [/ship](../.claude/commands/ship.md) (commit and PR), [/sweep](../.claude/commands/sweep.md) (dead code cleanup), [/quicktest](../.claude/commands/quicktest.md) (run the right test), [/mine](../.claude/commands/mine.md) (query your history), [/improve](../.claude/commands/improve.md) (evolve CLAUDE.md).
 
 **agents** are autonomous workers with their own context window. they work independently, have their own model, and return results:
 
@@ -343,7 +343,7 @@ tools:
 ---
 ```
 
-run with `/agent code-sweeper scan this project`. agents are for specialized roles: [analyst](../agents/analyst.md) (data investigation), [explorer](../agents/explorer.md) (parallel worktree exploration), [test-writer](../agents/test-writer.md), [pr-narrator](../agents/pr-narrator.md).
+run with `/agent code-sweeper scan this project`. agents are for specialized roles: [analyst](../.claude/agents/analyst.md) (data investigation), [explorer](../.claude/agents/explorer.md) (parallel worktree exploration), [test-writer](../.claude/agents/test-writer.md), [pr-narrator](../.claude/agents/pr-narrator.md).
 
 **the decision:** if you find yourself typing the same 3-sentence prompt often, make it a command. if it needs tool restrictions or arguments, make it a skill. if it needs to work independently with its own context window and model, make it an agent.
 
@@ -690,9 +690,7 @@ sqlite3 ~/.claude/mine.db "SELECT content_preview FROM messages_fts WHERE messag
 sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%.2f', SUM(estimated_cost_usd)) FROM session_costs GROUP BY project_name ORDER BY SUM(estimated_cost_usd) DESC;"
 ```
 
-**the `/sift` skill** wraps these into canned subcommands: `/sift search <term>`, `/sift cost this month`, `/sift top tools`, `/sift cache efficiency`, `/sift wasted`, `/sift workflows`. see [sift.md](../skills/sift.md).
-
-**the `/ledger` command** is the quick dashboard -- today's sessions, weekly spend, top tools, active projects. see [ledger.md](../commands/ledger.md).
+**the `/mine` command** wraps these into intents: `/mine search <term>`, `/mine cost this month`, `/mine top tools`, `/mine hotspots`, `/mine mistakes`, `/mine loops`. see [mine.md](../.claude/commands/mine.md).
 
 **the `analyst` agent** writes arbitrary SQL queries to investigate whatever you're curious about. it's the difference between canned reports and free-form investigation:
 
@@ -702,7 +700,7 @@ sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%.2f', SUM(estimated_c
 /agent analyst compare my sonnet vs haiku usage
 ```
 
-see [mine README](../plugins/mine/README.md) for install details and [analyst.md](../agents/analyst.md) for the agent definition.
+see [mine README](../plugins/mine/README.md) for install details and [analyst.md](../.claude/agents/analyst.md) for the agent definition.
 
 ---
 
@@ -806,7 +804,7 @@ the feedback loop: claude makes mistake -> git history captures it -> /improve d
 
 you can also do this manually. after any session where claude keeps getting something wrong, add a rule to CLAUDE.md. the patterns add up fast.
 
-see [improve.md](../skills/improve.md) for the full skill definition.
+see [improve.md](../.claude/commands/improve.md) for the full skill definition.
 
 ---
 
@@ -824,7 +822,7 @@ it works by spawning 2-4 Task subagents with `isolation: "worktree"`. each agent
 
 why this is powerful: instead of committing to one approach and potentially having to revert, you try 2-3 approaches simultaneously and pick the best one with evidence. costs more tokens, saves more time.
 
-see [explorer.md](../agents/explorer.md) for the agent definition and [subagent-patterns.md](./subagent-patterns.md) for worktree isolation details.
+see [explorer.md](../.claude/agents/explorer.md) for the agent definition and [subagent-patterns.md](./subagent-patterns.md) for worktree isolation details.
 
 ---
 
