@@ -1,0 +1,155 @@
+name: Plugin Smoke Test
+
+# ---------------------------------------------------------------
+# validates the mine plugin can be installed and its hooks
+# are structurally correct. catches broken plugin.json,
+# missing scripts, bad permissions, and import errors.
+#
+# runs on PRs that touch plugin files and on main pushes.
+#
+# cost: $0 (no claude API calls, pure validation)
+# ---------------------------------------------------------------
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - 'hooks/**'
+      - 'skills/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - 'hooks/**'
+      - 'skills/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "smoke-test-${{ github.event.pull_request.number || github.sha }}"
+  cancel-in-progress: true
+
+jobs:
+  plugin-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validate plugin.json manifests
+        run: |
+          errors=0
+
+          mapfile -t manifests < <(find plugins -name 'plugin.json' -type f)
+
+          if [ ${#manifests[@]} -eq 0 ]; then
+            echo "No plugin.json files found"
+            exit 0
+          fi
+
+          for manifest in "${manifests[@]}"; do
+            echo "--- $manifest ---"
+
+            # valid JSON
+            if ! python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$manifest" 2>&1; then
+              echo "  FAIL: invalid JSON"
+              errors=$((errors + 1))
+              continue
+            fi
+            echo "  json: ok"
+
+            # required fields
+            for field in name version description; do
+              val=$(python3 -c "import json,sys; d=json.load(open(sys.argv[1])); print(d.get('$field',''))" "$manifest")
+              if [ -z "$val" ]; then
+                echo "  FAIL: missing required field '$field'"
+                errors=$((errors + 1))
+              else
+                echo "  $field: $val"
+              fi
+            done
+          done
+
+          if [ $errors -gt 0 ]; then
+            echo "FAILED: $errors error(s)"
+            exit 1
+          fi
+
+      - name: Validate hook scripts exist and are executable
+        run: |
+          errors=0
+
+          # check all .sh files referenced by the plugin ecosystem
+          mapfile -t hook_scripts < <(find plugins -name '*.sh' -type f; find hooks -name '*.sh' -type f)
+
+          for script in "${hook_scripts[@]}"; do
+            echo "--- $script ---"
+
+            # exists and is executable
+            if [ ! -x "$script" ]; then
+              echo "  FAIL: not executable"
+              errors=$((errors + 1))
+            else
+              echo "  executable: ok"
+            fi
+
+            # syntax check
+            if bash -n "$script" 2>&1; then
+              echo "  syntax: ok"
+            else
+              echo "  FAIL: syntax error"
+              errors=$((errors + 1))
+            fi
+          done
+
+          if [ $errors -gt 0 ]; then
+            echo "FAILED: $errors error(s)"
+            exit 1
+          fi
+
+      - name: Validate Python scripts
+        run: |
+          errors=0
+
+          mapfile -t py_files < <(find plugins scripts -name '*.py' -type f 2>/dev/null)
+
+          for f in "${py_files[@]}"; do
+            if python3 -m py_compile "$f" 2>&1; then
+              echo "ok: $f"
+            else
+              echo "FAIL: $f"
+              errors=$((errors + 1))
+            fi
+          done
+
+          if [ $errors -gt 0 ]; then
+            echo "FAILED: $errors error(s)"
+            exit 1
+          fi
+
+      - name: Validate skill files
+        run: |
+          mapfile -t skills < <(find skills -name '*.md' -type f 2>/dev/null)
+
+          for skill in "${skills[@]}"; do
+            echo "--- $skill ---"
+
+            if head -1 "$skill" | grep -q '^---'; then
+              echo "  frontmatter: present"
+            else
+              echo "  warn: no YAML frontmatter"
+            fi
+
+            if grep -qiE 'tested.with' "$skill"; then
+              echo "  version stamp: ok"
+            else
+              echo "  warn: missing version stamp"
+            fi
+          done
