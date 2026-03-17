@@ -55,6 +55,27 @@ jobs:
       - name: Install dependencies
         run: pip install anthropic==0.49.0 requests==2.32.3
 
+      # ---- clean stale auto/ branches older than 7 days with no open PR ----
+      - name: Clean stale branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch --prune origin
+          for branch in $(git branch -r | grep 'origin/auto/' | sed 's|origin/||'); do
+            # skip if branch has an open PR
+            if gh pr list --head "$branch" --state open --json number -q '.[0].number' 2>/dev/null | grep -q '.'; then
+              continue
+            fi
+            # check age
+            AGE_EPOCH=$(git log -1 --format=%ct "origin/$branch" 2>/dev/null || echo 0)
+            NOW_EPOCH=$(date +%s)
+            DAYS_OLD=$(( (NOW_EPOCH - AGE_EPOCH) / 86400 ))
+            if [ "$DAYS_OLD" -gt 7 ]; then
+              echo "deleting stale branch: $branch ($DAYS_OLD days old)"
+              git push origin --delete "$branch" 2>/dev/null || true
+            fi
+          done
+
       # ---- collect upstream changes ----
       - name: Collect upstream changes
         id: collect
@@ -123,7 +144,7 @@ jobs:
 
           # add auto-merge label and enable auto-merge
           gh pr edit "$PR_NUMBER" --add-label "auto-merge" 2>/dev/null || true
-          gh pr merge "$PR_NUMBER" --auto --squash 2>/dev/null || echo "auto-merge not available (branch protection may not be configured)"
+          gh pr merge "$PR_NUMBER" --auto --merge 2>/dev/null || echo "auto-merge not available (branch protection may not be configured)"
 
           echo "Tier 1 PR created with auto-merge: $PR_URL"
         env:
