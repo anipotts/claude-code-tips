@@ -2,17 +2,38 @@
 
 # hooks
 
-standalone scripts that plug into claude code's hook system. copy to `~/.claude/hooks/` or reference from your project, then wire up in settings.
+standalone scripts that plug into claude code's hook system. copy one, wire it up, done.
 
-## available hooks
+## safety
 
-| hook | event | description |
+| hook | event | what it does |
 |---|---|---|
 | [safety-guard.sh](./safety-guard.sh) | PreToolUse | blocks force push, `rm -rf /`, DROP TABLE, and other dangerous commands |
-| [context-save.sh](./context-save.sh) | PreCompact | saves session context to markdown before compression — never lose your plan |
-| [panopticon.sh](./panopticon.sh) | PostToolUse | logs every tool action to a local SQLite audit trail |
-| [knowledge-builder/](./knowledge-builder/) | PostToolUse | builds a codebase knowledge graph as claude explores your project |
-| [notify.sh](./notify.sh) | Notification | routes notifications to macOS banners, Slack, Pushover, or ntfy |
+| [no-squash.sh](./no-squash.sh) | PreToolUse | blocks squash merges — preserves commit history |
+
+## observability
+
+| hook | event | what it does |
+|---|---|---|
+| [panopticon.sh](./panopticon.sh) | PostToolUse | logs every tool action to a local sqlite audit trail |
+| [knowledge-builder/](./knowledge-builder/) | PostToolUse | builds a codebase knowledge graph as claude explores |
+| [replay-capture.sh](./replay-capture.sh) | PostToolUse | captures file changes for VHS session replays |
+
+## preservation
+
+| hook | event | what it does |
+|---|---|---|
+| [context-save.sh](./context-save.sh) | PreCompact | saves session context to markdown before compression |
+| [notify.sh](./notify.sh) | Notification | routes to macOS banners, Slack, Pushover, or ntfy |
+
+## hygiene
+
+| hook | event | what it does |
+|---|---|---|
+| [commit-nudge.sh](./commit-nudge.sh) | PostToolUse | reminds you to commit after N edits without one |
+| [md-lint-fix.sh](./md-lint-fix.sh) | PostToolUse | auto-fixes markdown lint when .md files are saved |
+| [stale-branch.sh](./stale-branch.sh) | SessionStart | warns about local branches with gone tracking refs |
+| [version-stamp.sh](./version-stamp.sh) | SessionEnd | auto-updates "tested with" stamps in modified files |
 
 ## installation
 
@@ -22,111 +43,7 @@ copy the hook you want:
 cp hooks/safety-guard.sh ~/.claude/hooks/
 ```
 
-then add the matching config to your `.claude/settings.json` or `~/.claude/settings.json`.
-
-## individual hook configs
-
-### safety-guard (PreToolUse)
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/safety-guard.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### context-save (PreCompact)
-
-```json
-{
-  "hooks": {
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/context-save.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### panopticon (PostToolUse)
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/panopticon.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### knowledge-builder (PostToolUse)
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/knowledge-builder/knowledge-builder.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### notify (Notification)
-
-```json
-{
-  "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-## install all
-
-combined snippet — add the `hooks` object to your settings file:
+then add the matching config to your `.claude/settings.json` or `~/.claude/settings.json`:
 
 ```json
 {
@@ -136,29 +53,6 @@ combined snippet — add the `hooks` object to your settings file:
         "matcher": "Bash",
         "hooks": [
           { "type": "command", "command": "~/.claude/hooks/safety-guard.sh" }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          { "type": "command", "command": "~/.claude/hooks/panopticon.sh" },
-          { "type": "command", "command": "~/.claude/hooks/knowledge-builder/knowledge-builder.sh" }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "hooks": [
-          { "type": "command", "command": "~/.claude/hooks/context-save.sh" }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          { "type": "command", "command": "~/.claude/hooks/notify.sh" }
         ]
       }
     ]
