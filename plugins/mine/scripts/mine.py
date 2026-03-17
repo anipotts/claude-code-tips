@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# tested with: claude code v2.1.77
 # SYNC: canonical copy is scripts/mine.py — keep these in sync
 """
 mine.py -- Parse Claude Code JSONL conversation files into SQLite.
