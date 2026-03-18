@@ -19,8 +19,10 @@ curated external resources for claude code. these are genuinely useful -- not an
 
 ## community repos
 
+## community repos
+
 - [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) -- the biggest curation hub, comprehensive links and tools
-- [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) -- deep reports and analysis on effective patterns
+- [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) -- deep reports and analysis on effective patterns. recently added `<important if>` tags for CLAUDE.md context prioritization
 
 ## blogs & analysis
 

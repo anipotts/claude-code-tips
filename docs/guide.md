@@ -89,6 +89,22 @@ CLAUDE.md is the single most important file in your project for shaping claude's
 
 typescript monorepo. pnpm workspaces. vitest for testing.
 
+
+
+**advanced: `<important if>` tags**
+
+for large CLAUDE.md files, prioritize critical context with `<important if>` tags:
+
+```markdown
+<important if>
+  working on auth
+  or touching token validation
+</important if>
+token validation always uses HMAC-SHA256, never MD5
+```
+
+climate context before sending the prompt, keeping the most relevant sections at the front of the window. useful when your CLAUDE.md exceeds 300 lines and attention matters.
+
 ## structure
 - packages/api/ -- express backend
 - packages/web/ -- next.js frontend
