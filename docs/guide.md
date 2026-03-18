@@ -178,6 +178,12 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 
 ---
 
+
+
+**plugin persistent data:**
+
+plugins can now store state that persists across updates via `${CLAUDE_PLUGIN_DATA}`. this is set by the plugin system and available to all hook scripts. useful for plugins that maintain metrics, config, or history.
+
 ### 6. your first real task
 
 heres a real workflow for fixing a bug. this is how most sessions go:

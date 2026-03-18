@@ -49,6 +49,9 @@ every plugin needs exactly one `plugin.json` at its root. here is the full spec:
 | `license` | yes | SPDX identifier. `MIT` is the safe default. |
 | `hooks` | yes | Object mapping hook event names to arrays of hook handlers. Same structure as `settings.json` hooks. |
 | `keywords` | no | Array of strings for marketplace search. Keep it to 3-5 relevant terms. |
+| `agents` | no | Array of agent definitions with `effort`, `maxTurns`, and `disallowedTools` frontmatter support. |
+| `skills` | no | Array of skill definitions that plugin provides. |
+| `commands` | no | Array of custom command definitions. |
 
 ### hooks format
 
@@ -57,6 +60,30 @@ the `hooks` field uses the exact same format as your `settings.json`, with one k
 so `"command": "./hooks/my-hook.sh"` resolves to `<plugin-install-dir>/hooks/my-hook.sh`.
 
 you can use any hook event: `SessionStart`, `PreToolUse`, `PostToolUse`, `Stop`, `PreCompact`, etc. see the [hooks guide](./hooks-guide.md) for the full list.
+
+
+
+### persistent plugin state with ${CLAUDE_PLUGIN_DATA}
+
+v2.1.78 adds plugin persistent storage that survives plugin updates. use the `${CLAUDE_PLUGIN_DATA}` variable in your hook scripts to store and retrieve state:
+
+```bash
+#!/usr/bin/env bash
+SAVED_STATE="${CLAUDE_PLUGIN_DATA}/state.json"
+
+# read existing state
+if [ -f "$SAVED_STATE" ]; then
+  COUNTER=$(jq -r '.counter // 0' "$SAVED_STATE")
+else
+  COUNTER=0
+fi
+
+# increment and save
+COUNTER=$((COUNTER + 1))
+echo "{\"counter\": $COUNTER}" > "$SAVED_STATE"
+```
+
+when you run `/plugin uninstall`, claude prompts whether to delete the persistent data. this is useful for plugins that maintain history, config, or metrics across sessions.
 
 ### hooks with matchers
 

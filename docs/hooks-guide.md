@@ -136,6 +136,50 @@ Instead of just using exit codes, you can `exit 0` and print a JSON object to st
 
 ## All Hook Events -- Complete Reference
 
+
+
+### StopFailure
+
+**When it fires:** When a turn ends due to an API error (rate limit, auth failure, network timeout, etc.).
+
+**Matcher:** Not supported (fires on every API error).
+
+**Use it for:** Logging failures, alerting on repeated rate limits, triggering retry logic, notifying on auth issues.
+
+**Input JSON:**
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/Users/.../.claude/projects/.../transcript.jsonl",
+  "cwd": "/Users/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "StopFailure",
+  "error_type": "rate_limit_exceeded",
+  "error_message": "429 Too Many Requests",
+  "turn_count": 12
+}
+```
+
+**Key fields:**
+- `error_type` -- one of: `rate_limit_exceeded`, `auth_error`, `network_error`, `api_error`, `model_unavailable`
+- `error_message` -- the underlying error text
+- `turn_count` -- how many successful turns completed before this failure
+
+**Can block?** No. Hook runs after the error; session is already stopped.
+
+**Example use case:** count consecutive rate limits and alert when threshold is hit:
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+ERROR_TYPE=$(echo "$INPUT" | jq -r '.error_type')
+if [ "$ERROR_TYPE" = "rate_limit_exceeded" ]; then
+  COUNT=$(grep -c 'rate_limit_exceeded' ~/.claude/error-log.txt 2>/dev/null || echo 0)
+  echo "Rate limit hit (count: $((COUNT+1)))" >&2
+fi
+```
+
 ### SessionStart
 
 **When it fires:** When a session begins, resumes, or restarts after `/clear` or compaction.

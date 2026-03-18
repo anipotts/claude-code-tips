@@ -20,6 +20,15 @@ common problems and fixes. organized by feature area.
 - check: `~/.claude/settings.json` for malformed JSON
 - validate: `python3 -c "import json; json.load(open('$HOME/.claude/settings.json'))"`
 
+
+
+### "Security: sandbox disabled" warning at startup
+
+- cause: sandbox is enabled in settings but dependencies are missing
+- fix: install required dependencies (check `/sandbox` Dependencies tab for OS-specific instructions)
+- or disable sandbox: set `sandbox.enabled: false` in settings if you don't need it
+- v2.1.78 now shows a visible warning instead of silently disabling sandbox
+
 ### context window fills up too fast
 
 - use the [handoff plugin](../plugins/handoff/) to save context before compaction

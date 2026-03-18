@@ -94,6 +94,12 @@ targeted reads can be 10-20x cheaper than exploratory ones.
 
 send haiku to explore, sonnet to implement. haiku reads 30 files for pennies. sonnet reads the 4 files that matter. see [subagent-patterns.md](./subagent-patterns.md) for the full pattern.
 
+
+
+### token limits and output capping
+
+v2.1.78 increased default max output tokens for opus 4.6 to 64k (previously lower). the hard upper bound for opus 4.6 and sonnet 4.6 is now 128k tokens. this lets longer generations complete without hitting the old ceiling, but large outputs still cost accordingly. use `maxTurns` in agent frontmatter to cap exploration rounds instead of relying on token limits.
+
 ### compact strategically
 
 `/compact` when context is bloated but you want to continue the session. good triggers:

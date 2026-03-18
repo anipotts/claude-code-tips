@@ -62,6 +62,30 @@ spawn multiple Task calls at once and they run in parallel automatically:
 
 ---
 
+
+
+### agent effort levels (v2.1.78+)
+
+agents can now declare effort levels in their frontmatter. this controls how thoroughly claude explores before declaring the task done:
+
+```markdown
+---
+effort: balanced
+maxTurns: 20
+disallowedTools: ["Bash(rm *)", "Write(/sensitive/)", "Edit(secrets.*)"]
+---
+
+your agent prompt here...
+```
+
+| effort | behavior |
+|---|---|
+| `minimal` | quick answer, one pass, move on |
+| `balanced` | default. explore alternatives, verify results |
+| `thorough` | exhaustive testing, multiple approaches, double-check everything |
+
+`maxTurns` caps the agent's conversation length. `disallowedTools` blocks specific tool calls (regex matching).
+
 ## the /batch command
 
 if you dont need a coordinator agent orchestrating things, `/batch` is the simpler path. describe multiple independent tasks and claude runs them in parallel worktrees. you review the diffs.
