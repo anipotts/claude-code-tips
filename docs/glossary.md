@@ -69,3 +69,8 @@ terms used across this repo and claude code docs.
 **UserPromptSubmit** -- hook event that fires when the user submits a prompt. useful for prompt classification, routing, or pre-processing.
 
 **worktree** -- a git feature that creates a separate working directory sharing the same repo history. claude code uses worktrees to let subagents work on code without conflicting with the main session's working directory.
+
+
+**StopFailure** -- hook event that fires when a turn ends due to an API error (rate limit, auth failure, etc.). useful for logging and backoff logic. added in v2.1.78.
+
+**voiceEnabled** -- settings flag to enable voice input/output. configure in `settings.json`. available in v2.1.78+.

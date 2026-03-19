@@ -29,9 +29,20 @@ Stdout text on `exit 0` is added as context to the conversation for `SessionStar
 
 Hooks live in JSON settings files. There are three levels of nesting:
 
-1. Choose a **hook event** (`PreToolUse`, `Stop`, etc.)
+1. Choose a **hook event** (`PreToolUse`, `Stop`, `StopFailure`, etc.)
 2. Add a **matcher** to filter when it fires (tool name, session type, etc.)
 3. Define one or more **hook handlers** to run when matched
+
+### Config Locations
+
+| Location | Scope | Shareable |
+|---|---|---|
+| `~/.claude/settings.json` | All your projects | No (local to your machine) |
+| `.claude/settings.json` | Single project | Yes (commit to repo) |
+| `.claude/settings.local.json` | Single project | No (gitignored) |
+| Managed policy settings | Organization-wide | Yes (admin-controlled) |
+
+Project settings override user-level settings. Enterprise admins can use `allowManagedHooksOnly` to block user and project hooks.
 
 ### Config Locations
 
@@ -135,6 +146,48 @@ Instead of just using exit codes, you can `exit 0` and print a JSON object to st
 ---
 
 ## All Hook Events -- Complete Reference
+
+
+
+### StopFailure
+
+**When it fires:** When a turn ends due to an API error (rate limit 429, auth failure, or other error) instead of completing normally.
+
+**Matcher:** Not supported (fires on all API errors).
+
+**Use it for:** Logging API failures, alerting on rate limits, triggering backoff/retry logic, monitoring auth issues.
+
+**Input JSON:**
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/Users/.../.claude/projects/.../transcript.jsonl",
+  "cwd": "/Users/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "StopFailure",
+  "error_code": 429,
+  "error_message": "rate limit exceeded"
+}
+```
+
+**Can block?** No. This hook fires after the error occurs. exit code is logged but does not affect the error handling.
+
+**Example use:**
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+INPUT=$(cat)
+ERROR_CODE=$(echo "$INPUT" | jq -r '.error_code // empty')
+if [ "$ERROR_CODE" = "429" ]; then
+  echo "Rate limited. backing off for 5 minutes..." >&2
+  sleep 300
+fi
+exit 0
+```
+
+**New in v2.1.78.**
 
 ### SessionStart
 

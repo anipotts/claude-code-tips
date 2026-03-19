@@ -54,9 +54,9 @@ first session tips:
 
 the default model is sonnet. you can change it per-session with `/model` or globally in settings.
 
-> [quickstart docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+**new in v2.1.79:** use `claude auth login --console` to authenticate with anthropic console (API billing) instead of the default web auth. also check `/config` for the new "show turn duration" toggle to see how long each turn takes.
 
----
+> [quickstart docs](https://docs.anthropic.com/en/docs/claude-code/overview)
 
 ### 3. CLAUDE.md -- your project's brain
 
@@ -161,7 +161,7 @@ settings live in JSON files at three levels. later overrides earlier:
 2. `.claude/settings.json` -- project-level (shared with team, commit it)
 3. `.claude/settings.local.json` -- local project (gitignored, your overrides)
 
-anything you can configure: permissions, hooks, model, theme, environment variables, MCP servers, allowed tools.
+anything you can configure: permissions, hooks, model, theme, environment variables, MCP servers, allowed tools. note that `voiceEnabled` and filesystem read restrictions (`allowManagedReadPathsOnly`) are now available in settings.
 
 **key CLI flags:**
 
@@ -173,10 +173,9 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 | `--output-format json` | machine-readable output (pairs with `-p`) |
 | `--verbose` | show tool inputs/outputs, hook activity, token counts |
 | `--permission-mode plan` | read-only mode |
+| `--console` | authenticate with anthropic console (API billing) |
 
 > [settings docs](https://docs.anthropic.com/en/docs/claude-code/settings)
-
----
 
 ### 6. your first real task
 
