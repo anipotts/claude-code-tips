@@ -136,6 +136,12 @@ Instead of just using exit codes, you can `exit 0` and print a JSON object to st
 
 ## All Hook Events -- Complete Reference
 
+
+
+### UserPromptSubmit (codex parity)
+
+Note: codex v0.116.0 added `userpromptsubmit` hook as a parallel feature for prompt blocking/augmentation before history. claude code's UserPromptSubmit hook serves the same purpose -- intercept prompts, validate them, inject context, or block based on conditions.
+
 ### SessionStart
 
 **When it fires:** When a session begins, resumes, or restarts after `/clear` or compaction.

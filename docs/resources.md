@@ -19,8 +19,11 @@ curated external resources for claude code. these are genuinely useful -- not an
 
 ## community repos
 
+## community repos
+
 - [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) -- the biggest curation hub, comprehensive links and tools
-- [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) -- deep reports and analysis on effective patterns
+- [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) -- deep reports and analysis on effective patterns. includes skill authoring guides, workflow templates, and video transcripts
+- [shanraisshan/claude-code-hooks](https://github.com/shanraisshan/claude-code-hooks) -- community hook library (formerly claude-code-voice-hooks)
 
 ## blogs & analysis
 

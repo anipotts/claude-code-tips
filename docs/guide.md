@@ -16,6 +16,11 @@ everything here is tested. opinions are earned. links go to official docs and to
 
 ---
 
+
+
+
+> **new in v2.1.79**: ANTHROPIC_CUSTOM_MODEL_OPTION env vars for multi-model routing, updated sandbox path prefix convention (/ = absolute, ./ = project-relative), CLAUDE_CODE_PLUGIN_SEED_DIR for multi-directory plugin support, improved CLAUDE_CODE_AUTO_COMPACT_WINDOW tuning
+
 ## beginner
 
 ### 1. what claude code actually is
