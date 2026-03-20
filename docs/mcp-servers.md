@@ -1,10 +1,6 @@
 <!-- tested with: claude code v1.0.34 -->
 
-# MCP servers for claude code
-
-**practical guide to connecting claude code to external tools via MCP.**
-
----
+<!-- tested with: claude code v2.1.80 -->
 
 ## what MCP servers are and why they matter
 

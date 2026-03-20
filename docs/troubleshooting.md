@@ -20,6 +20,13 @@ common problems and fixes. organized by feature area.
 - check: `~/.claude/settings.json` for malformed JSON
 - validate: `python3 -c "import json; json.load(open('$HOME/.claude/settings.json'))"`
 
+
+### managed settings not applying at startup
+
+- cause: managed policy settings (`enabledPlugins`, `permissions.defaultMode`) not applied if `remote-settings.json` was cached from prior session
+- fix: clear the settings cache: `rm -rf ~/.claude/cache/remote-settings.json` and restart
+- context: v2.1.80 fixed this but older sessions may have stale caches
+
 ### context window fills up too fast
 
 - use the [handoff plugin](../plugins/handoff/) to save context before compaction

@@ -1,10 +1,6 @@
 <!-- tested with: claude code v1.0.34 -->
 
-# how to create claude code plugins
-
-**everything you need to ship a plugin, from scratch to marketplace.**
-
----
+<!-- tested with: claude code v2.1.80 -->
 
 ## what is a plugin
 
@@ -49,6 +45,9 @@ every plugin needs exactly one `plugin.json` at its root. here is the full spec:
 | `license` | yes | SPDX identifier. `MIT` is the safe default. |
 | `hooks` | yes | Object mapping hook event names to arrays of hook handlers. Same structure as `settings.json` hooks. |
 | `keywords` | no | Array of strings for marketplace search. Keep it to 3-5 relevant terms. |
+
+
+| `source` | no | Set to `'settings'` to declare plugin entries inline in your `.claude/settings.json` instead of via marketplace. useful for private or custom plugins. |
 
 ### hooks format
 

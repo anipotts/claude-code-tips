@@ -69,3 +69,5 @@ terms used across this repo and claude code docs.
 **UserPromptSubmit** -- hook event that fires when the user submits a prompt. useful for prompt classification, routing, or pre-processing.
 
 **worktree** -- a git feature that creates a separate working directory sharing the same repo history. claude code uses worktrees to let subagents work on code without conflicting with the main session's working directory.
+
+**channels** -- MCP server feature (v2.1.80+). allows MCP servers to push messages into a claude code session asynchronously instead of waiting for tool calls. useful for background processes that need to surface updates. enabled with `--channels` flag.

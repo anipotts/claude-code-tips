@@ -1,10 +1,6 @@
 <!-- tested with: claude code v1.0.34 -->
 
-# The Complete Claude Code Hooks Guide
-
-**A practical reference for every hook event, with tested examples.**
-
----
+<!-- tested with: claude code v2.1.80 -->
 
 ## What Are Hooks?
 

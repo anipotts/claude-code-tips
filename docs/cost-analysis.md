@@ -22,17 +22,13 @@ every claude code interaction is an API call. you send tokens in (your prompt + 
 
 ## model pricing (march 2026)
 
+<!-- tested with: claude code v2.1.80 -->
+
 | model | input (per M tokens) | output (per M tokens) | cache read | cache write |
 |---|---|---|---|---|
 | haiku 4.5 | $1.00 | $5.00 | $0.10 | $1.25 |
 | sonnet 4.6 | $3.00 | $15.00 | $0.30 | $3.75 |
 | opus 4.6 | $5.00 | $25.00 | $0.50 | $6.25 |
-
-the API reports four token buckets per request: `input_tokens` (non-cached input), `cache_read_input_tokens` (90% discount), `cache_creation_input_tokens` (25% premium), and `output_tokens`. in a typical session, 90%+ of cost comes from cache tokens bc every tool call re-sends the conversation context.
-
-> [pricing docs](https://docs.anthropic.com/en/docs/about-claude/models)
-
----
 
 ## what actually costs money
 

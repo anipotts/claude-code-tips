@@ -1,12 +1,6 @@
 <!-- tested with: claude code v1.0.34 -->
 
-# the claude code guide
-
-**beginner to claude-code-crazy in one document.**
-
-everything here is tested. opinions are earned. links go to official docs and to files in this repo.
-
----
+<!-- tested with: claude code v2.1.80 -->
 
 ## table of contents
 
@@ -178,6 +172,15 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 
 ---
 
+
+**new in v2.1.80:**
+
+| flag | what it does |
+|---|---|
+| `--channels` | enable MCP servers to push messages into your session (research preview) |
+
+channels let MCP servers initiate messages instead of waiting for tool calls. useful for long-running MCP processes that need to surface async updates.
+
 ### 6. your first real task
 
 heres a real workflow for fixing a bug. this is how most sessions go:
@@ -264,6 +267,20 @@ the `/model` command switches models mid-conversation. this is one of the most u
 ---
 
 ## intermediate
+
+
+### 7. effort frontmatter for skills and commands
+
+skills and slash commands now support an `effort` frontmatter field to override the model effort level when invoked:
+
+```yaml
+---
+name: write-tests
+effort: high
+---
+```
+
+valid values: `low`, `auto`, `high`. this lets you force a specific model tier for compute-intensive tasks without requiring the user to manually switch models.
 
 ### 9. the extensibility stack
 
