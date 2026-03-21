@@ -34,6 +34,9 @@
   // blanks around tables -- compact table formatting in prompts
   "MD058": false,
 
+  // table column style -- compact pipe-delimited tables throughout
+  "MD060": false,
+
   // unordered list indentation -- varies by content type
   "MD007": false,
 

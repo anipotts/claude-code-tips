@@ -118,7 +118,7 @@ cd <project_dir>
 
 ## Usage
 
-guardian isn't a typical `/agent` you invoke once -- it's meant to run as a daemon. see [docs/automation.md](../../docs/automation.md) for the daemon setup pattern.
+guardian isn't a typical `/agent` you invoke once -- it's meant to run as a daemon. see [docs/automation.md](../../docs/concepts/automation.md) for the daemon setup pattern.
 
 ### quick test (one-shot)
 
@@ -222,6 +222,6 @@ mitigations if you must use it:
 - check `/tmp/guardian.log` periodically
 - never run on a repo with uncommitted work you care about
 
-the safer alternative: don't use the flag and just approve each action manually. see the [hooks guide](../../docs/hooks-guide.md) for auto-approving safe commands instead.
+the safer alternative: don't use the flag and just approve each action manually. see the [hooks guide](../../docs/claude-code/hooks-reference.md) for auto-approving safe commands instead.
 
 haiku bc this runs on every file save. it needs to be fast and cheap, not brilliant. the proposals it writes are for you to evaluate -- the quality bar is "good enough to be useful," not "production-ready fix."

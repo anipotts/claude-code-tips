@@ -107,7 +107,7 @@ dont compact after every 5 turns -- the compaction itself costs a full round tri
 
 ## tracking costs with mine
 
-the [mine plugin](../plugins/mine/) logs every session to sqlite at `~/.claude/mine.db`. it tracks input tokens, output tokens, cache creation, and cache read -- per session, per model, per project.
+the [mine plugin](../../plugins/mine/) logs every session to sqlite at `~/.claude/mine.db`. it tracks input tokens, output tokens, cache creation, and cache read -- per session, per model, per project.
 
 ### quick commands
 
@@ -150,7 +150,7 @@ sqlite3 ~/.claude/mine.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) as
 sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) as cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
 ```
 
-mine also exposes convenience views: `session_costs`, `project_costs`, `daily_costs`, and `tool_usage`. see the [mine README](../plugins/mine/) for the full schema.
+mine also exposes convenience views: `session_costs`, `project_costs`, `daily_costs`, and `tool_usage`. see the [mine README](../../plugins/mine/) for the full schema.
 
 ---
 
@@ -207,4 +207,4 @@ this gets cached into every session and nudges the right behavior from the start
 
 ---
 
-*for deeper cost tracking, see the [mine plugin](../plugins/mine/). for model-switching patterns with subagents, see [subagent-patterns.md](./subagent-patterns.md). for the full cost overview in the guide, see [section 24](../claude-code/guide.md#24-cost-optimization----real-numbers).*
+*for deeper cost tracking, see the [mine plugin](../../plugins/mine/). for model-switching patterns with subagents, see [subagent-patterns.md](./subagent-patterns.md). for the full cost overview in the guide, see [section 24](../claude-code/guide.md#24-cost-optimization----real-numbers).*
