@@ -77,7 +77,7 @@ how to hit the minimum:
 - `@path` imports pulling in additional context files
 - tools and MCP server definitions count toward cached content
 
-measure your cache hit rate with `/sift cache efficiency` (requires mine). above 60% is good, above 80% is excellent.
+measure your cache hit rate with `/mine intent: cache efficiency` (requires mine). above 60% is good, above 80% is excellent.
 
 ### targeted file reads
 
@@ -113,10 +113,10 @@ the [mine plugin](../../plugins/mine/) logs every session to sqlite at `~/.claud
 
 | command | what it shows |
 |---|---|
-| `/ledger` | daily dashboard -- sessions, tokens, cost, tools |
+| `/mine` | daily dashboard -- sessions, tokens, cost, tools |
 | `/stats` | project health snapshot |
-| `/sift cost this month` | monthly spend breakdown |
-| `/sift cache efficiency` | cache hit rate analysis |
+| `/mine intent: cost this month` | monthly spend breakdown |
+| `/mine intent: cache efficiency` | cache hit rate analysis |
 
 ### cost queries
 
@@ -203,7 +203,7 @@ sqlite3 ~/.claude/mine.db "SELECT model, COUNT(*) as sessions, printf('%.0f%%', 
 
 this gets cached into every session and nudges the right behavior from the start.
 
-> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> [official docs](https://code.claude.com/docs/en/overview)
 
 ---
 

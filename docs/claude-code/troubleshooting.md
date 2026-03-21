@@ -180,7 +180,7 @@ tool=$(echo "$input" | jq -r '.tool')
 - restart claude code after adding new skills
 - check: the skill name doesn't conflict with a built-in command
 
-### /sift returns no results
+### /mine returns no results
 
 - check: mine database exists and has data
 - try: `sqlite3 ~/.claude/mine.db "SELECT count(*) FROM sessions;"`
@@ -234,5 +234,5 @@ nvm use 20
 
 - run with verbose mode (`Ctrl+O`) to see detailed hook and tool execution
 - check `~/.claude/logs/` for session logs
-- search past sessions with mine: use the `/sift` skill or query the database directly
+- search past sessions with mine: use the `/mine` skill or query the database directly
 - open an issue on this repo with your settings (redact secrets) and the error output

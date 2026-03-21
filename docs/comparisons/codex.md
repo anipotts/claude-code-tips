@@ -2,7 +2,7 @@
 
 # claude code vs openai codex CLI
 
-> last verified: 2026-03-08 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> last verified: 2026-03-08 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -12,7 +12,7 @@
 |---------|------------|-----------------|
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | $20/mo ChatGPT Plus / $200/mo Pro (includes codex access) |
 | model | opus 4.6, sonnet 4.6, haiku 4.5 | GPT-5.3-Codex, codex-mini, GPT-5.4 |
-| context | 200K tokens (standard), managed window with compaction | varies by model |
+| context | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5), managed window with compaction | varies by model |
 | interaction | real-time interactive terminal | real-time terminal + async cloud agent (web) |
 | platform | terminal CLI, VS Code, JetBrains | terminal CLI, VS Code, Cursor, Windsurf, macOS app |
 | extensibility | hooks, plugins, skills, agents, commands, MCP servers | MCP support (stdio), approval modes, limited extension |

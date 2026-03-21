@@ -48,7 +48,7 @@ cd "$PROJECT_DIR"
 claude --resume
 ```
 
-the `--resume` flag reconnects to your last session. pair it with tmux and you have a persistent claude that maintains context across your entire workday. but for automation, you usually want headless mode instead.
+the `--resume` / `-r` flag resumes a specific session by ID. use `--continue` / `-c` to load the most recent session. pair it with tmux and you have a persistent claude that maintains context across your entire workday. but for automation, you usually want headless mode instead.
 
 ### file watcher daemon
 

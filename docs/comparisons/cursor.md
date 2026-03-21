@@ -2,7 +2,7 @@
 
 # claude code vs cursor
 
-> last verified: 2026-03-08 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> last verified: 2026-03-08 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 

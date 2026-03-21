@@ -457,7 +457,7 @@ For deny:
 
 ### SubagentStart
 
-**When it fires:** When a Claude Code subagent is spawned via the Task tool.
+**When it fires:** When a Claude Code subagent is spawned via the Agent tool.
 
 **Matcher values:** Agent type names -- `Bash`, `Explore`, `Plan`, or custom agent names from `.claude/agents/`.
 

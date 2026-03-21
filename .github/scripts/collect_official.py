@@ -40,7 +40,7 @@ from _upstream_utils import (
 
 OUTPUT_FILE = Path("/tmp/official_changes.json")
 
-OFFICIAL_DOCS_URL = "https://docs.anthropic.com/en/docs/claude-code/overview"
+OFFICIAL_DOCS_URL = "https://code.claude.com/docs/en/overview"
 
 WATCHED_REPOS = [
     {
@@ -74,7 +74,7 @@ def check_changelog(state: dict) -> list[dict]:
     """
     key = "anthropic/changelog"
     raw_url = "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md"
-    docs_url = "https://docs.anthropic.com/en/docs/claude-code/changelog"
+    docs_url = "https://code.claude.com/docs/en/changelog"
 
     text = ""
     source_url = raw_url
