@@ -116,7 +116,7 @@ jobs:
             echo -e "$REPORT"
             echo ""
             echo "---"
-            echo "*automated check -- see [conventions](docs/guide.md) for details.*"
+            echo "*automated check -- see [conventions](docs/claude-code/guide.md) for details.*"
           } > /tmp/quality-report.md
 
           echo "failures=$FAIL" >> "$GITHUB_OUTPUT"

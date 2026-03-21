@@ -176,7 +176,7 @@ echo "[$(date)] task completed: $TASK_DESC" >> /tmp/team-log.txt
 
 both hooks have no matcher support -- they always fire for every teammate/task.
 
-> [hooks reference](./hooks-guide.md)
+> [hooks reference](./hooks-reference.md)
 
 ---
 
@@ -204,7 +204,7 @@ each phase feeds the next. thats sequential, not parallel. use subagents, not te
 scout (haiku)  -->  findings  -->  implementer (sonnet)  -->  code  -->  reviewer (haiku)
 ```
 
-this is the [scout pattern](./subagent-patterns.md). mentioning it here bc people try to force it into a team. dont.
+this is the [scout pattern](../concepts/subagent-patterns.md). mentioning it here bc people try to force it into a team. dont.
 
 ### specialist teams
 
@@ -320,4 +320,4 @@ the risk: different assumptions. mitigate by making the interface contract extre
 
 if any of these fail, use a single agent or sequential subagents instead.
 
-> [subagent patterns](./subagent-patterns.md) | [explorer agent](../.claude/agents/explorer.md) | [hooks guide](./hooks-guide.md)
+> [subagent patterns](../concepts/subagent-patterns.md) | [explorer agent](../../.claude/agents/explorer.md) | [hooks guide](./hooks-reference.md)

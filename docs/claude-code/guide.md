@@ -467,7 +467,7 @@ the `matcher` is a regex that filters which tool triggers the hook. `"Bash"` onl
 
 three handler types: `command` (shell script), `prompt` (LLM evaluation), `agent` (subagent with tools). command hooks are the most common and the fastest.
 
-see [hooks-guide.md](./hooks-guide.md) for the complete reference -- all 17 events, every input field, tested examples, and advanced patterns.
+see [hooks-reference.md](./hooks-reference.md) for the complete reference -- all 17 events, every input field, tested examples, and advanced patterns.
 
 > [hooks docs](https://docs.anthropic.com/en/docs/claude-code/hooks)
 
@@ -545,7 +545,7 @@ step 2: "sonnet, refactor these 4 specific files to use the new middleware"
 
 **rule of thumb:** if the task can be done with 1-3 tool calls, do it yourself. subagents are for tasks that require 10+ steps, complex reasoning, or can run while you do other work.
 
-see [subagent-patterns.md](./subagent-patterns.md) for the full playbook with real examples and a decision flowchart.
+see [subagent-patterns.md](../concepts/subagent-patterns.md) for the full playbook with real examples and a decision flowchart.
 
 > [sub-agents docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
 
@@ -822,7 +822,7 @@ it works by spawning 2-4 Task subagents with `isolation: "worktree"`. each agent
 
 why this is powerful: instead of committing to one approach and potentially having to revert, you try 2-3 approaches simultaneously and pick the best one with evidence. costs more tokens, saves more time.
 
-see [explorer.md](../.claude/agents/explorer.md) for the agent definition and [subagent-patterns.md](./subagent-patterns.md) for worktree isolation details.
+see [explorer.md](../../.claude/agents/explorer.md) for the agent definition and [subagent-patterns.md](../concepts/subagent-patterns.md) for worktree isolation details.
 
 ---
 
@@ -882,7 +882,7 @@ always branch, always PR, always human review.
 - never auto-merges -- opens a PR
 - has a timeout (`timeout 300 claude -p "..."`)
 
-see [automation.md](./automation.md) for the full playbook including the guardian agent pattern.
+see [automation.md](../concepts/automation.md) for the full playbook including the guardian agent pattern.
 
 ---
 
@@ -1071,7 +1071,7 @@ my-project/.claude/settings.local.json  your personal project hooks (gitignored)
 }
 ```
 
-see [hooks-guide.md](./hooks-guide.md) for the full reference.
+see [hooks-reference.md](./hooks-reference.md) for the full reference.
 
 ---
 
@@ -1107,7 +1107,7 @@ this guide draws from hands-on experience and community knowledge.
 - CLAUDE.md as a living document (section 3) -- tip #10
 - cron maintenance patterns (section 21) -- tip #12
 
-**claude code official docs** -- the hook events reference, permission modes, settings schema, and MCP server configuration are documented at [docs.anthropic.com/en/docs/claude-code](https://docs.anthropic.com/en/docs/claude-code/overview). the [hooks reference](https://docs.anthropic.com/en/docs/claude-code/hooks) was the primary source for section 11 and the [hooks-guide.md](./hooks-guide.md).
+**claude code official docs** -- the hook events reference, permission modes, settings schema, and MCP server configuration are documented at [docs.anthropic.com/en/docs/claude-code](https://docs.anthropic.com/en/docs/claude-code/overview). the [hooks reference](https://docs.anthropic.com/en/docs/claude-code/hooks) was the primary source for section 11 and the [hooks-reference.md](./hooks-reference.md).
 
 **anthropic blog** -- the [hooks customization post](https://claude.com/blog/how-to-configure-hooks) provided additional context on hook patterns and best practices.
 

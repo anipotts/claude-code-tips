@@ -164,7 +164,7 @@ git merge worktree-branch
 **pitfalls:**
 - worktrees add overhead. do not use them for read-only research tasks.
 - the agent works on a snapshot of your code at worktree creation time. if you make changes in the main tree while the agent is working, there may be merge conflicts.
-- worktrees require git. if your project is not a git repo, this will not work. (you can override with the `WorktreeCreate` hook for other VCS -- see the [hooks guide](./hooks-guide.md).)
+- worktrees require git. if your project is not a git repo, this will not work. (you can override with the `WorktreeCreate` hook for other VCS -- see the [hooks guide](../claude-code/hooks-reference.md).)
 
 **real-world scenario:** you want to try two different approaches to a refactor. spawn two worktree-isolated agents, each with a different strategy. compare the diffs, pick the better one.
 
@@ -380,4 +380,4 @@ bc the prompt is everything when the agent cannot ask follow-up questions:
 
 ---
 
-*For hook events that fire during subagent lifecycle (SubagentStart, SubagentStop, TeammateIdle), see the [hooks guide](./hooks-guide.md).*
+*For hook events that fire during subagent lifecycle (SubagentStart, SubagentStop, TeammateIdle), see the [hooks guide](../claude-code/hooks-reference.md).*

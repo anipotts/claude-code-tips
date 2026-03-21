@@ -43,15 +43,15 @@ def read_existing_docs() -> dict[str, str]:
     """Read current state of key docs files for context."""
     docs = {}
     files_to_read = [
-        "docs/guide.md",
-        "docs/hooks-guide.md",
-        "docs/agent-teams.md",
-        "docs/cost-analysis.md",
-        "docs/mcp-servers.md",
-        "docs/subagent-patterns.md",
-        "docs/plugin-creation.md",
+        "docs/claude-code/guide.md",
+        "docs/claude-code/hooks-reference.md",
+        "docs/claude-code/agent-teams.md",
+        "docs/concepts/cost-optimization.md",
+        "docs/claude-code/mcp-servers.md",
+        "docs/concepts/subagent-patterns.md",
+        "docs/claude-code/plugin-creation.md",
         "docs/comparisons/pricing.md",
-        "docs/troubleshooting.md",
+        "docs/claude-code/troubleshooting.md",
         "docs/glossary.md",
         "docs/resources.md",
     ]
@@ -86,15 +86,15 @@ def build_prompt(changes: list[dict], existing_docs: dict[str, str]) -> str:
     return f"""you are updating the claude-code-tips repo (github.com/anipotts/claude-code-tips).
 
 this repo has these docs:
-- docs/guide.md -- comprehensive guide (beginner to advanced)
-- docs/hooks-guide.md -- complete hooks reference
-- docs/agent-teams.md -- agent teams guide
-- docs/cost-analysis.md -- cost optimization guide
-- docs/mcp-servers.md -- MCP server guide
-- docs/subagent-patterns.md -- subagent patterns
-- docs/plugin-creation.md -- plugin creation guide
+- docs/claude-code/guide.md -- comprehensive guide (beginner to advanced)
+- docs/claude-code/hooks-reference.md -- complete hooks reference
+- docs/claude-code/agent-teams.md -- agent teams guide
+- docs/concepts/cost-optimization.md -- cost optimization guide
+- docs/claude-code/mcp-servers.md -- MCP server guide
+- docs/concepts/subagent-patterns.md -- subagent patterns
+- docs/claude-code/plugin-creation.md -- plugin creation guide
 - docs/comparisons/ -- competitor comparison docs (codex, cursor, gemini, antigravity, pricing)
-- docs/troubleshooting.md -- common problems and fixes
+- docs/claude-code/troubleshooting.md -- common problems and fixes
 - docs/glossary.md -- key terms
 - docs/resources.md -- curated external resources
 
@@ -105,7 +105,7 @@ upstream changes detected today:
 {changes_text}
 
 output a JSON array of file edits. each edit:
-- "file": relative path (e.g., "docs/guide.md")
+- "file": relative path (e.g., "docs/claude-code/guide.md")
 - "section": which section to update (e.g., "### 2. installing and first run")
 - "action": "append" | "replace" | "add_section"
 - "content": markdown content to add/replace
@@ -123,7 +123,7 @@ rules:
 format:
 [
   {{
-    "file": "docs/guide.md",
+    "file": "docs/claude-code/guide.md",
     "section": "### 2. installing and first run",
     "action": "replace",
     "content": "updated content...",
