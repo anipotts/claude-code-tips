@@ -1,11 +1,15 @@
 # claude-code-tips
 
 [![CI](https://github.com/anipotts/claude-code-tips/actions/workflows/validate.yml/badge.svg)](https://github.com/anipotts/claude-code-tips/actions/workflows/validate.yml)
+[![docs freshness](https://github.com/anipotts/claude-code-tips/actions/workflows/freshness-check.yml/badge.svg)](https://github.com/anipotts/claude-code-tips/actions/workflows/freshness-check.yml)
+[![upstream watch](https://github.com/anipotts/claude-code-tips/actions/workflows/official-watcher.yml/badge.svg)](https://github.com/anipotts/claude-code-tips/actions/workflows/official-watcher.yml)
 [![last commit](https://img.shields.io/github/last-commit/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](https://github.com/anipotts/claude-code-tips/commits/main)
 [![license](https://img.shields.io/github/license/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](./LICENSE)
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v2.1.77-000?style=flat-square&labelColor=D4A574&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 
-an installable plugin, a library of hooks and agents, and docs that go deeper than the official ones. not a tips list — a toolkit. built from 500+ real sessions.
+i've run 4,000+ claude code sessions. this is everything i learned — packaged as a plugin, a reference library, and notes on what actually works.
+
+the plugin mines my sessions. the hooks guard my code. the docs stay current automatically. **this repo maintains itself using the patterns it teaches.**
 
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine stats showing sessions, tokens, costs, and projects" />
 
@@ -15,7 +19,7 @@ an installable plugin, a library of hooks and agents, and docs that go deeper th
 claude plugin add anipotts/claude-code-tips
 ```
 
-this installs **mine** — a plugin that mines every claude code session into a local sqlite database. costs, search, error memory, pattern detection.
+this installs **mine** — a plugin that mines every claude code session into a local sqlite database. costs, search, error memory, pattern detection. data stays local at `~/.claude/mine.db`.
 
 ```
 /mine                          → today's sessions, weekly cost, top tools
@@ -26,9 +30,7 @@ this installs **mine** — a plugin that mines every claude code session into a 
 /mine mistakes                 → error patterns claude keeps repeating
 ```
 
-7 hooks, zero config after install. data stays local at `~/.claude/mine.db`.
-
-**[full mine docs →](./plugins/mine/README.md)**
+**[full mine docs →](./plugins/mine/README.md)** · **[5-minute setup →](./SETUP.md)**
 
 ---
 
@@ -99,15 +101,17 @@ this installs **mine** — a plugin that mines every claude code session into a 
 
 ## docs
 
-| starting point | what you'll learn |
-|---|---|
-| new to claude code? | [guide.md](./docs/guide.md) — beginner to advanced, one doc |
-| building a plugin? | [plugin-creation.md](./docs/plugin-creation.md) — full walkthrough |
-| want hook examples? | [hooks-guide.md](./docs/hooks-guide.md) — every event, tested patterns |
-| multi-agent patterns? | [subagent-patterns.md](./docs/subagent-patterns.md) — parallel research, worktrees |
-| headless CLI automation? | [cli-tools.md](./docs/cli-tools.md) — `claude -p` as a function factory |
-| understanding costs? | [cost-analysis.md](./docs/cost-analysis.md) — token economics, cache mechanics |
-| vs cursor / codex / gemini? | [comparisons/](./docs/comparisons/) — data-driven, no FUD |
+organized by what you need:
+
+| | what | who it's for |
+|---|---|---|
+| **concepts** | [subagent patterns](./docs/concepts/subagent-patterns.md), [automation](./docs/concepts/automation.md), [cost optimization](./docs/concepts/cost-optimization.md) | anyone using agentic coding tools |
+| **claude code** | [guide](./docs/claude-code/guide.md), [hooks](./docs/claude-code/hooks-reference.md), [plugins](./docs/claude-code/plugin-creation.md), [MCP](./docs/claude-code/mcp-servers.md), [CLI](./docs/claude-code/cli-tools.md), [agents](./docs/claude-code/agent-teams.md) | claude code users |
+| **comparisons** | [pricing](./docs/comparisons/pricing.md), [cursor](./docs/comparisons/cursor.md), [codex](./docs/comparisons/codex.md), [gemini](./docs/comparisons/gemini.md) | choosing a tool |
+| **tips** | [why hooks matter](./docs/tips/why-hooks-matter.md), [my stack](./docs/tips/my-automation-stack.md), [mistakes i made](./docs/tips/mistakes-i-made.md), [cost reality](./docs/tips/cost-reality.md) | my personal takes |
+| **notes** | [community](./docs/notes/community.md), [changelog](./docs/notes/changelog.md) | staying current |
+
+concepts/ is tool-agnostic — applies to cursor, codex, gemini, whatever you use. tips/ is me.
 
 ---
 
@@ -121,12 +125,14 @@ reference implementations to study and adapt:
 
 ---
 
-## what's new (march 2026)
+## how this repo works
 
-- **mine v1.0** — burn (cost anomaly detection), hotspots (file edit analysis), loops (pattern detection)
-- **10 CI workflows** — release automation, plugin smoke test, upstream watcher
-- **11 standalone hooks** — safety, observability, preservation, hygiene categories
-- **10 agents** — changelog-writer, link-checker, explorer with worktree isolation
+this repo is its own best example. [see what's running →](./docs/claude-code/this-repo.md)
+
+- **8 CI/CD pipelines** — official upstream watcher, competitive intelligence, community digest, docs audit, freshness checks, stale cleanup, dependabot auto-merge, release automation
+- **11 hooks** — safety, observability, preservation, hygiene
+- **10 agents** — exploration, analysis, code quality, documentation
+- **0 manual maintenance** — everything that doesn't require taste is automated
 
 ---
 
@@ -140,4 +146,4 @@ MIT
 
 ---
 
-<sub>built by [anipotts](https://anipotts.com/claude) from 500+ real claude code sessions</sub>
+<sub>built by [anipotts](https://anipotts.com) from 4,000+ claude code sessions · [setup guide →](./SETUP.md)</sub>
