@@ -7,7 +7,7 @@ body:
     attributes:
       label: Component
       description: Which file or component has the issue?
-      placeholder: e.g., "hooks/safety-guard.sh", "docs/guide.md section 11"
+      placeholder: e.g., "hooks/safety-guard.sh", "docs/claude-code/guide.md section 11"
     validations:
       required: true
   - type: textarea

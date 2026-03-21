@@ -246,7 +246,7 @@ fswatch -0 --exclude '.git' --include '\.(ts|js|py|rs)$' src/ | while IFS= read 
 done
 ```
 
-the Write tool is allowed but scoped to the proposals directory by the prompt. not bulletproof -- use `--dangerously-skip-permissions` only if you've also set up PreToolUse hooks to enforce the directory constraint. see the [hooks guide](./hooks-guide.md) for how.
+the Write tool is allowed but scoped to the proposals directory by the prompt. not bulletproof -- use `--dangerously-skip-permissions` only if you've also set up PreToolUse hooks to enforce the directory constraint. see the [hooks guide](../claude-code/hooks-reference.md) for how.
 
 ---
 

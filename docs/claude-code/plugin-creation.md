@@ -56,7 +56,7 @@ the `hooks` field uses the exact same format as your `settings.json`, with one k
 
 so `"command": "./hooks/my-hook.sh"` resolves to `<plugin-install-dir>/hooks/my-hook.sh`.
 
-you can use any hook event: `SessionStart`, `PreToolUse`, `PostToolUse`, `Stop`, `PreCompact`, etc. see the [hooks guide](./hooks-guide.md) for the full list.
+you can use any hook event: `SessionStart`, `PreToolUse`, `PostToolUse`, `Stop`, `PreCompact`, etc. see the [hooks guide](./hooks-reference.md) for the full list.
 
 ### hooks with matchers
 
@@ -190,7 +190,7 @@ COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id')
 ```
 
-every event includes `session_id`, `transcript_path`, `cwd`, `permission_mode`, and `hook_event_name`. each event type adds its own fields on top. see the [hooks guide](./hooks-guide.md) for per-event input schemas.
+every event includes `session_id`, `transcript_path`, `cwd`, `permission_mode`, and `hook_event_name`. each event type adds its own fields on top. see the [hooks guide](./hooks-reference.md) for per-event input schemas.
 
 ### exit codes
 
@@ -521,4 +521,4 @@ thats it. no noise, just signal.
 
 ---
 
-*For the full hooks reference, see [The Complete Claude Code Hooks Guide](./hooks-guide.md).*
+*For the full hooks reference, see [The Complete Claude Code Hooks Guide](./hooks-reference.md).*

@@ -76,7 +76,7 @@ jobs:
 
           rules:
           - be concise and helpful, lowercase voice, no fluff
-          - link to relevant docs if the question is covered (use relative paths like docs/guide.md)
+          - link to relevant docs if the question is covered (use relative paths like docs/claude-code/guide.md)
           - if it's a bug report, suggest diagnostic steps
           - if it's a feature request, note if it aligns with existing patterns
           - end with 'this is an automated response -- @anipotts will follow up'

@@ -207,4 +207,4 @@ this gets cached into every session and nudges the right behavior from the start
 
 ---
 
-*for deeper cost tracking, see the [mine plugin](../plugins/mine/). for model-switching patterns with subagents, see [subagent-patterns.md](./subagent-patterns.md). for the full cost overview in the guide, see [section 24](./guide.md#24-cost-optimization----real-numbers).*
+*for deeper cost tracking, see the [mine plugin](../plugins/mine/). for model-switching patterns with subagents, see [subagent-patterns.md](./subagent-patterns.md). for the full cost overview in the guide, see [section 24](../claude-code/guide.md#24-cost-optimization----real-numbers).*

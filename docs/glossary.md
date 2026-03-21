@@ -6,13 +6,13 @@ terms used across this repo and claude code docs.
 
 ---
 
-**agent** -- an autonomous prompt template that claude code runs as a subagent. agents can use tools, create files, and make decisions independently. defined in `.claude/agents/` as markdown files. see [subagent patterns](./subagent-patterns.md).
+**agent** -- an autonomous prompt template that claude code runs as a subagent. agents can use tools, create files, and make decisions independently. defined in `.claude/agents/` as markdown files. see [subagent patterns](./concepts/subagent-patterns.md).
 
 **agent team** -- multiple agents working together on a task. claude code manages coordination, passing context between agents. useful for parallel work like code review + testing + documentation in one go.
 
 **broadcast** -- plugin in this repo. sends async notifications (system alerts, slack, etc.) when claude code events fire. useful for long-running headless sessions.
 
-**CLAUDE.md** -- the project instruction file claude code reads at session start. lives at project root, `.claude/CLAUDE.md`, or `~/.claude/CLAUDE.md` (global). the single most important file for shaping behavior. see [guide](./guide.md#3-claudemd----your-projects-brain).
+**CLAUDE.md** -- the project instruction file claude code reads at session start. lives at project root, `.claude/CLAUDE.md`, or `~/.claude/CLAUDE.md` (global). the single most important file for shaping behavior. see [guide](./claude-code/guide.md#3-claudemd----your-projects-brain).
 
 **command** -- a user-defined slash command. defined as markdown files in `.claude/commands/`. invoked with `/commandname` in-session. simpler than skills -- just a prompt template.
 
@@ -28,13 +28,13 @@ terms used across this repo and claude code docs.
 
 **handoff** -- plugin in this repo. preserves conversation context before compaction or between sessions. writes structured summaries so the next session picks up where you left off.
 
-**hook** -- a script that runs in response to claude code events. hooks can observe (PostToolUse), modify (PreToolUse), or block (exit code 2) tool actions. configured in `settings.json`. see [hooks guide](./hooks-guide.md).
+**hook** -- a script that runs in response to claude code events. hooks can observe (PostToolUse), modify (PreToolUse), or block (exit code 2) tool actions. configured in `settings.json`. see [hooks guide](./claude-code/hooks-reference.md).
 
 **hook event** -- the trigger point for a hook. current events: PreToolUse, PostToolUse, PreCompact, Notification, Stop, SubagentStop, SessionStart, SessionEnd, UserPromptSubmit.
 
 **hotspots** -- mine plugin feature (formerly imprint). analyzes which files you edit most frequently via `/mine` and connects it to patterns from your other projects. fires on SessionStart.
 
-**MCP (model context protocol)** -- a standard for connecting AI models to external tools and data sources. MCP servers expose tools that claude code discovers at session start and calls like built-in tools. see [MCP servers](./mcp-servers.md).
+**MCP (model context protocol)** -- a standard for connecting AI models to external tools and data sources. MCP servers expose tools that claude code discovers at session start and calls like built-in tools. see [MCP servers](./claude-code/mcp-servers.md).
 
 **loops** -- mine plugin feature. detects repeated patterns in your workflow via `/mine` and surfaces them so you can automate or avoid them.
 
@@ -42,7 +42,7 @@ terms used across this repo and claude code docs.
 
 **panopticon** -- hook in this repo. logs all tool calls for audit and analysis. fires on PostToolUse.
 
-**plugin** -- a packaged collection of hooks, agents, skills, and commands distributed as a unit. installed via `claude plugin add`. defined by a `plugin.json` manifest. see [plugin creation](./plugin-creation.md).
+**plugin** -- a packaged collection of hooks, agents, skills, and commands distributed as a unit. installed via `claude plugin add`. defined by a `plugin.json` manifest. see [plugin creation](./claude-code/plugin-creation.md).
 
 **plugin.json** -- the manifest file for a plugin. defines metadata, hooks, agents, skills, and commands. must be valid JSON (no trailing commas).
 
@@ -62,7 +62,7 @@ terms used across this repo and claude code docs.
 
 **skill** -- a markdown template that defines a reusable prompt pattern. richer than commands -- skills can include frontmatter config, multi-step instructions, and conditional logic. defined in `.claude/skills/` as markdown files.
 
-**subagent** -- a claude code session spawned within another session to handle a subtask. subagents can run in parallel and use worktrees for code isolation. see [subagent patterns](./subagent-patterns.md).
+**subagent** -- a claude code session spawned within another session to handle a subtask. subagents can run in parallel and use worktrees for code isolation. see [subagent patterns](./concepts/subagent-patterns.md).
 
 **upstream watcher** -- this repo's github actions pipeline that monitors claude code releases, competitor changes, and community content, then auto-updates the docs and comparisons.
 
