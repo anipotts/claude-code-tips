@@ -1,0 +1,110 @@
+name: Stale Cleanup
+
+# ---------------------------------------------------------------
+# daily housekeeping cron.
+# keeps the repo tidy by closing stale auto/ PRs, pruning orphan
+# branches, and closing superseded freshness-check issues.
+#
+# what it does:
+#   1. closes PRs from auto/* branches older than 3 days
+#   2. deletes orphan auto/* remote branches with no open PR
+#   3. closes freshness-check issues older than 14 days
+#   4. prunes remote branches that are gone locally
+#
+# cost: $0 (pure shell, no claude API)
+# tested with: claude code v2.1.77
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # daily at 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: stale-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Close stale auto/ PRs (older than 3 days)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          CUTOFF=$(date -u -d '3 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          echo "closing auto/ PRs created before $CUTOFF"
+
+          gh pr list --state open --json number,headRefName,createdAt \
+            --jq '.[] | select(.headRefName | startswith("auto/")) | select(.createdAt < "'"$CUTOFF"'") | .number' \
+          | while read -r pr; do
+            echo "closing PR #$pr (stale auto/ branch)"
+            gh pr close "$pr" --comment "auto-closed: stale auto/ PR (>3 days old)" --delete-branch || true
+          done
+
+      - name: Delete orphan auto/* branches with no open PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          # get all remote auto/* branches
+          git branch -r --list 'origin/auto/*' | sed 's|origin/||' | while read -r branch; do
+            branch=$(echo "$branch" | xargs)  # trim whitespace
+            [ -z "$branch" ] && continue
+
+            # check if any open PR uses this branch
+            OPEN_PRS=$(gh pr list --head "$branch" --state open --json number --jq 'length')
+            if [ "$OPEN_PRS" = "0" ]; then
+              echo "deleting orphan branch: $branch"
+              git push origin --delete "$branch" || true
+            fi
+          done
+
+      - name: Close old freshness-check issues (>14 days)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          CUTOFF=$(date -u -d '14 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          echo "closing freshness-check issues created before $CUTOFF"
+
+          gh issue list --label "freshness-check" --state open \
+            --json number,createdAt \
+            --jq '.[] | select(.createdAt < "'"$CUTOFF"'") | .number' \
+          | while read -r issue; do
+            echo "closing issue #$issue (superseded freshness-check)"
+            gh issue close "$issue" --comment "auto-closed: superseded by newer freshness check" || true
+          done
+
+      - name: Prune gone remote branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          # prune remote tracking refs that no longer exist
+          git remote prune origin
+
+          # delete any local branches whose remote is gone
+          git branch -vv | grep ': gone]' | awk '{print $1}' | while read -r branch; do
+            [ -z "$branch" ] && continue
+            echo "would delete local branch: $branch (remote gone)"
+            # in CI there are no local branches to clean, but this
+            # handles the case if fetch-depth pulls tracking refs
+          done
+
+          echo "remote prune complete"
