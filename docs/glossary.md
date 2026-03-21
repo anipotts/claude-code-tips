@@ -69,3 +69,9 @@ terms used across this repo and claude code docs.
 **UserPromptSubmit** -- hook event that fires when the user submits a prompt. useful for prompt classification, routing, or pre-processing.
 
 **worktree** -- a git feature that creates a separate working directory sharing the same repo history. claude code uses worktrees to let subagents work on code without conflicting with the main session's working directory.
+
+
+**--bare** -- flag for `-p` scripted calls that skips hooks, LSP, plugin sync, and skill walks. requires `ANTHROPIC_API_KEY` or `apiKeyHelper` in settings. oauth and keychain auth disabled. useful for CI/CD and headless automation to minimize overhead and startup time.
+
+
+**--channels** -- permission relay flag that lets external channel servers forward tool approval prompts to your phone or external device. servers must declare the permission capability. useful for remote approval workflows.

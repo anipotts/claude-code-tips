@@ -12,6 +12,10 @@ curated external resources for claude code. these are genuinely useful -- not an
 - [anthropic blog](https://www.anthropic.com/blog) -- announcements, deep dives, and research
 - [claude code changelog](https://docs.anthropic.com/en/docs/claude-code/changelog) -- release notes and version history
 
+
+
+- [claude code changelog](https://docs.anthropic.com/en/docs/claude-code/changelog) -- release notes and version history (updated for v2.1.81 with --bare, --channels, and bug fixes)
+
 ## official SDKs
 
 - [claude-code-sdk-python](https://github.com/anthropics/claude-code-sdk-python) -- official Python SDK for building on claude code programmatically

@@ -62,6 +62,10 @@ spawn multiple Task calls at once and they run in parallel automatically:
 
 ---
 
+
+
+**v2.1.81 improvement:** resuming a session that was in a worktree now automatically switches back to that worktree. no need to manually re-enter the worktree directory.
+
 ## the /batch command
 
 if you dont need a coordinator agent orchestrating things, `/batch` is the simpler path. describe multiple independent tasks and claude runs them in parallel worktrees. you review the diffs.

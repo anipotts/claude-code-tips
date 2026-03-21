@@ -8,6 +8,20 @@ common problems and fixes. organized by feature area.
 
 ## general
 
+
+
+
+
+### voice mode audio drops or shows "check your network"
+- cause: WebSocket connection silently dropped by server, retry failures swallowed
+- fix: v2.1.81+ recovers automatically from connection drops and shows actual errors
+- workaround: switch to text mode if audio continues to fail
+
+### multiple sessions losing auth between token refreshes
+- cause: concurrent claude code sessions fighting over OAuth token refresh
+- fix: v2.1.81+ handles this automatically. upgrade if you're running older versions
+- workaround: stagger session starts by 30+ seconds
+
 ### "permission denied" when running hooks
 
 - cause: hook scripts aren't executable

@@ -58,6 +58,14 @@ the default model is sonnet. you can change it per-session with `/model` or glob
 
 ---
 
+
+
+**new in v2.1.81:** use `--bare` flag for scripted `-p` calls to skip hooks, LSP, plugin sync, and skill directory walks. requires `ANTHROPIC_API_KEY` or an `apiKeyHelper` via `--settings`. useful for CI/CD and headless automation where you want minimal overhead.
+
+```bash
+claude -p "your prompt" --bare --settings /path/to/settings.json
+```
+
 ### 3. CLAUDE.md -- your project's brain
 
 CLAUDE.md is the single most important file in your project for shaping claude's behavior. it persists across sessions. its more valuable than your README because claude actually reads it every time a session starts.
@@ -177,6 +185,10 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 > [settings docs](https://docs.anthropic.com/en/docs/claude-code/settings)
 
 ---
+
+
+
+**new in v2.1.81:** `--channels` permission relay allows channel servers to forward tool approval prompts to your phone or external device. declare the permission capability in your channel server config to enable.
 
 ### 6. your first real task
 
