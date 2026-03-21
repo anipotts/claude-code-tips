@@ -1,0 +1,127 @@
+name: Community Digest
+
+# ---------------------------------------------------------------
+# weekly community digest — creates a GitHub Issue summarizing
+# what's happening in the Claude Code community.
+#
+# sources: reddit, hacker news, trending github repos
+# output: single open issue (supersedes previous digests)
+#
+# cost: $0/run — no Claude API calls, just HTTP + formatting
+# tested with: claude code v2.1.77
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    # weekly: friday 14:00 UTC
+    - cron: '0 14 * * 5'
+  workflow_dispatch:       # manual trigger for testing
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: "community-digest"
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      # ---- setup ----
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests==2.32.3
+
+      # ---- collect community signals ----
+      - name: Collect community data
+        id: collect
+        run: python .github/scripts/collect_community.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- format and create issue ----
+      - name: Create digest issue
+        if: steps.collect.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+
+          # ensure label exists
+          gh label create "community-digest" \
+            --description "weekly community signal digest" \
+            --color "c5def5" 2>/dev/null || true
+
+          # build issue body from community_changes.json
+          BODY=$(python3 -c "
+          import json, sys
+
+          with open('/tmp/community_changes.json') as f:
+              changes = json.load(f)
+
+          reddit = [c for c in changes if c['type'] == 'reddit_post']
+          hn = [c for c in changes if c['type'] == 'hn_story']
+          trending = [c for c in changes if c['type'] == 'trending_repo']
+
+          lines = ['## community digest — $DATE', '']
+
+          if reddit:
+              lines.append('### reddit highlights')
+              for r in reddit:
+                  title = r['title']
+                  url = r['url']
+                  body = r.get('body', '')[:120].replace('\n', ' ').strip()
+                  desc = f' — {body}' if body else ''
+                  lines.append(f'- [{title}]({url}){desc}')
+              lines.append('')
+
+          if hn:
+              lines.append('### hacker news')
+              for h in hn:
+                  title = h['title']
+                  url = h['url']
+                  lines.append(f'- [{title}]({url})')
+              lines.append('')
+
+          if trending:
+              lines.append('### trending repos')
+              for t in trending:
+                  title = t['title']
+                  url = t['url']
+                  body = t.get('body', '')[:120].replace('\n', ' ').strip()
+                  desc = f' — {body}' if body else ''
+                  lines.append(f'- [{title}]({url}){desc}')
+              lines.append('')
+
+          lines.append('---')
+          lines.append('*auto-generated weekly digest. close if not useful.*')
+
+          print('\n'.join(lines))
+          ")
+
+          # close previous community-digest issues (superseded)
+          PREV_ISSUES=$(gh issue list \
+            --label "community-digest" \
+            --state open \
+            --json number \
+            --jq '.[].number')
+
+          for ISSUE_NUM in $PREV_ISSUES; do
+            gh issue close "$ISSUE_NUM" \
+              --comment "superseded by new weekly digest" 2>/dev/null || true
+          done
+
+          # create new issue
+          gh issue create \
+            --title "community digest — $DATE" \
+            --body "$BODY" \
+            --label "community-digest"
