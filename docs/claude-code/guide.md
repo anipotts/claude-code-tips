@@ -230,7 +230,7 @@ when compaction happens:
 - file contents claude read earlier are gone from context
 - the summary retains key decisions and progress
 
-you can manually trigger this with `/compact`. pair it with the [handoff plugin](../examples/plugins/handoff/) to preserve the full transcript before compression.
+you can manually trigger this with `/compact`. pair it with the [handoff plugin](../../examples/plugins/handoff/) to preserve the full transcript before compression.
 
 ---
 
@@ -326,7 +326,7 @@ When the user runs /ship, do the following:
 4. Push and create a PR with `gh pr create`
 ```
 
-skills are for multi-step workflows: [/ship](../.claude/commands/ship.md) (commit and PR), [/sweep](../.claude/commands/sweep.md) (dead code cleanup), [/quicktest](../.claude/commands/quicktest.md) (run the right test), [/mine](../.claude/commands/mine.md) (query your history), [/improve](../.claude/commands/improve.md) (evolve CLAUDE.md).
+skills are for multi-step workflows: [/ship](../../.claude/commands/ship.md) (commit and PR), [/sweep](../../.claude/commands/sweep.md) (dead code cleanup), [/quicktest](../../.claude/commands/quicktest.md) (run the right test), [/mine](../../.claude/commands/mine.md) (query your history), [/improve](../../.claude/commands/improve.md) (evolve CLAUDE.md).
 
 **agents** are autonomous workers with their own context window. they work independently, have their own model, and return results:
 
@@ -343,7 +343,7 @@ tools:
 ---
 ```
 
-run with `/agent code-sweeper scan this project`. agents are for specialized roles: [analyst](../.claude/agents/analyst.md) (data investigation), [explorer](../.claude/agents/explorer.md) (parallel worktree exploration), [test-writer](../.claude/agents/test-writer.md), [pr-narrator](../.claude/agents/pr-narrator.md).
+run with `/agent code-sweeper scan this project`. agents are for specialized roles: [analyst](../../.claude/agents/analyst.md) (data investigation), [explorer](../../.claude/agents/explorer.md) (parallel worktree exploration), [test-writer](../../.claude/agents/test-writer.md), [pr-narrator](../../.claude/agents/pr-narrator.md).
 
 **the decision:** if you find yourself typing the same 3-sentence prompt often, make it a command. if it needs tool restrictions or arguments, make it a skill. if it needs to work independently with its own context window and model, make it an agent.
 
@@ -390,7 +390,7 @@ fi
 exit 0
 ```
 
-see [hooks/safety-guard.sh](../hooks/safety-guard.sh) for a production version that blocks 6 categories of dangerous commands.
+see [hooks/safety-guard.sh](../../hooks/safety-guard.sh) for a production version that blocks 6 categories of dangerous commands.
 
 **PostToolUse for logging** (the panopticon pattern) -- log every tool call to a SQLite database. gives you a complete audit trail of everything claude did:
 
@@ -407,7 +407,7 @@ sqlite3 ~/.claude/panopticon.db "INSERT INTO actions (session_id, tool_name, too
 exit 0
 ```
 
-see [hooks/panopticon.sh](../hooks/panopticon.sh) for the full version.
+see [hooks/panopticon.sh](../../hooks/panopticon.sh) for the full version.
 
 **Stop hooks for quality gates** -- prevent claude from stopping until tests pass. critical: always check `stop_hook_active` to prevent infinite loops:
 
@@ -690,7 +690,7 @@ sqlite3 ~/.claude/mine.db "SELECT content_preview FROM messages_fts WHERE messag
 sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%.2f', SUM(estimated_cost_usd)) FROM session_costs GROUP BY project_name ORDER BY SUM(estimated_cost_usd) DESC;"
 ```
 
-**the `/mine` command** wraps these into intents: `/mine search <term>`, `/mine cost this month`, `/mine top tools`, `/mine hotspots`, `/mine mistakes`, `/mine loops`. see [mine.md](../.claude/commands/mine.md).
+**the `/mine` command** wraps these into intents: `/mine search <term>`, `/mine cost this month`, `/mine top tools`, `/mine hotspots`, `/mine mistakes`, `/mine loops`. see [mine.md](../../.claude/commands/mine.md).
 
 **the `analyst` agent** writes arbitrary SQL queries to investigate whatever you're curious about. it's the difference between canned reports and free-form investigation:
 
@@ -700,7 +700,7 @@ sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%.2f', SUM(estimated_c
 /agent analyst compare my sonnet vs haiku usage
 ```
 
-see [mine README](../plugins/mine/README.md) for install details and [analyst.md](../.claude/agents/analyst.md) for the agent definition.
+see [mine README](../../plugins/mine/README.md) for install details and [analyst.md](../../.claude/agents/analyst.md) for the agent definition.
 
 ---
 
@@ -804,7 +804,7 @@ the feedback loop: claude makes mistake -> git history captures it -> /improve d
 
 you can also do this manually. after any session where claude keeps getting something wrong, add a rule to CLAUDE.md. the patterns add up fast.
 
-see [improve.md](../.claude/commands/improve.md) for the full skill definition.
+see [improve.md](../../.claude/commands/improve.md) for the full skill definition.
 
 ---
 

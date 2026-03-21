@@ -288,7 +288,7 @@ native claude code worktrees (via `isolation: "worktree"`) clean up automaticall
 
 ### research approach A, B, C in parallel
 
-you need a caching layer but arent sure whether to use redis, lru-cache, or sqlite. the [explorer agent](../.claude/agents/explorer.md) in this repo does exactly this:
+you need a caching layer but arent sure whether to use redis, lru-cache, or sqlite. the [explorer agent](../../.claude/agents/explorer.md) in this repo does exactly this:
 
 ```
 /agent explorer try implementing the cache with redis, lru-cache, and better-sqlite3
@@ -320,4 +320,4 @@ the risk: different assumptions. mitigate by making the interface contract extre
 
 if any of these fail, use a single agent or sequential subagents instead.
 
-> [subagent patterns](../concepts/subagent-patterns.md) | [explorer agent](../../.claude/agents/explorer.md) | [hooks guide](./hooks-reference.md)
+> [subagent patterns](../concepts/subagent-patterns.md) | [explorer agent](../../.claude/agents/explorer.md) | [hooks reference](./hooks-reference.md)

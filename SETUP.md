@@ -41,9 +41,9 @@ run any agent with `/agents` in claude code.
 
 ## 4. explore the docs
 
-- beginner: [docs/guide.md](docs/guide.md) -- concepts, mental model, first steps
-- intermediate: [docs/hooks-reference.md](docs/hooks-reference.md) -- every hook explained with examples
-- advanced: [docs/subagent-patterns.md](docs/subagent-patterns.md) -- orchestrating multiple agents
+- beginner: [docs/guide.md](docs/claude-code/guide.md) -- concepts, mental model, first steps
+- intermediate: [docs/hooks-reference.md](docs/claude-code/hooks-reference.md) -- every hook explained with examples
+- advanced: [docs/subagent-patterns.md](docs/concepts/subagent-patterns.md) -- orchestrating multiple agents
 
 ## what NOT to do
 
