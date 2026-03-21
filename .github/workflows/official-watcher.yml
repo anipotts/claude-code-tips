@@ -1,0 +1,210 @@
+name: Official Watcher
+
+# ---------------------------------------------------------------
+# monitors official claude code sources (releases, changelog, docs)
+# and auto-applies updates to the repo.
+#
+# this is the tier-1 replacement split from upstream-watcher.yml.
+# handles ONLY official sources -- no community or competitor feeds.
+#
+# behavior:
+#   - collects official changes via collect_official.py
+#   - persists state so we don't re-process same changes
+#   - processes changes through Claude API (Haiku) for draft edits
+#   - minor updates (<=3 files): commits directly to main
+#   - larger updates (>3 files): creates a draft PR for review
+#   - rolls back direct commits if validation breaks
+#
+# cost: ~$0/mo GitHub Actions + ~$0.01-0.05/run Claude API
+# tested with: claude code v2.1.77
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    # twice daily: 06:00 UTC and 18:00 UTC
+    - cron: '0 6,18 * * *'
+  workflow_dispatch:       # manual trigger for testing
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: "official-watcher"
+  cancel-in-progress: false
+
+jobs:
+  watch-and-apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # ---- setup ----
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install anthropic==0.49.0 requests==2.32.3
+
+      # ---- collect official changes ----
+      - name: Collect official changes
+        id: collect
+        run: python .github/scripts/collect_official.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      # ---- persist state so we don't re-process same changes ----
+      - name: Persist state
+        run: |
+          git config user.name "official-watcher[bot]"
+          git config user.email "official-watcher[bot]@users.noreply.github.com"
+          git add .github/state/
+          git diff --cached --quiet && echo "no state changes" && exit 0
+          git commit -m "chore: update official watcher state"
+          git push origin main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- process through Haiku and apply edits ----
+      - name: Generate draft content
+        if: steps.collect.outputs.has_changes == 'true'
+        run: python .github/scripts/generate_draft.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      # ---- check what changed and route accordingly ----
+      - name: Check for modified files
+        id: changes
+        if: steps.collect.outputs.has_changes == 'true'
+        run: |
+          # stage only public-facing dirs (never content/, data/, handoffs/)
+          git add docs/ examples/ 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "no file changes after draft generation"
+            exit 0
+          fi
+
+          FILE_COUNT=$(git diff --cached --name-only | wc -l | tr -d ' ')
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          echo "file_count=$FILE_COUNT" >> "$GITHUB_OUTPUT"
+          echo "$FILE_COUNT file(s) modified"
+
+      # ---- minor changes (<=3 files): commit directly to main ----
+      - name: Direct commit to main
+        id: direct_commit
+        if: steps.changes.outputs.has_changes == 'true' && steps.changes.outputs.file_count <= 3
+        run: |
+          git config user.name "official-watcher[bot]"
+          git config user.email "official-watcher[bot]@users.noreply.github.com"
+
+          git commit -m "upstream: official updates $(date +%Y-%m-%d)"
+          COMMIT_SHA=$(git rev-parse HEAD)
+          echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+          git push origin main
+
+          echo "committed directly to main: $COMMIT_SHA"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- major changes (>3 files): create draft PR for review ----
+      - name: Create draft PR
+        id: create_pr
+        if: steps.changes.outputs.has_changes == 'true' && steps.changes.outputs.file_count > 3
+        run: |
+          BRANCH="auto/official-$(date +%Y%m%d-%H%M)"
+          git checkout -b "$BRANCH"
+
+          git config user.name "official-watcher[bot]"
+          git config user.email "official-watcher[bot]@users.noreply.github.com"
+
+          git commit -m "upstream: official updates $(date +%Y-%m-%d)"
+          git push -u origin "$BRANCH"
+
+          if ! PR_URL=$(gh pr create \
+            --title "upstream: official claude code updates $(date +%Y-%m-%d)" \
+            --body-file /tmp/pr-body.md \
+            --base main \
+            --draft 2>/tmp/pr-create-err.txt); then
+            echo "::error::PR creation failed: $(cat /tmp/pr-create-err.txt)"
+            exit 1
+          fi
+
+          if ! echo "$PR_URL" | grep -qE 'github\.com/.+/pull/[0-9]+$'; then
+            echo "::error::unexpected PR URL format: $PR_URL"
+            exit 1
+          fi
+
+          PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+          gh pr edit "$PR_NUMBER" --add-label "needs-review" 2>/dev/null || true
+
+          echo "draft PR created: $PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- notify ----
+      - name: Send notification
+        if: steps.direct_commit.outputs.committed == 'true' || steps.create_pr.outputs.pr_url
+        continue-on-error: true
+        run: python .github/scripts/notify.py
+        env:
+          PR_URL: ${{ steps.create_pr.outputs.pr_url || '' }}
+          PR_NUMBER: ${{ steps.create_pr.outputs.pr_number || '' }}
+          PR_TIER: "1"
+          COMMIT_SHA: ${{ steps.direct_commit.outputs.commit_sha || '' }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+          NOTIFY_PHONE_NUMBER: ${{ secrets.NOTIFY_PHONE_NUMBER }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+
+      # ---- rollback: if a direct commit breaks validation, create revert PR ----
+      - name: Rollback on failure
+        if: failure() && steps.direct_commit.outputs.committed == 'true'
+        run: |
+          COMMIT_SHA="${{ steps.direct_commit.outputs.commit_sha }}"
+          if [ -z "$COMMIT_SHA" ]; then
+            echo "no commit SHA to revert"
+            exit 0
+          fi
+
+          git fetch origin main
+          git checkout origin/main
+
+          REVERT_BRANCH="auto/revert-official-$(date +%Y%m%d-%H%M)"
+          git checkout -b "$REVERT_BRANCH"
+
+          git config user.name "official-watcher[bot]"
+          git config user.email "official-watcher[bot]@users.noreply.github.com"
+
+          git revert --no-edit "$COMMIT_SHA" || {
+            echo "revert failed -- manual intervention needed"
+            exit 1
+          }
+
+          git push -u origin "$REVERT_BRANCH"
+
+          if ! REVERT_URL=$(gh pr create \
+            --title "revert: official-watcher commit $(echo "$COMMIT_SHA" | head -c 7) (auto-rollback)" \
+            --body "auto-rollback of commit $COMMIT_SHA due to pipeline failure. review before merging." \
+            --base main 2>/tmp/revert-err.txt); then
+            echo "::error::revert PR creation failed: $(cat /tmp/revert-err.txt)"
+            exit 1
+          fi
+
+          echo "revert PR created: $REVERT_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
