@@ -71,7 +71,7 @@ playwright MCP is the move. it controls a real browser programmatically. no flak
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@anthropic-ai/mcp-playwright"]
+      "args": ["@playwright/mcp"]
     }
   }
 }
@@ -386,4 +386,4 @@ some MCP servers need credentials. put them in `.claude/settings.local.json` (gi
 
 ---
 
-*for MCP server development, see the [MCP specification](https://modelcontextprotocol.io/) and the [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk). for claude code's MCP integration, see the [official docs](https://docs.anthropic.com/en/docs/claude-code/overview).*
+*for MCP server development, see the [MCP specification](https://modelcontextprotocol.io/) and the [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk). for claude code's MCP integration, see the [official docs](https://code.claude.com/docs/en/overview).*

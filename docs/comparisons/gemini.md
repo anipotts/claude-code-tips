@@ -12,7 +12,7 @@
 |---------|------------|------------|
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | generous free tier (60 req/min, 1000 req/day) / $19.99 AI Pro / $249.99 AI Ultra |
 | model | opus 4.6, sonnet 4.6, haiku 4.5 | gemini 2.5 flash, gemini 3 pro (1M token context) |
-| context | 200K tokens (standard), managed window with compaction | up to 1M tokens |
+| context | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5), managed window with compaction | up to 1M tokens |
 | interface | terminal CLI, VS Code, JetBrains | terminal CLI |
 | extensibility | hooks, plugins, skills, agents, commands, MCP servers | MCP servers, GEMINI.md context files, extensions |
 | open source | yes ([anthropics/claude-code](https://github.com/anthropics/claude-code)) | yes, Apache 2.0 ([google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli)) |
@@ -50,7 +50,7 @@ claude code has VS Code and JetBrains extensions in addition to the terminal CLI
 
 ### 1M token context window
 
-gemini models support up to 1M tokens of context -- 5x claude's standard 200K window. for massive codebases where you need the model to see hundreds of files at once, this is a structural advantage. claude code manages context through compaction and selective file reading, which works well in practice, but gemini can just hold more raw context.
+gemini models support up to 1M tokens of context. opus 4.6 and sonnet 4.6 now also have 1M token context windows, so the gap has closed. haiku 4.5 still has 200K. claude code manages context through compaction and selective file reading, which works well in practice.
 
 ### google cloud integration
 
@@ -86,10 +86,10 @@ google AI Ultra at $249.99/mo is more expensive than claude code Max 20x at $200
 
 | tool | standard context | max context |
 |------|-----------------|-------------|
-| claude code | 200K tokens | 200K (compaction manages longer sessions) |
+| claude code | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5) | 1M (compaction manages longer sessions) |
 | gemini | 1M tokens | 1M tokens |
 
-in practice, claude code's compaction system means you can work in sessions longer than 200K tokens -- it summarizes and continues. but gemini's raw 1M window means less information loss from summarization.
+in practice, claude code's compaction system means you can work in sessions longer than 1M tokens -- it summarizes and continues. opus 4.6 and sonnet 4.6 now match gemini's 1M window, though haiku 4.5 is still at 200K.
 
 ---
 

@@ -67,7 +67,7 @@ WATCHED_REPOS = [
 ]
 
 # official docs -- monitor for structure changes (tier 1)
-OFFICIAL_DOCS_URL = "https://docs.anthropic.com/en/docs/claude-code/overview"
+OFFICIAL_DOCS_URL = "https://code.claude.com/docs/en/overview"
 
 USER_AGENT = "claude-code-tips-watcher/1.0 (github.com/anipotts/claude-code-tips)"
 
@@ -263,7 +263,7 @@ def check_changelog(state: dict) -> list[dict]:
     # primary: raw CHANGELOG.md from the repo (structured markdown)
     raw_url = "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md"
     # fallback: rendered docs page
-    docs_url = "https://docs.anthropic.com/en/docs/claude-code/changelog"
+    docs_url = "https://code.claude.com/docs/en/changelog"
 
     text = ""
     source_url = raw_url

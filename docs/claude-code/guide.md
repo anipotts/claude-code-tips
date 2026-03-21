@@ -33,6 +33,12 @@ you are the architect. claude is the implementer.
 ### 2. installing and first run
 
 ```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+or via npm:
+
+```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
@@ -54,7 +60,7 @@ first session tips:
 
 the default model is sonnet. you can change it per-session with `/model` or globally in settings.
 
-> [quickstart docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> [quickstart docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -114,19 +120,20 @@ guidelines:
 - put the most important stuff first -- context windows have attention gradients
 - be specific. "always run tests" is useless. "run `pnpm -F api test` before committing changes to packages/api/" is actionable
 
-> [memory docs](https://docs.anthropic.com/en/docs/claude-code/memory)
+> [memory docs](https://code.claude.com/docs/en/memory)
 
 ---
 
 ### 4. permissions -- the four modes
 
-claude code asks before doing anything risky. there are four permission modes and the one you pick determines how much friction you deal with:
+claude code asks before doing anything risky. there are five permission modes and the one you pick determines how much friction you deal with:
 
 | mode | what it does | when to use it |
 |---|---|---|
 | `default` | asks permission for file writes, bash commands, etc. | everyday work. the sane default |
 | `plan` | read-only. claude can read and search but cannot write or run commands | codebase exploration, architecture review |
 | `acceptEdits` | auto-approves file edits, still asks for bash commands | when you trust the edits but want to vet commands |
+| `dontAsk` | auto-approves tools matching your allowlist, asks for everything else | when you have a well-defined allowlist and want zero prompts for safe tools |
 | `bypassPermissions` | auto-approves everything | **never on shared machines or with untrusted code** |
 
 set the mode with `--permission-mode` or in settings. for most work, `default` is right.
@@ -149,7 +156,7 @@ the real power move is **allowlist patterns** -- auto-approve specific tools wit
 
 this auto-approves test/lint/git-read commands and all file reads while still prompting for writes and other bash commands. much better than `bypassPermissions` and eliminates the most annoying permission prompts.
 
-> [permissions docs](https://docs.anthropic.com/en/docs/claude-code/security)
+> [permissions docs](https://code.claude.com/docs/en/security)
 
 ---
 
@@ -174,7 +181,7 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 | `--verbose` | show tool inputs/outputs, hook activity, token counts |
 | `--permission-mode plan` | read-only mode |
 
-> [settings docs](https://docs.anthropic.com/en/docs/claude-code/settings)
+> [settings docs](https://code.claude.com/docs/en/settings)
 
 ---
 
@@ -257,7 +264,7 @@ the `/model` command switches models mid-conversation. this is one of the most u
 - sonnet for most actual coding work. its the workhorse
 - opus when you're stuck or designing something complex. save it for the 10% that actually needs it
 - prompt caching saves money -- long system prompts (CLAUDE.md, few-shot examples) that exceed 4,096 tokens get cached. subsequent turns read from cache at 90% discount
-- watch your token usage with `/sift cost this month` (requires the mine plugin)
+- watch your token usage with `/mine intent: cost this month` (requires the mine plugin)
 
 > [pricing docs](https://docs.anthropic.com/en/docs/about-claude/models)
 
@@ -289,7 +296,7 @@ claude code has a lot of extension points. this is the hierarchy from simplest t
 - if you want to share hooks with others, make it a plugin
 - if you need to connect to external services, use MCP
 
-> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> [official docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -358,7 +365,7 @@ hooks are shell scripts (or LLM prompts) that fire on claude code lifecycle even
 2. runs your logic
 3. returns via exit code: `0` = allow, `2` = block
 
-there are 17 hook events. here are the ones that matter most:
+there are 22 hook events. here are the ones that matter most:
 
 | event | fires when | killer use case |
 |---|---|---|
@@ -467,9 +474,9 @@ the `matcher` is a regex that filters which tool triggers the hook. `"Bash"` onl
 
 three handler types: `command` (shell script), `prompt` (LLM evaluation), `agent` (subagent with tools). command hooks are the most common and the fastest.
 
-see [hooks-reference.md](./hooks-reference.md) for the complete reference -- all 17 events, every input field, tested examples, and advanced patterns.
+see [hooks-reference.md](./hooks-reference.md) for the complete reference -- all 22 events, every input field, tested examples, and advanced patterns.
 
-> [hooks docs](https://docs.anthropic.com/en/docs/claude-code/hooks)
+> [hooks docs](https://code.claude.com/docs/en/hooks)
 
 ---
 
@@ -514,7 +521,7 @@ minimal `plugin.json`:
 
 see [plugin-creation.md](./plugin-creation.md) for the full walkthrough, the spec, and the 8 most common mistakes.
 
-> [plugins docs](https://docs.anthropic.com/en/docs/claude-code/plugins)
+> [plugins docs](https://code.claude.com/docs/en/plugins)
 
 ---
 
@@ -547,7 +554,7 @@ step 2: "sonnet, refactor these 4 specific files to use the new middleware"
 
 see [subagent-patterns.md](../concepts/subagent-patterns.md) for the full playbook with real examples and a decision flowchart.
 
-> [sub-agents docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
+> [sub-agents docs](https://code.claude.com/docs/en/sub-agents)
 
 ---
 
@@ -566,7 +573,7 @@ MCP (model context protocol) lets claude connect to external tools and data sour
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@anthropic-ai/mcp-playwright"]
+      "args": ["@playwright/mcp"]
     },
     "context7": {
       "command": "npx",
@@ -588,7 +595,7 @@ MCP (model context protocol) lets claude connect to external tools and data sour
 
 see [mcp-servers.md](./mcp-servers.md) for the deep dive on setup and building your own.
 
-> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> [official docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -637,7 +644,7 @@ breaking work into phases prevents claude from diving into implementation before
 
 **plan mode** (`--permission-mode plan` or toggle with `Shift+Tab`): claude reads and thinks but cannot modify anything. use this to explore a codebase, understand a bug, or design an approach before committing to changes.
 
-> [best practices docs](https://docs.anthropic.com/en/docs/claude-code/best-practices)
+> [best practices docs](https://code.claude.com/docs/en/best-practices)
 
 ---
 
@@ -917,7 +924,7 @@ you can also run `--print` mode in CI for automated security reviews, changelog 
     claude --print "review changes for security issues. output JSON: {issues: [{file, line, severity, description}]}" --output-format json > report.json
 ```
 
-> [github actions docs](https://docs.anthropic.com/en/docs/claude-code/github-actions)
+> [github actions docs](https://code.claude.com/docs/en/github-actions)
 
 ---
 
@@ -934,7 +941,7 @@ prompt caching gives you a 90% discount on input tokens for content that stays t
 **measuring your cache hit rate:**
 
 ```
-/sift cache efficiency
+/mine intent: cache efficiency
 ```
 
 this queries mine.db for cache read vs creation vs uncached tokens. above 60% is good, above 80% is excellent. below 40% means your system prompts aren't hitting the 4,096 token minimum.
@@ -959,12 +966,12 @@ after thousands of sessions, here's what actually moves the needle on costs:
 **other optimizations:**
 - prompt caching (see above) -- 90% discount on repeated content
 - `/compact` before context gets too long -- long conversations burn tokens on every turn
-- break large tasks into smaller sessions -- fresh context is cheaper than carrying 200K tokens
+- break large tasks into smaller sessions -- fresh context is cheaper than carrying a full context window
 - use `/model haiku` for quick lookups mid-session, then switch back
 - avoid subagents for simple tasks (each one has startup overhead)
 - use `--allowedTools` in headless mode to prevent unnecessary tool calls
 
-**tracking your spend:** `/ledger` for daily glance, `/sift cost this month` for the bill, `/agent analyst` for deep dives into where your tokens are going.
+**tracking your spend:** `/mine` for daily glance, `/mine intent: cost this month` for the bill, `/agent analyst` for deep dives into where your tokens are going.
 
 ---
 
@@ -982,7 +989,7 @@ WHERE project_name = 'my-project';
 
 mine's `startup.sh` hook detects when a project has moved (same name, different path) and links the new path to existing history. your sessions follow the project, not the directory.
 
-`/sift project my-project` queries across ALL paths the project has ever lived at.
+`/mine intent: project my-project` queries across ALL paths the project has ever lived at.
 
 ---
 
@@ -1107,10 +1114,10 @@ this guide draws from hands-on experience and community knowledge.
 - CLAUDE.md as a living document (section 3) -- tip #10
 - cron maintenance patterns (section 21) -- tip #12
 
-**claude code official docs** -- the hook events reference, permission modes, settings schema, and MCP server configuration are documented at [docs.anthropic.com/en/docs/claude-code](https://docs.anthropic.com/en/docs/claude-code/overview). the [hooks reference](https://docs.anthropic.com/en/docs/claude-code/hooks) was the primary source for section 11 and the [hooks-reference.md](./hooks-reference.md).
+**claude code official docs** -- the hook events reference, permission modes, settings schema, and MCP server configuration are documented at [docs.anthropic.com/en/docs/claude-code](https://code.claude.com/docs/en/overview). the [hooks reference](https://code.claude.com/docs/en/hooks) was the primary source for section 11 and the [hooks-reference.md](./hooks-reference.md).
 
 **anthropic blog** -- the [hooks customization post](https://claude.com/blog/how-to-configure-hooks) provided additional context on hook patterns and best practices.
 
 ---
 
-*this guide covers claude code as of february 2026. for the latest, check the [official docs](https://docs.anthropic.com/en/docs/claude-code/overview).*
+*this guide covers claude code as of february 2026. for the latest, check the [official docs](https://code.claude.com/docs/en/overview).*

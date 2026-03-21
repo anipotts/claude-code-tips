@@ -58,7 +58,7 @@ spawn multiple Task calls at once and they run in parallel automatically:
 {"prompt": "...", "description": "refactor notifications module", "isolation": "worktree"}
 ```
 
-> [official docs](https://docs.anthropic.com/en/docs/claude-code/overview)
+> [official docs](https://code.claude.com/docs/en/overview)
 
 ---
 
