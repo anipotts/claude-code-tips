@@ -28,7 +28,7 @@ hooks catch three categories of damage:
 | version-stamp | SessionEnd | updates "tested with" version stamps in changed files |
 | stale-branch | SessionStart | warns about local branches with deleted remotes |
 | notify | Notification | routes claude code alerts to macOS notifications |
-| knowledge-builder | [FILL -- hook type and one-line description] |
+| knowledge-builder | PostToolUse | builds a codebase knowledge graph from tool calls |
 
 <!-- [FILL: reorder this table by how often each hook fires for you. -->
 <!-- add a "fires/session" column with real numbers from panopticon data] -->
