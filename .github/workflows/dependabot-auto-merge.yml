@@ -1,0 +1,80 @@
+name: Dependabot Auto-Merge
+
+# ---------------------------------------------------------------
+# auto-merge dependabot PRs when CI passes.
+#
+# patch and minor bumps: approve + merge automatically.
+# major bumps: label "needs-review" so a human decides.
+#
+# cost: $0 (runs ~1 min on ubuntu-latest, well under free tier)
+# tested with: claude code v2.1.77
+# ---------------------------------------------------------------
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Detect version bump type
+        id: bump
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "title: $PR_TITLE"
+
+          # dependabot titles look like:
+          #   "bump foo from 1.2.3 to 2.0.0"
+          #   "bump the actions group with 2 updates"
+          if echo "$PR_TITLE" | grep -qiE 'bump .+ from [0-9]+\..+ to ([0-9]+)\.'; then
+            OLD_MAJOR=$(echo "$PR_TITLE" | grep -oiE 'from ([0-9]+)\.' | grep -oE '[0-9]+')
+            NEW_MAJOR=$(echo "$PR_TITLE" | grep -oiE 'to ([0-9]+)\.'   | grep -oE '[0-9]+')
+            if [ "$OLD_MAJOR" != "$NEW_MAJOR" ]; then
+              echo "type=major" >> "$GITHUB_OUTPUT"
+            else
+              echo "type=minor-or-patch" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            # grouped updates or unrecognized format — treat as minor
+            echo "type=minor-or-patch" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Label major bumps for review
+        if: steps.bump.outputs.type == 'major'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr edit "$PR_NUM" --add-label "needs-review" || \
+            gh label create "needs-review" --color "D93F0B" --description "major version bump — needs human review" && \
+            gh pr edit "$PR_NUM" --add-label "needs-review"
+          echo "Major version bump — labeled for review, skipping auto-merge."
+
+      - name: Wait for CI, approve, and merge
+        if: steps.bump.outputs.type == 'minor-or-patch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Waiting for CI checks on PR #${PR_NUM}..."
+          gh pr checks "$PR_NUM" --watch --fail-fast
+
+          echo "CI passed. Approving..."
+          gh pr review "$PR_NUM" --approve --body "Auto-approved: patch/minor dependabot bump, CI green."
+
+          echo "Merging..."
+          gh pr merge "$PR_NUM" \
+            --merge \
+            --delete-branch
+
+          echo "PR #${PR_NUM} merged."
