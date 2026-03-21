@@ -58,6 +58,10 @@ the default model is sonnet. you can change it per-session with `/model` or glob
 
 ---
 
+
+
+**version note:** claude code v2.1.81 adds IDE auto-connection settings. see `/settings` for `autoConnectIde` and `autoInstallIdeExtension` options.
+
 ### 3. CLAUDE.md -- your project's brain
 
 CLAUDE.md is the single most important file in your project for shaping claude's behavior. it persists across sessions. its more valuable than your README because claude actually reads it every time a session starts.
@@ -177,6 +181,10 @@ anything you can configure: permissions, hooks, model, theme, environment variab
 > [settings docs](https://docs.anthropic.com/en/docs/claude-code/settings)
 
 ---
+
+
+
+**new in v2.1.81:** `rate_limits` field shows current API usage. `autoConnectIde` and `autoInstallIdeExtension` control IDE integration behavior. see official docs for full settings reference.
 
 ### 6. your first real task
 

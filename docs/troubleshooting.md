@@ -8,6 +8,14 @@ common problems and fixes. organized by feature area.
 
 ## general
 
+
+
+### IDE connection issues
+
+- cause: `autoConnectIde` or `autoInstallIdeExtension` may conflict with existing IDE setup
+- fix: check `/settings` and disable auto-setup if you manage IDE config manually
+- for remote sessions: `allow_remote_sessions` is not a settings.json key (it's enforced via organization policy)
+
 ### "permission denied" when running hooks
 
 - cause: hook scripts aren't executable
