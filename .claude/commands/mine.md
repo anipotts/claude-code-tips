@@ -5,6 +5,9 @@ allowed-tools:
   - Bash
   - Read
   - AskUserQuestion
+  - CronCreate
+  - CronDelete
+  - CronList
 ---
 
 # /mine
@@ -349,6 +352,23 @@ ORDER BY repeats DESC LIMIT 10;
 ```
 
 Present as "tool call loops" and "error loops" — these surface where you or Claude are stuck.
+
+### WATCH ("watch", "monitor", "keep checking", "every N minutes", "scheduled", "cron")
+
+Set up a recurring dashboard refresh using CronCreate. Use AskUserQuestion to ask the interval:
+- "every 10 minutes" (default)
+- "every 30 minutes"
+- "every hour"
+- "stop watching" → use CronList to find the mine cron, then CronDelete to remove it
+
+When creating the cron, use CronCreate with:
+- name: "mine-watch"
+- the user's chosen interval
+- prompt: "/mine" (this re-runs the dashboard on schedule)
+
+Tell the user: "dashboard will refresh every X minutes. say `/mine stop watching` to cancel."
+
+If the user says "stop watching" or "stop monitoring", list crons with CronList, find the mine-watch cron, and delete it with CronDelete.
 
 ### FREEFORM (anything else)
 

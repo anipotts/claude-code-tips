@@ -13,6 +13,7 @@ model: claude-haiku-4-5
 tools:
   - Read
   - Glob
+  - LSP
   - Grep
   - Bash
 ```
