@@ -487,7 +487,7 @@ def parse_jsonl_file(args: tuple[str, bool]) -> dict[str, Any]:
     result["line_count"] = line_number
 
     # ---- Derive project_name from cwd or directory structure ----
-    # Prefer cwd basename (e.g., /Users/anipotts/Code/rudy -> "rudy")
+    # Prefer cwd basename (e.g., /home/user/projects/myapp -> "myapp")
     # Fall back to the encoded project dir name from ~/.claude/projects/
     if result["cwd"]:
         result["project_name"] = pathlib.Path(result["cwd"]).name
