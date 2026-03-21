@@ -24,6 +24,7 @@ description: what /mine can do
 | health | `/mine health` or `/mine stats` |
 | time filter | `/mine this week` or `/mine january` |
 | backfill | `/mine backfill` or `/mine refresh` |
+| watch | `/mine watch` or `/mine every 30 minutes` — scheduled dashboard |
 | freeform | `/mine anything else` — builds a query from your question |
 
 ## data

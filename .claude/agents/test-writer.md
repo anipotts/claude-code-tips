@@ -13,6 +13,7 @@ model: claude-sonnet-4-6
 tools:
   - Read
   - Glob
+  - LSP
   - Grep
   - Bash
   - Write
