@@ -5,6 +5,7 @@ description: usage stats, costs, search, tools
 allowed-tools:
   - Bash
   - Read
+  - AskUserQuestion
 ---
 
 <!-- PROMPT:START — keep in sync with .claude/commands/mine.md -->
@@ -41,7 +42,16 @@ else
 fi
 ```
 
-- If NO_DB: tell the user "no mine.db found — install the mine plugin or run `python3 scripts/mine.py` from the repo"
+- If NO_DB: run an interactive first-time setup:
+
+  1. Use AskUserQuestion to ask:
+     title: "no mine.db found — want to create it now?"
+     Select from:
+     - "yes, mine my sessions now" → find and run mine.py (search ./scripts/mine.py, ./plugins/mine/scripts/mine.py, then ~/.claude/plugins/*/mine/scripts/mine.py). Run it with --incremental. Show progress. When done, re-run the dashboard query and show results.
+     - "just show me how" → explain: `python3 scripts/mine.py` parses ~/.claude/projects/ JSONL logs into ~/.claude/mine.db. show the one-liner they need to run. mention --dry-run to preview first.
+     - "change db path" → use AskUserQuestion with a text input to ask for their preferred path. then explain how to set MINE_DB env var or use --db flag.
+
+  Keep it fast — the "yes" option should just work with no further questions.
 - If STALE: the backfill ran automatically. note it briefly ("backfilled X sessions") then proceed
 - If FRESH: proceed directly
 - Save FIRST, LATEST, TOTAL for the freshness line
