@@ -12,8 +12,6 @@ Claude Code toolkit: one installable plugin (mine), a reference library of hooks
 - `docs/claude-code/` -- Claude Code specific (guide, hooks-reference, plugin-creation, mcp-servers, cli-tools, agent-teams, troubleshooting)
 - `docs/comparisons/` -- competitor comparisons (cursor, codex, gemini, antigravity, pricing)
 - `docs/tips/` -- personal takes and opinionated workflow advice
-- `docs/notes/` -- living feed (community, changelog)
-- `docs/` root -- glossary, resources
 - `examples/` -- CLAUDE.md templates, demo plugins (handoff, broadcast)
 - `scripts/` -- mine.py (bulk parser), schema.sql, dashboard.py
 - `tests/` -- 125 tests for mine.py
