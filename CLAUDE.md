@@ -8,7 +8,12 @@ Claude Code toolkit: one installable plugin (mine), a reference library of hooks
 - `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge, replay-capture, knowledge-builder)
 - `.claude/agents/` -- agents (analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check, changelog-writer, link-checker)
 - `.claude/commands/` -- slash commands (mine, improve, ship, sweep, quicktest, stats, deps, replay)
-- `docs/` -- guide, hooks reference, plugin creation, subagent patterns, cli-tools, automation, mcp-servers, comparisons, troubleshooting, glossary, resources
+- `docs/concepts/` -- tool-agnostic content (subagent-patterns, automation, cost-optimization)
+- `docs/claude-code/` -- Claude Code specific (guide, hooks-reference, plugin-creation, mcp-servers, cli-tools, agent-teams, troubleshooting)
+- `docs/comparisons/` -- competitor comparisons (cursor, codex, gemini, antigravity, pricing)
+- `docs/tips/` -- personal takes and opinionated workflow advice
+- `docs/notes/` -- living feed (community, changelog)
+- `docs/` root -- glossary, resources
 - `examples/` -- CLAUDE.md templates, demo plugins (handoff, broadcast)
 - `scripts/` -- mine.py (bulk parser), schema.sql, dashboard.py
 - `tests/` -- 125 tests for mine.py
