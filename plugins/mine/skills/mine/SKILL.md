@@ -715,7 +715,9 @@ If the user says "stop watching" or "stop monitoring", list crons with CronList,
 
 ### FREEFORM (anything else)
 
-If the user's question doesn't match a known intent, construct a reasonable SQL query. The schema has: sessions, messages, tool_calls, subagents, errors, project_paths, model_pricing, daily_rollups, session_costs (view), project_costs (view), daily_costs (view), tool_usage (view), messages_fts (FTS5), user_session_costs (view), user_tool_calls (view), project_top_model (view).
+If the user's question doesn't match a known intent, construct a reasonable SELECT query (never INSERT, UPDATE, DELETE, or any write operation). If the request is not about Claude Code usage data, decline and suggest removing the /mine prefix — this skill only handles usage analytics.
+
+The schema has: sessions, messages, tool_calls, subagents, errors, project_paths, model_pricing, daily_rollups, session_costs (view), project_costs (view), daily_costs (view), tool_usage (view), messages_fts (FTS5), user_session_costs (view), user_tool_calls (view), project_top_model (view).
 
 ## Subscription plan awareness
 
