@@ -11,10 +11,13 @@ set -euo pipefail
 # =============================================================================
 
 THRESHOLD=8
-COUNTER_FILE="/tmp/.claude-commit-nudge-$$"
 
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
+
+# use session_id for the counter file — $$ changes per invocation since hooks are separate processes
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "default"')
+COUNTER_FILE="/tmp/.claude-commit-nudge-${SESSION_ID}"
 
 # only count Write and Edit
 if [[ "$TOOL_NAME" != "Write" && "$TOOL_NAME" != "Edit" ]]; then

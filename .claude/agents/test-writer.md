@@ -17,6 +17,7 @@ tools:
   - Grep
   - Bash
   - Write
+  - Edit
 ```
 
 ## System Prompt
