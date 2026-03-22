@@ -1,19 +1,10 @@
 {
   "name": "claude-code-tips",
-  "version": "0.2.0",
-  "description": "claude code plugins, hooks, agents, and resources. all tested",
+  "description": "Claude Code toolkit — mine plugin, hooks, agents, and docs. Install the mine plugin for session analytics: claude plugin install anipotts/claude-code-tips/mine",
   "author": {
     "name": "Ani Potts",
-    "email": "ani@anipotts.com"
+    "url": "https://github.com/anipotts"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/anipotts/claude-code-tips",
   "repository": "https://github.com/anipotts/claude-code-tips",
-  "keywords": [
-    "claude-code",
-    "claude-code-plugins",
-    "claude-code-tips",
-    "claude-code-hooks",
-    "mcp-server"
-  ]
+  "license": "MIT"
 }
