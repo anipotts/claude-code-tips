@@ -1,3 +1,4 @@
+<!-- tested with: claude code v2.1.81 -->
 ---
 name: mine
 description: Query your Claude Code usage history — costs, tokens, tools, projects, errors, search, and patterns. Use when the user asks about their usage, spending, session history, project costs, tool stats, cache efficiency, or wants to search past conversations. Also use for "how much have I spent", "what tools do I use", "show my projects", "find sessions about X", or any question about Claude Code usage data.

@@ -1,3 +1,4 @@
+-- tested with: claude code v2.1.81
 -- mine schema v2
 -- Claude Code conversation history mining database
 -- PRAGMA journal_mode=WAL set by mine.py at connection time

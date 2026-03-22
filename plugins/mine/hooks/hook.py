@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+# tested with: claude code v2.1.81
 """hook.py -- unified hook dispatcher for the mine plugin.
 
-Handles 7 of 8 hook events (PostToolUse stays in tool-log.sh for speed).
-Eliminates jq dependency — all JSON parsing via stdlib json module.
-All handlers use parameterized SQL queries — no string interpolation.
+Handles all hook events. No bash scripts, no jq dependency.
+All JSON parsing via stdlib json, all SQL via parameterized queries.
 """
 
 from __future__ import annotations
