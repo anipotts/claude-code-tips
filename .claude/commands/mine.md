@@ -1,6 +1,6 @@
 ---
 name: mine
-description: usage stats, costs, search, tools
+description: Query your Claude Code usage history — costs, tokens, tools, projects, errors, search, and patterns. Use when the user asks about their usage, spending, session history, project costs, tool stats, cache efficiency, or wants to search past conversations.
 allowed-tools:
   - Bash
   - Read
@@ -27,17 +27,16 @@ one command for everything in your usage data. just ask what you want to know in
 /mine top tools                → tool usage with "other" accounting
 /mine story claude-code-tips   → narrative history of a project's lifecycle
 /mine compare this week vs last → side-by-side delta comparison
+/mine hotspots                 → files you keep touching and reading
+/mine loops                    → where you got stuck (repeated edits, error loops)
+/mine models                   → model usage comparison
 /mine health                   → codebase size, git activity, tests
 /mine backfill                 → re-mine recent sessions into the database
 /mine watch                    → scheduled dashboard refresh
 ```
-
-<!-- PROMPT:START — keep in sync with plugins/mine/skills/mine/SKILL.md -->
 
 **IMPORTANT: Read the full instructions before executing.**
 
 Use the Read tool to read `plugins/mine/skills/mine/SKILL.md` from the repo root (or find it at the plugin install path via `find ~/.claude/plugins -path "*/mine/skills/mine/SKILL.md" 2>/dev/null | head -1`). That file contains all intent routing, SQL queries, formatting rules, and presentation guidelines for /mine.
 
 Follow those instructions completely to handle this /mine request. The user's intent comes from whatever they typed after `/mine`.
-
-<!-- PROMPT:END -->

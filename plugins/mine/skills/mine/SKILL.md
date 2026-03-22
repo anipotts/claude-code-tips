@@ -1,20 +1,8 @@
-<!-- tested with: claude code v2.1.77 -->
-<!-- CACHE NOTE: this entire skill prompt is static content. dynamic data
-     (query results, user preferences) arrives via conversation messages.
-     this maximizes prompt cache hit rate per Thariq's caching lessons. -->
 ---
 name: mine
-description: usage stats, costs, search, tools
-allowed-tools:
-  - Bash
-  - Read
-  - AskUserQuestion
-  - CronCreate
-  - CronDelete
-  - CronList
+description: Query your Claude Code usage history — costs, tokens, tools, projects, errors, search, and patterns. Use when the user asks about their usage, spending, session history, project costs, tool stats, cache efficiency, or wants to search past conversations. Also use for "how much have I spent", "what tools do I use", "show my projects", "find sessions about X", or any question about Claude Code usage data.
+tools: Bash, Read, AskUserQuestion, CronCreate, CronDelete, CronList
 ---
-
-<!-- PROMPT:START — keep in sync with .claude/commands/mine.md -->
 When the user runs /mine, interpret their intent and query ~/.claude/mine.db accordingly.
 
 ## Step 0: Check database exists and is fresh
@@ -61,6 +49,25 @@ fi
 - If STALE: the backfill ran automatically. note it briefly ("backfilled X sessions") then proceed
 - If FRESH: proceed directly
 - Save FIRST, LATEST, TOTAL for the freshness line
+
+## Step 0.5: Scope detection
+
+Determine the query scope — **project** (just this project) or **global** (all projects).
+
+Run this after Step 0:
+`````bash
+PROJECT=$(basename "$PWD")
+sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE project_name LIKE '%$PROJECT%' AND is_subagent = 0;" 2>/dev/null
+`````
+
+**Scope rules:**
+- If the user's prompt explicitly names a project (e.g., `/mine about rudy`, `/mine project fullstack`), scope to that project regardless of cwd
+- If the user says "global" or "all projects", scope globally
+- If the user says nothing about scope AND the cwd matches a project in mine.db, use **project** scope as default. Show in the freshness line: `scope: <project> (N sessions) · say "global" for all projects`
+- If the cwd doesn't match any project, default to **global** scope
+- For intents that are inherently global (PROJECTS, COMPARE projects, VALUE all-time), always use global scope regardless
+
+**How to apply scope:** When scope is "project", add `AND s.project_name LIKE '%<project>%'` to every WHERE clause in the intent's SQL. When scope is "global", use the queries as written (no project filter).
 
 ## Step 1: Intent routing
 
@@ -139,7 +146,9 @@ SQL
 
 Format as a compact dashboard:
 
-1. **Freshness line**: `data: <first_date> → <latest_date> (<N> sessions)`
+1. **Freshness line**: `data: <first_date> → <latest_date> (<N> sessions) · scope: <project|global>`
+   - If project scope, append: `say "global" for all projects`
+   - If global scope, append: `say "project" for just <cwd project>`
 2. **7-day summary table**: sessions | active time | API value | tokens (in/out) | cache hit rate
 3. **Top projects table**: project | sessions | API value | top model | % of 7d total
    - End with: `+N other projects ($X API value)` if there are more
@@ -148,7 +157,14 @@ Format as a compact dashboard:
 5. **Models table**: model | sessions | API value | avg output/session
 6. **Insight line**: "busiest day this week: [day] ([N] sessions). cache rate saved ~$X vs uncached. all-time API value: $Y."
 
-Then use AskUserQuestion: "want last 30 days? last 90 days? all time?" — if selected, re-run with adjusted date filter.
+Then use AskUserQuestion with options:
+- "last 30 days"
+- "last 90 days"
+- "all time"
+- if project scope: "switch to global"
+- if global scope: "switch to project (<name>)"
+
+If selected, re-run with adjusted date filter or scope.
 
 **Cache savings estimate**: compute from the summary data. `cache_savings = cache_read_tokens * (model_uncached_rate - model_cached_rate) / 1e6`. For opus 4.6: uncached $5/M, cached $0.50/M, so savings per M cache-read tokens = $4.50.
 

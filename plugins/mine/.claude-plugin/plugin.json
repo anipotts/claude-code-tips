@@ -1,12 +1,10 @@
 {
   "name": "mine",
-  "version": "1.0.0",
-  "description": "mines every claude code session into a local sqlite database. tracks costs, tools, errors, subagents, and enables full-text search across your history.",
+  "description": "Mines every Claude Code session into a local SQLite database. Query your usage history — costs, tokens, tools, projects, errors, and full-text search across all conversations.",
   "author": {
-    "name": "Ani Potts"
+    "name": "Ani Potts",
+    "url": "https://github.com/anipotts"
   },
-  "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/mine",
   "repository": "https://github.com/anipotts/claude-code-tips",
-  "license": "MIT",
-  "keywords": ["mining", "analytics", "sqlite", "history", "search", "costs", "sessions", "mistakes", "burn", "hotspots", "loops"]
+  "license": "MIT"
 }
