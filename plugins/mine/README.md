@@ -1,3 +1,4 @@
+<!-- tested with: claude code v2.1.81 -->
 # mine
 
 mines every claude code session into a local sqlite database. total recall for your dev work.
