@@ -44,16 +44,21 @@ target a specific base branch:
 ```
 When the user runs /ship, do the following:
 
-1. Run `git status` (no -uall flag) and `git diff --stat` to understand what changed
+1. Run `git status` (no -uall flag) and `git diff --stat` to understand what changed.
+   If there are no changes (nothing to commit, working tree clean), stop and tell the user there's nothing to ship.
 2. Run `git log --oneline -10` to see recent commit message style
-3. Stage changed files by name — prefer specific files over `git add .` to avoid accidentally committing secrets or build artifacts. Never stage .env files, credentials, or large binaries
-4. Write a concise commit message (1-2 lines) that explains WHY the change was made, matching the repo's existing commit message style. Use a HEREDOC for the message
-5. Push to the remote. If the branch doesn't have an upstream, use `git push -u origin HEAD`
-6. Create a PR using `gh pr create` with:
+3. Stage changed files by name — prefer specific files over `git add .` to avoid accidentally committing secrets or build artifacts. Never stage .env files, credentials, *.key, *.pem, or large binaries
+4. Write a concise commit message (1-2 lines) that explains WHY the change was made, matching the repo's existing commit message style. Use a HEREDOC for the message. End with:
+   Co-Authored-By: Claude <noreply@anthropic.com>
+5. Push to the remote. If the branch doesn't have an upstream, use `git push -u origin HEAD`.
+   If no remote is configured, stop and tell the user to add one (`git remote add origin <url>`).
+6. Before creating a PR, check if one already exists for this branch (`gh pr view HEAD 2>/dev/null`). If so, show its URL instead of creating a duplicate.
+   Create a PR using `gh pr create` with:
    - A short title (under 70 chars)
    - A body with: ## what changed, ## details (bullets), ## testing
    - If the user provided context about the changes, use it
-   - End the body with: 🤖 Generated with Claude Code
+   - End the body with: Generated with Claude Code
+   If `gh` is not installed, tell the user to install it (`brew install gh`) and authenticate (`gh auth login`).
 
 If any step fails, stop and explain what went wrong. Don't retry destructive operations.
 
