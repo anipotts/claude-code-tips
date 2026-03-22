@@ -3,22 +3,22 @@
     "SessionEnd": [
       {
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ingest.sh", "async": true }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py ingest", "async": true }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent.sh" }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py subagent" }
         ]
       }
     ],
     "PreCompact": [
       {
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/compact.sh" },
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/burn.sh" }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py compact" },
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py burn" }
         ]
       }
     ],
@@ -33,14 +33,14 @@
       {
         "matcher": "startup",
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/startup.sh" }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py startup" }
         ]
       }
     ],
     "PostToolUseFailure": [
       {
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/mistakes.sh" }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py mistakes" }
         ]
       }
     ]
