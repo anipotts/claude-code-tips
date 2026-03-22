@@ -33,7 +33,11 @@ one command for everything in your usage data. just ask what you want to know in
 ```
 
 <!-- PROMPT:START — keep in sync with plugins/mine/skills/mine/SKILL.md -->
-The content of this command is identical to plugins/mine/skills/mine/SKILL.md (lines 18 onwards, between the PROMPT:START and PROMPT:END markers). To avoid duplication in the repo, refer to that file as the source of truth. When the skill is loaded as a plugin, the SKILL.md is used directly. When invoked as a /mine command, this file is used — but the prompt content is the same.
 
-See plugins/mine/skills/mine/SKILL.md for the full prompt.
+**IMPORTANT: Read the full instructions before executing.**
+
+Use the Read tool to read `plugins/mine/skills/mine/SKILL.md` from the repo root (or find it at the plugin install path via `find ~/.claude/plugins -path "*/mine/skills/mine/SKILL.md" 2>/dev/null | head -1`). That file contains all intent routing, SQL queries, formatting rules, and presentation guidelines for /mine.
+
+Follow those instructions completely to handle this /mine request. The user's intent comes from whatever they typed after `/mine`.
+
 <!-- PROMPT:END -->
