@@ -109,20 +109,21 @@ SELECT 'TOOLS' s, tool_name, uses, sessions FROM (
   GROUP BY tc.tool_name
 ) WHERE rn <= 5;
 
-SELECT 'TOOLS_OTHER' s, COUNT(*) tools, SUM(uses) uses FROM (
-  SELECT tc.tool_name, COUNT(*) uses,
+SELECT 'TOOLS_OTHER' s, COUNT(*) tools, SUM(uses) uses, SUM(sessions) sessions FROM (
+  SELECT tc.tool_name, COUNT(*) uses, COUNT(DISTINCT tc.session_id) sessions,
     ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) rn
   FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
   WHERE tc.timestamp >= date('now', '-7 days') AND s.is_subagent = 0
   GROUP BY tc.tool_name
 ) WHERE rn > 5;
 
--- models (7d)
+-- models (7d, exclude synthetic/empty)
 SELECT 'MODELS' s, s.model, COUNT(*) sessions,
   ROUND(SUM(sc.estimated_cost_usd), 2) api_value,
   ROUND(AVG(s.total_output_tokens), 0) avg_output
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
 WHERE s.start_time >= date('now', '-7 days') AND s.is_subagent = 0
+  AND s.model IS NOT NULL AND s.model != '' AND s.model != '<synthetic>'
 GROUP BY s.model ORDER BY sessions DESC;
 
 -- busiest day insight (7d)
@@ -216,12 +217,21 @@ Show API inference value (not "cost") with plan ROI context.
 
 `````bash
 sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
--- by project (this month)
+-- by project (this month, top 10)
 SELECT 'PROJ' s, project_name, COUNT(*) sessions,
   ROUND(SUM(estimated_cost_usd), 2) api_value
 FROM session_costs
 WHERE start_time >= date('now', 'start of month') AND is_subagent = 0
-GROUP BY project_name ORDER BY api_value DESC;
+GROUP BY project_name ORDER BY api_value DESC LIMIT 10;
+
+-- project "other" count
+SELECT 'PROJ_OTHER' s, COUNT(*) projects, SUM(sessions) sessions, ROUND(SUM(api_value), 2) api_value FROM (
+  SELECT project_name, COUNT(*) sessions, SUM(estimated_cost_usd) api_value,
+    ROW_NUMBER() OVER (ORDER BY SUM(estimated_cost_usd) DESC) rn
+  FROM session_costs
+  WHERE start_time >= date('now', 'start of month') AND is_subagent = 0
+  GROUP BY project_name
+) WHERE rn > 10;
 
 -- by model (this month)
 SELECT 'MODEL' s, model, COUNT(*) sessions,
@@ -246,17 +256,26 @@ Include one-line ROI summary: `this month: $X API value → Yx Pro · Zx Max 5x 
 
 ### SEARCH ("search", "find", or any quoted term)
 
-```sql
+`````bash
+sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
 SELECT m.session_id, s.project_name, m.role, m.timestamp,
        snippet(messages_fts, 0, '>>>', '<<<', '...', 40) AS match
 FROM messages_fts
 JOIN messages m ON m.id = messages_fts.rowid
 JOIN sessions s ON m.session_id = s.id
-WHERE messages_fts MATCH '<term>'
+WHERE messages_fts MATCH '<term>' AND s.is_subagent = 0
 ORDER BY m.timestamp DESC LIMIT 20;
-```
 
-Show results with project context. Group by session when multiple hits in the same session.
+-- total matches for "other" accounting
+SELECT 'TOTAL' s, COUNT(*) total_matches
+FROM messages_fts
+JOIN messages m ON m.id = messages_fts.rowid
+JOIN sessions s ON m.session_id = s.id
+WHERE messages_fts MATCH '<term>' AND s.is_subagent = 0;
+SQL
+`````
+
+Escape single quotes in the search term by doubling them. Show results with project context. Group by session when multiple hits in the same session. If >20 matches, show: `+N more matches (use a narrower search or add a project filter)`.
 
 ### CACHE ("cache", "caching", "cache efficiency", "cache hit")
 
@@ -325,10 +344,20 @@ GROUP BY s.project_name ORDER BY api_value DESC LIMIT 15;
 
 -- total for percentage calculation
 SELECT 'TOTAL' s, ROUND(SUM(estimated_cost_usd), 2) total FROM session_costs WHERE is_subagent = 0;
+
+-- "other" projects not in top 15
+SELECT 'PROJ_OTHER' s, COUNT(*) projects, SUM(sessions) sessions, ROUND(SUM(api_value), 2) api_value FROM (
+  SELECT s.project_name, COUNT(*) sessions, SUM(sc.estimated_cost_usd) api_value,
+    ROW_NUMBER() OVER (ORDER BY SUM(sc.estimated_cost_usd) DESC) rn
+  FROM sessions s JOIN session_costs sc ON s.id = sc.id
+  WHERE s.project_name IS NOT NULL AND s.is_subagent = 0
+  GROUP BY s.project_name
+) WHERE rn > 15;
 SQL
 `````
 
 Show: project | sessions | API value | % of total | top model | cache rate | last active
+End with: `+N other projects ($X API value, Y% of total)` if more exist.
 
 Add insight: "your most expensive project is [X] at Y% of total API value. highest cache rate: [Z] at W%."
 
@@ -343,10 +372,14 @@ FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
 WHERE tc.timestamp >= date('now', '-30 days') AND s.is_subagent = 0
 GROUP BY tc.tool_name ORDER BY uses DESC;
 
--- total for "other" calculation
-SELECT 'TOTAL' s, COUNT(*) total_uses, COUNT(DISTINCT tool_name) total_tools
-FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
-WHERE tc.timestamp >= date('now', '-30 days') AND s.is_subagent = 0;
+-- "other" tools beyond top 10
+SELECT 'OTHER' s, COUNT(*) tools, SUM(uses) uses, SUM(sessions) sessions FROM (
+  SELECT tc.tool_name, COUNT(*) uses, COUNT(DISTINCT tc.session_id) sessions,
+    ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) rn
+  FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
+  WHERE tc.timestamp >= date('now', '-30 days') AND s.is_subagent = 0
+  GROUP BY tc.tool_name
+) WHERE rn > 10;
 SQL
 `````
 
@@ -356,7 +389,8 @@ Add insight: "you use [tool] X.Xx more per session than average. your Read-to-Wr
 
 ### MODELS ("models", "model usage", "compare models")
 
-```sql
+`````bash
+sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
 SELECT model, COUNT(*) AS sessions,
        SUM(total_output_tokens) AS output_tok,
        ROUND(SUM(sc.estimated_cost_usd), 2) AS api_value,
@@ -364,8 +398,10 @@ SELECT model, COUNT(*) AS sessions,
        ROUND(AVG(duration_active_seconds), 0) AS avg_active_secs
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
 WHERE s.start_time >= date('now', '-30 days') AND s.is_subagent = 0
+  AND s.model IS NOT NULL AND s.model != '' AND s.model != '<synthetic>'
 GROUP BY model ORDER BY sessions DESC;
-```
+SQL
+`````
 
 ### WASTED ("wasted", "failures", "expensive failures", "mistakes")
 
@@ -411,36 +447,61 @@ Show three sections:
 2. **Most expensive sessions**: top 5 by API value regardless of errors
 3. **Worst error ratio**: highest errors-per-1K-tokens in last 30 days
 
+If the errors table is empty (mine.py may not have extracted errors yet), say so clearly: "no error data available — the errors table is empty. error extraction may not be enabled in your mine.py version. the most expensive sessions section still works since it uses token/cost data only."
+
 Add narrative: "your most expensive session was on [date] in [project] ($X). [first prompt snippet]."
 
 ### WORKFLOWS ("workflows", "patterns", "tool chains")
 
-```sql
+`````bash
+sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
+-- top 15 tool transitions
 WITH ordered AS (
-  SELECT session_id, tool_name,
-         LAG(tool_name) OVER (PARTITION BY session_id ORDER BY timestamp, id) AS prev
+  SELECT tc.session_id, tc.tool_name,
+         LAG(tc.tool_name) OVER (PARTITION BY tc.session_id ORDER BY tc.timestamp, tc.id) AS prev
   FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
   WHERE tc.timestamp >= date('now', '-7 days') AND s.is_subagent = 0
 )
-SELECT prev || ' → ' || tool_name AS flow, COUNT(*) AS n
+SELECT 'FLOW' s, prev || ' → ' || tool_name AS flow, COUNT(*) AS n
 FROM ordered WHERE prev IS NOT NULL
 GROUP BY prev, tool_name ORDER BY n DESC LIMIT 15;
-```
+
+-- total transitions for "other" accounting
+WITH ordered AS (
+  SELECT tc.session_id, tc.tool_name,
+         LAG(tc.tool_name) OVER (PARTITION BY tc.session_id ORDER BY tc.timestamp, tc.id) AS prev
+  FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
+  WHERE tc.timestamp >= date('now', '-7 days') AND s.is_subagent = 0
+)
+SELECT 'TOTAL' s, COUNT(DISTINCT prev || ' → ' || tool_name) total_patterns, COUNT(*) total_transitions
+FROM ordered WHERE prev IS NOT NULL;
+SQL
+`````
+
+Show top 15 transitions, then: `+N more patterns (X total transitions)`. Add insight: identify the most common self-loop (Read → Read, Edit → Edit) and the dominant workflow pattern (e.g., "your most common flow is Read → Edit → Read — classic review-fix-verify").
 
 ### PROJECT-SPECIFIC ("project X", "about X", specific project name)
 
-```sql
-SELECT project_dir, session_count, first_seen, last_seen
+`````bash
+sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
+SELECT 'PATHS' s, project_dir, session_count, first_seen, last_seen
 FROM project_paths WHERE project_name LIKE '%<name>%';
 
-SELECT s.start_time, s.model,
+SELECT 'SESSIONS' s, s.start_time, s.model,
        s.total_input_tokens + s.total_output_tokens AS tokens,
        ROUND(sc.estimated_cost_usd, 2) AS api_value,
        SUBSTR(s.first_user_prompt, 1, 80) AS prompt
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
 WHERE s.project_name LIKE '%<name>%' AND s.is_subagent = 0
 ORDER BY s.start_time DESC LIMIT 20;
-```
+
+SELECT 'TOTAL' s, COUNT(*) total_sessions, ROUND(SUM(sc.estimated_cost_usd), 2) total_value
+FROM sessions s JOIN session_costs sc ON s.id = sc.id
+WHERE s.project_name LIKE '%<name>%' AND s.is_subagent = 0;
+SQL
+`````
+
+If showing 20 sessions out of more, add: `showing 20 most recent of N total sessions ($X total API value)`.
 
 ### STORY ("story", "history of", "tell me about project")
 
@@ -481,6 +542,24 @@ SELECT 'ERRORS' s, e.tool_name, SUBSTR(e.error_message, 1, 80) error, COUNT(*) o
 FROM errors e JOIN sessions s ON e.session_id = s.id
 WHERE s.project_name LIKE '%<name>%' AND s.is_subagent = 0
 GROUP BY e.tool_name, e.error_message ORDER BY occurrences DESC LIMIT 5;
+
+-- tools "other" accounting
+SELECT 'TOOLS_OTHER' s, COUNT(*) tools, SUM(uses) uses FROM (
+  SELECT tc.tool_name, COUNT(*) uses,
+    ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) rn
+  FROM tool_calls tc JOIN sessions s ON tc.session_id = s.id
+  WHERE s.project_name LIKE '%<name>%' AND s.is_subagent = 0
+  GROUP BY tc.tool_name
+) WHERE rn > 10;
+
+-- errors "other" accounting
+SELECT 'ERRORS_OTHER' s, COUNT(*) patterns, SUM(occurrences) total FROM (
+  SELECT e.tool_name, SUBSTR(e.error_message, 1, 80) error, COUNT(*) occurrences,
+    ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) rn
+  FROM errors e JOIN sessions s ON e.session_id = s.id
+  WHERE s.project_name LIKE '%<name>%' AND s.is_subagent = 0
+  GROUP BY e.tool_name, e.error_message
+) WHERE rn > 5;
 
 -- peak activity days
 SELECT 'PEAK' s, SUBSTR(s.start_time, 1, 10) day, COUNT(*) sessions,
