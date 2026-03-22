@@ -32,6 +32,8 @@ scope to a directory:
 ```
 When the user runs /stats, generate a project health dashboard.
 
+If the user provides a directory argument (e.g., `/stats lib/`), scope all `find` commands to that directory instead of `.`.
+
 ## Codebase size
 
 Run these via Bash:

@@ -21,6 +21,9 @@ description: what /mine can do
 | hotspots | `/mine hotspots` or `/mine most edited files` |
 | loops | `/mine loops` or `/mine where am i stuck` |
 | workflows | `/mine tool chains` |
+| compare | `/mine compare this week vs last week` or `/mine project-a vs project-b` |
+| project detail | `/mine project myapp` or `/mine about myapp` |
+| story | `/mine story of myapp` or `/mine history of myapp` |
 | health | `/mine health` or `/mine stats` |
 | time filter | `/mine this week` or `/mine january` |
 | backfill | `/mine backfill` or `/mine refresh` |
