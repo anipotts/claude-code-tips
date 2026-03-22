@@ -41,16 +41,11 @@ use `/mine hotspots` for most-edited files, `/mine loops` for repeated patterns.
 ## install
 
 ```bash
-claude plugin add anipotts/claude-code-tips --plugin mine
+claude plugin marketplace add anipotts/claude-code-tips
+claude plugin install mine@claude-code-tips
 ```
 
-or manually copy the plugin directory and add to `.claude/settings.json`.
-
-after installing, make the hooks executable:
-
-```bash
-chmod +x plugins/mine/hooks/*.sh
-```
+that's it. the marketplace command registers this repo as a plugin source (one-time), then install pulls the mine plugin. hooks are auto-registered — no manual chmod needed.
 
 ## config
 

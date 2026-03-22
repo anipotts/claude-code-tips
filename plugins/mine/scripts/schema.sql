@@ -257,6 +257,36 @@ LEFT JOIN matched_pricing mp ON s.id = mp.session_id AND mp.rn = 1;
 -- CONVENIENCE VIEWS
 -- ============================================================
 
+-- user session costs (excludes subagents — the most common query pattern)
+-- use this instead of "sessions s JOIN session_costs sc ... WHERE is_subagent = 0"
+DROP VIEW IF EXISTS user_session_costs;
+CREATE VIEW IF NOT EXISTS user_session_costs AS
+SELECT
+    sc.id,
+    sc.project_name,
+    sc.model,
+    sc.start_time,
+    sc.total_input_tokens,
+    sc.total_output_tokens,
+    sc.total_cache_creation_tokens,
+    sc.total_cache_read_tokens,
+    sc.estimated_cost_usd,
+    s.duration_wall_seconds,
+    s.duration_active_seconds,
+    s.message_count,
+    s.user_message_count,
+    s.tool_use_count,
+    s.compaction_count,
+    s.first_user_prompt,
+    s.git_branch,
+    s.cwd,
+    s.version,
+    s.permission_mode
+FROM session_costs sc
+JOIN sessions s ON sc.id = s.id
+WHERE sc.is_subagent = 0
+  AND sc.model IS NOT NULL AND sc.model != '' AND sc.model != '<synthetic>';
+
 -- project-level cost summary (most useful view for dashboards)
 DROP VIEW IF EXISTS project_costs;
 CREATE VIEW IF NOT EXISTS project_costs AS
