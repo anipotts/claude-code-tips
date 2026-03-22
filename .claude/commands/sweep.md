@@ -52,10 +52,17 @@ dry run — just report, don't fix:
 ```
 When the user runs /sweep, do the following:
 
+## Phase 0: Parse arguments
+
+- If `--dry-run` is present, run Phase 1 and Phase 2 only — skip Phase 3 (no fixes applied)
+- If a directory path is given (e.g., `/sweep lib/`), scope all Glob searches to that directory only
+- If a filter is given (e.g., `imports only`), only check that category in Phase 1
+
 ## Phase 1: Scan
 
 1. Use Glob to find all source files (*.ts, *.tsx, *.js, *.jsx, *.py, *.rs — match the project's language)
 2. Skip node_modules, dist, build, .git, and generated directories
+3. If more than 500 source files match, warn the user and ask if they want to scope to a specific directory
 3. For each file, check for:
    - **Unused imports**: imported names that don't appear elsewhere in the file
    - **Dead code**: commented-out code blocks (3+ consecutive commented lines), unreachable code after returns
@@ -66,6 +73,8 @@ When the user runs /sweep, do the following:
 4. For each finding, classify confidence:
    - **SAFE**: unused imports, commented-out code blocks — can be removed without behavior change
    - **REVIEW**: TODOs, empty catches, dead exports — might be intentional
+
+If no issues are found in Phase 1, say "all clean — no dead code or unused imports found" and stop (skip Phase 2-4).
 
 ## Phase 2: Report
 
