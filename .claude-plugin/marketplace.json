@@ -4,19 +4,16 @@
     "name": "Ani Potts"
   },
   "metadata": {
-    "description": "claude code toolkit — mine plugin, hooks, agents, and docs. everything tested.",
+    "description": "Claude Code toolkit — mine plugin, hooks, agents, and docs.",
     "version": "0.3.0"
   },
   "plugins": [
     {
       "name": "mine",
       "source": "./plugins/mine",
-      "description": "mines every claude code session into a local sqlite database. tracks costs, tools, errors, subagents, and enables full-text search across your history.",
-      "version": "1.0.0",
+      "description": "Mines every Claude Code session into a local SQLite database. Query your usage history — costs, tokens, tools, projects, errors, and full-text search across all conversations.",
       "author": { "name": "Ani Potts" },
-      "homepage": "https://github.com/anipotts/claude-code-tips/tree/main/plugins/mine",
       "license": "MIT",
-      "keywords": ["mining", "analytics", "sqlite", "sessions", "costs", "search", "mistakes", "burn", "hotspots", "loops"],
       "category": "analytics"
     }
   ]
