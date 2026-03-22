@@ -17,15 +17,7 @@
     "PreCompact": [
       {
         "hooks": [
-          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py compact" },
-          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py burn" }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/tool-log.sh" }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hook.py precompact" }
         ]
       }
     ],

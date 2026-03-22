@@ -308,6 +308,12 @@ def handle_compact(payload: dict, config: dict) -> None:
     log(f"[mine] compact: incremented compaction_count for {session_id}")
 
 
+def handle_precompact(payload: dict, config: dict) -> None:
+    """PreCompact: run both compact + burn in a single invocation."""
+    handle_compact(payload, config)
+    handle_burn(payload, config)
+
+
 def handle_startup(payload: dict, config: dict) -> None:
     """SessionStart: migration, freshness check, backfill, move detect, search."""
     # one-time migration: miner -> mine
@@ -413,12 +419,13 @@ def handle_startup(payload: dict, config: dict) -> None:
 # ---------------------------------------------------------------------------
 
 HANDLERS: dict[str, tuple[str | None, callable]] = {
-    "ingest":   ("ingest",   handle_ingest),
-    "subagent": ("ingest",   handle_subagent),    # shares ingest toggle
-    "mistakes": ("mistakes", handle_mistakes),
-    "burn":     ("burn",     handle_burn),
-    "compact":  ("compact",  handle_compact),
-    "startup":  (None,       handle_startup),      # manages its own toggles
+    "ingest":     ("ingest",   handle_ingest),
+    "subagent":   ("ingest",   handle_subagent),    # shares ingest toggle
+    "mistakes":   ("mistakes", handle_mistakes),
+    "burn":       ("burn",     handle_burn),
+    "compact":    ("compact",  handle_compact),
+    "precompact": (None,       handle_precompact),  # runs compact + burn together
+    "startup":    (None,       handle_startup),      # manages its own toggles
 }
 
 
