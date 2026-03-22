@@ -2,7 +2,7 @@
 
 here's what claude code actually costs me per month.
 
-most cost discussions online are vibes. "it's expensive" or "it's worth it" without numbers. here are mine.
+most cost discussions online are deadass just vibes. "it's expensive" or "it's worth it" without numbers. here are mine.
 
 ## the numbers
 

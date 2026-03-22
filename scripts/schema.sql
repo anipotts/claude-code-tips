@@ -1,4 +1,4 @@
--- mine schema v1
+-- mine schema v2
 -- Claude Code conversation history mining database
 -- PRAGMA journal_mode=WAL set by mine.py at connection time
 
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS meta (
     key TEXT PRIMARY KEY,
     value TEXT
 );
-INSERT OR IGNORE INTO meta (key, value) VALUES ('schema_version', '1');
+INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', '2');
 INSERT OR IGNORE INTO meta (key, value) VALUES ('created_at', datetime('now'));
 
 -- ============================================================
@@ -181,10 +181,58 @@ CREATE TRIGGER IF NOT EXISTS messages_au AFTER UPDATE ON messages BEGIN
 END;
 
 -- ============================================================
+-- MODEL PRICING: historical per-model pricing for accurate cost calculation
+-- ============================================================
+CREATE TABLE IF NOT EXISTS model_pricing (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    model_pattern TEXT NOT NULL,
+    input_per_mtok REAL NOT NULL,
+    output_per_mtok REAL NOT NULL,
+    cache_read_per_mtok REAL NOT NULL,
+    cache_write_per_mtok REAL NOT NULL,
+    effective_from TEXT NOT NULL,
+    effective_to TEXT,
+    source TEXT,
+    UNIQUE(model_pattern, effective_from)
+);
+
+-- seed pricing data (idempotent via INSERT OR IGNORE)
+INSERT OR IGNORE INTO model_pricing (model_pattern, input_per_mtok, output_per_mtok, cache_read_per_mtok, cache_write_per_mtok, effective_from, source) VALUES
+    ('claude-opus-4-6%', 5.00, 25.00, 0.50, 6.25, '2024-01-01', 'anthropic.com/pricing 2025-05'),
+    ('claude-opus-4-5%', 5.00, 25.00, 0.50, 6.25, '2025-02-01', 'anthropic.com/pricing 2025-02'),
+    ('claude-opus-4-1%', 15.00, 75.00, 1.50, 18.75, '2025-01-01', 'anthropic.com/pricing 2025-01'),
+    ('claude-opus-4-0%', 15.00, 75.00, 1.50, 18.75, '2025-01-01', 'anthropic.com/pricing 2025-01'),
+    ('claude-sonnet-4-6%', 3.00, 15.00, 0.30, 3.75, '2024-01-01', 'anthropic.com/pricing 2025-05'),
+    ('claude-sonnet-4-5%', 3.00, 15.00, 0.30, 3.75, '2025-06-01', 'anthropic.com/pricing 2025-06'),
+    ('claude-sonnet-4-1%', 3.00, 15.00, 0.30, 3.75, '2025-04-01', 'anthropic.com/pricing 2025-04'),
+    ('claude-sonnet-4-0%', 3.00, 15.00, 0.30, 3.75, '2025-01-01', 'anthropic.com/pricing 2025-01'),
+    ('claude-3-7-sonnet%', 3.00, 15.00, 0.30, 3.75, '2025-01-01', 'anthropic.com/pricing 2025-01'),
+    ('claude-3-5-sonnet%', 3.00, 15.00, 0.30, 3.75, '2024-06-01', 'anthropic.com/pricing 2024-06'),
+    ('claude-haiku-4-5%', 1.00, 5.00, 0.10, 1.25, '2025-10-01', 'anthropic.com/pricing 2025-10'),
+    ('claude-3-5-haiku%', 0.80, 4.00, 0.08, 1.00, '2024-10-01', 'anthropic.com/pricing 2024-10'),
+    ('claude-3-haiku%', 0.25, 1.25, 0.03, 0.30, '2024-03-01', 'anthropic.com/pricing 2024-03');
+
+-- ============================================================
 -- COSTS VIEW: auto-computed USD per session
 -- ============================================================
 DROP VIEW IF EXISTS session_costs;
 CREATE VIEW IF NOT EXISTS session_costs AS
+WITH matched_pricing AS (
+    SELECT
+        s.id AS session_id,
+        mp.input_per_mtok,
+        mp.output_per_mtok,
+        mp.cache_read_per_mtok,
+        mp.cache_write_per_mtok,
+        ROW_NUMBER() OVER (
+            PARTITION BY s.id
+            ORDER BY mp.effective_from DESC
+        ) AS rn
+    FROM sessions s
+    JOIN model_pricing mp ON s.model LIKE mp.model_pattern
+        AND mp.effective_from <= COALESCE(s.start_time, '9999-12-31')
+        AND (mp.effective_to IS NULL OR mp.effective_to > COALESCE(s.start_time, '0000-01-01'))
+)
 SELECT
     s.id,
     s.is_subagent,
@@ -195,43 +243,15 @@ SELECT
     s.total_output_tokens,
     s.total_cache_creation_tokens,
     s.total_cache_read_tokens,
-    -- total_input_tokens is already the non-cached portion (API's input_tokens field)
-    -- so no subtraction needed — just price each bucket separately
-    -- model names include version suffixes (e.g. claude-opus-4-5-20251101) so use LIKE
-    CASE
-        -- opus 4.5+ ($5/$25 per MTok, cache read $0.50, cache write $6.25)
-        WHEN s.model LIKE 'claude-opus-4-5%' OR s.model LIKE 'claude-opus-4-6%' THEN
-            COALESCE(s.total_input_tokens, 0) * 5.0 / 1e6
-            + COALESCE(s.total_cache_read_tokens, 0) * 0.50 / 1e6
-            + COALESCE(s.total_cache_creation_tokens, 0) * 6.25 / 1e6
-            + COALESCE(s.total_output_tokens, 0) * 25.0 / 1e6
-        -- opus 4.0/4.1 ($15/$75 per MTok, cache read $1.50, cache write $18.75)
-        WHEN s.model LIKE 'claude-opus-4%' THEN
-            COALESCE(s.total_input_tokens, 0) * 15.0 / 1e6
-            + COALESCE(s.total_cache_read_tokens, 0) * 1.5 / 1e6
-            + COALESCE(s.total_cache_creation_tokens, 0) * 18.75 / 1e6
-            + COALESCE(s.total_output_tokens, 0) * 75.0 / 1e6
-        -- sonnet 4.x / 3.7 / 3.5 ($3/$15 per MTok, cache read $0.30, cache write $3.75)
-        WHEN s.model LIKE 'claude-sonnet-4-%' OR s.model LIKE 'claude-3-7-sonnet%' OR s.model LIKE 'claude-3-5-sonnet%' THEN
-            COALESCE(s.total_input_tokens, 0) * 3.0 / 1e6
-            + COALESCE(s.total_cache_read_tokens, 0) * 0.30 / 1e6
-            + COALESCE(s.total_cache_creation_tokens, 0) * 3.75 / 1e6
-            + COALESCE(s.total_output_tokens, 0) * 15.0 / 1e6
-        -- haiku 4.5 ($1/$5 per MTok, cache read $0.10, cache write $1.25)
-        WHEN s.model LIKE 'claude-haiku-4%' THEN
-            COALESCE(s.total_input_tokens, 0) * 1.0 / 1e6
-            + COALESCE(s.total_cache_read_tokens, 0) * 0.10 / 1e6
-            + COALESCE(s.total_cache_creation_tokens, 0) * 1.25 / 1e6
-            + COALESCE(s.total_output_tokens, 0) * 5.0 / 1e6
-        -- haiku 3.5 ($0.80/$4 per MTok)
-        WHEN s.model LIKE 'claude-3-5-haiku%' OR s.model LIKE 'claude-3-haiku%' THEN
-            COALESCE(s.total_input_tokens, 0) * 0.80 / 1e6
-            + COALESCE(s.total_cache_read_tokens, 0) * 0.08 / 1e6
-            + COALESCE(s.total_cache_creation_tokens, 0) * 1.0 / 1e6
-            + COALESCE(s.total_output_tokens, 0) * 4.0 / 1e6
-        ELSE 0
-    END AS estimated_cost_usd
-FROM sessions s;
+    COALESCE(
+        COALESCE(s.total_input_tokens, 0) * COALESCE(mp.input_per_mtok, 0) / 1e6
+        + COALESCE(s.total_cache_read_tokens, 0) * COALESCE(mp.cache_read_per_mtok, 0) / 1e6
+        + COALESCE(s.total_cache_creation_tokens, 0) * COALESCE(mp.cache_write_per_mtok, 0) / 1e6
+        + COALESCE(s.total_output_tokens, 0) * COALESCE(mp.output_per_mtok, 0) / 1e6,
+        0
+    ) AS estimated_cost_usd
+FROM sessions s
+LEFT JOIN matched_pricing mp ON s.id = mp.session_id AND mp.rn = 1;
 
 -- ============================================================
 -- CONVENIENCE VIEWS
@@ -286,6 +306,28 @@ WHERE s.is_subagent = 0
 GROUP BY tc.tool_name;
 
 -- ============================================================
+-- DAILY ROLLUPS: pre-computed aggregates for fast dashboard queries
+-- ============================================================
+CREATE TABLE IF NOT EXISTS daily_rollups (
+    date TEXT NOT NULL,
+    project_name TEXT NOT NULL DEFAULT '',
+    model TEXT NOT NULL DEFAULT '',
+    sessions INTEGER DEFAULT 0,
+    main_sessions INTEGER DEFAULT 0,
+    subagent_sessions INTEGER DEFAULT 0,
+    input_tokens INTEGER DEFAULT 0,
+    output_tokens INTEGER DEFAULT 0,
+    cache_read_tokens INTEGER DEFAULT 0,
+    cache_creation_tokens INTEGER DEFAULT 0,
+    tool_calls INTEGER DEFAULT 0,
+    errors INTEGER DEFAULT 0,
+    active_seconds INTEGER DEFAULT 0,
+    estimated_cost_usd REAL DEFAULT 0,
+    computed_at TEXT DEFAULT (datetime('now')),
+    PRIMARY KEY (date, project_name, model)
+);
+
+-- ============================================================
 -- INDEXES
 -- ============================================================
 CREATE INDEX IF NOT EXISTS idx_sessions_project ON sessions(project_name);
@@ -303,3 +345,4 @@ CREATE INDEX IF NOT EXISTS idx_errors_session ON errors(session_id);
 CREATE INDEX IF NOT EXISTS idx_subagents_parent ON subagents(parent_session_id);
 CREATE INDEX IF NOT EXISTS idx_parse_log_session ON parse_log(session_id);
 CREATE INDEX IF NOT EXISTS idx_project_paths_name ON project_paths(project_name);
+CREATE INDEX IF NOT EXISTS idx_model_pricing_pattern ON model_pricing(model_pattern, effective_from);

@@ -100,7 +100,7 @@ jobs:
           git remote prune origin
 
           # delete any local branches whose remote is gone
-          git branch -vv | grep ': gone]' | awk '{print $1}' | while read -r branch; do
+          git branch -vv | { grep ': gone]' || true; } | awk '{print $1}' | while read -r branch; do
             [ -z "$branch" ] && continue
             echo "would delete local branch: $branch (remote gone)"
             # in CI there are no local branches to clean, but this
