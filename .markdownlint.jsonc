@@ -6,6 +6,9 @@
 {
   // --- disabled: inappropriate for prompt-heavy content ---
 
+  // heading style -- skills use ATX (###) for deep nesting, setext only supports h1/h2
+  "MD003": false,
+
   // line length -- long command examples, SQL queries, URLs
   "MD013": false,
 
