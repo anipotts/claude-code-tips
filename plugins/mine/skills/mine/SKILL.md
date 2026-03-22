@@ -10,10 +10,9 @@ When the user runs /mine, interpret their intent and query ~/.claude/mine.db acc
 Run this FIRST as a single Bash call:
 
 `````bash
-# dependency check
+# dependency check (only python3 and sqlite3 — no jq needed)
 MISSING=""
 command -v sqlite3 >/dev/null 2>&1 || MISSING="$MISSING sqlite3"
-command -v jq >/dev/null 2>&1 || MISSING="$MISSING jq"
 command -v python3 >/dev/null 2>&1 || MISSING="$MISSING python3"
 if [ -n "$MISSING" ]; then
   echo "MISSING_DEPS|$MISSING"
@@ -48,7 +47,6 @@ fi
 
 - If MISSING_DEPS: tell the user which tools are missing and how to install them:
   - `sqlite3`: ships with macOS. on linux: `sudo apt install sqlite3`
-  - `jq`: `brew install jq` or `sudo apt install jq`
   - `python3`: `brew install python3` or check python.org
   Don't proceed until dependencies are resolved.
 
