@@ -44,12 +44,20 @@ def is_enabled(config: dict, feature: str) -> bool:
     return config.get(feature, True) is not False
 
 
-def db_connect() -> sqlite3.Connection | None:
+def db_connect(apply_schema: bool = False) -> sqlite3.Connection | None:
     """Connect to mine.db with WAL mode and 5s timeout. None if DB missing."""
     if not DB_PATH.exists():
         return None
     conn = sqlite3.connect(str(DB_PATH), timeout=5)
     conn.execute("PRAGMA journal_mode=WAL")
+    # apply schema updates (creates missing views) on startup
+    if apply_schema:
+        schema_file = SCRIPTS_DIR / "schema.sql"
+        if schema_file.exists():
+            try:
+                conn.executescript(schema_file.read_text())
+            except sqlite3.Error:
+                pass  # non-fatal — views may already exist
     return conn
 
 
@@ -328,7 +336,7 @@ def handle_startup(payload: dict, config: dict) -> None:
             old_ignore.rename(CLAUDE_DIR / ".mineignore")
         print("[mine] migrated miner.db -> mine.db")
 
-    conn = db_connect()
+    conn = db_connect(apply_schema=True)
     if not conn:
         return
 
