@@ -25,8 +25,8 @@ set -euo pipefail
 # Read the hook payload from stdin
 INPUT=$(cat)
 
-# Extract the command string from the tool input
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
+# Extract the command string from the tool input (printf avoids echo interpreting flags)
+COMMAND=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // ""')
 
 # If no command found, allow (not a Bash call we care about)
 if [ -z "$COMMAND" ]; then
@@ -43,27 +43,24 @@ block() {
 # git push --force to main/master
 # Catches: --force, -f, --force-with-lease targeting main or master
 # ---------------------------------------------------------------------------
-if echo "$COMMAND" | grep -qiE 'git\s+push\s+.*(-f|--force)' ; then
-  if echo "$COMMAND" | grep -qiE '\b(main|master)\b'; then
+if printf '%s' "$COMMAND" | grep -qiE 'git\s+push\s+.*(-f|--force)' ; then
+  if printf '%s' "$COMMAND" | grep -qiE '\b(main|master)\b'; then
     block "Force push to main/master is not allowed. Use a feature branch."
   fi
 fi
 
 # ---------------------------------------------------------------------------
 # rm -rf / or rm -rf ~ (catastrophic filesystem deletion)
+# No trailing $ anchor — catches `rm -rf / && ...` and `rm -rf / foo` too
 # ---------------------------------------------------------------------------
-if echo "$COMMAND" | grep -qiE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+(/|~|\$HOME)\s*$'; then
+if printf '%s' "$COMMAND" | grep -qiE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r)\s+(/|~|\$HOME)(\s|;|&|\||$)'; then
   block "Recursive force delete on root or home directory is not allowed."
-fi
-
-if echo "$COMMAND" | grep -qiE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+/\s*$'; then
-  block "rm -rf / is not allowed."
 fi
 
 # ---------------------------------------------------------------------------
 # git reset --hard on main/master
 # ---------------------------------------------------------------------------
-if echo "$COMMAND" | grep -qiE 'git\s+reset\s+--hard'; then
+if printf '%s' "$COMMAND" | grep -qiE 'git\s+reset\s+--hard'; then
   CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
   if [[ "$CURRENT_BRANCH" == "main" || "$CURRENT_BRANCH" == "master" ]]; then
     block "git reset --hard on $CURRENT_BRANCH is not allowed. Checkout a feature branch first."
@@ -74,21 +71,21 @@ fi
 # DROP TABLE / DROP DATABASE (SQL destruction)
 # Catches these in any context: inline sqlite3, psql, mysql, etc.
 # ---------------------------------------------------------------------------
-if echo "$COMMAND" | grep -qiE 'DROP\s+(TABLE|DATABASE)'; then
+if printf '%s' "$COMMAND" | grep -qiE 'DROP\s+(TABLE|DATABASE)'; then
   block "DROP TABLE / DROP DATABASE detected. Remove this from the command if intentional."
 fi
 
 # ---------------------------------------------------------------------------
 # chmod 777 on sensitive paths
 # ---------------------------------------------------------------------------
-if echo "$COMMAND" | grep -qiE 'chmod\s+777\s+(/|~|\$HOME|/etc|/usr)'; then
+if printf '%s' "$COMMAND" | grep -qiE 'chmod\s+777\s+(/|~|\$HOME|/etc|/usr)'; then
   block "chmod 777 on sensitive paths is not allowed."
 fi
 
 # ---------------------------------------------------------------------------
 # curl/wget piped to sh/bash (remote code execution)
 # ---------------------------------------------------------------------------
-if echo "$COMMAND" | grep -qiE '(curl|wget)\s+.*\|\s*(sudo\s+)?(bash|sh|zsh)'; then
+if printf '%s' "$COMMAND" | grep -qiE '(curl|wget)\s+.*\|\s*(sudo\s+)?(bash|sh|zsh)'; then
   block "Piping remote content to a shell is not allowed. Download first, review, then execute."
 fi
 

@@ -12,3 +12,4 @@ node_modules/
 __pycache__/
 *.egg-info/
 .env
+CLAUDE.local.md

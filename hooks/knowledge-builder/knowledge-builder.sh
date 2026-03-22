@@ -104,8 +104,14 @@ add_file() {
     local file_type
     file_type=$(classify_file "$rel_path")
     # Insert before "## relationships" line
-    sed -i'' -e "/^## relationships$/i\\
+    # cross-platform sed -i: macOS needs '', GNU needs no arg
+    if [[ "$(uname)" == "Darwin" ]]; then
+      sed -i '' "/^## relationships$/i\\
 | ${rel_path} | ${file_type} | ${TIMESTAMP} |" "$KNOWLEDGE_FILE"
+    else
+      sed -i "/^## relationships$/i\\
+| ${rel_path} | ${file_type} | ${TIMESTAMP} |" "$KNOWLEDGE_FILE"
+    fi
   fi
 }
 

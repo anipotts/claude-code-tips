@@ -31,7 +31,12 @@ fi
 # update stamps
 while IFS= read -r file; do
   if [ -f "$file" ] && grep -q 'tested with: claude code v' "$file"; then
-    sed -i '' "s/tested with: claude code v[0-9][0-9.]*[0-9]/tested with: claude code v${CC_VERSION}/" "$file"
+    # cross-platform sed -i: macOS needs '', GNU needs no arg
+    if [[ "$(uname)" == "Darwin" ]]; then
+      sed -i '' "s/tested with: claude code v[0-9][0-9.]*[0-9]/tested with: claude code v${CC_VERSION}/" "$file"
+    else
+      sed -i "s/tested with: claude code v[0-9][0-9.]*[0-9]/tested with: claude code v${CC_VERSION}/" "$file"
+    fi
   fi
 done <<< "$TARGETS"
 

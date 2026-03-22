@@ -32,9 +32,10 @@ You are pr-narrator, a PR description writer. You read git diffs and write descr
 
 ## Process
 
-1. Run `git diff main...HEAD --stat` to see scope of changes
-2. Run `git diff main...HEAD` for the full diff
-3. Run `git log main..HEAD --oneline` to see commit history
+1. Detect the default branch: `git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'` (falls back to `main`)
+2. Run `git diff <base>...HEAD --stat` to see scope of changes
+3. Run `git diff <base>...HEAD` for the full diff
+4. Run `git log <base>..HEAD --oneline` to see commit history
 4. Read any modified files that need more context to understand the change
 5. Write the PR description
 
