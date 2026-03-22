@@ -1,42 +1,26 @@
-<!-- tested with: claude code v2.1.77 -->
-
 # mine
 
 mines every claude code session into a local sqlite database. total recall for your dev work.
 
 ## what it does
 
-mine runs 7 hooks across the claude code session lifecycle, building a searchable history of everything you do. the database lives at `~/.claude/mine.db` and uses the schema from `scripts/schema.sql`.
+mine runs 5 hooks across the claude code session lifecycle via a single python dispatcher (`hook.py`), building a searchable history of everything you do. the database lives at `~/.claude/mine.db`.
 
-three hooks surface that history back to you, plus two query intents available via `/mine`:
+### hooks
 
-### search (solution recall)
-
-fires on SessionStart. queries your past sessions for this project and surfaces recent prompts and context so claude knows what you were working on. no more re-explaining.
-
-### mistakes (error memory)
-
-fires on PostToolUseFailure. records every tool failure and warns when the same tool has failed before in this project. prevents claude from repeating the same mistake.
-
-### burn (cost anomaly detection)
-
-fires on PreCompact. compares current session token usage against your project average and warns if this session is burning significantly more than usual.
-
-### query intents
-
-use `/mine hotspots` for most-edited files, `/mine loops` for repeated patterns. these are query intents handled by the `/mine` skill, not hooks.
-
-## all hooks
-
-| hook | event | behavior |
+| event | handler | behavior |
 |---|---|---|
-| `ingest.sh` | SessionEnd (async) | parses session + subagent transcripts into mine.db |
-| `subagent.sh` | SubagentStop | parses a single subagent transcript on completion |
-| `compact.sh` | PreCompact | increments compaction_count for the session |
-| `tool-log.sh` | PostToolUse | logs every tool call (<100ms, fires on every tool) |
-| `startup.sh` | SessionStart | project move detection + search (2-in-1) |
-| `mistakes.sh` | PostToolUseFailure | error memory + pattern surfacing |
-| `burn.sh` | PreCompact | cost anomaly detection |
+| SessionEnd | `ingest` | parses session + subagent transcripts into mine.db (async) |
+| SubagentStop | `subagent` | parses a single subagent transcript on completion |
+| PreCompact | `precompact` | increments compaction_count + cost anomaly warning if >2x average |
+| SessionStart | `startup` | project move detection, solution recall, auto-backfill |
+| PostToolUseFailure | `mistakes` | records errors, surfaces past similar failures to prevent repeats |
+
+all hooks are handled by `hooks/hook.py` — one file, zero bash scripts, zero jq dependency.
+
+### query skill
+
+`/mine` gives you 18+ query intents: dashboard, cost, value, search, cache, projects, tools, models, mistakes, hotspots, loops, workflows, story, compare, and more. just ask in plain language.
 
 ## install
 
@@ -45,7 +29,10 @@ claude plugin marketplace add anipotts/claude-code-tips
 claude plugin install mine@claude-code-tips
 ```
 
-that's it. the marketplace command registers this repo as a plugin source (one-time), then install pulls the mine plugin. hooks are auto-registered — no manual chmod needed.
+## requirements
+
+- `python3` — for transcript parsing and hook handlers (stdlib only, no pip packages)
+- `sqlite3` — for `/mine` skill queries (ships with macOS and most linux)
 
 ## config
 
@@ -58,86 +45,31 @@ create `~/.claude/mine.json` to toggle individual features:
   "mistakes": true,
   "burn": true,
   "move_detect": true,
-  "tool_log": true,
-  "compact": true
+  "compact": true,
+  "auto_backfill": true
 }
 ```
 
 all features default to enabled. set any to `false` to disable.
 
-## requirements
-
-- `jq` -- for parsing hook payloads (standard on most systems)
-- `sqlite3` -- for database operations (ships with macOS and most linux)
-- `python3` -- for `scripts/mine.py` transcript parsing (ingest + subagent hooks only)
-
 ## database
 
-the database lives at `~/.claude/mine.db`. schema is defined in `scripts/schema.sql`.
-
-### quick stats
-
-```bash
-python3 scripts/mine.py --stats
-```
-
-shows sessions, messages, tool calls, tokens, cost breakdown by model and project, cache efficiency.
-
-### cost tracking
-
-mine tracks all token usage per session: input, output, cache creation, and cache read. the `session_costs` view auto-computes USD estimates at API pricing (opus 4.5+ $5/$25, sonnet $3/$15, haiku 4.5 $1/$5 per 1M tokens, with cache discounts). older opus 4.0/4.1 sessions use the legacy $15/$75 rates.
-
-this tells you what your usage _would_ cost at API rates — useful for understanding the value of a Max subscription or tracking actual API spend.
-
-convenience views:
+schema: `scripts/schema.sql`. key views:
 
 | view | what it does |
 |---|---|
-| `session_costs` | per-session cost estimate with token breakdown |
+| `user_session_costs` | per-session cost (user sessions only, no subagents) |
+| `user_tool_calls` | tool calls with project context (user sessions only) |
+| `project_top_model` | most-used model per project |
 | `project_costs` | per-project cost, session count, date range |
-| `daily_costs` | per-day cost and token totals (for trends) |
-| `tool_usage` | tool frequency, sessions used in, avg per session |
+| `daily_costs` | per-day cost and token totals |
 
 ```bash
-# total lifetime cost
-sqlite3 ~/.claude/mine.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM session_costs;"
+# quick stats
+python3 scripts/mine.py --stats
 
-# cost by project
-sqlite3 ~/.claude/mine.db "SELECT project_name, printf('\$%,.2f', estimated_cost_usd) AS cost FROM project_costs ORDER BY estimated_cost_usd DESC LIMIT 10;"
-
-# daily spend this week
-sqlite3 ~/.claude/mine.db "SELECT date, printf('\$%,.2f', estimated_cost_usd) AS cost FROM daily_costs WHERE date >= date('now', '-7 days');"
-
-# cache efficiency
-sqlite3 ~/.claude/mine.db "SELECT printf('%.1f%%', SUM(cache_read_tokens) * 100.0 / SUM(input_tokens + cache_creation_tokens + cache_read_tokens)) AS hit_rate FROM project_costs;"
-```
-
-### how costs are calculated
-
-the API reports four token buckets per request:
-
-| bucket | what it is | opus price |
-|---|---|---|
-| `input_tokens` | non-cached input | $5/1M (opus 4.5+) |
-| `cache_read_input_tokens` | context re-read from cache | $0.50/1M (90% off) |
-| `cache_creation_input_tokens` | new context written to cache | $6.25/1M (25% premium) |
-| `output_tokens` | claude's response | $25/1M (opus 4.5+) |
-
-in a typical claude code session, **90%+ of the cost is cache tokens** — every tool call re-sends the conversation context. a long opus session with 100+ tool calls can easily generate billions of cache read tokens.
-
-**important:** `input_tokens` is already the non-cached portion. the total input sent to the model = `input_tokens + cache_creation + cache_read`. don't subtract cache from input — they're separate buckets.
-
-### raw queries
-
-```bash
-# sessions today
-sqlite3 ~/.claude/mine.db "SELECT project_name, model, start_time FROM sessions WHERE date(start_time) = date('now');"
-
-# most used tools
-sqlite3 ~/.claude/mine.db "SELECT tool_name, total_uses FROM tool_usage ORDER BY total_uses DESC LIMIT 10;"
-
-# full-text search past prompts
-sqlite3 ~/.claude/mine.db "SELECT content_preview FROM messages_fts WHERE messages_fts MATCH 'streaming';"
+# total lifetime API value
+sqlite3 ~/.claude/mine.db "SELECT printf('\$%,.2f', SUM(estimated_cost_usd)) FROM user_session_costs;"
 
 # backfill all history
 python3 scripts/mine.py --workers 8
