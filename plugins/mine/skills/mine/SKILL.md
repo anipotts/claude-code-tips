@@ -72,8 +72,14 @@ Determine the query scope — **project** (just this project) or **global** (all
 
 Run this after Step 0:
 `````bash
-PROJECT=$(basename "$PWD")
-sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE project_name LIKE '%$PROJECT%' AND is_subagent = 0;" 2>/dev/null
+# try exact match on project_dir or cwd first, fall back to basename match
+CWD="$PWD"
+MATCH=$(sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE (project_dir = '$CWD' OR cwd = '$CWD') AND is_subagent = 0 GROUP BY project_name ORDER BY COUNT(*) DESC LIMIT 1;" 2>/dev/null)
+if [ -z "$MATCH" ]; then
+  PROJECT=$(basename "$PWD" | tr -dc 'a-zA-Z0-9._-')
+  MATCH=$(sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE project_name = '$PROJECT' AND is_subagent = 0 GROUP BY project_name LIMIT 1;" 2>/dev/null)
+fi
+echo "SCOPE|$MATCH"
 `````
 
 **Scope rules:**
@@ -83,7 +89,7 @@ sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions
 - If the cwd doesn't match any project, default to **global** scope
 - For intents that are inherently global (PROJECTS, COMPARE projects, VALUE all-time), always use global scope regardless
 
-**How to apply scope:** When scope is "project", add `AND s.project_name LIKE '%<project>%'` to every WHERE clause in the intent's SQL. When scope is "global", use the queries as written (no project filter).
+**How to apply scope:** When scope is "project", add `AND project_name = '<project>'` (exact match) to every WHERE clause. When scope is "global", use the queries as written (no project filter).
 
 ## Step 1: Intent routing
 
@@ -435,7 +441,7 @@ GROUP BY model ORDER BY sessions DESC;
 SQL
 `````
 
-### WASTED ("wasted", "failures", "expensive failures", "mistakes")
+### MISTAKES ("wasted", "failures", "expensive failures", "mistakes")
 
 `````bash
 sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
@@ -512,7 +518,7 @@ SQL
 
 Show top 15 transitions, then: `+N more patterns (X total transitions)`. Add insight: identify the most common self-loop (Read → Read, Edit → Edit) and the dominant workflow pattern (e.g., "your most common flow is Read → Edit → Read — classic review-fix-verify").
 
-### PROJECT-SPECIFIC ("project X", "about X", specific project name)
+### PROJECT ("project X", "about X", specific project name)
 
 `````bash
 sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
@@ -626,23 +632,23 @@ For time comparisons, run the dashboard queries with two different date filters 
 
 For project comparisons, show the same table with project names instead of periods.
 
-### TIME-FILTERED ("this week", "last 30 days", "today", "january", "2026-01")
+### TIME ("this week", "last 30 days", "today", "january", "2026-01")
 
 Apply the time filter to whichever analysis makes sense. If just a time period with no other intent, show a mini dashboard for that period using the same dashboard format but with the adjusted date filter.
 
 ### BACKFILL ("backfill", "refresh", "update data", "sync", "re-mine")
 
 Explicitly re-mine recent sessions:
-```bash
+`````bash
 for p in ./scripts/mine.py ./plugins/mine/scripts/mine.py \
   $(find ~/.claude/plugins -path "*/mine/scripts/mine.py" 2>/dev/null | head -1); do
   if [ -f "$p" ]; then python3 "$p" --incremental 2>&1; break; fi
 done
-```
+`````
 
 Show the backfill output, then a mini dashboard with the updated data.
 
-### HEALTH / STATS ("health", "stats", "project health", "codebase", "lines of code")
+### HEALTH ("health", "stats", "project health", "codebase", "lines of code")
 
 This intent uses the filesystem and git — NOT mine.db. Run these via Bash:
 
@@ -784,6 +790,7 @@ The `estimated_cost_usd` field is the **API inference value** — what this usag
 - When showing API value: real numbers from published anthropic pricing. don't hedge or disclaim
 - If the user asks something you can't answer from the data, say what data would be needed
 - Escape single quotes by doubling them (O'Brien → O''Brien) in SQL strings
+- NEVER show SQL, table names, column names, or raw query output to the user. if a query fails, describe what data was unavailable, not which table or column was missing
 
 ## Narrative rules (NEW)
 
