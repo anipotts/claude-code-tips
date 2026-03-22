@@ -77,7 +77,7 @@ copy one, wire it up, done. see [hooks reference →](./docs/claude-code/hooks-r
 | | what | who it's for |
 |---|---|---|
 | **concepts** | [subagent patterns](./docs/concepts/subagent-patterns.md), [automation](./docs/concepts/automation.md), [cost optimization](./docs/concepts/cost-optimization.md) | anyone using agentic coding tools |
-| **claude code** | [guide](./docs/claude-code/guide.md), [hooks](./docs/claude-code/hooks-reference.md), [plugins](./docs/claude-code/plugin-creation.md), [MCP](./docs/claude-code/mcp-servers.md), [CLI](./docs/claude-code/cli-tools.md) | claude code users |
+| **claude code** | [guide](./docs/claude-code/guide.md), [hooks](./docs/claude-code/hooks-reference.md), [plugins](./docs/claude-code/plugin-creation.md), [MCP](./docs/claude-code/mcp-servers.md), [CLI](./docs/claude-code/cli-tools.md), [**ecosystem**](./docs/claude-code/ecosystem.md) | claude code users |
 | **comparisons** | [vs cursor](./docs/comparisons/cursor.md), [vs codex](./docs/comparisons/codex.md), [vs gemini](./docs/comparisons/gemini.md), [pricing](./docs/comparisons/pricing.md) | choosing a tool |
 | **my tips** | [why hooks matter](./docs/tips/why-hooks-matter.md), [my stack](./docs/tips/my-automation-stack.md), [mistakes i made](./docs/tips/mistakes-i-made.md), [cost reality](./docs/tips/cost-reality.md) | my personal takes |
 

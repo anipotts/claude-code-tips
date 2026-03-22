@@ -9,7 +9,7 @@ Claude Code toolkit: one installable plugin (mine), a reference library of hooks
 - `.claude/agents/` -- agents (analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check, changelog-writer, link-checker)
 - `.claude/commands/` -- slash commands (mine, improve, ship, sweep, quicktest, stats, deps, replay)
 - `docs/concepts/` -- tool-agnostic content (subagent-patterns, automation, cost-optimization)
-- `docs/claude-code/` -- Claude Code specific (guide, hooks-reference, plugin-creation, mcp-servers, cli-tools, agent-teams, troubleshooting)
+- `docs/claude-code/` -- Claude Code specific (guide, hooks-reference, plugin-creation, mcp-servers, cli-tools, agent-teams, troubleshooting, ecosystem)
 - `docs/comparisons/` -- competitor comparisons (cursor, codex, gemini, antigravity, pricing)
 - `docs/tips/` -- personal takes and opinionated workflow advice
 - `examples/` -- CLAUDE.md templates, demo plugins (handoff, broadcast)

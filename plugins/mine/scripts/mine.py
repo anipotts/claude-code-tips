@@ -629,6 +629,9 @@ def init_db(db_path: pathlib.Path) -> sqlite3.Connection:
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")
     conn.execute("PRAGMA synchronous=NORMAL")
+    conn.execute("PRAGMA mmap_size=268435456")  # 256MB mmap
+    conn.execute("PRAGMA cache_size=-64000")     # 64MB page cache
+    conn.execute("PRAGMA temp_store=MEMORY")
 
     # Read and execute schema
     if SCHEMA_PATH.exists():
@@ -640,6 +643,15 @@ def init_db(db_path: pathlib.Path) -> sqlite3.Connection:
             "Database may not have correct structure.",
             file=sys.stderr,
         )
+
+    # Check and run migrations
+    version = conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+    current_version = int(version[0]) if version else 1
+
+    if current_version < 2:
+        # v2: model_pricing table (already created by schema.sql above)
+        conn.execute("UPDATE meta SET value='2' WHERE key='schema_version'")
+        conn.commit()
 
     conn.commit()
     return conn
@@ -1254,6 +1266,132 @@ def export_csv(db_path: pathlib.Path) -> None:
 
 
 # ---------------------------------------------------------------------------
+# --debug-discovery command
+# ---------------------------------------------------------------------------
+
+def debug_discovery() -> None:
+    """Print file discovery diagnostics: counts, dates, skipped files."""
+    ignore_patterns = load_mineignore()
+
+    print(f"\n{'='*60}")
+    print(f"  File Discovery Diagnostics")
+    print(f"{'='*60}\n")
+    print(f"  Projects dir: {PROJECTS_DIR}")
+    print(f"  Mineignore:   {MINEIGNORE_PATH} ({'exists' if MINEIGNORE_PATH.exists() else 'not found'})")
+
+    if ignore_patterns:
+        print(f"  Ignore patterns ({len(ignore_patterns)}):")
+        for pat in ignore_patterns:
+            print(f"    - {pat}")
+    print()
+
+    all_files = discover_jsonl_files()
+    main_files = [(f, s) for f, s in all_files if not s]
+    sub_files = [(f, s) for f, s in all_files if s]
+
+    print(f"  Total files discovered: {len(all_files)}")
+    print(f"    Main sessions: {len(main_files)}")
+    print(f"    Subagent files: {len(sub_files)}")
+    print()
+
+    # Per-project breakdown
+    project_stats: dict[str, dict[str, Any]] = {}
+    for fpath, is_sub in all_files:
+        try:
+            rel = pathlib.Path(fpath).relative_to(PROJECTS_DIR)
+            proj_dir = rel.parts[0]
+        except (ValueError, IndexError):
+            proj_dir = "(unknown)"
+
+        if proj_dir not in project_stats:
+            project_stats[proj_dir] = {"count": 0, "oldest": None, "newest": None}
+
+        project_stats[proj_dir]["count"] += 1
+
+        try:
+            mtime = pathlib.Path(fpath).stat().st_mtime
+            mtime_str = time.strftime("%Y-%m-%d", time.gmtime(mtime))
+            if project_stats[proj_dir]["oldest"] is None or mtime_str < project_stats[proj_dir]["oldest"]:
+                project_stats[proj_dir]["oldest"] = mtime_str
+            if project_stats[proj_dir]["newest"] is None or mtime_str > project_stats[proj_dir]["newest"]:
+                project_stats[proj_dir]["newest"] = mtime_str
+        except OSError:
+            pass
+
+    print(f"  Per-project breakdown ({len(project_stats)} projects):\n")
+    print(f"    {'Project':<55s} {'Files':>6s}  {'Oldest':>10s}  {'Newest':>10s}")
+    print(f"    {'-'*55} {'-'*6}  {'-'*10}  {'-'*10}")
+
+    for proj_dir in sorted(project_stats, key=lambda k: project_stats[k]["count"], reverse=True):
+        stats = project_stats[proj_dir]
+        name = proj_dir if len(proj_dir) <= 55 else "..." + proj_dir[-52:]
+        oldest = stats["oldest"] or "?"
+        newest = stats["newest"] or "?"
+        print(f"    {name:<55s} {stats['count']:>6d}  {oldest:>10s}  {newest:>10s}")
+
+    # Check for skipped directories
+    if PROJECTS_DIR.exists() and ignore_patterns:
+        print(f"\n  Skipped directories (matched .mineignore):")
+        skipped = 0
+        for d in sorted(PROJECTS_DIR.iterdir()):
+            if d.is_dir() and should_ignore(d.name, ignore_patterns):
+                jsonl_count = sum(1 for _ in d.glob("**/*.jsonl"))
+                print(f"    {d.name} ({jsonl_count} files)")
+                skipped += 1
+        if skipped == 0:
+            print(f"    (none)")
+
+    print()
+
+
+# ---------------------------------------------------------------------------
+# --rollup command
+# ---------------------------------------------------------------------------
+
+def compute_rollups(db_path: pathlib.Path) -> None:
+    """Rebuild daily_rollups table from sessions + session_costs."""
+    if not db_path.exists():
+        print(f"Database not found: {db_path}")
+        return
+
+    conn = init_db(db_path)
+
+    print("Rebuilding daily_rollups...")
+    conn.execute("DELETE FROM daily_rollups")
+
+    conn.execute("""
+        INSERT INTO daily_rollups (date, project_name, model, sessions, main_sessions, subagent_sessions,
+            input_tokens, output_tokens, cache_read_tokens, cache_creation_tokens,
+            tool_calls, errors, active_seconds, estimated_cost_usd)
+        SELECT
+            SUBSTR(s.start_time, 1, 10) AS date,
+            COALESCE(s.project_name, '') AS project_name,
+            COALESCE(s.model, '') AS model,
+            COUNT(*) AS sessions,
+            SUM(CASE WHEN s.is_subagent = 0 THEN 1 ELSE 0 END),
+            SUM(CASE WHEN s.is_subagent = 1 THEN 1 ELSE 0 END),
+            SUM(s.total_input_tokens),
+            SUM(s.total_output_tokens),
+            SUM(s.total_cache_read_tokens),
+            SUM(s.total_cache_creation_tokens),
+            SUM(s.tool_use_count),
+            (SELECT COUNT(*) FROM errors e WHERE e.session_id = s.id),
+            SUM(s.duration_active_seconds),
+            SUM(sc.estimated_cost_usd)
+        FROM sessions s
+        JOIN session_costs sc ON s.id = sc.id
+        WHERE s.start_time IS NOT NULL
+        GROUP BY SUBSTR(s.start_time, 1, 10), COALESCE(s.project_name, ''), COALESCE(s.model, '')
+    """)
+
+    row_count = conn.execute("SELECT COUNT(*) FROM daily_rollups").fetchone()[0]
+    conn.commit()
+    conn.close()
+
+    print(f"Done. {row_count} rollup rows created.")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1337,6 +1475,16 @@ def main() -> None:
         default=None,
         help=f"Path to SQLite database (default: {DEFAULT_DB_PATH}).",
     )
+    parser.add_argument(
+        "--debug-discovery",
+        action="store_true",
+        help="Print file discovery diagnostics (counts, dates, skipped files) and exit.",
+    )
+    parser.add_argument(
+        "--rollup",
+        action="store_true",
+        help="Rebuild daily_rollups table from sessions + session_costs and exit.",
+    )
 
     args = parser.parse_args()
 
@@ -1373,6 +1521,14 @@ def main() -> None:
             f"Done. {before_size / 1_000_000:.1f} MB -> {after_size / 1_000_000:.1f} MB "
             f"(saved {saved / 1_000_000:.1f} MB)"
         )
+        return
+
+    if args.debug_discovery:
+        debug_discovery()
+        return
+
+    if args.rollup:
+        compute_rollups(db_path)
         return
 
     # ---- Discovery phase ----
