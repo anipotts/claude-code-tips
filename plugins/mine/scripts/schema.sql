@@ -335,6 +335,27 @@ JOIN sessions s ON tc.session_id = s.id
 WHERE s.is_subagent = 0
 GROUP BY tc.tool_name;
 
+-- top model per project (eliminates correlated subquery in SKILL.md)
+DROP VIEW IF EXISTS project_top_model;
+CREATE VIEW IF NOT EXISTS project_top_model AS
+SELECT project_name, model AS top_model FROM (
+    SELECT project_name, model, COUNT(*) n,
+           ROW_NUMBER() OVER (PARTITION BY project_name ORDER BY COUNT(*) DESC) rn
+    FROM sessions
+    WHERE is_subagent = 0
+      AND model IS NOT NULL AND model != '' AND model != '<synthetic>'
+    GROUP BY project_name, model
+) WHERE rn = 1;
+
+-- user tool calls with project context (pre-joins + pre-filters is_subagent)
+DROP VIEW IF EXISTS user_tool_calls;
+CREATE VIEW IF NOT EXISTS user_tool_calls AS
+SELECT tc.id, tc.session_id, tc.tool_name, tc.input_summary, tc.timestamp,
+       s.project_name
+FROM tool_calls tc
+JOIN sessions s ON tc.session_id = s.id
+WHERE s.is_subagent = 0;
+
 -- ============================================================
 -- DAILY ROLLUPS: pre-computed aggregates for fast dashboard queries
 -- ============================================================
