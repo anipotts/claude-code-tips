@@ -157,11 +157,11 @@ Then use AskUserQuestion: "want last 30 days? last 90 days? all time?" — if se
 `````bash
 sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
 -- per-model breakdown with cost categories
-SELECT 'MODEL' s, model, COUNT(*) sessions,
-  SUM(total_input_tokens) input_tok,
-  SUM(total_output_tokens) output_tok,
-  SUM(total_cache_read_tokens) cache_read_tok,
-  SUM(total_cache_creation_tokens) cache_write_tok,
+SELECT 'MODEL' s, s.model, COUNT(*) sessions,
+  SUM(s.total_input_tokens) input_tok,
+  SUM(s.total_output_tokens) output_tok,
+  SUM(s.total_cache_read_tokens) cache_read_tok,
+  SUM(s.total_cache_creation_tokens) cache_write_tok,
   ROUND(SUM(sc.estimated_cost_usd), 2) total_value
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
 WHERE s.model IS NOT NULL AND s.model != '' AND s.model != '<synthetic>' AND s.is_subagent = 0
@@ -184,20 +184,20 @@ SELECT 'PROJ_OTHER' s, COUNT(*) projects, SUM(sessions) sessions, ROUND(SUM(api_
 ) WHERE rn > 10;
 
 -- time span for ROI calculation
-SELECT 'SPAN' s, MIN(start_time) first, MAX(start_time) latest,
-  ROUND(JULIANDAY(MAX(start_time)) - JULIANDAY(MIN(start_time)), 0) days,
-  ROUND((JULIANDAY(MAX(start_time)) - JULIANDAY(MIN(start_time))) / 30.44, 1) months
-FROM sessions WHERE is_subagent = 0;
+SELECT 'SPAN' s, MIN(s.start_time) first, MAX(s.start_time) latest,
+  ROUND(JULIANDAY(MAX(s.start_time)) - JULIANDAY(MIN(s.start_time)), 0) days,
+  ROUND((JULIANDAY(MAX(s.start_time)) - JULIANDAY(MIN(s.start_time))) / 30.44, 1) months
+FROM sessions s WHERE s.is_subagent = 0;
 
 -- grand total
 SELECT 'GRAND' s, ROUND(SUM(estimated_cost_usd), 2) total FROM session_costs WHERE is_subagent = 0;
 
 -- monthly trend (last 6 months)
-SELECT 'MONTHLY' s, SUBSTR(start_time, 1, 7) month,
+SELECT 'MONTHLY' s, SUBSTR(s.start_time, 1, 7) month,
   COUNT(*) sessions, ROUND(SUM(sc.estimated_cost_usd), 2) api_value
 FROM sessions s JOIN session_costs sc ON s.id = sc.id
 WHERE s.is_subagent = 0
-GROUP BY SUBSTR(start_time, 1, 7) ORDER BY month DESC LIMIT 6;
+GROUP BY SUBSTR(s.start_time, 1, 7) ORDER BY month DESC LIMIT 6;
 SQL
 `````
 
