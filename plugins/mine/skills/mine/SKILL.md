@@ -603,15 +603,39 @@ Supports two comparison types:
 - Time: `/mine compare this week vs last week` or `/mine compare march vs february`
 - Projects: `/mine compare project-a vs project-b`
 
-For time comparisons, run the dashboard queries with two different date filters and show side-by-side:
+**For time comparisons**, replace `<A_FILTER>` and `<B_FILTER>` with the two date ranges (e.g., `start_time >= date('now', '-7 days')` vs `start_time >= date('now', '-14 days') AND start_time < date('now', '-7 days')`):
+
+`````bash
+sqlite3 -header -separator '|' ~/.claude/mine.db <<'SQL'
+SELECT 'A' s, COUNT(*) sessions,
+  COALESCE(ROUND(SUM(estimated_cost_usd), 2), 0) api_value,
+  COALESCE(SUM(total_input_tokens + total_output_tokens), 0) tokens,
+  ROUND(SUM(total_cache_read_tokens) * 100.0 / NULLIF(SUM(total_input_tokens + total_cache_creation_tokens + total_cache_read_tokens), 0), 1) cache_pct,
+  COUNT(DISTINCT project_name) projects
+FROM user_session_costs WHERE <A_FILTER>;
+
+SELECT 'B' s, COUNT(*) sessions,
+  COALESCE(ROUND(SUM(estimated_cost_usd), 2), 0) api_value,
+  COALESCE(SUM(total_input_tokens + total_output_tokens), 0) tokens,
+  ROUND(SUM(total_cache_read_tokens) * 100.0 / NULLIF(SUM(total_input_tokens + total_cache_creation_tokens + total_cache_read_tokens), 0), 1) cache_pct,
+  COUNT(DISTINCT project_name) projects
+FROM user_session_costs WHERE <B_FILTER>;
+SQL
+`````
+
+**For project comparisons**, replace `<A_FILTER>` with `project_name = '<project-a>'` and `<B_FILTER>` with `project_name = '<project-b>'`.
+
+Format as a side-by-side delta table:
 
 | metric | period A | period B | delta |
 |---|---|---|---|
 | sessions | 34 | 28 | +6 (↑21%) |
 | API value | $847 | $612 | +$235 (↑38%) |
 | cache rate | 87% | 82% | +5pp (↑) |
+| tokens | 12.4M | 9.1M | +3.3M (↑36%) |
+| projects | 5 | 4 | +1 |
 
-For project comparisons, show the same table with project names instead of periods.
+Compute deltas as: `value_A - value_B`. Show ↑ for positive, ↓ for negative. Show percentage change: `(A - B) / B * 100`. For cache rate, show percentage-point change (pp) not percentage change.
 
 ### TIME ("this week", "last 30 days", "today", "january", "2026-01")
 
