@@ -198,6 +198,9 @@ CREATE TABLE IF NOT EXISTS model_pricing (
 );
 
 -- seed pricing data (idempotent via INSERT OR IGNORE)
+-- effective_from dates are intentionally backdated so the LIKE match applies to all
+-- sessions regardless of when they were recorded. actual release dates don't matter
+-- for cost calculation — only the per-token rates do.
 INSERT OR IGNORE INTO model_pricing (model_pattern, input_per_mtok, output_per_mtok, cache_read_per_mtok, cache_write_per_mtok, effective_from, source) VALUES
     ('claude-opus-4-6%', 5.00, 25.00, 0.50, 6.25, '2024-01-01', 'anthropic.com/pricing 2025-05'),
     ('claude-opus-4-5%', 5.00, 25.00, 0.50, 6.25, '2025-02-01', 'anthropic.com/pricing 2025-02'),
@@ -215,6 +218,8 @@ INSERT OR IGNORE INTO model_pricing (model_pattern, input_per_mtok, output_per_m
 
 -- ============================================================
 -- COSTS VIEW: auto-computed USD per session
+-- NOTE: DROP+CREATE pattern ensures views update when schema changes.
+-- schema.sql is re-run on every mine.py invocation and SessionStart hook.
 -- ============================================================
 DROP VIEW IF EXISTS session_costs;
 CREATE VIEW IF NOT EXISTS session_costs AS

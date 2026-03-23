@@ -179,7 +179,7 @@ Then use AskUserQuestion with options:
 
 If selected, re-run with adjusted date filter or scope.
 
-**Cache savings estimate**: compute from the summary data. `cache_savings = cache_read_tokens * (model_uncached_rate - model_cached_rate) / 1e6`. For opus 4.6: uncached $5/M, cached $0.50/M, so savings per M cache-read tokens = $4.50.
+**Cache savings estimate**: compute from the summary data. Savings apply to **input-side tokens only** (cache reads replace uncached input). `cache_savings = cache_read_tokens * (input_uncached_rate - cache_read_rate) / 1e6`. For opus 4.6: uncached input $5/M, cached input $0.50/M, so savings = $4.50 per M cache-read tokens. For sonnet: $3/M uncached, $0.30/M cached, so savings = $2.70/M.
 
 ### VALUE ("value", "roi", "inference", "how much is my usage worth", "api value")
 
@@ -300,7 +300,9 @@ WHERE messages_fts MATCH '<term>' AND s.is_subagent = 0;
 SQL
 `````
 
-Escape single quotes in the search term by doubling them. Show results with project context. Group by session when multiple hits in the same session. If >20 matches, show: `+N more matches (use a narrower search or add a project filter)`.
+**Escaping for SEARCH**: double single quotes (`O'Brien` → `O''Brien`). Wrap the search term in double quotes inside the MATCH expression to treat it as a literal phrase (prevents FTS5 operators like `*`, `AND`, `OR`, `NOT`, `NEAR` from being interpreted as syntax). Example: `MATCH '"search term here"'`.
+
+Show results with project context. Group by session when multiple hits in the same session. If >20 matches, show: `+N more matches (use a narrower search or add a project filter)`.
 
 ### CACHE ("cache", "caching", "cache efficiency", "cache hit")
 
@@ -422,6 +424,8 @@ WHERE start_time >= date('now', '-30 days')
 GROUP BY model ORDER BY sessions DESC;
 SQL
 `````
+
+Show all models (typically 4-6 — no "other" cutoff needed). Add insight: compare avg output tokens across models, note which has best cost efficiency (lowest API value per session), and flag any model switches mid-week.
 
 ### MISTAKES ("wasted", "failures", "expensive failures", "mistakes")
 
@@ -637,9 +641,11 @@ Format as a side-by-side delta table:
 
 Compute deltas as: `value_A - value_B`. Show ↑ for positive, ↓ for negative. Show percentage change: `(A - B) / B * 100`. For cache rate, show percentage-point change (pp) not percentage change.
 
+Add insight: highlight the metric with the largest percentage change and what likely drove it (e.g., "API value up 38% — driven by 3 new fullstack sessions").
+
 ### TIME ("this week", "last 30 days", "today", "january", "2026-01")
 
-Apply the time filter to whichever analysis makes sense. If just a time period with no other intent, show a mini dashboard for that period using the same dashboard format but with the adjusted date filter.
+Apply the time filter to whichever analysis makes sense. If just a time period with no other intent, show a mini dashboard for that period — use the same DASHBOARD SQL and format with the date filter adjusted. Include freshness line, insight line, and "other" accounting as usual.
 
 ### BACKFILL ("backfill", "refresh", "update data", "sync", "re-mine")
 
@@ -655,7 +661,13 @@ Show the backfill output, then a mini dashboard with the updated data.
 
 ### HEALTH ("health", "stats", "project health", "codebase", "lines of code")
 
-Run the /stats command and present results. If the user also asked about mine.db data, add those queries after.
+This intent uses the **filesystem and git**, not mine.db. Run via Bash:
+1. File count by type: `find . -type f -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/.next/*' -not -path '*/vendor/*' -not -path '*/.venv/*' | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -15`
+2. Lines of code: `find . -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.py' -o -name '*.rs' -o -name '*.go' -o -name '*.java' -o -name '*.rb' -o -name '*.css' \) -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' | xargs wc -l 2>/dev/null | tail -1`
+3. Git activity: `git log --oneline -20`, `git shortlog -sn --no-merges | head -10`, `git log --since='7 days ago' --oneline | wc -l`, `git rev-list --count HEAD`
+4. Largest files: `find . -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.py' -o -name '*.rs' \) -not -path '*/node_modules/*' -not -path '*/.git/*' | xargs wc -l 2>/dev/null | sort -rn | head -6`
+
+Present as compact tables. If the user also asked about mine.db data, add relevant queries after.
 
 ### HOTSPOTS ("hotspots", "hot files", "most edited", "complexity")
 
@@ -736,6 +748,8 @@ When creating the cron, use CronCreate with:
 Tell the user: "dashboard will refresh every X minutes. say `/mine stop watching` to cancel."
 
 If the user says "stop watching" or "stop monitoring", list crons with CronList, find the mine-watch cron, and delete it with CronDelete.
+
+Note: WATCH is a setup command, not a data query — it is exempt from freshness line, insight line, and "other" accounting rules.
 
 ### FREEFORM (anything else)
 
