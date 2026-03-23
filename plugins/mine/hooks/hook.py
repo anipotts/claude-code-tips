@@ -56,8 +56,8 @@ def db_connect(apply_schema: bool = False) -> sqlite3.Connection | None:
         if schema_file.exists():
             try:
                 conn.executescript(schema_file.read_text())
-            except sqlite3.Error:
-                pass  # non-fatal — views may already exist
+            except sqlite3.Error as e:
+                log(f"[mine] schema apply warning: {e}")
     return conn
 
 
@@ -65,7 +65,6 @@ def find_mine_py() -> pathlib.Path | None:
     """Locate mine.py relative to this hook script."""
     candidates = [
         SCRIPTS_DIR / "mine.py",
-        HOOK_DIR.parent.parent / "scripts" / "mine.py",
     ]
     # also search installed plugin paths
     plugins_dir = CLAUDE_DIR / "plugins"
@@ -232,20 +231,24 @@ def handle_burn(payload: dict, config: dict) -> None:
         conn.close()
         return
 
-    # get current session tokens + project name
+    # get current session token breakdown + project name
     row = conn.execute(
-        """SELECT COALESCE(total_input_tokens,0) + COALESCE(total_output_tokens,0)
-                + COALESCE(total_cache_creation_tokens,0) + COALESCE(total_cache_read_tokens,0),
+        """SELECT COALESCE(total_input_tokens,0), COALESCE(total_output_tokens,0),
+                COALESCE(total_cache_read_tokens,0), COALESCE(total_cache_creation_tokens,0),
                 project_name
         FROM sessions WHERE id = ? LIMIT 1""",
         (session_id,),
     ).fetchone()
 
-    if not row or not row[1] or row[0] == 0:
+    if not row or not row[4]:
         conn.close()
         return
 
-    current_tokens, project_name = row
+    inp, out, cache_read, cache_write, project_name = row
+    current_tokens = inp + out + cache_read + cache_write
+    if current_tokens == 0:
+        conn.close()
+        return
 
     # project average for sessions that had compaction
     avg_row = conn.execute(
@@ -288,8 +291,8 @@ def handle_burn(payload: dict, config: dict) -> None:
         else:
             token_fmt = f"{current_tokens // 1000}K"
 
-        # rough cost estimate (dominant cost is cache reads at $0.50/1M)
-        cost_est = current_tokens * 50 / 1_000_000_000
+        # per-component cost estimate (opus rates: input $5, output $25, cache_read $0.50, cache_write $6.25 per 1M)
+        cost_est = (inp * 5 + out * 25 + cache_read * 0.5 + cache_write * 6.25) / 1_000_000
         print(f"[mine:burn] this session is at {token_fmt} tokens — {ratio:.1f}x your avg for '{project_name}' (~${cost_est:.2f} estimated)")
 
 
@@ -367,11 +370,15 @@ def handle_startup(payload: dict, config: dict) -> None:
                     if mine_py:
                         gap_days = int(gap / 86400)
                         log(f"[mine:heal] data is {gap_days}d stale. backfilling in background...")
-                        subprocess.Popen(
+                        log_file = open(str(CLAUDE_DIR / "mine-backfill.log"), "a")
+                        proc = subprocess.Popen(
                             [sys.executable, str(mine_py), "--incremental"],
-                            stdout=open(str(CLAUDE_DIR / "mine-backfill.log"), "a"),
+                            stdout=log_file,
                             stderr=subprocess.STDOUT,
+                            start_new_session=True,
                         )
+                        # detach — proc runs in background, log_file closed on exit
+                        del proc
             except (ValueError, OSError):
                 pass
 
@@ -426,7 +433,7 @@ def handle_startup(payload: dict, config: dict) -> None:
 # Dispatcher
 # ---------------------------------------------------------------------------
 
-HANDLERS: dict[str, tuple[str | None, callable]] = {
+HANDLERS: dict[str, tuple[str | None, object]] = {
     "ingest":     ("ingest",   handle_ingest),
     "subagent":   ("ingest",   handle_subagent),    # shares ingest toggle
     "mistakes":   ("mistakes", handle_mistakes),

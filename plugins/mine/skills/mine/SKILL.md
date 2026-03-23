@@ -72,8 +72,8 @@ Determine the query scope — **project** (just this project) or **global** (all
 Run this after Step 0:
 `````bash
 # try exact match on project_dir or cwd first, fall back to basename match
-CWD="$PWD"
-MATCH=$(sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE (project_dir = '$CWD' OR cwd = '$CWD') AND is_subagent = 0 GROUP BY project_name ORDER BY COUNT(*) DESC LIMIT 1;" 2>/dev/null)
+CWD_SAFE="${PWD//\'/\'\'}"
+MATCH=$(sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE (project_dir = '$CWD_SAFE' OR cwd = '$CWD_SAFE') AND is_subagent = 0 GROUP BY project_name ORDER BY COUNT(*) DESC LIMIT 1;" 2>/dev/null)
 if [ -z "$MATCH" ]; then
   PROJECT=$(basename "$PWD" | tr -dc 'a-zA-Z0-9._-')
   MATCH=$(sqlite3 -noheader ~/.claude/mine.db "SELECT project_name, COUNT(*) FROM sessions WHERE project_name = '$PROJECT' AND is_subagent = 0 GROUP BY project_name LIMIT 1;" 2>/dev/null)

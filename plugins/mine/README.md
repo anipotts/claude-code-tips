@@ -21,7 +21,7 @@ all hooks are handled by `hooks/hook.py` — one file, zero bash scripts, zero j
 
 ### query skill
 
-`/mine` gives you 18+ query intents: dashboard, cost, value, search, cache, projects, tools, models, mistakes, hotspots, loops, workflows, story, compare, and more. just ask in plain language.
+`/mine` gives you 20 query intents: dashboard, cost, value, search, cache, projects, tools, models, mistakes, hotspots, loops, workflows, story, compare, and more. just ask in plain language.
 
 ## install
 
