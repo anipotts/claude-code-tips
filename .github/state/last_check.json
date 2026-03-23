@@ -1,6 +1,6 @@
 {
   "anthropics/claude-code/releases": "v2.1.81",
-  "shanraisshan/claude-code-best-practice/commits": "25934da774dc01764aca65f3589966f7f2054047",
+  "shanraisshan/claude-code-best-practice/commits": "f297cfe61320e76b7e22c7ac34519cf04797ff90",
   "marckrenn/claude-code-changelog/commits": "1355220e2df92f25f864194d823ff11f1e7af749",
   "anthropic/changelog": "41f534f198c3ba25",
   "trending/seen_repos": [
@@ -20,7 +20,7 @@
     "wshobson/agents",
     "x1xhlol/system-prompts-and-models-of-ai-tools"
   ],
-  "anthropic/official_docs": "cf98bf708898dbcb",
+  "anthropic/official_docs": "3664af76bb7da79e",
   "competitor/openai_codex/releases": "rust-v0.117.0-alpha.7",
   "competitor/gemini/releases": "v0.36.0-nightly.20260321.fc03891a1",
   "community/hackernews/seen": [
