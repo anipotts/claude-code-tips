@@ -119,14 +119,13 @@ class TestHandleCompact:
         with patch.object(hook, "DB_PATH", db_path):
             hook.handle_compact({}, {})  # should not error
 
-    def test_disabled_by_config(self, tmp_path):
-        conn = make_db(tmp_path)
-        seed_session(conn, "sess-1")
-        db_path = tmp_path / "mine.db"
-        with patch.object(hook, "DB_PATH", db_path):
-            hook.handle_compact({"session_id": "sess-1"}, {"compact": False})
-        row = conn.execute("SELECT compaction_count FROM sessions WHERE id = 'sess-1'").fetchone()
-        assert row[0] == 0  # not incremented
+    def test_disabled_by_config_via_dispatcher(self, tmp_path):
+        """Toggle checks happen at the dispatcher level, not in handlers."""
+        # verify the dispatcher would skip this handler
+        assert not hook.is_enabled({"compact": False}, "compact")
+        # the HANDLERS dict has "compact" as the toggle key
+        toggle_key, _ = hook.HANDLERS["compact"]
+        assert toggle_key == "compact"
 
 
 # ===========================================================================
