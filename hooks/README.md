@@ -65,4 +65,4 @@ then add the matching config to your `.claude/settings.json` or `~/.claude/setti
 - hooks read JSON from stdin via `jq`
 - exit code `0` = allow, exit code `2` = block (PreToolUse only)
 - all scripts use `#!/usr/bin/env bash` with `set -euo pipefail`
-- see the [hooks guide](../docs/claude-code/hooks-reference.md) for full reference
+- see the [hooks guide](../docs/hooks.md) for full reference
