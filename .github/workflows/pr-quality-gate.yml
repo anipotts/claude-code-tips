@@ -54,7 +54,7 @@ jobs:
           fi
 
           # --- check 2: new/modified docs have "tested with" stamps ---
-          DOC_FILES=$(git diff --name-only "$BASE_SHA"...HEAD -- 'docs/' 'plugins/' 'hooks/' 'agents/' 'skills/' | grep -E '\.(md|sh)$' || true)
+          DOC_FILES=$(git diff --name-only "$BASE_SHA"...HEAD -- 'docs/' 'plugins/' 'hooks/' 'examples/agents/' 'examples/commands/' 'skills/' | grep -E '\.(md|sh)$' || true)
           STAMP_MISSING=""
           if [ -n "$DOC_FILES" ]; then
             while IFS= read -r file; do
@@ -116,7 +116,7 @@ jobs:
             echo -e "$REPORT"
             echo ""
             echo "---"
-            echo "*automated check -- see [conventions](docs/claude-code/guide.md) for details.*"
+            echo "*automated check -- see [CLAUDE.md](CLAUDE.md) for conventions.*"
           } > /tmp/quality-report.md
 
           echo "failures=$FAIL" >> "$GITHUB_OUTPUT"
