@@ -1,3 +1,5 @@
+<!-- tested with: claude code v2.1.77 -->
+
 # my automation stack
 
 this repo maintains itself. here's the full stack.
@@ -49,6 +51,7 @@ the goal: when i open the repo on monday, there's an issue summarizing what chan
 
 ## further reading
 
-- [how this repo works](../claude-code/this-repo.md) -- full architecture breakdown
+- [automation](./automation.md) -- daemons, cron, github actions patterns
+- [hooks](./hooks.md) -- the enforcement layer behind the automation
 
 tested with: claude code v2.1.77
