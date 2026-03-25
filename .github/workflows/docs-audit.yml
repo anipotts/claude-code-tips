@@ -55,7 +55,7 @@ jobs:
           claude -p --model "$CLAUDE_MODEL" \
             "you are auditing the docs/ directory of the claude-code-tips repo.
 
-          read every file in docs/, plugins/*/README.md, hooks/README.md, .claude/agents/*.md, and .claude/skills/*.md.
+          read every file in docs/, plugins/*/README.md, hooks/README.md, examples/agents/*.md, and examples/commands/*.md.
 
           check for:
           1. missing 'tested with' version stamps (every doc should have one)
@@ -85,7 +85,7 @@ jobs:
 
           git config user.name "docs-audit[bot]"
           git config user.email "docs-audit[bot]@users.noreply.github.com"
-          git add docs/ plugins/ hooks/ .claude/agents/ .claude/skills/ 2>/dev/null || true
+          git add docs/ plugins/ hooks/ examples/agents/ examples/commands/ 2>/dev/null || true
           git diff --cached --quiet && echo "nothing to commit" && exit 0
 
           CHANGED_FILES=$(git diff --cached --stat | tail -1 | grep -oE '[0-9]+ file' | grep -oE '[0-9]+')
