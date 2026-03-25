@@ -1,6 +1,6 @@
 # mistakes i made
 
-4,000+ sessions. here are the mistakes i keep making -- and the fixes.
+450+ sessions. here are the mistakes i keep making -- and the fixes.
 
 some of these are my mistakes. some are patterns where claude code reliably does the wrong thing unless you set up guardrails. the distinction matters less than the fix.
 
