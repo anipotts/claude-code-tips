@@ -62,6 +62,7 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 ## further reading
 
-- [guide](../claude-code/guide.md) -- comprehensive claude code setup and usage
+- [hooks](./hooks.md) -- the 11 hooks that fire during sessions
+- [cost](./cost.md) -- session cost patterns and optimization
 
 tested with: claude code v2.1.77

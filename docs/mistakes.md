@@ -72,6 +72,7 @@ the value isn't seeing individual errors. it's seeing which errors are *systemat
 
 ## further reading
 
-- [mine plugin](../../plugins/mine/README.md) -- full feature docs including mistakes, search, burn
+- [mine plugin](../plugins/mine/) -- full feature docs including mistakes, search, burn
+- [hooks](./hooks.md) -- the enforcement hooks that prevent recurring mistakes
 
 tested with: claude code v2.1.77
