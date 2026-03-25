@@ -5,7 +5,7 @@ AUDIT.md
 docs/upstream-watcher-design.md
 .claude/*
 !.claude/commands/
-!.claude/agents/
+!.claude/rules/
 node_modules/
 .DS_Store
 *.pyc
