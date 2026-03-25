@@ -188,7 +188,7 @@ jobs:
         run: |
           missing=0
           checked=0
-          dirs="docs hooks plugins agents skills commands"
+          dirs="docs hooks plugins examples/agents examples/commands skills"
 
           echo "Checking for 'tested with' stamps..."
           echo "(this is aspirational -- failures here are informational)"
