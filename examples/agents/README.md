@@ -1,3 +1,5 @@
+<!-- tested with: claude code v2.1.77 -->
+
 # example agents
 
 copy any of these to `.claude/agents/` in your project, then invoke with `/agent <name>`.

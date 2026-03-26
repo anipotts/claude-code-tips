@@ -1,3 +1,4 @@
+<!-- tested with: claude code v2.1.77 -->
 ---
 name: quicktest
 description: run tests for current file
