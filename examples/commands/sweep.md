@@ -1,3 +1,4 @@
+<!-- tested with: claude code v2.1.77 -->
 ---
 name: sweep
 description: clean dead code and unused imports

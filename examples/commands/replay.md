@@ -1,3 +1,4 @@
+<!-- tested with: claude code v2.1.77 -->
 ---
 name: replay
 description: generate a VHS tape replay of session file changes

@@ -1,3 +1,5 @@
+<!-- tested with: claude code v2.1.77 -->
+
 # example commands
 
 copy any of these to `.claude/commands/` in your project, then invoke with `/<name>`.
