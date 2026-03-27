@@ -6,7 +6,7 @@
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v2.1.77-000?style=flat-square&labelColor=D4A574&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 [![license](https://img.shields.io/github/license/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](./LICENSE)
 
-my claude code setup, open source. 190 hours of active coding. $2.88/hr.
+my claude code setup, after nearly 200 hours of active coding.
 
 ---
 
