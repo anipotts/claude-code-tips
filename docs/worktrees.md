@@ -41,9 +41,7 @@ three use cases:
 
 the claude code desktop app has a built-in UI for managing worktrees. you can see all active worktrees, their branches, and their status in one view. it's significantly better than managing worktrees from the CLI.
 
-<!-- [FILL: describe the desktop app worktree UI. what does it show? -->
-<!-- how do you use it day-to-day? screenshots would be great here. -->
-<!-- compare to CLI workflow -- what's better about the UI?] -->
+<!-- TODO: describe the desktop app worktree UI, screenshots -->
 
 ### when to use desktop vs CLI
 
@@ -54,7 +52,7 @@ the claude code desktop app has a built-in UI for managing worktrees. you can se
 | reviewing worktree diffs before merge | yes -- side-by-side view | `git diff` works fine |
 | long-running background agents | yes -- status at a glance | need to check manually |
 
-<!-- [FILL: adjust this table based on your actual experience with both] -->
+<!-- TODO: adjust table based on actual experience -->
 
 ---
 
@@ -118,7 +116,7 @@ tmux split-window -v -c ../myproject-ui
 
 **node_modules / venv** -- each worktree needs its own `node_modules` or virtual environment. `npm install` in one doesn't affect another. this is a feature, not a bug -- but it adds setup time.
 
-<!-- [FILL: any other gotchas you've hit? worktree experiments that went wrong?] -->
+<!-- TODO: worktree gotchas -->
 
 ---
 

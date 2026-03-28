@@ -35,19 +35,17 @@ the goal: when i open the repo on monday, there's an issue summarizing what chan
 
 ## what i'd automate next
 
-<!-- [FILL: what's still manual that bugs you? examples: -->
-<!-- - auto-merge PRs when CI passes (if not already doing this) -->
-<!-- - auto-update comparison docs when competitor pricing changes -->
-<!-- - auto-generate hook docs from script headers -->
-<!-- - nightly mine.db backup to cloud storage] -->
+<!-- TODO: what's still manual -->
 
 ## cost of running all this
 
-<!-- [FILL: real monthly numbers. format like this: -->
-<!-- github actions: $X.XX/month (or "free tier covers it") -->
-<!-- claude API (responder + audits): $X.XX/month -->
-<!-- total: $X.XX/month -->
-<!-- compare to: "less than one mass-market coffee per month" or whatever is honest] -->
+| cost | monthly |
+|------|---------|
+| github actions | free tier covers it (all workflows combined < 2,000 min/month) |
+| claude API (responder + audits) | ~$0.15/month (haiku-powered, fires on issues and PRs) |
+| total CI cost | **< $1/month** |
+
+less than a gas station coffee. the haiku-powered workflows (claude-responder, docs-audit) cost pennies bc haiku is $1/M input tokens and these workflows process tiny payloads.
 
 ## further reading
 

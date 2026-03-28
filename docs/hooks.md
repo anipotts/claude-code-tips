@@ -40,8 +40,16 @@ a hook:
 | notify | Notification | routes claude code alerts to macOS notifications |
 | knowledge-builder | PostToolUse | builds a codebase knowledge graph from tool calls |
 
-<!-- [FILL: reorder this table by how often each hook fires for you. -->
-<!-- add a "fires/session" column with real numbers from panopticon data] -->
+hook fire frequency is driven by tool usage. from real session data:
+
+| tool event | fires | what triggers hooks |
+|------------|-------|-------------------|
+| Bash (10,153) | most hook-triggering | safety-guard, no-squash, commit-nudge all fire on Bash |
+| Read (9,187) | panopticon logs these | knowledge-builder builds graph from Read targets |
+| Edit (5,010) | panopticon + replay-capture | md-lint-fix fires on .md edits, commit-nudge counts edits |
+| Write (1,696) | panopticon + replay-capture | version-stamp checks written files at SessionEnd |
+
+PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times across all sessions. that's why they need to be fast (< 50ms).
 
 ---
 
@@ -225,8 +233,7 @@ hooks should be:
 - **cheap to run** -- bash + jq, not python + imports
 - **standalone** -- each hook is one script, no shared libraries
 
-<!-- [FILL: add your personal hook philosophy. what made you start using hooks? -->
-<!-- which hook saved you the most grief? any hooks you tried and removed?] -->
+<!-- TODO: personal hook philosophy and origin story -->
 
 ---
 

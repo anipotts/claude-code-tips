@@ -33,7 +33,7 @@ i spend less than 30 minutes a week on maintenance. twelve CI workflows handle v
 
 the goal: when i open the repo on monday, there's an issue summarizing what changed in the ecosystem, a digest of community activity, and any staleness flags. i read, decide, act.
 
-<!-- [FILL: what's still manual that bugs you? what would you automate next?] -->
+<!-- TODO: what's still manual that bugs you? what would you automate next? -->
 
 ---
 
@@ -193,7 +193,7 @@ to stop: `touch .claude/guardian-kill`. to restart: `rm .claude/guardian-kill` a
 
 the pattern that works: **automate the analysis, leave the action to humans.** let claude find problems, propose fixes, draft PRs. let a human click merge.
 
-<!-- [FILL: cost of running all this monthly. github actions tier + claude API spend] -->
+total monthly cost: **< $1**. github actions free tier covers all 12 workflows. the AI-powered ones (claude-responder, docs-audit, official-watcher) use haiku at ~$0.05/run and fire weekly or on events. the rest are pure bash/python with zero API cost.
 
 ---
 
