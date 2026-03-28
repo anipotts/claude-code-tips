@@ -6,29 +6,35 @@
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v2.1.77-000?style=flat-square&labelColor=D4A574&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 [![license](https://img.shields.io/github/license/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](./LICENSE)
 
-my claude code setup, open source. 190 hours of active coding. $2.88/hr.
+my claude code setup, open source. hooks, agents, tips, and a plugin that mines your usage data.
+
+## quick start
+
+```bash
+claude plugin add anipotts/mine   # install the mine plugin
+```
+
+then: copy [safety-guard.sh](./hooks/safety-guard.sh) to block dangerous commands. read a [tip](./docs/tips/). done.
 
 ---
 
 ## the numbers
 
-450+ sessions across 137 projects in 3 months. $548 paid on the $200/mo max plan. $30,000 worth of API compute at a 91% prompt cache hit rate. that's **55x the value** of what i paid.
+hundreds of sessions across dozens of projects. $200/mo max plan.
 
-872 commits across 35 active days. no autonomous loops. no cron jobs generating commits. every session starts with me typing a prompt.
-
-without prompt caching, the same usage would've cost **$158,000**. caching brought it to $30K. i paid $548. [how prompt caching works &rarr;](./docs/cost.md)
+same usage would cost ~$12K on the API with caching, ~$95K without. no autonomous loops. no cron jobs. every session starts with me typing a prompt. [how the cost math works &rarr;](./docs/cost.md)
 
 <img src="./gifs/mine-stats.gif" width="100%" alt="mine stats showing sessions, tokens, costs, and projects" />
 
 ---
 
-## install the plugin
+## install the mine plugin
 
 ```bash
-claude plugin add anipotts/claude-code-tips
+claude plugin add anipotts/mine
 ```
 
-you get **mine** -- session mining to sqlite. costs, search, error memory, pattern detection. all data stays local at `~/.claude/mine.db`.
+you get **[mine](https://github.com/anipotts/mine)** -- session mining to sqlite. costs, search, error memory, pattern detection. all data stays local at `~/.claude/mine.db`.
 
 ```
 /mine                     today's sessions, cost, top tools
@@ -38,7 +44,7 @@ you get **mine** -- session mining to sqlite. costs, search, error memory, patte
 /mine loops               repeated patterns across sessions
 ```
 
-start with `mine` + the `safety-guard` hook. add more as you go. **[mine docs &rarr;](./plugins/mine/README.md)**
+start with `mine` + the `safety-guard` hook. add more as you go. **[mine docs &rarr;](https://github.com/anipotts/mine)**
 
 ---
 
@@ -61,6 +67,20 @@ i use this for parallel research, trying risky changes safely, and comparing app
 this is why the $200/mo plan is the best deal in AI coding. claude code caches your system prompt, tools, and CLAUDE.md as a prefix. 91% of my input tokens hit the cache -- meaning i pay 10% of the input cost on 91% of my reads.
 
 the key: keep your CLAUDE.md short and stable. every edit breaks the prefix cache. mine is 30 lines and changes maybe once a week. [the full cost breakdown &rarr;](./docs/cost.md)
+
+---
+
+## tips
+
+short, standalone techniques. each one is something you can use in your next session.
+
+| tip | what you learn |
+|-----|---------------|
+| [prompt caching](./docs/tips/prompt-caching.md) | get 97%+ cache hit rates, slash your bill |
+| [ultrathink](./docs/tips/ultrathink.md) | force extended thinking for complex problems |
+| [settings hierarchy](./docs/tips/settings-hierarchy.md) | project vs global vs local settings |
+| [safety hooks](./docs/tips/safety-hooks.md) | block force pushes and rm -rf in 5 minutes |
+| [session length](./docs/tips/session-length.md) | why shorter sessions are more efficient (with data) |
 
 ---
 
@@ -156,4 +176,4 @@ this repo runs on its own patterns.
 
 ---
 
-MIT &middot; built by [anipotts](https://anipotts.com) from 450+ sessions
+MIT &middot; built by [anipotts](https://anipotts.com)
