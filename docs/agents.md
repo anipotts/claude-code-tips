@@ -195,8 +195,7 @@ the prompt is everything bc the agent can't ask follow-up questions:
 4. **set boundaries** -- "only modify files in src/auth/. do not touch src/routes/"
 5. **describe the end state** -- "when done, all TypeScript files should compile without errors"
 
-<!-- [FILL: add your personal agent experience. which pattern do you use most? -->
-<!-- any agent teams that failed spectacularly? what's your typical team size?] -->
+<!-- TODO: which agent pattern do you use most? any teams that failed? typical team size? -->
 
 ---
 

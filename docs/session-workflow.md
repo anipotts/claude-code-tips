@@ -26,21 +26,25 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
-<!-- [FILL: how you run parallel agents for throughput. things to cover: -->
-<!-- - do you run multiple claude instances in split terminals? -->
-<!-- - how do you divide work across agents? (e.g., one writes tests, one implements) -->
-<!-- - do you use the agent subcommands from .claude/agents/? -->
-<!-- - what's your typical pattern? "3 agents concurrently = 3-5x throughput" -->
-<!-- - any gotchas with parallel sessions? (git conflicts, file locks) ] -->
+<!-- TODO: parallel agent workflow details -->
 
 ## when to /compact vs /clear
 
-<!-- [FILL: your decision framework. examples: -->
-<!-- /compact when: -->
-<!-- - context is getting long but you're mid-task -->
-<!-- - you see responses getting slower -->
-<!-- - context-save.sh will preserve your state -->
-<!-- -->
+from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:
+
+**/compact when:**
+- 20+ turns and you're shifting topics
+- context-save.sh hook is active (it preserves state before compression)
+- you see claude repeating itself or losing track of earlier decisions
+
+**/clear when:**
+- starting a completely new task
+- the previous task is done and committed
+- you want a fresh context window (cheaper than carrying dead context)
+
+the data says: sessions that hit compaction average 1.7 compactions. if you're compacting more than twice, the session is too long -- split it.
+
+<!-- TODO: personal compact vs clear decision framework -->
 <!-- /clear when: -->
 <!-- - switching to a completely different task -->
 <!-- - claude is stuck in a loop and retrying the same approach -->
