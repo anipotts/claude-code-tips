@@ -1,20 +1,11 @@
 {
-  "name": "claude-code-tips",
+  "name": "anipotts",
   "owner": {
     "name": "Ani Potts"
   },
   "metadata": {
-    "description": "Claude Code toolkit — mine plugin, hooks, agents, and docs.",
-    "version": "0.3.0"
+    "description": "hooks, agents, tips, and docs from months of building with Claude Code.",
+    "version": "0.4.0"
   },
-  "plugins": [
-    {
-      "name": "mine",
-      "source": "./plugins/mine",
-      "description": "Mines every Claude Code session into a local SQLite database. Query your usage history — costs, tokens, tools, projects, errors, and full-text search across all conversations.",
-      "author": { "name": "Ani Potts" },
-      "license": "MIT",
-      "category": "analytics"
-    }
-  ]
+  "plugins": []
 }

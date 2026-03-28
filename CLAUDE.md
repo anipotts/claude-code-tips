@@ -1,24 +1,22 @@
 # claude-code-tips
 
-personal claude code setup, open source. one installable plugin (mine), hooks, example agents/commands, and opinionated docs.
+personal claude code setup, open source. hooks, example agents/commands, opinionated docs. the mine plugin lives at [anipotts/mine](https://github.com/anipotts/mine).
 
 ## Structure
 
-- `plugins/mine/` -- flagship: mines sessions to sqlite (search, mistakes, burn, hotspots, loops)
 - `hooks/` -- standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge, replay-capture, knowledge-builder)
-- `.claude/commands/` -- slash commands i actually use (mine, mine-help, ship, improve)
+- `.claude/commands/` -- slash commands i actually use (ship, improve)
 - `examples/agents/` -- example agents (watch-tests, try-worktree, arch-review, write-pr)
 - `examples/commands/` -- example commands (sweep, quicktest, replay)
 - `examples/claude-md/` -- CLAUDE.md templates for different stacks
 - `examples/plugins/` -- demo plugins (handoff, broadcast)
 - `docs/` -- personal takes (hooks, agents, automation, worktrees, cost, mistakes, session-workflow, my-stack)
+- `docs/tips/` -- standalone tips (prompt-caching, ultrathink, settings-hierarchy, safety-hooks, session-length)
 - `docs/comparisons/` -- competitor comparisons (cursor, codex, gemini, antigravity, pricing)
-- `scripts/` -- mine.py (bulk parser), schema.sql, dashboard.py
-- `tests/` -- 125 tests for mine.py
 - `gifs/` -- VHS tape files and demo recordings
 - `content/` -- GITIGNORED, personal drafts
 - `data/` -- GITIGNORED, local mining data
-- `handoffs/` -- GITIGNORED, private handoff prompts (course, monetization, etc)
+- `handoffs/` -- GITIGNORED, private handoff prompts
 
 ## Conventions
 
