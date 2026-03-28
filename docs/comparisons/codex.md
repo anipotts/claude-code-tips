@@ -35,7 +35,7 @@ this matters bc extensibility is what turns a coding tool into *your* coding too
 
 ### established patterns at scale
 
-450+ session-tested patterns in this repo alone. community plugins, documented agent architectures, subagent coordination patterns, cost optimization strategies. the claude code ecosystem has had more time to mature and it shows in the depth of available tooling.
+hundreds of session-tested patterns in this repo alone. community plugins, documented agent architectures, subagent coordination patterns, cost optimization strategies. the claude code ecosystem has had more time to mature and it shows in the depth of available tooling.
 
 ### model switching mid-session
 

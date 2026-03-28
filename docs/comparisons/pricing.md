@@ -139,6 +139,6 @@ use antigravity (free preview, includes frontier models) as your primary tool. s
 **ChatGPT Pro**: best for openai ecosystem access beyond just coding
 
 ### $200+/mo
-if you're spending this much, you should be tracking per-session costs. use the [mine plugin](../../plugins/mine/) to measure actual usage and optimize model selection.
+if you're spending this much, you should be tracking per-session costs. use the [mine plugin](https://github.com/anipotts/mine) to measure actual usage and optimize model selection.
 
 > individual comparison docs: [codex](codex.md) | [cursor](cursor.md) | [gemini](gemini.md) | [antigravity](antigravity.md)
