@@ -266,21 +266,4 @@ jobs:
             echo "All Python files compile cleanly"
           fi
 
-  # ---------------------------------------------------------------------------
-  # pytest -- test mine.py parser, DB writes, cost calculations
-  # ---------------------------------------------------------------------------
-  pytest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install pytest
-        run: pip install pytest==8.3.4
-
-      - name: Run tests
-        run: python -m pytest tests/ -v
+  # pytest removed -- tests live in anipotts/mine now
