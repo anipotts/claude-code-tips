@@ -10,23 +10,32 @@ what claude code actually costs, how caching saves 81% of it, and the strategies
 
 most cost discussions are vibes. "it's expensive" or "it's worth it" without data. here are mine.
 
-| metric | value |
-|--------|-------|
-| total tokens processed | 19.8B |
-| cache read tokens | 18.1B |
-| overall cache hit rate | 91% (opus 92.9%, haiku 89.2%) |
-| cost without caching | $158K |
-| cost with caching | $30K |
-| amount paid | $548 |
-| saved by caching | $128K (81%) |
-| effective hourly rate | $2.88/hr |
-| value multiplier | 55x |
+### what i pay
+
+**$200/mo.** Max plan. flat rate. no per-token billing. no surprises.
+
+that $200 covers everything — hundreds of sessions, thousands of subagent spawns. run `/mine` to see your own numbers.
+
+### what your plan costs
+
+| plan | monthly | how billing works |
+|------|---------|------------------|
+| pro | $20 | flat rate, rate-limited. you'll hit limits with heavy use. |
+| max | $200 | flat rate, no rate limits in practice. what i use. |
+| API (pay-per-use) | variable | billed per token. caching saves ~87% on input costs. |
+
+on pro or max, **you don't pay per token.** the mine.db cost estimates are hypothetical — they show what your usage would cost at API list prices, not what you actually pay.
+
+### why caching still matters on a flat plan
+
+even though you don't pay per token, caching affects:
+- **speed** — cached prefixes return faster (less compute to process)
+- **rate limits** — fewer tokens consumed per turn = more headroom before throttling
+- **context quality** — stable CLAUDE.md = stable cache prefix = consistent behavior
+
+my cache hit rate is 95% overall (83% for short sessions, 96% for long ones).
 
 caching is everything. Thariq Shuja (creator of claude code) put it best: put static content first, don't change CLAUDE.md often. the cache hit rate is the single biggest lever on your bill.
-
-<!-- [FILL: add your monthly breakdown. pull from /mine or anthropic dashboard: -->
-<!-- monthly API spend, sessions/month, avg cost/session, avg cost/commit, -->
-<!-- plan type (max/pro/team), whether you hit rate limits ] -->
 
 ---
 
@@ -158,14 +167,16 @@ the mine plugin logs every session to sqlite at `~/.claude/mine.db`. tracks inpu
 
 the wide ranges are real -- a focused 30-minute session costs $1. the same 30 minutes with unfocused exploration costs $3. context discipline matters.
 
-<!-- [FILL: is the max plan worth it? what plan are you on? -->
-<!-- do you hit rate limits on pro? effective hourly rate of time saved? -->
-<!-- cost per commit from your data? ] -->
+### is the max plan worth it?
+
+yes. $200/mo flat vs ~$12K worth of API compute. if you're running 5+ sessions/day, max pays for itself immediately.
+
+i've never hit a rate limit on max. on pro, i'd have been throttled in the first week.
 
 ---
 
 ## further reading
 
-- [mine plugin](../plugins/mine/) -- burn feature, cost tracking, usage analysis
+- [mine plugin](https://github.com/anipotts/mine) -- burn feature, cost tracking, usage analysis
 - [agents](./agents.md) -- cost considerations for agent teams
 - [official pricing](https://docs.anthropic.com/en/docs/about-claude/models) -- current model pricing
