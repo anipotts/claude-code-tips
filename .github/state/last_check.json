@@ -1,8 +1,8 @@
 {
-  "anthropics/claude-code/releases": "v2.1.86",
+  "anthropics/claude-code/releases": "v2.1.87",
   "shanraisshan/claude-code-best-practice/commits": "cfb33c9fce753433bc052c015d616eaa9a37d4a8",
-  "marckrenn/claude-code-changelog/commits": "552635f62e90eeb3ec4046a0040e917d5c624493",
-  "anthropic/changelog": "5228fdc0c1060184",
+  "marckrenn/claude-code-changelog/commits": "74a4e307a00bf6fcb3b7731992f8fec6c6af929e",
+  "anthropic/changelog": "376de60cceaaae07",
   "trending/seen_repos": [
     "CherryHQ/cherry-studio",
     "ComposioHQ/awesome-claude-skills",
