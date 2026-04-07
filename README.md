@@ -8,6 +8,8 @@
 
 my claude code setup, open source. hooks, agents, tips, and a plugin that mines your usage data.
 
+if this saves you time, [star it](https://github.com/anipotts/claude-code-tips). it helps others find it.
+
 ## quick start
 
 ```bash
@@ -34,7 +36,7 @@ same usage would cost ~$12K on the API with caching, ~$95K without. no autonomou
 claude plugin add anipotts/mine
 ```
 
-you get **[mine](https://github.com/anipotts/mine)** -- session mining to sqlite. costs, search, error memory, pattern detection. all data stays local at `~/.claude/mine.db`.
+you get **[mine](https://github.com/anipotts/mine)** · session mining to sqlite. costs, search, error memory, pattern detection. all data stays local at `~/.claude/mine.db`.
 
 ```
 /mine                     today's sessions, cost, top tools
@@ -64,7 +66,7 @@ i use this for parallel research, trying risky changes safely, and comparing app
 
 ### prompt caching
 
-this is why the $200/mo plan is the best deal in AI coding. claude code caches your system prompt, tools, and CLAUDE.md as a prefix. 91% of my input tokens hit the cache -- meaning i pay 10% of the input cost on 91% of my reads.
+this is why the $200/mo plan is the best deal in AI coding. claude code caches your system prompt, tools, and CLAUDE.md as a prefix. 91% of my input tokens hit the cache, meaning i pay 10% of the input cost on 91% of my reads.
 
 the key: keep your CLAUDE.md short and stable. every edit breaks the prefix cache. mine is 30 lines and changes maybe once a week. [the full cost breakdown &rarr;](./docs/cost.md)
 
@@ -77,10 +79,17 @@ short, standalone techniques. each one is something you can use in your next ses
 | tip | what you learn |
 |-----|---------------|
 | [prompt caching](./docs/tips/prompt-caching.md) | get 97%+ cache hit rates, slash your bill |
-| [ultrathink](./docs/tips/ultrathink.md) | force extended thinking for complex problems |
-| [settings hierarchy](./docs/tips/settings-hierarchy.md) | project vs global vs local settings |
 | [safety hooks](./docs/tips/safety-hooks.md) | block force pushes and rm -rf in 5 minutes |
+| [settings hierarchy](./docs/tips/settings-hierarchy.md) | project vs global vs local settings |
 | [session length](./docs/tips/session-length.md) | why shorter sessions are more efficient (with data) |
+| [ultrathink](./docs/tips/ultrathink.md) | force extended thinking for complex problems |
+| [context management](./docs/tips/context-management.md) | compaction strategies, active tool rate, keeping sessions tight |
+| [plan mode](./docs/tips/plan-mode.md) | when planning saves time vs when it wastes it |
+| [fast mode](./docs/tips/fast-mode.md) | same model, faster output, the tradeoff |
+| [plugins](./docs/tips/plugins.md) | build a plugin from scratch, what makes one worth installing |
+| [subagents](./docs/tips/subagents.md) | agent teams, worktree isolation, when parallel pays off |
+| [mcp integration](./docs/tips/mcp-integration.md) | wire up MCP servers, use them inside sessions |
+| [hooks v2](./docs/tips/hooks-v2.md) | command vs http vs prompt hooks, the async pattern |
 
 ---
 
@@ -127,7 +136,7 @@ copy to `.claude/agents/` and invoke with `/agent <name>`. each teaches a differ
 
 | command | what it does |
 |---|---|
-| `/mine` | usage data -- costs, sessions, search, patterns |
+| `/mine` | usage data · costs, sessions, search, patterns |
 | `/ship` | stage, commit, push, open PR in one command |
 | `/improve` | propose CLAUDE.md updates from git history |
 
@@ -155,11 +164,11 @@ diplomatic, data-driven, no FUD. every claim cites a source.
 
 ## examples
 
-- [CLAUDE.md templates](./examples/claude-md/) -- starter configs for TypeScript, Python, Rust, Next.js
-- [example agents](./examples/agents/) -- 4 agents, each teaching a different pattern
-- [example commands](./examples/commands/) -- 3 commands you can copy to any project
-- [handoff plugin](./examples/plugins/handoff/) -- PreCompact context preservation
-- [broadcast plugin](./examples/plugins/broadcast/) -- async notifications on git events
+- [CLAUDE.md templates](./examples/claude-md/) · starter configs for TypeScript, Python, Rust, Next.js
+- [example agents](./examples/agents/) · 4 agents, each teaching a different pattern
+- [example commands](./examples/commands/) · 3 commands you can copy to any project
+- [handoff plugin](./examples/plugins/handoff/) · PreCompact context preservation
+- [broadcast plugin](./examples/plugins/broadcast/) · async notifications on git events
 
 ---
 
@@ -167,12 +176,29 @@ diplomatic, data-driven, no FUD. every claim cites a source.
 
 this repo runs on its own patterns.
 
-- **12 CI workflows** -- docs audit, competitive intel, community digest, freshness check, stale cleanup, dependabot, releases, plugin smoke test, PR quality gate, validation, claude responder, upstream watcher
+- **12 CI workflows** · docs audit, competitive intel, community digest, freshness check, stale cleanup, dependabot, releases, plugin smoke test, PR quality gate, validation, claude responder, upstream watcher
 - **11 hooks** running on every session
-- **<$1/month** CI cost -- AI-powered workflows use haiku
-- **0 manual maintenance** -- everything that doesn't require taste is automated
+- **<$1/month** CI cost · AI-powered workflows use haiku
+- **0 manual maintenance** · everything that doesn't require taste is automated
 
 [automation details &rarr;](./docs/automation.md)
+
+---
+
+## tools i built from these patterns
+
+these all came out of living in claude code every day. each solves a specific problem i kept hitting.
+
+- **[mine](https://github.com/anipotts/mine)** · session mining to sqlite. costs, search, error memory, pattern detection
+- **[claudemon](https://github.com/anipotts/claudemon)** · real-time session monitoring across projects and machines
+- **[cc](https://github.com/anipotts/cc)** · multi-session awareness. see what other sessions are doing, send messages between them
+- **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · MCP server for read-only iMessage history. 26 tools, zero network requests
+
+## more from me
+
+- [anipotts.com/thoughts](https://anipotts.com/thoughts) · long-form
+- [buttondown.com/anipotts](https://buttondown.com/anipotts) · newsletter
+- [@anipottsbuilds](https://instagram.com/anipottsbuilds) · short-form
 
 ---
 

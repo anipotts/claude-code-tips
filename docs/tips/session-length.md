@@ -16,7 +16,7 @@ shorter sessions are more efficient. here's the data.
 
 ## what this means
 
-**active tool rate is flat at ~3.4/min.** claude doesn't slow down in long sessions. the wall-time rate drops 8.8x bc *you* slow down -- longer review gaps, context switching, decision fatigue.
+**active tool rate is flat at ~3.4/min.** claude doesn't slow down in long sessions. the wall-time rate drops 8.8x bc *you* slow down. longer review gaps, context switching, decision fatigue.
 
 **compaction is the cliff.** 0% of <10 min sessions need compaction. 54% of 2hr+ sessions do. each compaction loses context. after 2 compactions, you're fighting drift.
 

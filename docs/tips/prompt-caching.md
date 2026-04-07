@@ -6,7 +6,7 @@ the single biggest cost lever in claude code. my overall cache hit rate is 95%. 
 
 ## how it works
 
-claude code caches your system prompt, tool definitions, and CLAUDE.md as a prefix. when these stay the same across turns, 90% of input tokens hit the cache -- meaning you pay 1/10th the cost on those tokens.
+claude code caches your system prompt, tool definitions, and CLAUDE.md as a prefix. when these stay the same across turns, 90% of input tokens hit the cache, meaning you pay 1/10th the cost on those tokens.
 
 ## the trick
 
@@ -49,7 +49,7 @@ longer sessions cache better bc the prefix stabilizes and cache_write amortizes 
 
 ## try it
 
-1. check your current CLAUDE.md -- is it under 30 lines?
+1. check your current CLAUDE.md. is it under 30 lines?
 2. move anything that changes frequently (task lists, WIP notes) to a separate file
 3. run `/mine` to check your cache hit rate after a few sessions
 

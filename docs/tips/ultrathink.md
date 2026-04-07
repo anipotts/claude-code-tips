@@ -9,7 +9,7 @@ force claude code into extended thinking mode for complex problems. more thinkin
 add "ultrathink" anywhere in your prompt:
 
 ```
-ultrathink — design the database schema for a multi-tenant SaaS with row-level security
+ultrathink: design the database schema for a multi-tenant SaaS with row-level security
 ```
 
 or at the start of a complex request:
