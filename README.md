@@ -111,11 +111,9 @@ copy one, wire it up, done. each is a standalone bash script. [full guide &rarr;
 | hook | event | what it does |
 |---|---|---|
 | [commit-nudge](./hooks/commit-nudge.sh) | PostToolUse | reminds you to commit after N edits |
-| [replay-capture](./hooks/replay-capture.sh) | PostToolUse | captures file changes for VHS replays |
 | [version-stamp](./hooks/version-stamp.sh) | SessionEnd | auto-updates "tested with" stamps |
 | [stale-branch](./hooks/stale-branch.sh) | SessionStart | warns about gone tracking branches |
 | [md-lint-fix](./hooks/md-lint-fix.sh) | PostToolUse | auto-fixes markdown lint on save |
-| [knowledge-builder](./hooks/knowledge-builder/) | PostToolUse | builds a codebase knowledge graph |
 
 </details>
 
@@ -140,7 +138,7 @@ copy to `.claude/agents/` and invoke with `/agent <name>`. each teaches a differ
 | `/ship` | stage, commit, push, open PR in one command |
 | `/improve` | propose CLAUDE.md updates from git history |
 
-plus [3 example commands](./examples/commands/) you can copy: `/sweep`, `/quicktest`, `/replay`.
+plus [2 example commands](./examples/commands/) you can copy: `/sweep`, `/quicktest`.
 
 ---
 

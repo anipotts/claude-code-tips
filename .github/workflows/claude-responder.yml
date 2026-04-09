@@ -67,7 +67,7 @@ jobs:
           you are triaging issues for the claude-code-tips repo.
           this repo has:
           - plugins: mine (session mining to sqlite), handoff (context preservation), broadcast (async notifications)
-          - hooks: safety-guard, context-save, panopticon, knowledge-builder, notify
+          - hooks: safety-guard, context-save, panopticon, notify, no-squash, commit-nudge, md-lint-fix, stale-branch, version-stamp
           - agents: analyst, explorer, guardian, code-sweeper, dep-checker, pr-narrator, test-writer, vibe-check
           - skills: sift, improve, ship, sweep, quicktest
           - docs: guide, hooks-guide, plugin-creation, subagent-patterns, cli-tools, automation, mcp-servers, comparisons/

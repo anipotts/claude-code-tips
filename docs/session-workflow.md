@@ -60,13 +60,13 @@ when a session ends (ctrl+c, `/exit`, or timeout), two things fire:
 
 **version-stamp.sh** (SessionEnd) -- if you modified files in docs/, hooks/, plugins/, or scripts/, it auto-updates the "tested with: claude code vX.Y.Z" stamps to your current version. no manual stamp maintenance.
 
-**panopticon** has already logged every tool call during the session to `~/.claude/panopticon.db`. replay-capture has logged every file mutation to `~/.claude/replay/SESSION_ID.jsonl`.
+**panopticon** has already logged every tool call during the session to `~/.claude/panopticon.db`.
 
 nothing to do manually. close the terminal. the data is there when you need it.
 
 ## further reading
 
-- [hooks](./hooks.md) -- the 11 hooks that fire during sessions
+- [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
 
 tested with: claude code v2.1.77

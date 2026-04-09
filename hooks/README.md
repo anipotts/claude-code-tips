@@ -16,8 +16,6 @@ standalone scripts that plug into claude code's hook system. copy one, wire it u
 | hook | event | what it does |
 |---|---|---|
 | [panopticon.sh](./panopticon.sh) | PostToolUse | logs every tool action to a local sqlite audit trail |
-| [knowledge-builder/](./knowledge-builder/) | PostToolUse | builds a codebase knowledge graph as claude explores |
-| [replay-capture.sh](./replay-capture.sh) | PostToolUse | captures file changes for VHS session replays |
 
 ## preservation
 

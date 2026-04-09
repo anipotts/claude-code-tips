@@ -4,7 +4,7 @@ personal claude code setup, open source. hooks, example agents/commands, opinion
 
 ## Structure
 
-- `hooks/` · standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge, replay-capture, knowledge-builder)
+- `hooks/` · standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge)
 - `.claude/commands/` · slash commands i actually use (ship, improve)
 - `examples/agents/` · example agents (watch-tests, try-worktree, arch-review, write-pr)
 - `examples/commands/` · example commands (sweep, quicktest, replay)

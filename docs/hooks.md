@@ -32,22 +32,19 @@ a hook:
 | no-squash | PreToolUse | blocks squash merges -- preserves commit history |
 | context-save | PreCompact | saves session state before context compression |
 | panopticon | PostToolUse | logs every tool call to sqlite for later analysis |
-| replay-capture | PostToolUse | logs file mutations to JSONL for VHS animations |
 | commit-nudge | PostToolUse | soft reminder after 8+ edits without a commit |
 | md-lint-fix | PostToolUse | auto-runs markdownlint-fix on saved .md files |
 | version-stamp | SessionEnd | updates "tested with" version stamps in changed files |
 | stale-branch | SessionStart | warns about local branches with deleted remotes |
 | notify | Notification | routes claude code alerts to macOS notifications |
-| knowledge-builder | PostToolUse | builds a codebase knowledge graph from tool calls |
-
 hook fire frequency is driven by tool usage. from real session data:
 
 | tool event | fires | what triggers hooks |
 |------------|-------|-------------------|
 | Bash (10,153) | most hook-triggering | safety-guard, no-squash, commit-nudge all fire on Bash |
-| Read (9,187) | panopticon logs these | knowledge-builder builds graph from Read targets |
-| Edit (5,010) | panopticon + replay-capture | md-lint-fix fires on .md edits, commit-nudge counts edits |
-| Write (1,696) | panopticon + replay-capture | version-stamp checks written files at SessionEnd |
+| Read (9,187) | panopticon logs these | panopticon tracks all read operations |
+| Edit (5,010) | panopticon tracks | md-lint-fix fires on .md edits, commit-nudge counts edits |
+| Write (1,696) | panopticon tracks | version-stamp checks written files at SessionEnd |
 
 PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times across all sessions. that's why they need to be fast (< 50ms).
 
