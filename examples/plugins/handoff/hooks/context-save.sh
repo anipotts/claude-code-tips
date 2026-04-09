@@ -4,7 +4,7 @@
 # recent context, and writes a structured handoff file to .claude/handoff.md
 
 set -euo pipefail
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 
 HANDOFF_DIR=".claude"
 HANDOFF_FILE="${HANDOFF_DIR}/handoff.md"

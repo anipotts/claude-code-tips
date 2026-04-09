@@ -1,4 +1,4 @@
-<!-- tested with: claude code v2.1.77 -->
+<!-- tested with: claude code v2.1.94 -->
 
 # AI coding tool pricing matrix
 

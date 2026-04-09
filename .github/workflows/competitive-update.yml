@@ -12,7 +12,7 @@ name: Competitive Update
 # replaces: comparison-update.yml
 #
 # cost: ~$0.02-0.05 per run (haiku, stripped text input)
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 # ---------------------------------------------------------------
 
 on:

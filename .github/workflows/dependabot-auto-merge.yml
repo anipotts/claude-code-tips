@@ -7,7 +7,7 @@ name: Dependabot Auto-Merge
 # major bumps: label "needs-review" so a human decides.
 #
 # cost: $0 (runs ~1 min on ubuntu-latest, well under free tier)
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 # ---------------------------------------------------------------
 
 on:

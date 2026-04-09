@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 # =============================================================================
 # Panopticon — PostToolUse audit trail
 # =============================================================================

@@ -67,4 +67,4 @@ nothing to do manually. close the terminal. the data is there when you need it.
 - [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
 
-tested with: claude code v2.1.77
+tested with: claude code v2.1.94

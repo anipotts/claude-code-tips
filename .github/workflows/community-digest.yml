@@ -8,7 +8,7 @@ name: Community Digest
 # output: single open issue (supersedes previous digests)
 #
 # cost: $0/run — no Claude API calls, just HTTP + formatting
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 # ---------------------------------------------------------------
 
 on:

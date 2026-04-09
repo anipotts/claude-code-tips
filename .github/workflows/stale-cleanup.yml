@@ -12,7 +12,7 @@ name: Stale Cleanup
 #   4. prunes remote branches that are gone locally
 #
 # cost: $0 (pure shell, no claude API)
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 # ---------------------------------------------------------------
 
 on:

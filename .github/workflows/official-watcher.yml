@@ -16,7 +16,7 @@ name: Official Watcher
 #   - rolls back direct commits if validation breaks
 #
 # cost: ~$0/mo GitHub Actions + ~$0.01-0.05/run Claude API
-# tested with: claude code v2.1.77
+# tested with: claude code v2.1.94
 # ---------------------------------------------------------------
 
 on:
