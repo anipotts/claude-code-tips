@@ -10,7 +10,7 @@ personal claude code setup, open source. hooks, example agents/commands, opinion
 - `examples/commands/` · example commands (sweep, quicktest, replay)
 - `examples/claude-md/` · CLAUDE.md templates for different stacks
 - `examples/plugins/` · demo plugins (handoff, broadcast)
-- `docs/` · personal takes (hooks, agents, automation, worktrees, cost, mistakes, session-workflow, my-stack)
+- `docs/` · personal takes (hooks, agents, automation, worktrees, cost, mistakes, session-workflow)
 - `docs/tips/` · standalone tips (prompt-caching, ultrathink, settings-hierarchy, safety-hooks, session-length, plugins, subagents, mcp-integration, plan-mode, fast-mode, hooks-v2, context-management)
 - `docs/comparisons/` · competitor comparisons (cursor, codex, gemini, antigravity, pricing)
 - `gifs/` · VHS tape files and demo recordings

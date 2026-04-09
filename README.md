@@ -148,7 +148,7 @@ plus [2 example commands](./examples/commands/) you can copy: `/sweep`, `/quickt
 |---|---|
 | [cost reality](./docs/cost.md) | what claude code actually costs, the prompt caching math |
 | [mistakes i made](./docs/mistakes.md) | what burned me so you can skip it |
-| [my stack](./docs/my-stack.md) | the automation setup i actually run |
+| [automation](./docs/automation.md) | the 12 CI pipelines that maintain this repo |
 | [session workflow](./docs/session-workflow.md) | how i work day-to-day with claude code |
 | [worktrees](./docs/worktrees.md) | parallel exploration with the desktop app |
 
