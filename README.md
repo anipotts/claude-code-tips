@@ -56,7 +56,7 @@ start with `mine` + the `safety-guard` hook. add more as you go. **[mine docs &r
 
 hooks are the difference between "claude does what i want" and "claude does whatever it feels like." CLAUDE.md gives guidance. hooks give enforcement. one is a suggestion, the other is a wall.
 
-i run 9 hooks on every session. safety-guard blocks force pushes, `rm -rf /`, and `curl | bash`. no-squash blocks squash merges. context-save preserves state before compaction. [my full hook philosophy &rarr;](./docs/hooks.md)
+this repo has 9 hooks you can drop into any project. safety-guard blocks force pushes, `rm -rf /`, and `curl | bash`. no-squash blocks squash merges. context-save preserves state before compaction. pick the ones that fit your workflow. [hook guide &rarr;](./docs/hooks.md)
 
 ### agent teams
 

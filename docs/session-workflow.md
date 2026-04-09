@@ -8,9 +8,9 @@ not the official docs version. the real version, with the muscle memory and the 
 
 open terminal. `cd` into the project. type `claude`. that's it.
 
-on launch, claude code loads CLAUDE.md from the project root, reads any `.claude/settings.json` for hook registrations, and fires SessionStart hooks. in my setup, stale-branch.sh runs here -- it checks for local branches whose remote is gone and prints a cleanup reminder.
+on launch, claude code loads CLAUDE.md from the project root, reads any `.claude/settings.json` for hook registrations, and fires SessionStart hooks. if you wire up stale-branch.sh, it runs here and checks for local branches whose remote is gone.
 
-by the time i see the prompt, hooks are loaded, context is cached, and claude knows my conventions.
+by the time you see the prompt, hooks are loaded, context is cached, and claude knows your conventions.
 
 ## context loading
 
