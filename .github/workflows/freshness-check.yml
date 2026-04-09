@@ -41,7 +41,7 @@ jobs:
           STALE_FILES=""
           MISSING_FILES=""
           CHECKED=0
-          DIRS="docs hooks plugins agents skills commands"
+          DIRS="docs hooks examples/agents examples/commands examples/plugins"
 
           for dir in $DIRS; do
             [ ! -d "$dir" ] && continue
