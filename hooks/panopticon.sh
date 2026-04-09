@@ -11,10 +11,8 @@ set -euo pipefail
 #
 # What gets logged:
 #   - Timestamp (UTC)
-#   - Session ID
 #   - Tool name (Bash, Read, Write, Edit, Glob, Grep, etc.)
 #   - Tool input (truncated to 500 chars)
-#   - Output status code from the tool execution
 #
 # Query your history:
 #   sqlite3 ~/.claude/panopticon.db "SELECT * FROM actions ORDER BY timestamp DESC LIMIT 20;"
@@ -30,29 +28,24 @@ mkdir -p "$(dirname "$DB")"
 sqlite3 "$DB" "CREATE TABLE IF NOT EXISTS actions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   timestamp TEXT DEFAULT (datetime('now')),
-  session_id TEXT,
   tool_name TEXT,
-  tool_input TEXT,
-  exit_code INTEGER
+  tool_input TEXT
 );"
 
 # Read the hook payload from stdin
 INPUT=$(cat)
 
 # Parse fields from the JSON payload
-SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // "unknown"')
-TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input | tostring' | head -c 500)
-EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_output.exit_code // 0')
-EXIT_CODE=$(echo "$EXIT_CODE" | grep -oE '^[0-9]+$' || echo "0")
+# PostToolUse provides: tool_name, tool_input, tool_result
+TOOL_NAME=$(printf '%s' "$INPUT" | jq -r '.tool_name // "unknown"')
+TOOL_INPUT=$(printf '%s' "$INPUT" | jq -r '.tool_input | tostring' | head -c 500)
 
 # Escape single quotes for safe SQL insertion
-SAFE_INPUT=$(echo "$TOOL_INPUT" | sed "s/'/''/g")
-SAFE_SESSION=$(echo "$SESSION_ID" | sed "s/'/''/g")
-SAFE_TOOL=$(echo "$TOOL_NAME" | sed "s/'/''/g")
+SAFE_INPUT=$(printf '%s' "$TOOL_INPUT" | sed "s/'/''/g")
+SAFE_TOOL=$(printf '%s' "$TOOL_NAME" | sed "s/'/''/g")
 
 # Insert the record
-sqlite3 "$DB" ".timeout 5000" "INSERT INTO actions (session_id, tool_name, tool_input, exit_code)
-  VALUES ('$SAFE_SESSION', '$SAFE_TOOL', '$SAFE_INPUT', '$EXIT_CODE');"
+sqlite3 "$DB" ".timeout 5000" "INSERT INTO actions (tool_name, tool_input)
+  VALUES ('$SAFE_TOOL', '$SAFE_INPUT');"
 
 exit 0

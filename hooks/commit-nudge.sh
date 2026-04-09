@@ -13,11 +13,11 @@ set -euo pipefail
 THRESHOLD=8
 
 INPUT=$(cat)
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
+TOOL_NAME=$(printf '%s' "$INPUT" | jq -r '.tool_name // ""')
 
-# use session_id for the counter file — $$ changes per invocation since hooks are separate processes
-SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "default"')
-COUNTER_FILE="/tmp/.claude-commit-nudge-${SESSION_ID}"
+# Counter file uses PPID (parent process ID) to scope per Claude Code session.
+# Each Claude Code process spawns hooks as children, so PPID is stable for the session.
+COUNTER_FILE="${TMPDIR:=/tmp}/.claude-commit-nudge-${PPID}"
 
 # only count Write and Edit
 if [[ "$TOOL_NAME" != "Write" && "$TOOL_NAME" != "Edit" ]]; then
@@ -39,7 +39,7 @@ if [ "$COUNT" -ge "$THRESHOLD" ]; then
   TOTAL=$((DIRTY + UNTRACKED))
 
   if [ "$TOTAL" -gt 0 ]; then
-    echo "nudge: $TOTAL uncommitted file(s) after $COUNT edits — consider committing" >&2
+    echo "nudge: $TOTAL uncommitted file(s) after $COUNT edits. consider committing." >&2
     # reset counter after nudge
     echo "0" > "$COUNTER_FILE"
   fi

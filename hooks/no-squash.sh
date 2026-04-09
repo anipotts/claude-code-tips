@@ -14,13 +14,13 @@ set -euo pipefail
 # =============================================================================
 
 INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
+COMMAND=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // ""')
 
 if [ -z "$COMMAND" ]; then
   exit 0
 fi
 
-if echo "$COMMAND" | grep -qiE '(git\s+merge|gh\s+pr\s+merge).*--squash'; then
+if printf '%s' "$COMMAND" | grep -qiE '(git\s+merge|gh\s+pr\s+merge).*--squash'; then
   echo "BLOCKED by no-squash: squash merges are not allowed. use regular merge to preserve commit history." >&2
   exit 2
 fi

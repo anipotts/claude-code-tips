@@ -17,24 +17,22 @@ The plugin writes to `.claude/handoff.md` in your project root:
 ```markdown
 # Session Handoff
 **Saved:** 2026-02-25T14:32:01Z
-**Trigger:** PreCompact
+**Trigger:** PreCompact (context window about to be compressed)
+**Session:** abc123
 
-## Current Plan
-- Refactoring the auth module to use JWT
-- Migrating tests from Jest to Vitest
+## What to do with this file
 
-## Progress
-- [x] Extracted token validation into lib/auth/validate.ts
-- [x] Updated 12 of 18 test files
-- [ ] Remaining: 6 test files + integration tests
+This was auto-generated when the context window filled up. Read it at the
+start of your next session to pick up where you left off. Add your own notes
+below before starting a new session.
 
-## Blockers
-- CI pipeline expects Jest config -- need to update .github/workflows
+## Recent Context
 
-## Next Steps
-1. Finish test migration
-2. Update CI config
-3. Run full suite locally before pushing
+(recent transcript lines extracted from the session file)
+
+## Your Notes
+
+<!-- Add your plan, progress, and blockers here before starting a new session -->
 ```
 
 ## Install
@@ -59,10 +57,10 @@ chmod +x .claude/plugins/context-handoff/hooks/*.sh
 ## How it works
 
 1. Claude Code fires `PreCompact` when the context window is about to be compressed
-2. `context-save.sh` receives the transcript as JSON on stdin
-3. The script extracts the last several assistant messages, identifies plan/progress/blocker patterns
-4. Writes structured markdown to `.claude/handoff.md`
-5. On `Stop`, `session-state.sh` does a lighter-weight capture of the final session state
+2. `context-save.sh` receives a JSON payload with `session_id` and `transcript_path`
+3. The script reads recent context from the transcript file at that path
+4. Writes a handoff template to `.claude/handoff.md` with the extracted context
+5. On `Stop`, `session-state.sh` appends the stop reason and timestamp
 
 The handoff file persists across sessions. Next time you start Claude Code in that project, you (or Claude) can read `.claude/handoff.md` to pick up exactly where you left off.
 

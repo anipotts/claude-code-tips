@@ -17,16 +17,8 @@ INPUT=$(cat)
 # Ensure .claude directory exists
 mkdir -p "${HANDOFF_DIR}"
 
-# Extract session ID and stop reason
-SESSION_ID=$(echo "${INPUT}" | jq -r '.session_id // "unknown"' 2>/dev/null || echo "unknown")
-STOP_REASON=$(echo "${INPUT}" | jq -r '.stop_reason // "unknown"' 2>/dev/null || echo "unknown")
-
-# Extract the final assistant message if available
-LAST_MESSAGE=$(echo "${INPUT}" | jq -r '
-  .transcript // .messages // []
-  | map(select(.role == "assistant"))
-  | .[-1].content // "No final message captured."
-' 2>/dev/null || echo "No final message captured.")
+# Extract stop reason from the Stop payload
+STOP_REASON=$(printf '%s' "${INPUT}" | jq -r '.stop_reason // "unknown"' 2>/dev/null || echo "unknown")
 
 # Append session end state (don't overwrite PreCompact data if it exists)
 cat >> "${HANDOFF_FILE}" << EOF
@@ -35,12 +27,9 @@ cat >> "${HANDOFF_FILE}" << EOF
 
 ## Session End
 **Timestamp:** ${TIMESTAMP}
-**Session:** ${SESSION_ID}
 **Stop Reason:** ${STOP_REASON}
 
-### Final State
-
-${LAST_MESSAGE}
+<!-- Add notes about what was accomplished and what's next -->
 
 ---
 *Appended by context-handoff/session-state on Stop*
