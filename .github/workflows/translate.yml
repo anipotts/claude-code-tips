@@ -14,28 +14,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if translation needed
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "should_translate=true" >> "$GITHUB_OUTPUT"
+          elif git diff HEAD~1 --name-only | grep -q '^README.md$'; then
+            # skip if the last commit was from this workflow (avoid loops)
+            LAST_AUTHOR=$(git log -1 --format='%an')
+            if [ "$LAST_AUTHOR" = "github-actions[bot]" ]; then
+              echo "Skipping: last commit was from translation bot"
+              echo "should_translate=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "should_translate=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "should_translate=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Translate README to 5 languages
+        if: steps.check.outputs.should_translate == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           set -euo pipefail
 
-          # language selector line (shared across all translations)
+          SOURCE_HASH=$(git rev-parse --short HEAD)
           SELECTOR='> [EN](./README.md) | [ZH](./README.zh-CN.md) | [ES](./README.es.md) | [HI](./README.hi.md) | [PT](./README.pt-BR.md) | [JA](./README.ja.md)'
 
-          # escape README content for JSON embedding
           README_JSON=$(jq -Rs . < README.md)
 
-          # system prompt (cached across all 5 requests)
+          # system prompt with glossary for consistent terminology
+          # cached across all 5 requests (~90% input cost savings on requests 2-5)
           SYSTEM_JSON=$(cat <<'SYSPROMPT'
           [{
             "type": "text",
-            "text": "You translate GitHub README.md files. Rules:\n- Translate all prose to the target language\n- Keep ALL markdown formatting, links, badges, image tags, code blocks, and HTML exactly as-is\n- Keep proper nouns in English: Claude Code, mine, claudemon, cc, imessage-mcp, CLAUDE.md, MCP, Anthropic\n- Keep code/CLI commands and content inside backticks in English\n- Do NOT translate URLs, file paths, or badge parameters\n- Keep the same casual, lowercase tone as the original\n- Output ONLY the translated markdown. No commentary, no explanation.",
+            "text": "You translate GitHub README.md files.\n\nRules:\n- Translate all prose to the target language\n- Keep ALL markdown formatting, links, badges, image tags, code blocks, and HTML exactly as-is\n- Keep code/CLI commands and content inside backticks in English\n- Do NOT translate URLs, file paths, or badge parameters\n- Match the casual, lowercase tone of the original\n- Output ONLY the translated markdown, no commentary\n\nTerminology glossary (use these exact terms, do not translate them):\n- hooks, agents, worktree, plugin, prompt caching, subagents\n- Claude Code, CLAUDE.md, mine, claudemon, cc, imessage-mcp\n- MCP, Anthropic, sqlite, haiku, dependabot\n- safety-guard, panopticon, context-save, no-squash\n- PreToolUse, PostToolUse, SessionStart, SessionEnd, PreCompact\n\nTerminology to translate naturally:\n- 'tip/tips' -> translate to target language\n- 'session/sessions' -> translate to target language\n- 'cost/pricing' -> translate to target language\n- 'star/stars' (GitHub) -> translate to target language",
             "cache_control": {"type": "ephemeral"}
           }]
           SYSPROMPT
           )
+
+          RESULTS_DIR=$(mktemp -d)
+          PASS=0
+          FAIL=0
 
           translate() {
             local lang="$1"
@@ -45,8 +70,6 @@ jobs:
             local max_attempts=2
 
             while [ $attempt -lt $max_attempts ]; do
-              echo "Translating $file ($lang)..."
-
               RESPONSE=$(curl -s -w "\n%{http_code}" https://api.anthropic.com/v1/messages \
                 -H "x-api-key: $ANTHROPIC_API_KEY" \
                 -H "anthropic-version: 2023-06-01" \
@@ -55,7 +78,7 @@ jobs:
                   --arg model "claude-haiku-4-5-20251001" \
                   --argjson system "$SYSTEM_JSON" \
                   --argjson readme "$README_JSON" \
-                  --arg instruction "Translate the following README to ${lang}. Voice: ${voice}. Start the file with this language selector on line 1:\n${SELECTOR}\n\nThen a blank line, then the translated content." \
+                  --arg instruction "Translate to ${lang}. Voice: ${voice}. Start with this language selector on line 1:\n${SELECTOR}\n\nThen a blank line, then the translated content." \
                   '{
                     model: $model,
                     max_tokens: 12000,
@@ -78,31 +101,104 @@ jobs:
               BODY=$(echo "$RESPONSE" | sed '$d')
 
               if [ "$HTTP_CODE" = "200" ]; then
-                echo "$BODY" | jq -r '.content[0].text' > "$file"
+                # extract translation and append source hash
+                CONTENT=$(echo "$BODY" | jq -r '.content[0].text')
+                printf '%s\n\n<!-- translated from README.md @ %s -->\n' "$CONTENT" "$SOURCE_HASH" > "$file"
+
+                # log cache stats
+                CACHE_CREATE=$(echo "$BODY" | jq -r '.usage.cache_creation_input_tokens // 0')
                 CACHE_READ=$(echo "$BODY" | jq -r '.usage.cache_read_input_tokens // 0')
-                echo "  Done. Cache read tokens: $CACHE_READ"
+                INPUT=$(echo "$BODY" | jq -r '.usage.input_tokens // 0')
+                OUTPUT=$(echo "$BODY" | jq -r '.usage.output_tokens // 0')
+                echo "$file|$CACHE_CREATE|$CACHE_READ|$INPUT|$OUTPUT" >> "$RESULTS_DIR/stats.txt"
                 return 0
               else
                 attempt=$((attempt + 1))
-                echo "  HTTP $HTTP_CODE (attempt $attempt/$max_attempts)"
-                echo "  $BODY" | head -5
+                echo "::warning::$file HTTP $HTTP_CODE (attempt $attempt/$max_attempts)"
                 [ $attempt -lt $max_attempts ] && sleep 5
               fi
             done
 
-            echo "  FAILED after $max_attempts attempts. Skipping $file."
+            echo "::error::Failed to translate $file after $max_attempts attempts"
             return 1
           }
 
-          # run sequentially to maximize prompt cache hits
-          # 1st request: full price. 2nd-5th: cached input (~90% cheaper)
-          translate "Simplified Chinese"    "README.zh-CN.md" "natural casual Chinese"
-          translate "Spanish"               "README.es.md"    "casual Latin American Spanish, direct"
-          translate "Hindi"                 "README.hi.md"    "natural Hindi with Hinglish for technical terms"
-          translate "Brazilian Portuguese"  "README.pt-BR.md" "casual Brazilian Portuguese, use voce not tu"
-          translate "Japanese"              "README.ja.md"    "casual Japanese, plain form (da/dearu style)"
+          validate() {
+            local file="$1"
+            local ok=true
+
+            # count structural elements in source (excluding language selector line we add)
+            local src_headings=$(grep -c '^#' README.md || true)
+            local src_links=$(grep -co '\[.*\](.*' README.md | paste -sd+ - | bc || echo 0)
+            local src_codeblocks=$(grep -c '^```' README.md || true)
+            local src_tables=$(grep -c '^|' README.md || true)
+
+            local tgt_headings=$(grep -c '^#' "$file" || true)
+            local tgt_codeblocks=$(grep -c '^```' "$file" || true)
+            local tgt_tables=$(grep -c '^|' "$file" || true)
+
+            # headings and code blocks must match exactly
+            if [ "$src_headings" != "$tgt_headings" ]; then
+              echo "::warning::$file heading count mismatch (source: $src_headings, target: $tgt_headings)"
+              ok=false
+            fi
+            if [ "$src_codeblocks" != "$tgt_codeblocks" ]; then
+              echo "::warning::$file code block count mismatch (source: $src_codeblocks, target: $tgt_codeblocks)"
+              ok=false
+            fi
+            # tables can vary slightly due to language expansion, allow 20% drift
+            if [ "$src_tables" -gt 0 ]; then
+              local drift=$(( (tgt_tables - src_tables) * 100 / src_tables ))
+              if [ "${drift#-}" -gt 20 ]; then
+                echo "::warning::$file table row count drift ${drift}% (source: $src_tables, target: $tgt_tables)"
+                ok=false
+              fi
+            fi
+
+            $ok && echo "  $file: structure OK" || echo "  $file: structure WARN"
+          }
+
+          echo "::group::Translations"
+
+          # request 1: warm the prompt cache (sequential)
+          echo "=== Warming cache with Chinese translation ==="
+          translate "Simplified Chinese" "README.zh-CN.md" "natural casual Chinese"
+
+          # requests 2-5: run in parallel (all hit cached prefix)
+          echo "=== Translating 4 languages in parallel (cached) ==="
+          translate "Spanish"              "README.es.md"    "casual Latin American Spanish, direct" &
+          translate "Hindi"                "README.hi.md"    "natural Hindi with Hinglish for technical terms" &
+          translate "Brazilian Portuguese" "README.pt-BR.md" "casual Brazilian Portuguese, use voce not tu" &
+          translate "Japanese"             "README.ja.md"    "casual Japanese, plain form (da/dearu style)" &
+          wait
+
+          echo "::endgroup::"
+
+          # validate structural integrity
+          echo "::group::Validation"
+          for f in README.zh-CN.md README.es.md README.hi.md README.pt-BR.md README.ja.md; do
+            [ -f "$f" ] && validate "$f"
+          done
+          echo "::endgroup::"
+
+          # print cost summary
+          echo "::group::Cost summary"
+          if [ -f "$RESULTS_DIR/stats.txt" ]; then
+            echo "file|cache_create|cache_read|input|output"
+            cat "$RESULTS_DIR/stats.txt"
+            TOTAL_INPUT=$(awk -F'|' '{s+=$4} END{print s}' "$RESULTS_DIR/stats.txt")
+            TOTAL_OUTPUT=$(awk -F'|' '{s+=$5} END{print s}' "$RESULTS_DIR/stats.txt")
+            TOTAL_CACHED=$(awk -F'|' '{s+=$3} END{print s}' "$RESULTS_DIR/stats.txt")
+            echo ""
+            echo "Total: ${TOTAL_INPUT} input, ${TOTAL_OUTPUT} output, ${TOTAL_CACHED} cached"
+            # haiku pricing: $0.80/MTok input, $0.08/MTok cached, $4/MTok output
+            COST=$(echo "scale=4; ($TOTAL_INPUT * 0.80 + $TOTAL_CACHED * 0.08 + $TOTAL_OUTPUT * 4) / 1000000" | bc)
+            echo "Estimated cost: \$${COST}"
+          fi
+          echo "::endgroup::"
 
       - name: Commit translations
+        if: steps.check.outputs.should_translate == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -110,7 +206,8 @@ jobs:
           if git diff --staged --quiet; then
             echo "No translation changes detected"
           else
-            git commit -m "chore: auto-translate README to 5 languages
+            SOURCE_HASH=$(git rev-parse --short HEAD)
+            git commit -m "chore: auto-translate README (source: ${SOURCE_HASH})
 
           Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
             git push
