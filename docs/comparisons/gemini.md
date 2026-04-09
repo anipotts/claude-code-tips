@@ -11,7 +11,7 @@
 | feature | claude code | gemini |
 |---------|------------|------------|
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | generous free tier (60 req/min, 1000 req/day) / $19.99 AI Pro / $249.99 AI Ultra |
-| model | opus 4.6, sonnet 4.6, haiku 4.5 | gemini 2.5 flash, gemini 3 pro (1M token context) |
+| model | opus 4.6, sonnet 4.6, haiku 4.5 | gemini 2.5 flash, gemini 3.1 pro (1M token context) |
 | context | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5), managed window with compaction | up to 1M tokens |
 | interface | terminal CLI, VS Code, JetBrains | terminal CLI |
 | extensibility | hooks, plugins, skills, agents, commands, MCP servers | MCP servers, GEMINI.md context files, extensions |
@@ -80,7 +80,7 @@ the free tier gap is significant. gemini gives you enough free usage for daily d
 
 at the paid tiers, pricing is comparable. google AI Pro at $19.99/mo includes gemini access plus google workspace AI features and 2TB storage. claude code Pro at $20/mo is focused on claude code + claude.ai usage.
 
-google AI Ultra at $249.99/mo is more expensive than claude code Max 20x at $200/mo, but includes access to google's most powerful models (gemini 3 pro, Veo, deep think) across all google products.
+google AI Ultra at $249.99/mo is more expensive than claude code Max 20x at $200/mo, but includes access to google's most powerful models (gemini 3.1 pro, Veo, deep think) across all google products.
 
 ### context window comparison
 

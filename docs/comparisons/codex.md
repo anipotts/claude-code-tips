@@ -11,7 +11,7 @@
 | feature | claude code | openai codex CLI |
 |---------|------------|-----------------|
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | $20/mo ChatGPT Plus / $200/mo Pro (includes codex access) |
-| model | opus 4.6, sonnet 4.6, haiku 4.5 | GPT-5.3-Codex, codex-mini, GPT-5.4 |
+| model | opus 4.6, sonnet 4.6, haiku 4.5 | GPT-5.3-Codex, GPT-5.4, gpt-5.4-mini (codex-mini deprecated) |
 | context | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5), managed window with compaction | varies by model |
 | interaction | real-time interactive terminal | real-time terminal + async cloud agent (web) |
 | platform | terminal CLI, VS Code, JetBrains | terminal CLI, VS Code, Cursor, Windsurf, macOS app |
@@ -85,10 +85,10 @@ both entry tiers at $20/mo are comparable in value. the difference is in the mid
 | claude haiku 4.5 | $1.00 | $5.00 |
 | claude sonnet 4.6 | $3.00 | $15.00 |
 | claude opus 4.6 | $5.00 | $25.00 |
-| codex-mini-latest | $1.50 | $6.00 |
-| GPT-5 | $1.25 | $10.00 |
+| gpt-5.4-mini | $1.50 | $6.00 |
+| GPT-5.4 | $1.25 | $10.00 |
 
-codex-mini is cheaper than sonnet per token. whether that matters depends on how many tokens each tool uses to complete the same task -- and that varies significantly by task.
+gpt-5.4-mini is cheaper than sonnet per token. whether that matters depends on how many tokens each tool uses to complete the same task, and that varies significantly by task. note: the older codex-mini model has been deprecated in favor of gpt-5.4-mini.
 
 ### interaction model
 

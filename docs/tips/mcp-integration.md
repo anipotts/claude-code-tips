@@ -64,7 +64,7 @@ servers that both observe and modify. playwright is the canonical example: claud
 
 **system prompt bloat.** more tools means a larger prompt prefix. this hurts cache hit rates if the tool set changes between sessions. keep your active server count minimal.
 
-**`readOnlyHint` for auto-approval.** MCP tools with the `readOnlyHint` annotation skip the confirmation step. set this on every read-only tool your server exposes. it removes friction without adding risk.
+**`readOnlyHint` annotation.** MCP tools with `readOnlyHint` signal they are read-only. this helps Claude Code's permission system treat them as lower-risk, though you may still need to configure auto-approval in your settings. set it on every read-only tool your server exposes regardless.
 
 **environment variables.** use the `env` field in `.mcp.json` for secrets. never hardcode credentials in the command args.
 

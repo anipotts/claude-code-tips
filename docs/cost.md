@@ -21,7 +21,7 @@ that $200 covers everything — hundreds of sessions, thousands of subagent spaw
 | plan | monthly | how billing works |
 |------|---------|------------------|
 | pro | $20 | flat rate, rate-limited. you'll hit limits with heavy use. |
-| max | $200 | flat rate, no rate limits in practice. what i use. |
+| max | $200 | flat rate, 20x Pro limits. generous enough that most users won't hit them. |
 | API (pay-per-use) | variable | billed per token. caching saves ~87% on input costs. |
 
 on pro or max, **you don't pay per token.** the mine.db cost estimates are hypothetical — they show what your usage would cost at API list prices, not what you actually pay.
@@ -47,7 +47,7 @@ every claude code interaction is an API call. you send tokens in (prompt + conve
 
 **every tool call adds tokens.** reading a 10K line file dumps thousands of tokens into the window. those persist for the rest of the session.
 
-**prompt caching helps.** content that stays the same across turns (CLAUDE.md, tool definitions, system prompt) gets cached at 90% discount. but only if the cached content exceeds 4,096 tokens.
+**prompt caching helps.** content that stays the same across turns (CLAUDE.md, tool definitions, system prompt) gets cached at 90% discount. minimum cacheable size varies by model: 2,048 tokens for Sonnet 4.6, 4,096 tokens for Opus 4.6 and Haiku 4.5.
 
 **compaction resets context -- but costs tokens itself.** `/compact` summarizes your conversation. reduces future turn costs but the compaction is a full round trip. use it strategically.
 
