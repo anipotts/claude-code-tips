@@ -107,7 +107,7 @@ the signal is copy-pasting. if you're copying the same hook between projects, it
 
 my threshold: three files. one hook in a project is fine. two hooks, maybe. once you hit three related files doing the same job across repos, extract.
 
-[FILL: story about extracting your first plugin. what hooks were you duplicating? how many repos had copies before you bundled it?]
+my first extraction was mine (session analytics). i had the same SQLite parsing script copy-pasted across a few projects, each slightly different, each falling behind when i improved one copy. the hook that feeds session data was duplicated in every project's settings. once i hit the third copy, i extracted everything into a plugin: one hook dispatcher, one parser, one schema, one skill definition. now it's installed globally and every session feeds the same database. the rule of three works. one copy is fine. two copies, tolerable. three copies of the same hook across repos and you're maintaining divergent forks of your own tooling.
 
 ## this repo is a plugin
 

@@ -140,7 +140,7 @@ SessionStart stdout becomes conversation context. PreToolUse can block (exit 2) 
 
 ## which type i use and why
 
-[FILL: break down your 11 hooks by type. something like "all 11 are command hooks. i tried a prompt hook for code review gating and it added 2-3s per tool call. not worth it for the marginal improvement over regex matching. the only case where i'd reach for prompt/agent hooks is..."]
+i run 5 hooks: a security guard (PreToolUse, blocks dangerous commands), a git guard (PreToolUse, enforces clean git workflows), a live stats tracker (PostToolUse), a session sync to my Mac Mini (Stop), and a pulse digest generator (Stop). all command hooks. i tried a prompt-based hook early on for code review gating and it added a few seconds per tool call. not worth it. command hooks with jq parsing are fast enough for every validation i've needed. the only case where i'd reach for a prompt hook is if i needed Claude to make a judgment call ("is this change architecturally safe?") rather than a regex match. start with a command hook on PreToolUse. safety-guard.sh in this repo is a good first hook.
 
 ## try it
 
