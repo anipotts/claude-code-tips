@@ -1,0 +1,117 @@
+name: Stamp Bump
+
+# ---------------------------------------------------------------
+# one-click version stamp updater.
+# updates all "tested with: claude code vX.Y.Z" stamps across
+# the repo to match the latest published version on npm.
+#
+# trigger: manual only (workflow_dispatch). never runs automatically
+# bc you should only bump stamps after actually testing with the
+# new version.
+#
+# cost: $0 (pure shell, no API calls)
+# tested with: claude code v2.1.94
+# ---------------------------------------------------------------
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Target version (leave blank for latest from npm)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (show changes without committing)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  bump-stamps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Determine target version
+        id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            TARGET="${{ inputs.version }}"
+          else
+            TARGET=$(npm view @anthropic-ai/claude-code version 2>/dev/null || echo "")
+            if [ -z "$TARGET" ]; then
+              echo "::error::could not fetch latest version from npm"
+              exit 1
+            fi
+          fi
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "target version: v$TARGET"
+
+      - name: Find current stamps
+        id: scan
+        run: |
+          TARGET="${{ steps.version.outputs.target }}"
+
+          # find all files with version stamps that don't match target
+          STALE=$(grep -rlE 'tested.with[: ]+claude.code.v?[0-9]+\.[0-9]+\.[0-9]+' \
+            docs/ hooks/ examples/ .github/ README.md CLAUDE.md CHANGELOG.md 2>/dev/null \
+            | xargs grep -lv "v${TARGET}" 2>/dev/null || true)
+
+          if [ -z "$STALE" ]; then
+            echo "all stamps already at v$TARGET"
+            echo "has_stale=false" >> "$GITHUB_OUTPUT"
+          else
+            COUNT=$(echo "$STALE" | wc -l | tr -d ' ')
+            echo "found $COUNT files to update"
+            echo "$STALE"
+            echo "has_stale=true" >> "$GITHUB_OUTPUT"
+            echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update stamps
+        if: steps.scan.outputs.has_stale == 'true'
+        run: |
+          TARGET="${{ steps.version.outputs.target }}"
+
+          # match patterns like "v2.1.77" or "v2.1.94" in tested-with lines
+          find docs/ hooks/ examples/ .github/ -type f \( -name "*.md" -o -name "*.sh" -o -name "*.yml" \) \
+            -exec sed -i "s/\(tested.with[: ]*claude.code.\)v[0-9]\+\.[0-9]\+\.[0-9]\+/\1v${TARGET}/gI" {} +
+
+          # also update README badge
+          sed -i "s/Claude%20Code%20v[0-9]\+\.[0-9]\+\.[0-9]\+/Claude%20Code%20v${TARGET}/g" README.md 2>/dev/null || true
+
+          # also update CLAUDE.md and CHANGELOG.md if they have stamps
+          for f in CLAUDE.md CHANGELOG.md; do
+            [ -f "$f" ] && sed -i "s/\(tested.with[: ]*claude.code.\)v[0-9]\+\.[0-9]\+\.[0-9]\+/\1v${TARGET}/gI" "$f" 2>/dev/null || true
+          done
+
+          echo "stamps updated to v$TARGET"
+
+      - name: Show diff (dry run)
+        if: steps.scan.outputs.has_stale == 'true' && inputs.dry_run
+        run: |
+          git diff --stat
+          echo "---"
+          git diff
+
+      - name: Commit and push
+        if: steps.scan.outputs.has_stale == 'true' && !inputs.dry_run
+        run: |
+          TARGET="${{ steps.version.outputs.target }}"
+          COUNT="${{ steps.scan.outputs.count }}"
+
+          git config user.name "stamp-bump[bot]"
+          git config user.email "stamp-bump[bot]@users.noreply.github.com"
+
+          git add -A
+          git commit -m "chore: bump version stamps to v${TARGET} (${COUNT} files)"
+          git push origin main
+
+          echo "committed and pushed: $COUNT files updated to v$TARGET"
