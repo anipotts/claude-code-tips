@@ -1,0 +1,160 @@
+name: Stats Tracker
+
+# ---------------------------------------------------------------
+# weekly stats collection for traction tracking.
+# logs github stars, forks, and npm downloads for the repo
+# ecosystem (claude-code-tips, mine, imessage-mcp, claudemon-cli).
+#
+# data saved to data/stats.json (committed to repo, public).
+# creates a tracking issue with week-over-week deltas.
+#
+# cost: $0 (api calls only, no claude usage)
+# tested with: claude code v2.1.94
+# ---------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: '0 8 * * 0'  # every sunday at 08:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  collect-stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Collect stats
+        id: stats
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mkdir -p data
+
+          # github stats for ecosystem repos
+          REPOS="anipotts/claude-code-tips anipotts/mine anipotts/imessage-mcp anipotts/claudemon"
+
+          GITHUB_DATA="["
+          FIRST=true
+          for repo in $REPOS; do
+            STARS=$(gh api "repos/$repo" --jq '.stargazers_count' 2>/dev/null || echo "0")
+            FORKS=$(gh api "repos/$repo" --jq '.forks_count' 2>/dev/null || echo "0")
+            ISSUES=$(gh api "repos/$repo" --jq '.open_issues_count' 2>/dev/null || echo "0")
+
+            if [ "$FIRST" = true ]; then FIRST=false; else GITHUB_DATA+=","; fi
+            GITHUB_DATA+="{\"repo\":\"$repo\",\"stars\":$STARS,\"forks\":$FORKS,\"open_issues\":$ISSUES}"
+          done
+          GITHUB_DATA+="]"
+
+          # npm download stats for published packages
+          NPM_PACKAGES="imessage-mcp claudemon-cli"
+
+          NPM_DATA="["
+          FIRST=true
+          for pkg in $NPM_PACKAGES; do
+            WEEKLY=$(curl -s "https://api.npmjs.org/downloads/point/last-week/$pkg" | python3 -c "import sys,json; print(json.load(sys.stdin).get('downloads',0))" 2>/dev/null || echo "0")
+            MONTHLY=$(curl -s "https://api.npmjs.org/downloads/point/last-month/$pkg" | python3 -c "import sys,json; print(json.load(sys.stdin).get('downloads',0))" 2>/dev/null || echo "0")
+            TOTAL=$(curl -s "https://api.npmjs.org/downloads/range/2020-01-01:$DATE/$pkg" | python3 -c "import sys,json; d=json.load(sys.stdin); print(sum(x['downloads'] for x in d.get('downloads',[])))" 2>/dev/null || echo "0")
+
+            if [ "$FIRST" = true ]; then FIRST=false; else NPM_DATA+=","; fi
+            NPM_DATA+="{\"package\":\"$pkg\",\"weekly\":$WEEKLY,\"monthly\":$MONTHLY,\"total\":$TOTAL}"
+          done
+          NPM_DATA+="]"
+
+          # build this week's entry
+          ENTRY="{\"date\":\"$DATE\",\"github\":$GITHUB_DATA,\"npm\":$NPM_DATA}"
+
+          # append to stats.json (create if missing)
+          if [ -f data/stats.json ]; then
+            # append to existing array
+            python3 -c "
+          import json, sys
+          with open('data/stats.json') as f:
+              data = json.load(f)
+          entry = json.loads('$ENTRY')
+          data.append(entry)
+          # keep last 52 weeks (1 year)
+          data = data[-52:]
+          with open('data/stats.json', 'w') as f:
+              json.dump(data, f, indent=2)
+          "
+          else
+            echo "[$ENTRY]" | python3 -m json.tool > data/stats.json
+          fi
+
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+
+          # calculate deltas for issue body
+          if [ -f data/stats.json ]; then
+            python3 -c "
+          import json
+          with open('data/stats.json') as f:
+              data = json.load(f)
+          if len(data) < 2:
+              print('first_run=true')
+          else:
+              curr = data[-1]
+              prev = data[-2]
+              lines = []
+              lines.append('## weekly stats -- $DATE')
+              lines.append('')
+              lines.append('### github')
+              lines.append('| repo | stars | forks | delta |')
+              lines.append('|---|---|---|---|')
+              for c in curr['github']:
+                  p = next((x for x in prev['github'] if x['repo'] == c['repo']), c)
+                  delta = c['stars'] - p.get('stars', 0)
+                  sign = '+' if delta >= 0 else ''
+                  lines.append(f\"| {c['repo']} | {c['stars']} | {c['forks']} | {sign}{delta} |\"  )
+              lines.append('')
+              lines.append('### npm downloads (weekly)')
+              lines.append('| package | weekly | monthly | total |')
+              lines.append('|---|---|---|---|')
+              for c in curr['npm']:
+                  lines.append(f\"| {c['package']} | {c['weekly']} | {c['monthly']} | {c['total']} |\")
+              lines.append('')
+              lines.append('---')
+              lines.append('*auto-generated weekly stats. close when reviewed.*')
+              with open('/tmp/stats-report.md', 'w') as f:
+                  f.write('\n'.join(lines))
+              print('has_report=true')
+          " >> "$GITHUB_OUTPUT" 2>/dev/null || echo "has_report=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit stats
+        run: |
+          git config user.name "stats-tracker[bot]"
+          git config user.email "stats-tracker[bot]@users.noreply.github.com"
+
+          git add data/stats.json
+          git diff --cached --quiet && echo "no changes" && exit 0
+          git commit -m "data: weekly stats $(date +%Y-%m-%d)"
+          git push origin main
+
+      - name: Create tracking issue
+        if: steps.stats.outputs.has_report == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE="${{ steps.stats.outputs.date }}"
+
+          gh label create "weekly-stats" --color "0E8A16" --description "automated weekly stats" 2>/dev/null || true
+
+          # close previous stats issues
+          EXISTING=$(gh issue list --label "weekly-stats" --state open --json number -q '.[].number' 2>/dev/null || true)
+          for num in $EXISTING; do
+            gh issue close "$num" --comment "superseded by new weekly stats" 2>/dev/null || true
+          done
+
+          gh issue create \
+            --title "weekly stats -- $DATE" \
+            --body-file /tmp/stats-report.md \
+            --label "weekly-stats"

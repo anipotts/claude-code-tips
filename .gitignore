@@ -1,6 +1,7 @@
 assets/
 content/
-data/
+data/*
+!data/stats.json
 handoffs/
 AUDIT.md
 docs/upstream-watcher-design.md
