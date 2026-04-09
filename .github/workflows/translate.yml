@@ -1,0 +1,117 @@
+name: Translate README
+
+on:
+  push:
+    branches: [main]
+    paths: ['README.md']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Translate README to 5 languages
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          # language selector line (shared across all translations)
+          SELECTOR='> [EN](./README.md) | [ZH](./README.zh-CN.md) | [ES](./README.es.md) | [HI](./README.hi.md) | [PT](./README.pt-BR.md) | [JA](./README.ja.md)'
+
+          # escape README content for JSON embedding
+          README_JSON=$(jq -Rs . < README.md)
+
+          # system prompt (cached across all 5 requests)
+          SYSTEM_JSON=$(cat <<'SYSPROMPT'
+          [{
+            "type": "text",
+            "text": "You translate GitHub README.md files. Rules:\n- Translate all prose to the target language\n- Keep ALL markdown formatting, links, badges, image tags, code blocks, and HTML exactly as-is\n- Keep proper nouns in English: Claude Code, mine, claudemon, cc, imessage-mcp, CLAUDE.md, MCP, Anthropic\n- Keep code/CLI commands and content inside backticks in English\n- Do NOT translate URLs, file paths, or badge parameters\n- Keep the same casual, lowercase tone as the original\n- Output ONLY the translated markdown. No commentary, no explanation.",
+            "cache_control": {"type": "ephemeral"}
+          }]
+          SYSPROMPT
+          )
+
+          translate() {
+            local lang="$1"
+            local file="$2"
+            local voice="$3"
+            local attempt=0
+            local max_attempts=2
+
+            while [ $attempt -lt $max_attempts ]; do
+              echo "Translating $file ($lang)..."
+
+              RESPONSE=$(curl -s -w "\n%{http_code}" https://api.anthropic.com/v1/messages \
+                -H "x-api-key: $ANTHROPIC_API_KEY" \
+                -H "anthropic-version: 2023-06-01" \
+                -H "content-type: application/json" \
+                -d "$(jq -n \
+                  --arg model "claude-haiku-4-5-20251001" \
+                  --argjson system "$SYSTEM_JSON" \
+                  --argjson readme "$README_JSON" \
+                  --arg instruction "Translate the following README to ${lang}. Voice: ${voice}. Start the file with this language selector on line 1:\n${SELECTOR}\n\nThen a blank line, then the translated content." \
+                  '{
+                    model: $model,
+                    max_tokens: 12000,
+                    system: $system,
+                    messages: [{
+                      role: "user",
+                      content: [{
+                        type: "text",
+                        text: $readme,
+                        cache_control: {type: "ephemeral"}
+                      }, {
+                        type: "text",
+                        text: $instruction
+                      }]
+                    }]
+                  }'
+                )")
+
+              HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+              BODY=$(echo "$RESPONSE" | sed '$d')
+
+              if [ "$HTTP_CODE" = "200" ]; then
+                echo "$BODY" | jq -r '.content[0].text' > "$file"
+                CACHE_READ=$(echo "$BODY" | jq -r '.usage.cache_read_input_tokens // 0')
+                echo "  Done. Cache read tokens: $CACHE_READ"
+                return 0
+              else
+                attempt=$((attempt + 1))
+                echo "  HTTP $HTTP_CODE (attempt $attempt/$max_attempts)"
+                echo "  $BODY" | head -5
+                [ $attempt -lt $max_attempts ] && sleep 5
+              fi
+            done
+
+            echo "  FAILED after $max_attempts attempts. Skipping $file."
+            return 1
+          }
+
+          # run sequentially to maximize prompt cache hits
+          # 1st request: full price. 2nd-5th: cached input (~90% cheaper)
+          translate "Simplified Chinese"    "README.zh-CN.md" "natural casual Chinese"
+          translate "Spanish"               "README.es.md"    "casual Latin American Spanish, direct"
+          translate "Hindi"                 "README.hi.md"    "natural Hindi with Hinglish for technical terms"
+          translate "Brazilian Portuguese"  "README.pt-BR.md" "casual Brazilian Portuguese, use voce not tu"
+          translate "Japanese"              "README.ja.md"    "casual Japanese, plain form (da/dearu style)"
+
+      - name: Commit translations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.zh-CN.md README.es.md README.hi.md README.pt-BR.md README.ja.md
+          if git diff --staged --quiet; then
+            echo "No translation changes detected"
+          else
+            git commit -m "chore: auto-translate README to 5 languages
+
+          Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
+            git push
+          fi
