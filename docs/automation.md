@@ -33,8 +33,6 @@ i spend less than 30 minutes a week on maintenance. twelve CI workflows handle v
 
 the goal: when i open the repo on monday, there's an issue summarizing what changed in the ecosystem, a digest of community activity, and any staleness flags. i read, decide, act.
 
-<!-- TODO: what's still manual that bugs you? what would you automate next? -->
-
 ---
 
 ## the daemon pattern

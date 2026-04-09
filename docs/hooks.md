@@ -230,7 +230,6 @@ hooks should be:
 - **cheap to run** -- bash + jq, not python + imports
 - **standalone** -- each hook is one script, no shared libraries
 
-<!-- TODO: personal hook philosophy and origin story -->
 
 ---
 

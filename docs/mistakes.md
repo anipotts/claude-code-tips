@@ -16,8 +16,6 @@ from real session data -- these are the patterns that actually cost me time:
 | edited files without reading them first | common (Write→Write is the 11th most common bigram) | CLAUDE.md rule: always Read before Write |
 | left sessions running in background (50x+ wall/active ratio) | 19 sessions (5%) | not a "mistake" per se, but it skews your stats and wastes token budget |
 
-<!-- TODO: add 2-3 specific personal stories -->
-
 ## the CLAUDE.md rules that fixed them
 
 each mistake above earned a rule. here's the mapping:
@@ -33,8 +31,6 @@ fix: [context-save.sh](../hooks/context-save.sh) hook (PreCompact) writes a hand
 
 **off-convention code**
 fix: CLAUDE.md conventions section with explicit style rules. pr-quality-gate workflow catches missing version stamps on PR. the combination of guidance + enforcement catches most drift.
-
-<!-- TODO: squash merge war story -->
 
 ## error patterns claude repeats
 

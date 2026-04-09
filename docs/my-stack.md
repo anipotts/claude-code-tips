@@ -35,8 +35,6 @@ the goal: when i open the repo on monday, there's an issue summarizing what chan
 
 ## what i'd automate next
 
-<!-- TODO: what's still manual -->
-
 ## cost of running all this
 
 | cost | monthly |

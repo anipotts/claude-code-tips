@@ -26,7 +26,6 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
-<!-- TODO: parallel agent workflow details -->
 
 ## when to /compact vs /clear
 
@@ -44,7 +43,6 @@ from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ session
 
 the data says: sessions that hit compaction average 1.7 compactions. if you're compacting more than twice, the session is too long -- split it.
 
-<!-- TODO: personal compact vs clear decision framework -->
 <!-- /clear when: -->
 <!-- - switching to a completely different task -->
 <!-- - claude is stuck in a loop and retrying the same approach -->
