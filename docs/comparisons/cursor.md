@@ -2,7 +2,7 @@
 
 # claude code vs cursor
 
-> last verified: 2026-03-08 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-04-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -23,7 +23,6 @@
 
 ### cursor's credit system (june 2025+)
 
-<!-- verify against cursor.com/pricing before merging -->
 Cursor uses a credit-based system -- check cursor.com/pricing for current limits. every paid plan includes a credit pool equal to your subscription cost. AI features consume credits based on the model used and request complexity. this means your effective usage depends on which models you lean on -- heavy claude opus usage burns credits faster than cursor-small.
 
 ---
