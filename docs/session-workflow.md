@@ -26,7 +26,6 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
-
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

@@ -37,6 +37,7 @@ a hook:
 | version-stamp | SessionEnd | updates "tested with" version stamps in changed files |
 | stale-branch | SessionStart | warns about local branches with deleted remotes |
 | notify | Notification | routes claude code alerts to macOS notifications |
+
 hook fire frequency is driven by tool usage. from real session data:
 
 | tool event | fires | what triggers hooks |
@@ -229,7 +230,6 @@ hooks should be:
 - **loud when things go wrong** -- exit 2 with a clear reason
 - **cheap to run** -- bash + jq, not python + imports
 - **standalone** -- each hook is one script, no shared libraries
-
 
 ---
 
