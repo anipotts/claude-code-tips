@@ -56,7 +56,7 @@ start with `mine` + the `safety-guard` hook. add more as you go. **[mine docs &r
 
 hooks are the difference between "claude does what i want" and "claude does whatever it feels like." CLAUDE.md gives guidance. hooks give enforcement. one is a suggestion, the other is a wall.
 
-i run 11 hooks on every session. safety-guard blocks force pushes, `rm -rf /`, and `curl | bash`. no-squash blocks squash merges. context-save preserves state before compaction. [my full hook philosophy &rarr;](./docs/hooks.md)
+i run 9 hooks on every session. safety-guard blocks force pushes, `rm -rf /`, and `curl | bash`. no-squash blocks squash merges. context-save preserves state before compaction. [my full hook philosophy &rarr;](./docs/hooks.md)
 
 ### agent teams
 
@@ -106,7 +106,7 @@ copy one, wire it up, done. each is a standalone bash script. [full guide &rarr;
 | [notify](./hooks/notify.sh) | Notification | routes to macOS, Slack, ntfy |
 
 <details>
-<summary>6 more hooks</summary>
+<summary>4 more hooks</summary>
 
 | hook | event | what it does |
 |---|---|---|
@@ -164,7 +164,7 @@ diplomatic, data-driven, no FUD. every claim cites a source.
 
 - [CLAUDE.md templates](./examples/claude-md/) · starter configs for TypeScript, Python, Rust, Next.js
 - [example agents](./examples/agents/) · 4 agents, each teaching a different pattern
-- [example commands](./examples/commands/) · 3 commands you can copy to any project
+- [example commands](./examples/commands/) · 2 commands you can copy to any project
 - [handoff plugin](./examples/plugins/handoff/) · PreCompact context preservation
 - [broadcast plugin](./examples/plugins/broadcast/) · async notifications on git events
 

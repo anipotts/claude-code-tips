@@ -35,10 +35,11 @@ standalone scripts that plug into claude code's hook system. copy one, wire it u
 
 ## installation
 
-copy the hook you want:
+copy the hook you want and make it executable:
 
 ```bash
 cp hooks/safety-guard.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/safety-guard.sh
 ```
 
 then add the matching config to your `.claude/settings.json` or `~/.claude/settings.json`:

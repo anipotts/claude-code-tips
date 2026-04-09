@@ -113,16 +113,3 @@ in practice, claude code's compaction system means you can work in sessions long
 gemini's free tier makes it a zero-cost complement to claude code. use claude code as your primary tool for complex work and extensibility, and gemini for quick lookups, research tasks, or when you've hit claude code rate limits.
 
 > see also: [pricing comparison across all tools](pricing.md)
-
----
-
-### v0.35.0-nightly updates (march 2026)
-
-- OAuth2 Authorization Code support for A2A agents
-- improved `/tools list` command visibility in TUI
-- better headless execution for credits/upgrade dialogs
-- flash model steering fixes in plan mode
-- improved error logging on API retries
-- github actions tracking IDs for PR/issue/custom metrics
-
-focus areas: agent auth, cli discoverability, headless reliability.
