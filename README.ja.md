@@ -15,7 +15,7 @@
 ## クイックスタート
 
 ```bash
-claude plugin add anipotts/mine   # install the mine plugin
+claude plugin install anipotts/mine   # install the mine plugin
 ```
 
 次に: [safety-guard.sh](./hooks/safety-guard.sh) をコピーして危険なコマンドをブロック。[Tips](./docs/tips/) を読む。以上。
@@ -35,7 +35,7 @@ claude plugin add anipotts/mine   # install the mine plugin
 ## mine プラグインのインストール
 
 ```bash
-claude plugin add anipotts/mine
+claude plugin install anipotts/mine
 ```
 
 手に入るのは **[mine](https://github.com/anipotts/mine)** -- セッションデータをSQLiteにマイニング。コスト、検索、エラー記憶、パターン検出。データはすべてローカルの `~/.claude/mine.db` に保存される。

@@ -7,5 +7,11 @@
     "description": "hooks, agents, tips, and docs from months of building with Claude Code.",
     "version": "0.4.0"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "mine",
+      "repository": "https://github.com/anipotts/mine",
+      "description": "mines every claude code session into sqlite. costs, search, patterns, error memory."
+    }
+  ]
 }

@@ -15,7 +15,7 @@
 ## 快速开始
 
 ```bash
-claude plugin add anipotts/mine   # install the mine plugin
+claude plugin install anipotts/mine   # install the mine plugin
 ```
 
 然后：把 [safety-guard.sh](./hooks/safety-guard.sh) 复制过去，拦截危险命令。读一篇 [tip](./docs/tips/)。搞定。
@@ -35,7 +35,7 @@ claude plugin add anipotts/mine   # install the mine plugin
 ## 安装 mine 插件
 
 ```bash
-claude plugin add anipotts/mine
+claude plugin install anipotts/mine
 ```
 
 你会得到 **[mine](https://github.com/anipotts/mine)** · 会话数据挖掘到 sqlite。费用、搜索、错误记忆、模式检测。所有数据都留在本地 `~/.claude/mine.db`。

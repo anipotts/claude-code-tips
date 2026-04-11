@@ -90,13 +90,13 @@ EOF
 test it locally:
 
 ```bash
-claude plugin add ./my-plugin
+claude plugin install ./my-plugin
 ```
 
 publish it by pushing to github, then anyone can install:
 
 ```bash
-claude plugin add yourname/my-plugin
+claude plugin install yourname/my-plugin
 ```
 
 that's it. one hook, one manifest, installable everywhere.
@@ -111,7 +111,7 @@ my first extraction was mine (session analytics). i had the same SQLite parsing 
 
 ## this repo is a plugin
 
-this repo itself is a plugin. check `/.claude-plugin/plugin.json`. when you run `claude plugin add anipotts/claude-code-tips`, you get the hooks, commands, and agents as a single install.
+this repo itself is a plugin. check `/.claude-plugin/plugin.json`. when you run `claude plugin install anipotts/claude-code-tips`, you get the hooks, commands, and agents as a single install.
 
 the plugin manifest:
 
@@ -126,7 +126,7 @@ the plugin manifest:
 ## try it
 
 1. create a single-hook plugin using the template above
-2. test locally with `claude plugin add ./your-plugin`
-3. push to github and install from remote with `claude plugin add yourname/repo`
+2. test locally with `claude plugin install ./your-plugin`
+3. push to github and install from remote with `claude plugin install yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)

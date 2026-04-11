@@ -15,7 +15,7 @@ se isso te economizar tempo, [da uma estrela](https://github.com/anipotts/claude
 ## inicio rapido
 
 ```bash
-claude plugin add anipotts/mine   # instala o plugin mine
+claude plugin install anipotts/mine   # instala o plugin mine
 ```
 
 depois: copie o [safety-guard.sh](./hooks/safety-guard.sh) pra bloquear comandos perigosos. leia uma [dica](./docs/tips/). pronto.
@@ -35,7 +35,7 @@ o mesmo uso custaria ~$12K na API com cache, ~$95K sem. nenhum loop autonomo. ne
 ## instale o plugin mine
 
 ```bash
-claude plugin add anipotts/mine
+claude plugin install anipotts/mine
 ```
 
 voce ganha o **[mine](https://github.com/anipotts/mine)** · mineracao de sessoes em sqlite. custos, busca, memoria de erros, deteccao de padroes. todos os dados ficam locais em `~/.claude/mine.db`.
