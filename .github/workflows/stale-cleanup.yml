@@ -73,21 +73,28 @@ jobs:
             fi
           done
 
-      - name: Close old freshness-check issues (>14 days)
+      - name: Close stale bot-generated issues
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
 
-          CUTOFF=$(date -u -d '14 days ago' +%Y-%m-%dT%H:%M:%SZ)
-          echo "closing freshness-check issues created before $CUTOFF"
+          # label:max_age_days pairs for bot-generated issues
+          LABELS="freshness-check:14 community-digest:7 weekly-stats:14"
 
-          gh issue list --label "freshness-check" --state open \
-            --json number,createdAt \
-            --jq '.[] | select(.createdAt < "'"$CUTOFF"'") | .number' \
-          | while read -r issue; do
-            echo "closing issue #$issue (superseded freshness-check)"
-            gh issue close "$issue" --comment "auto-closed: superseded by newer freshness check" || true
+          for entry in $LABELS; do
+            label="${entry%%:*}"
+            days="${entry##*:}"
+            CUTOFF=$(date -u -d "${days} days ago" +%Y-%m-%dT%H:%M:%SZ)
+            echo "closing $label issues created before $CUTOFF"
+
+            gh issue list --label "$label" --state open \
+              --json number,createdAt \
+              --jq '.[] | select(.createdAt < "'"$CUTOFF"'") | .number' \
+            | while read -r issue; do
+              echo "closing issue #$issue (stale $label)"
+              gh issue close "$issue" --comment "closing, superseded by newer reports." || true
+            done
           done
 
       - name: Prune gone remote branches
