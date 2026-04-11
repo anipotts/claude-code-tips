@@ -8,27 +8,27 @@
 [![tested with](https://img.shields.io/badge/tested%20with-Claude%20Code%20v2.1.94-000?style=flat-square&labelColor=D4A574&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 [![license](https://img.shields.io/github/license/anipotts/claude-code-tips?style=flat-square&labelColor=111827&color=000)](./LICENSE)
 
-mi setup de Claude Code, open source. hooks, agentes, tips y un plugin que mina tus datos de uso.
+mi configuración de Claude Code, código abierto. hooks, agentes, consejos y un plugin que analiza tus datos de uso.
 
 si esto te ahorra tiempo, [dale una estrella](https://github.com/anipotts/claude-code-tips). ayuda a que otros lo encuentren.
 
-## inicio rapido
+## inicio rápido
 
 ```bash
-claude plugin install anipotts/mine   # install the mine plugin
+claude plugin install anipotts/mine   # instala el plugin mine
 ```
 
-despues: copia [safety-guard.sh](./hooks/safety-guard.sh) para bloquear comandos peligrosos. lee un [tip](./docs/tips/). listo.
+luego: copia [safety-guard.sh](./hooks/safety-guard.sh) para bloquear comandos peligrosos. lee un [consejo](./docs/tips/). listo.
 
 ---
 
-## los numeros
+## los números
 
-cientos de sesiones en docenas de proyectos. plan max de $200/mes.
+cientos de sesiones en docenas de proyectos. plan máximo de $200/mes.
 
-el mismo uso costaria ~$12K en la API con cache, ~$95K sin cache. sin loops autonomos. sin cron jobs. cada sesion empieza conmigo escribiendo un prompt. [como funciona la matematica de costos &rarr;](./docs/cost.md)
+el mismo uso costaría ~$12K en la API con caching, ~$95K sin. sin loops autónomos. sin cron jobs. cada sesión comienza cuando escribo un prompt. [cómo funciona la matemática de costos &rarr;](./docs/cost.md)
 
-<img src="./gifs/mine-stats.gif" width="100%" alt="mine stats showing sessions, tokens, costs, and projects" />
+<img src="./gifs/mine-stats.gif" width="100%" alt="estadísticas de mine mostrando sesiones, tokens, costos y proyectos" />
 
 ---
 
@@ -38,168 +38,170 @@ el mismo uso costaria ~$12K en la API con cache, ~$95K sin cache. sin loops auto
 claude plugin install anipotts/mine
 ```
 
-obtienes **[mine](https://github.com/anipotts/mine)** · mineria de sesiones a sqlite. costos, busqueda, memoria de errores, deteccion de patrones. todos los datos se quedan en local en `~/.claude/mine.db`.
+obtienes **[mine](https://github.com/anipotts/mine)** · análisis de sesiones a sqlite. costos, búsqueda, memoria de errores, detección de patrones. todos los datos se quedan locales en `~/.claude/mine.db`.
 
 ```
-/mine                     sesiones de hoy, costo, herramientas mas usadas
-/mine search "websocket"  busqueda full-text en todas las conversaciones
-/mine mistakes            patrones de error que claude sigue repitiendo
-/mine hotspots            archivos mas editados entre sesiones
-/mine loops               patrones repetidos entre sesiones
+/mine                     sesiones de hoy, costo, herramientas más usadas
+/mine search "websocket"  búsqueda de texto completo en todas las conversaciones
+/mine mistakes            patrones de errores que Claude sigue repitiendo
+/mine hotspots            archivos más editados en todas las sesiones
+/mine loops               patrones repetidos en todas las sesiones
 ```
 
-empieza con `mine` + el hook `safety-guard`. agrega mas conforme avanzas. **[docs de mine &rarr;](https://github.com/anipotts/mine)**
+comienza con `mine` + el hook `safety-guard`. agrega más conforme avances. **[docs de mine &rarr;](https://github.com/anipotts/mine)**
 
 ---
 
-## las 3 cosas que cambiaron como programo
+## las 3 cosas que cambiaron cómo codifico
 
 ### hooks
 
-los hooks son la diferencia entre "claude hace lo que yo quiero" y "claude hace lo que se le da la gana." CLAUDE.md da orientacion. los hooks dan cumplimiento. uno es una sugerencia, el otro es un muro.
+los hooks son la diferencia entre "Claude hace lo que quiero" y "Claude hace lo que se le antoja". CLAUDE.md da guía. los hooks dan fuerza. uno es una sugerencia, el otro es una pared.
 
-este repo tiene 9 hooks que puedes meter en cualquier proyecto. safety-guard bloquea force pushes, `rm -rf /` y `curl | bash`. no-squash bloquea squash merges. context-save preserva el estado antes de la compactacion. elige los que encajen en tu flujo de trabajo. [guia de hooks &rarr;](./docs/hooks.md)
+este repo tiene 9 hooks que puedes soltar en cualquier proyecto. safety-guard bloquea push forzados, `rm -rf /` y `curl | bash`. no-squash bloquea squash merges. context-save preserva estado antes de compactación. elige los que se adapten a tu flujo. [guía de hooks &rarr;](./docs/hooks.md)
 
 ### equipos de agentes
 
-multiples instancias de claude trabajando simultaneamente en el mismo codebase, cada una en su propio git worktree. el coordinador asigna tareas, recopila resultados y hace merge del mejor enfoque.
+múltiples instancias de Claude trabajando simultáneamente en el mismo código, cada una en su propio git worktree. el coordinador asigna tareas, recolecta resultados, fusiona el mejor enfoque.
 
-yo lo uso para investigacion en paralelo, probar cambios riesgosos de forma segura y comparar enfoques lado a lado sin tocar mi working tree. [como uso equipos de agentes &rarr;](./docs/agents.md)
+lo uso para investigación paralela, intentar cambios riesgosos de forma segura y comparar enfoques lado a lado sin tocar mi árbol de trabajo. [cómo uso equipos de agentes &rarr;](./docs/agents.md)
 
 ### prompt caching
 
-esta es la razon por la que el plan de $200/mes es la mejor oferta en AI coding. Claude Code cachea tu system prompt, herramientas y CLAUDE.md como prefijo. el 91% de mis tokens de entrada dan en el cache, lo que significa que pago el 10% del costo de entrada en el 91% de mis lecturas.
+esto es por qué el plan de $200/mes es el mejor deal en coding con IA. Claude Code cachea tu system prompt, herramientas y CLAUDE.md como prefijo. el 91% de mis tokens de entrada golpean el cache, significa que pago 10% del costo de entrada en 91% de mis lecturas.
 
-la clave: manten tu CLAUDE.md corto y estable. cada edicion rompe el cache de prefijo. el mio tiene 30 lineas y cambia quiza una vez por semana. [el desglose completo de costos &rarr;](./docs/cost.md)
+la clave: mantén tu CLAUDE.md corto y estable. cada edición rompe el cache de prefijo. el mío tiene 30 líneas y cambia quizá una vez a la semana. [el desglose de costos completo &rarr;](./docs/cost.md)
 
 ---
 
-## tips
+## consejos
 
-tecnicas cortas e independientes. cada una es algo que puedes usar en tu proxima sesion.
+técnicas cortas y autónomas. cada una es algo que puedes usar en tu próxima sesión.
 
-| tip | que aprendes |
+| consejo | qué aprendes |
 |-----|---------------|
-| [prompt caching](./docs/tips/prompt-caching.md) | obtener 97%+ de cache hit rate, reducir tu factura |
-| [safety hooks](./docs/tips/safety-hooks.md) | bloquear force pushes y rm -rf en 5 minutos |
-| [settings hierarchy](./docs/tips/settings-hierarchy.md) | settings de proyecto vs global vs local |
-| [session length](./docs/tips/session-length.md) | por que las sesiones cortas son mas eficientes (con datos) |
-| [ultrathink](./docs/tips/ultrathink.md) | forzar pensamiento extendido para problemas complejos |
-| [context management](./docs/tips/context-management.md) | estrategias de compactacion, active tool rate, sesiones ajustadas |
-| [plan mode](./docs/tips/plan-mode.md) | cuando planear ahorra tiempo vs cuando lo desperdicia |
-| [fast mode](./docs/tips/fast-mode.md) | mismo modelo, output mas rapido, el tradeoff |
-| [plugins](./docs/tips/plugins.md) | construir un plugin desde cero, que hace que valga la pena instalarlo |
-| [subagents](./docs/tips/subagents.md) | equipos de agentes, aislamiento con worktree, cuando el paralelismo vale la pena |
-| [mcp integration](./docs/tips/mcp-integration.md) | conectar servidores MCP, usarlos dentro de sesiones |
-| [hooks v2](./docs/tips/hooks-v2.md) | hooks de command vs http vs prompt, el patron asincrono |
+| [prompt caching](./docs/tips/prompt-caching.md) | obtén tasas de cache hit de 97%+, reduce tu factura |
+| [safety hooks](./docs/tips/safety-hooks.md) | bloquea push forzados y rm -rf en 5 minutos |
+| [jerarquía de configuración](./docs/tips/settings-hierarchy.md) | configuración por proyecto vs global vs local |
+| [duración de sesión](./docs/tips/session-length.md) | por qué sesiones más cortas son más eficientes (con datos) |
+| [ultrathink](./docs/tips/ultrathink.md) | fuerza pensamiento extendido para problemas complejos |
+| [gestión de contexto](./docs/tips/context-management.md) | estrategias de compactación, tasa de herramientas activas, mantener sesiones ajustadas |
+| [modo planificación](./docs/tips/plan-mode.md) | cuándo planificar ahorra tiempo vs cuándo lo desperdicia |
+| [modo rápido](./docs/tips/fast-mode.md) | mismo modelo, salida más rápida, el tradeoff |
+| [plugins](./docs/tips/plugins.md) | construye un plugin desde cero, qué lo hace valer la pena instalar |
+| [subagentes](./docs/tips/subagents.md) | equipos de agentes, aislamiento de worktree, cuándo lo paralelo paga |
+| [integración MCP](./docs/tips/mcp-integration.md) | conecta servidores MCP, úsalos dentro de sesiones |
+| [hooks v2](./docs/tips/hooks-v2.md) | hooks de comando vs http vs prompt, el patrón asíncrono |
 
 ---
 
 ## hooks
 
-copia uno, conectalo, listo. cada uno es un script bash independiente. [guia completa &rarr;](./docs/hooks.md)
+copia uno, conéctalo, listo. cada uno es un script bash autónomo. [guía completa &rarr;](./docs/hooks.md)
 
-| hook | evento | que hace |
+| hook | evento | qué hace |
 |---|---|---|
-| [safety-guard](./hooks/safety-guard.sh) | PreToolUse | bloquea force push, `rm -rf /`, DROP TABLE, curl-pipe-sh |
+| [safety-guard](./hooks/safety-guard.sh) | PreToolUse | bloquea push forzado, `rm -rf /`, DROP TABLE, curl-pipe-sh |
 | [no-squash](./hooks/no-squash.sh) | PreToolUse | bloquea squash merges |
-| [panopticon](./hooks/panopticon.sh) | PostToolUse | registra cada tool call en sqlite |
-| [context-save](./hooks/context-save.sh) | PreCompact | guarda el contexto antes de la compresion |
-| [notify](./hooks/notify.sh) | Notification | envia a macOS, Slack, ntfy |
+| [panopticon](./hooks/panopticon.sh) | PostToolUse | registra cada llamada de herramienta a sqlite |
+| [context-save](./hooks/context-save.sh) | PreCompact | guarda contexto antes de compresión |
+| [notify](./hooks/notify.sh) | Notification | enruta a macOS, Slack, ntfy |
 
 <details>
-<summary>4 hooks mas</summary>
+<summary>4 hooks más</summary>
 
-| hook | evento | que hace |
+| hook | evento | qué hace |
 |---|---|---|
-| [commit-nudge](./hooks/commit-nudge.sh) | PostToolUse | te recuerda hacer commit despues de N ediciones |
-| [version-stamp](./hooks/version-stamp.sh) | SessionEnd | actualiza automaticamente los stamps de "tested with" |
-| [stale-branch](./hooks/stale-branch.sh) | SessionStart | avisa sobre tracking branches eliminados |
-| [md-lint-fix](./hooks/md-lint-fix.sh) | PostToolUse | corrige automaticamente el lint de markdown al guardar |
+| [commit-nudge](./hooks/commit-nudge.sh) | PostToolUse | te recuerda hacer commit después de N ediciones |
+| [version-stamp](./hooks/version-stamp.sh) | SessionEnd | actualiza automáticamente stamps de "testeado con" |
+| [stale-branch](./hooks/stale-branch.sh) | SessionStart | advierte sobre ramas de seguimiento desaparecidas |
+| [md-lint-fix](./hooks/md-lint-fix.sh) | PostToolUse | corrige automáticamente markdown lint al guardar |
 
 </details>
 
-<img src="./gifs/hook-safety.gif" width="100%" alt="safety-guard blocking a dangerous command" />
+<img src="./gifs/hook-safety.gif" width="100%" alt="safety-guard bloqueando un comando peligroso" />
 
 ## agentes de ejemplo
 
-copia a `.claude/agents/` e invoca con `/agent <nombre>`. cada uno ensena un patron diferente. [guia &rarr;](./docs/agents.md)
+copia a `.claude/agents/` e invoca con `/agent <name>`. cada uno enseña un patrón diferente. [guía &rarr;](./docs/agents.md)
 
-| agente | patron | que hace |
+| agente | patrón | qué hace |
 |---|---|---|
-| [watch-tests](./examples/agents/watch-tests.md) | daemon | observa archivos, corre tests, propone fixes |
-| [try-worktree](./examples/agents/try-worktree.md) | worktree | prueba cambios riesgosos en worktrees aislados |
-| [arch-review](./examples/agents/arch-review.md) | revision rapida | revision rapida de olores arquitectonicos |
-| [write-pr](./examples/agents/write-pr.md) | integracion git | descripciones de PR a partir de tu diff |
+| [watch-tests](./examples/agents/watch-tests.md) | daemon | observa archivos, ejecuta pruebas, propone correcciones |
+| [try-worktree](./examples/agents/try-worktree.md) | worktree | intenta cambios riesgosos en worktrees aislados |
+| [arch-review](./examples/agents/arch-review.md) | revisión rápida | prueba de olor de arquitectura rápida |
+| [write-pr](./examples/agents/write-pr.md) | integración git | descripciones de PR desde tu diff |
 
 ## comandos que uso
 
-| comando | que hace |
+| comando | qué hace |
 |---|---|
-| `/mine` | datos de uso · costos, sesiones, busqueda, patrones |
-| `/ship` | stage, commit, push, abrir PR en un solo comando |
-| `/improve` | proponer actualizaciones a CLAUDE.md a partir del historial git |
+| `/mine` | datos de uso · costos, sesiones, búsqueda, patrones |
+| `/ship` | stage, commit, push, abre PR en un comando |
+| `/improve` | propone actualizaciones de CLAUDE.md desde el historial git |
 
-mas [2 comandos de ejemplo](./examples/commands/) que puedes copiar: `/sweep`, `/quicktest`.
+más [2 comandos de ejemplo](./examples/commands/) que puedes copiar: `/sweep`, `/quicktest`.
 
 ---
 
 ## mis opiniones personales
 
-| | que |
+| | qué |
 |---|---|
-| [realidad de costos](./docs/cost.md) | lo que Claude Code realmente cuesta, la matematica de prompt caching |
-| [errores que cometi](./docs/mistakes.md) | lo que me quemo para que te lo puedas saltar |
-| [automatizacion](./docs/automation.md) | los 12 pipelines de CI que mantienen este repo |
-| [flujo de sesion](./docs/session-workflow.md) | como trabajo dia a dia con Claude Code |
-| [worktrees](./docs/worktrees.md) | exploracion en paralelo con la app de escritorio |
+| [realidad de costos](./docs/cost.md) | qué Claude Code realmente cuesta, la matemática de prompt caching |
+| [errores que cometí](./docs/mistakes.md) | qué me quemó para que lo saltes |
+| [automatización](./docs/automation.md) | los 12 pipelines CI que mantienen este repo |
+| [flujo de trabajo de sesión](./docs/session-workflow.md) | cómo trabajo día a día con Claude Code |
+| [worktrees](./docs/worktrees.md) | exploración paralela con la aplicación desktop |
 
 ## vs las alternativas
 
-diplomatico, basado en datos, sin FUD. cada afirmacion cita una fuente.
+diplomático, basado en datos, sin FUD. cada afirmación cita una fuente.
 
-[vs cursor](./docs/comparisons/cursor.md) &middot; [vs codex](./docs/comparisons/codex.md) &middot; [vs gemini](./docs/comparisons/gemini.md) &middot; [vs antigravity](./docs/comparisons/antigravity.md) &middot; [precios](./docs/comparisons/pricing.md)
+[vs cursor](./docs/comparisons/cursor.md) &middot; [vs codex](./docs/comparisons/codex.md) &middot; [vs gemini](./docs/comparisons/gemini.md) &middot; [vs antigravity](./docs/comparisons/antigravity.md) &middot; [costos](./docs/comparisons/pricing.md)
 
 ---
 
 ## ejemplos
 
-- [plantillas de CLAUDE.md](./examples/claude-md/) · configs iniciales para TypeScript, Python, Rust, Next.js
-- [agentes de ejemplo](./examples/agents/) · 4 agentes, cada uno ensena un patron diferente
+- [plantillas CLAUDE.md](./examples/claude-md/) · configuraciones iniciales para TypeScript, Python, Rust, Next.js
+- [agentes de ejemplo](./examples/agents/) · 4 agentes, cada uno enseñando un patrón diferente
 - [comandos de ejemplo](./examples/commands/) · 2 comandos que puedes copiar a cualquier proyecto
-- [plugin handoff](./examples/plugins/handoff/) · preservacion de contexto en PreCompact
-- [plugin broadcast](./examples/plugins/broadcast/) · notificaciones asincronas en eventos git
+- [plugin handoff](./examples/plugins/handoff/) · preservación de contexto PreCompact
+- [plugin broadcast](./examples/plugins/broadcast/) · notificaciones asincrónicas en eventos git
 
 ---
 
-## como funciona este repo
+## cómo funciona este repo
 
-este repo corre con sus propios patrones.
+este repo se ejecuta en sus propios patrones.
 
-- **12 workflows de CI** · auditoria de docs, inteligencia competitiva, resumen de comunidad, chequeo de frescura, limpieza de stale, dependabot, releases, smoke test de plugins, quality gate de PRs, validacion, claude responder, upstream watcher
-- **11 hooks** corriendo en cada sesion
-- **<$1/mes** de costo de CI · los workflows con AI usan haiku
-- **0 mantenimiento manual** · todo lo que no requiere criterio esta automatizado
+- **12 workflows CI** · auditoría de docs, inteligencia competitiva, digestión comunitaria, verificación de actualización, limpieza de obsoletos, dependabot, releases, prueba de smoke de plugin, puerta de calidad de PR, validación, respondedor de Claude, observador de upstream
+- **11 hooks** ejecutándose en cada sesión
+- **<$1/mes** costo CI · los workflows potenciados por IA usan haiku
+- **0 mantenimiento manual** · todo lo que no requiere gusto está automatizado
 
-[detalles de automatizacion &rarr;](./docs/automation.md)
+[detalles de automatización &rarr;](./docs/automation.md)
 
 ---
 
-## herramientas que construi con estos patrones
+## herramientas que construí desde estos patrones
 
-todas salieron de vivir en Claude Code todos los dias. cada una resuelve un problema especifico que me seguia apareciendo.
+todas salieron de vivir en Claude Code cada día. cada una resuelve un problema específico que sigo golpeando.
 
-- **[mine](https://github.com/anipotts/mine)** · mineria de sesiones a sqlite. costos, busqueda, memoria de errores, deteccion de patrones
-- **[claudemon](https://github.com/anipotts/claudemon)** · monitoreo de sesiones en tiempo real entre proyectos y maquinas
-- **[cc](https://github.com/anipotts/cc)** · awareness multi-sesion. ve lo que otras sesiones estan haciendo, envia mensajes entre ellas
-- **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · servidor MCP para historial de iMessage en modo lectura. 26 herramientas, cero requests de red
+- **[mine](https://github.com/anipotts/mine)** · análisis de sesiones a sqlite. costos, búsqueda, memoria de errores, detección de patrones
+- **[claudemon](https://github.com/anipotts/claudemon)** · monitoreo de sesiones en tiempo real en proyectos y máquinas
+- **[cc](https://github.com/anipotts/cc)** · conciencia multi-sesión. ve qué otras sesiones están haciendo, envía mensajes entre ellas
+- **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · servidor MCP para historial de iMessage de solo lectura. 26 herramientas, cero solicitudes de red
 
-## mas de mi
+## más de mí
 
-- [anipotts.com/thoughts](https://anipotts.com/thoughts) · formato largo
+- [anipotts.com/thoughts](https://anipotts.com/thoughts) · forma larga
 - [buttondown.com/anipotts](https://buttondown.com/anipotts) · newsletter
-- [@anipottsbuilds](https://instagram.com/anipottsbuilds) · formato corto
+- [@anipottsbuilds](https://instagram.com/anipottsbuilds) · forma corta
 
 ---
 
-MIT &middot; hecho por [anipotts](https://anipotts.com)
+MIT &middot; construido por [anipotts](https://anipotts.com)
+
+<!-- translated from README.md @ 25b25ac -->
