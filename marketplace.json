@@ -1,9 +1,0 @@
-{
-  "name": "claude-code-tips",
-  "description": "claude code toolkit — mine plugin, hooks, agents, and docs. everything tested.",
-  "author": "anipotts",
-  "repository": "https://github.com/anipotts/claude-code-tips",
-  "plugins": [
-    "mine"
-  ]
-}
