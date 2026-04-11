@@ -15,7 +15,8 @@
 ## クイックスタート
 
 ```bash
-claude plugin install anipotts/mine   # mineプラグインをインストール
+/plugin marketplace add anipotts/claude-code-tips   # marketplace追加（初回のみ）
+/plugin install mine@anipotts                       # mineプラグインをインストール
 ```
 
 それから：[safety-guard.sh](./hooks/safety-guard.sh)を危険なコマンドをブロックするためにコピーしろ。[ティップス](./docs/tips/)を読め。以上だ。
@@ -35,7 +36,8 @@ claude plugin install anipotts/mine   # mineプラグインをインストール
 ## mineプラグインをインストールする
 
 ```bash
-claude plugin install anipotts/mine
+/plugin marketplace add anipotts/claude-code-tips   # marketplace追加（初回のみ）
+/plugin install mine@anipotts                       # mineをインストール
 ```
 
 **[mine](https://github.com/anipotts/mine)**が手に入る · セッションをsqliteにマイニング。コスト、検索、エラーメモリ、パターン検出。全部のデータはローカルの`~/.claude/mine.db`に残る。

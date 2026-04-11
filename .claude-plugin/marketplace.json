@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "anipotts",
   "owner": {
     "name": "Ani Potts"
@@ -10,8 +11,16 @@
   "plugins": [
     {
       "name": "mine",
-      "repository": "https://github.com/anipotts/mine",
-      "description": "mines every claude code session into sqlite. costs, search, patterns, error memory."
+      "description": "mines every claude code session into sqlite. costs, search, patterns, error memory.",
+      "category": "productivity",
+      "author": {
+        "name": "Ani Potts"
+      },
+      "source": {
+        "source": "github",
+        "repo": "anipotts/mine"
+      },
+      "homepage": "https://github.com/anipotts/mine"
     }
   ]
 }

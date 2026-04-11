@@ -15,7 +15,8 @@
 ## शुरुआत करें
 
 ```bash
-claude plugin install anipotts/mine   # mine plugin इंस्टॉल करें
+/plugin marketplace add anipotts/claude-code-tips   # marketplace जोड़ें (एक बार)
+/plugin install mine@anipotts                       # mine plugin इंस्टॉल करें
 ```
 
 फिर: [safety-guard.sh](./hooks/safety-guard.sh) को कॉपी करें ताकि खतरनाक कमांड्स को ब्लॉक किया जा सके। एक [सुझाव](./docs/tips/) पढ़ें। बस।
@@ -35,7 +36,8 @@ claude plugin install anipotts/mine   # mine plugin इंस्टॉल कर
 ## mine plugin इंस्टॉल करें
 
 ```bash
-claude plugin install anipotts/mine
+/plugin marketplace add anipotts/claude-code-tips   # marketplace जोड़ें (एक बार)
+/plugin install mine@anipotts                       # mine इंस्टॉल करें
 ```
 
 आप **[mine](https://github.com/anipotts/mine)** पाते हैं · session mining को sqlite में। लागतें, खोज, त्रुटि स्मृति, पैटर्न डिटेक्शन। सभी डेटा स्थानीय रहता है `~/.claude/mine.db` पर।

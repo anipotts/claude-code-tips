@@ -15,7 +15,8 @@ si esto te ahorra tiempo, [dale una estrella](https://github.com/anipotts/claude
 ## inicio rápido
 
 ```bash
-claude plugin install anipotts/mine   # instala el plugin mine
+/plugin marketplace add anipotts/claude-code-tips   # agrega marketplace (una vez)
+/plugin install mine@anipotts                       # instala el plugin mine
 ```
 
 luego: copia [safety-guard.sh](./hooks/safety-guard.sh) para bloquear comandos peligrosos. lee un [consejo](./docs/tips/). listo.
@@ -35,7 +36,8 @@ el mismo uso costaría ~$12K en la API con caching, ~$95K sin. sin loops autóno
 ## instala el plugin mine
 
 ```bash
-claude plugin install anipotts/mine
+/plugin marketplace add anipotts/claude-code-tips   # agrega marketplace (una vez)
+/plugin install mine@anipotts                       # instala mine
 ```
 
 obtienes **[mine](https://github.com/anipotts/mine)** · análisis de sesiones a sqlite. costos, búsqueda, memoria de errores, detección de patrones. todos los datos se quedan locales en `~/.claude/mine.db`.

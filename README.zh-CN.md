@@ -15,7 +15,8 @@
 ## 快速开始
 
 ```bash
-claude plugin install anipotts/mine   # 安装 mine plugin
+/plugin marketplace add anipotts/claude-code-tips   # 添加 marketplace（一次性）
+/plugin install mine@anipotts                       # 安装 mine plugin
 ```
 
 然后：复制 [safety-guard.sh](./hooks/safety-guard.sh) 来阻止危险命令。读一篇[提示](./docs/tips/)。完成。
@@ -35,7 +36,8 @@ claude plugin install anipotts/mine   # 安装 mine plugin
 ## 安装 mine plugin
 
 ```bash
-claude plugin install anipotts/mine
+/plugin marketplace add anipotts/claude-code-tips   # 添加 marketplace（一次性）
+/plugin install mine@anipotts                       # 安装 mine
 ```
 
 你将获得 **[mine](https://github.com/anipotts/mine)** · 会话数据挖掘到 sqlite。成本、搜索、错误记忆、模式检测。所有数据都保存在本地 `~/.claude/mine.db`。

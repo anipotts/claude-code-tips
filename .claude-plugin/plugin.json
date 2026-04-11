@@ -1,7 +1,7 @@
 {
   "name": "claude-code-tips",
   "version": "2.0.0",
-  "description": "Claude Code toolkit — mine plugin, hooks, agents, and docs. Install the mine plugin for session analytics: claude plugin install anipotts/mine",
+  "description": "Claude Code toolkit — mine plugin, hooks, agents, and docs. Install: /plugin marketplace add anipotts/claude-code-tips then /plugin install mine@anipotts",
   "author": {
     "name": "Ani Potts",
     "url": "https://github.com/anipotts"
