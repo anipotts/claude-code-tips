@@ -17,8 +17,8 @@
         "name": "Ani Potts"
       },
       "source": {
-        "source": "github",
-        "repo": "anipotts/mine"
+        "source": "url",
+        "url": "https://github.com/anipotts/mine.git"
       },
       "homepage": "https://github.com/anipotts/mine"
     }
