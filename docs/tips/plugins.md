@@ -6,11 +6,12 @@ a plugin is a portable bundle of claude code customizations. hooks, commands, sk
 
 ## what a plugin is
 
-at its core, a plugin is a `plugin.json` manifest plus one or more directories:
+at its core, a plugin is a `.claude-plugin/plugin.json` manifest plus one or more directories:
 
 ```
 my-plugin/
-  plugin.json       # name, version, hooks, commands
+  .claude-plugin/
+    plugin.json      # name, version, hooks, commands
   hooks/             # lifecycle hooks (shell or LLM)
   commands/          # slash commands
   skills/            # skill definitions
@@ -29,6 +30,7 @@ the manifest ties it together:
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
@@ -70,7 +72,8 @@ EOF
 chmod +x hooks/safety.sh
 
 # the manifest
-cat > plugin.json << 'EOF'
+mkdir .claude-plugin
+cat > .claude-plugin/plugin.json << 'EOF'
 {
   "name": "my-safety-plugin",
   "version": "0.1.0",
@@ -90,16 +93,36 @@ EOF
 test it locally:
 
 ```bash
-claude plugin install ./my-plugin
+/plugin marketplace add ./my-plugin
 ```
 
-publish it by pushing to github, then anyone can install:
+## distributing via marketplace
+
+to share your plugin, create a marketplace. push your plugin to github, then create a `.claude-plugin/marketplace.json`:
+
+```json
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "your-marketplace",
+  "owner": { "name": "your name" },
+  "plugins": [
+    {
+      "name": "my-plugin",
+      "description": "what it does",
+      "source": { "source": "github", "repo": "yourname/my-plugin" }
+    }
+  ]
+}
+```
+
+then anyone can install:
 
 ```bash
-claude plugin install yourname/my-plugin
+/plugin marketplace add yourname/your-marketplace-repo
+/plugin install my-plugin@your-marketplace
 ```
 
-that's it. one hook, one manifest, installable everywhere.
+two steps: add the marketplace (once), then install individual plugins from it.
 
 ## when to extract a plugin
 
@@ -109,24 +132,19 @@ my threshold: three files. one hook in a project is fine. two hooks, maybe. once
 
 my first extraction was mine (session analytics). i had the same SQLite parsing script copy-pasted across a few projects, each slightly different, each falling behind when i improved one copy. the hook that feeds session data was duplicated in every project's settings. once i hit the third copy, i extracted everything into a plugin: one hook dispatcher, one parser, one schema, one skill definition. now it's installed globally and every session feeds the same database. the rule of three works. one copy is fine. two copies, tolerable. three copies of the same hook across repos and you're maintaining divergent forks of your own tooling.
 
-## this repo is a plugin
+## this repo is a marketplace
 
-this repo itself is a plugin. check `/.claude-plugin/plugin.json`. when you run `claude plugin install anipotts/claude-code-tips`, you get the hooks, commands, and agents as a single install.
+this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to install the mine plugin:
 
-the plugin manifest:
-
-```json
-{
-  "name": "claude-code-tips",
-  "version": "2.0.0",
-  "description": "Claude Code toolkit"
-}
+```bash
+/plugin marketplace add anipotts/claude-code-tips
+/plugin install mine@anipotts
 ```
 
 ## try it
 
 1. create a single-hook plugin using the template above
-2. test locally with `claude plugin install ./your-plugin`
-3. push to github and install from remote with `claude plugin install yourname/repo`
+2. test locally with `/plugin marketplace add ./your-plugin`
+3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)

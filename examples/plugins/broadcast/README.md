@@ -30,7 +30,7 @@ supports:
 copy the hook or install the plugin:
 
 ```bash
-claude plugin install anipotts/claude-code-tips --plugin broadcast
+/plugin marketplace add anipotts/claude-code-tips
 ```
 
 or manually add to `.claude/settings.json`:
