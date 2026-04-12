@@ -1,24 +1,28 @@
 {
-  "name": "anipotts",
+  "name": "cc",
   "owner": {
     "name": "Ani Potts"
   },
   "metadata": {
-    "description": "hooks, agents, tips, and docs from months of building with Claude Code."
+    "description": "claude code plugins by ani potts — session awareness, usage mining, and tools.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
+      "name": "cc",
+      "source": "plugins/cc/",
+      "description": "multi-session awareness — see other sessions, file conflict warnings, cross-session messaging",
+      "author": { "name": "Ani Potts" },
+      "license": "MIT",
+      "category": "collaboration"
+    },
+    {
       "name": "mine",
+      "source": "plugins/mine/",
       "description": "mines every claude code session into sqlite. costs, search, patterns, error memory.",
-      "category": "productivity",
-      "author": {
-        "name": "Ani Potts"
-      },
-      "source": {
-        "source": "url",
-        "url": "https://github.com/anipotts/mine.git"
-      },
-      "homepage": "https://github.com/anipotts/mine"
+      "author": { "name": "Ani Potts" },
+      "license": "MIT",
+      "category": "analytics"
     }
   ]
 }

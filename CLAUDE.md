@@ -1,9 +1,11 @@
 # claude-code-tips
 
-personal claude code setup, open source. hooks, example agents/commands, opinionated docs. the mine plugin lives at [anipotts/mine](https://github.com/anipotts/mine).
+personal claude code setup, open source. hooks, example agents/commands, opinionated docs. marketplace name: `cc` (install via `anipotts@cc`).
 
 ## Structure
 
+- `plugins/cc/` · cross-session awareness plugin (MCP server, roster, messaging)
+- `plugins/mine/` · session mining plugin (SQLite analytics, costs, search, patterns)
 - `hooks/` · standalone hook scripts (safety-guard, panopticon, context-save, notify, no-squash, version-stamp, md-lint-fix, stale-branch, commit-nudge)
 - `.claude/commands/` · slash commands i actually use (ship, improve)
 - `examples/agents/` · example agents (watch-tests, try-worktree, arch-review, write-pr)

@@ -1,0 +1,5 @@
+[allowlist]
+paths = [
+  "tests/",
+  "scripts/mine.py"
+]
