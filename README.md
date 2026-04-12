@@ -16,7 +16,8 @@ if this saves you time, [star it](https://github.com/anipotts/claude-code-tips).
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # add marketplace (one time)
-/plugin install mine@anipotts                       # install the mine plugin
+/plugin install mine@cc                             # install mine (session analytics)
+/plugin install cc@cc                               # install cc (cross-session messaging)
 ```
 
 then: copy [safety-guard.sh](./hooks/safety-guard.sh) to block dangerous commands. read a [tip](./docs/tips/). done.
@@ -37,10 +38,11 @@ same usage would cost ~$12K on the API with caching, ~$95K without. no autonomou
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # add marketplace (one time)
-/plugin install mine@anipotts                       # install mine
+/plugin install mine@cc                             # install mine (session analytics)
+/plugin install cc@cc                               # install cc (cross-session messaging)
 ```
 
-you get **[mine](https://github.com/anipotts/mine)** · session mining to sqlite. costs, search, error memory, pattern detection. all data stays local at `~/.claude/mine.db`.
+you get **[mine](./plugins/mine/)** · session mining to sqlite. costs, search, error memory, pattern detection. all data stays local at `~/.claude/mine.db`.
 
 ```
 /mine                     today's sessions, cost, top tools
@@ -50,7 +52,22 @@ you get **[mine](https://github.com/anipotts/mine)** · session mining to sqlite
 /mine loops               repeated patterns across sessions
 ```
 
-start with `mine` + the `safety-guard` hook. add more as you go. **[mine docs &rarr;](https://github.com/anipotts/mine)**
+start with `mine` + the `safety-guard` hook. add more as you go. **[mine docs &rarr;](./plugins/mine/)**
+
+---
+
+## cc plugin
+
+cross-session messaging. see what other claude code sessions are doing, send messages between them.
+
+```bash
+/plugin install cc@cc
+```
+
+```
+/cc                          show active sessions
+/cc send merizo "pause"      message another session
+```
 
 ---
 
@@ -191,9 +208,9 @@ this repo runs on its own patterns.
 
 these all came out of living in claude code every day. each solves a specific problem i kept hitting.
 
-- **[mine](https://github.com/anipotts/mine)** · session mining to sqlite. costs, search, error memory, pattern detection
+- **[mine](./plugins/mine/)** · session mining to sqlite. costs, search, error memory, pattern detection
 - **[claudemon](https://github.com/anipotts/claudemon)** · real-time session monitoring across projects and machines
-- **[cc](https://github.com/anipotts/cc)** · multi-session awareness. see what other sessions are doing, send messages between them
+- **[cc](./plugins/cc/)** · multi-session awareness. see what other sessions are doing, send messages between them
 - **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · MCP server for read-only iMessage history. 26 tools, zero network requests
 
 ## more from me

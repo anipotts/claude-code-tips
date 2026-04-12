@@ -16,7 +16,8 @@ se isso economizar seu tempo, [dê uma estrela](https://github.com/anipotts/clau
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # adiciona marketplace (uma vez)
-/plugin install mine@anipotts                       # instala o plugin mine
+/plugin install mine@cc                             # instala mine (analytics de sessao)
+/plugin install cc@cc                               # instala cc (mensagens entre sessoes)
 ```
 
 depois: copie [safety-guard.sh](./hooks/safety-guard.sh) para bloquear comandos perigosos. leia uma [dica](./docs/tips/). pronto.
@@ -37,10 +38,11 @@ o mesmo uso custaria ~$12K na API com caching, ~$95K sem. sem loops autônomos. 
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # adiciona marketplace (uma vez)
-/plugin install mine@anipotts                       # instala mine
+/plugin install mine@cc                             # instala mine (analytics de sessao)
+/plugin install cc@cc                               # instala cc (mensagens entre sessoes)
 ```
 
-você ganha **[mine](https://github.com/anipotts/mine)** · análise de sessões para sqlite. custos, busca, memória de erros, detecção de padrões. todos os dados ficam locais em `~/.claude/mine.db`.
+você ganha **[mine](./plugins/mine/)** · análise de sessões para sqlite. custos, busca, memória de erros, detecção de padrões. todos os dados ficam locais em `~/.claude/mine.db`.
 
 ```
 /mine                     sessões de hoje, custo, ferramentas principais
@@ -50,7 +52,22 @@ você ganha **[mine](https://github.com/anipotts/mine)** · análise de sessões
 /mine loops               padrões repetidos entre sessões
 ```
 
-comece com `mine` + o hook `safety-guard`. adicione mais conforme avança. **[documentação do mine &rarr;](https://github.com/anipotts/mine)**
+comece com `mine` + o hook `safety-guard`. adicione mais conforme avança. **[documentação do mine &rarr;](./plugins/mine/)**
+
+---
+
+## cc plugin
+
+mensagens entre sessoes. veja o que outras sessoes do claude code estao fazendo, envie mensagens entre elas.
+
+```bash
+/plugin install cc@cc
+```
+
+```
+/cc                          mostrar sessoes ativas
+/cc send merizo "pause"      enviar mensagem para outra sessao
+```
 
 ---
 
@@ -191,9 +208,9 @@ este repo funciona em seus próprios padrões.
 
 todas saíram de viver em Claude Code todos os dias. cada uma resolve um problema específico que continuava batendo.
 
-- **[mine](https://github.com/anipotts/mine)** · análise de sessões para sqlite. custos, busca, memória de erros, detecção de padrões
+- **[mine](./plugins/mine/)** · análise de sessões para sqlite. custos, busca, memória de erros, detecção de padrões
 - **[claudemon](https://github.com/anipotts/claudemon)** · monitoramento de sessão em tempo real em projetos e máquinas
-- **[cc](https://github.com/anipotts/cc)** · consciência de múltiplas sessões. veja o que outras sessões estão fazendo, envie mensagens entre elas
+- **[cc](./plugins/cc/)** · consciência de múltiplas sessões. veja o que outras sessões estão fazendo, envie mensagens entre elas
 - **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · servidor MCP para histórico iMessage somente leitura. 26 ferramentas, zero requisições de rede
 
 ## mais de mim

@@ -16,7 +16,8 @@
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # marketplace追加（初回のみ）
-/plugin install mine@anipotts                       # mineプラグインをインストール
+/plugin install mine@cc                             # mineをインストール（セッション分析）
+/plugin install cc@cc                               # ccをインストール（クロスセッションメッセージング）
 ```
 
 それから：[safety-guard.sh](./hooks/safety-guard.sh)を危険なコマンドをブロックするためにコピーしろ。[ティップス](./docs/tips/)を読め。以上だ。
@@ -37,10 +38,11 @@
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # marketplace追加（初回のみ）
-/plugin install mine@anipotts                       # mineをインストール
+/plugin install mine@cc                             # mineをインストール（セッション分析）
+/plugin install cc@cc                               # ccをインストール（クロスセッションメッセージング）
 ```
 
-**[mine](https://github.com/anipotts/mine)**が手に入る · セッションをsqliteにマイニング。コスト、検索、エラーメモリ、パターン検出。全部のデータはローカルの`~/.claude/mine.db`に残る。
+**[mine](./plugins/mine/)**が手に入る · セッションをsqliteにマイニング。コスト、検索、エラーメモリ、パターン検出。全部のデータはローカルの`~/.claude/mine.db`に残る。
 
 ```
 /mine                     今日のセッション、コスト、トップツール
@@ -50,7 +52,22 @@
 /mine loops               セッション全体の繰り返しパターン
 ```
 
-`mine`と`safety-guard` hookから始めろ。あとは必要に応じて足していく。**[mineドキュメント &rarr;](https://github.com/anipotts/mine)**
+`mine`と`safety-guard` hookから始めろ。あとは必要に応じて足していく。**[mineドキュメント &rarr;](./plugins/mine/)**
+
+---
+
+## cc plugin
+
+クロスセッションメッセージング。他のclaude codeセッションが何をしているか確認し、セッション間でメッセージを送る。
+
+```bash
+/plugin install cc@cc
+```
+
+```
+/cc                          アクティブなセッションを表示
+/cc send merizo "pause"      別のセッションにメッセージを送る
+```
 
 ---
 
@@ -191,9 +208,9 @@ hooksがあるかないかで「Claudeが俺の思い通りに動く」と「Cla
 
 全部Claude Code内で毎日生きてることから出てきた。各々俺が何度も当たった特定の問題を解く。
 
-- **[mine](https://github.com/anipotts/mine)** · セッションマイニングをsqliteに。コスト、検索、エラーメモリ、パターン検出
+- **[mine](./plugins/mine/)** · セッションマイニングをsqliteに。コスト、検索、エラーメモリ、パターン検出
 - **[claudemon](https://github.com/anipotts/claudemon)** · プロジェクトとマシン全体のリアルタイムセッション監視
-- **[cc](https://github.com/anipotts/cc)** · マルチセッション認識。他のセッションが何やってるか見る、メッセージ送る
+- **[cc](./plugins/cc/)** · マルチセッション認識。他のセッションが何やってるか見る、メッセージ送る
 - **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · iMessageヒストリーの読み込み専用MCPサーバー。26のツール、ネットワーク リクエストゼロ
 
 ## 俺の他の作品

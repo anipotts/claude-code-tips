@@ -16,7 +16,8 @@
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # marketplace जोड़ें (एक बार)
-/plugin install mine@anipotts                       # mine plugin इंस्टॉल करें
+/plugin install mine@cc                             # mine इंस्टॉल करें (सेशन एनालिटिक्स)
+/plugin install cc@cc                               # cc इंस्टॉल करें (क्रॉस-सेशन मैसेजिंग)
 ```
 
 फिर: [safety-guard.sh](./hooks/safety-guard.sh) को कॉपी करें ताकि खतरनाक कमांड्स को ब्लॉक किया जा सके। एक [सुझाव](./docs/tips/) पढ़ें। बस।
@@ -37,10 +38,11 @@
 
 ```bash
 /plugin marketplace add anipotts/claude-code-tips   # marketplace जोड़ें (एक बार)
-/plugin install mine@anipotts                       # mine इंस्टॉल करें
+/plugin install mine@cc                             # mine इंस्टॉल करें (सेशन एनालिटिक्स)
+/plugin install cc@cc                               # cc इंस्टॉल करें (क्रॉस-सेशन मैसेजिंग)
 ```
 
-आप **[mine](https://github.com/anipotts/mine)** पाते हैं · session mining को sqlite में। लागतें, खोज, त्रुटि स्मृति, पैटर्न डिटेक्शन। सभी डेटा स्थानीय रहता है `~/.claude/mine.db` पर।
+आप **[mine](./plugins/mine/)** पाते हैं · session mining को sqlite में। लागतें, खोज, त्रुटि स्मृति, पैटर्न डिटेक्शन। सभी डेटा स्थानीय रहता है `~/.claude/mine.db` पर।
 
 ```
 /mine                     आज के सेशन्स, लागत, शीर्ष tools
@@ -50,7 +52,22 @@
 /mine loops               सेशन्स में दोहराए गए पैटर्न
 ```
 
-`mine` + `safety-guard` hook से शुरू करें। जैसे आप आगे बढ़ें, अधिक जोड़ें। **[mine डॉक्स &rarr;](https://github.com/anipotts/mine)**
+`mine` + `safety-guard` hook से शुरू करें। जैसे आप आगे बढ़ें, अधिक जोड़ें। **[mine डॉक्स &rarr;](./plugins/mine/)**
+
+---
+
+## cc plugin
+
+cross-session messaging. देखें कि अन्य claude code सेशन्स क्या कर रहे हैं, उनके बीच संदेश भेजें।
+
+```bash
+/plugin install cc@cc
+```
+
+```
+/cc                          active sessions दिखाएं
+/cc send merizo "pause"      दूसरे session को संदेश भेजें
+```
 
 ---
 
@@ -191,9 +208,9 @@ hooks "claude वह करता है जो मैं चाहता हू
 
 ये सभी हर दिन claude code में रहने से निकले। प्रत्येक एक विशिष्ट समस्या को हल करता है जिससे मैं बार-बार टकराया।
 
-- **[mine](https://github.com/anipotts/mine)** · session mining को sqlite में। लागतें, खोज, त्रुटि स्मृति, पैटर्न डिटेक्शन
+- **[mine](./plugins/mine/)** · session mining को sqlite में। लागतें, खोज, त्रुटि स्मृति, पैटर्न डिटेक्शन
 - **[claudemon](https://github.com/anipotts/claudemon)** · प्रोजेक्ट्स और मशीन्स में real-time session monitoring
-- **[cc](https://github.com/anipotts/cc)** · multi-session awareness। देखें कि अन्य सेशन्स क्या कर रहे हैं, उनके बीच संदेश भेजें
+- **[cc](./plugins/cc/)** · multi-session awareness। देखें कि अन्य सेशन्स क्या कर रहे हैं, उनके बीच संदेश भेजें
 - **[imessage-mcp](https://github.com/anipotts/imessage-mcp)** · iMessage history के लिए MCP server read-only। 26 tools, zero network requests
 
 ## मुझसे अधिक
