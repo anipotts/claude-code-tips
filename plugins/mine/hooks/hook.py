@@ -361,10 +361,9 @@ def handle_startup(payload: dict, config: dict) -> None:
                     if mine_py:
                         gap_days = int(gap / 86400)
                         log(f"[mine:heal] data is {gap_days}d stale. backfilling in background...")
-                        log_file = open(str(CLAUDE_DIR / "mine-backfill.log"), "a")
                         subprocess.Popen(
                             [sys.executable, str(mine_py), "--incremental"],
-                            stdout=log_file, stderr=subprocess.STDOUT,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                             start_new_session=True,
                         )
             except (ValueError, OSError):

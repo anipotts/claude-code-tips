@@ -13,7 +13,7 @@ from unittest.mock import patch
 import pytest
 
 # Import hook.py
-HOOKS_DIR = pathlib.Path(__file__).resolve().parent.parent / "plugins" / "mine" / "hooks"
+HOOKS_DIR = pathlib.Path(__file__).resolve().parent.parent / "hooks"
 sys.path.insert(0, str(HOOKS_DIR))
 
 import hook  # noqa: E402
@@ -23,7 +23,7 @@ import hook  # noqa: E402
 # Helpers
 # ===========================================================================
 
-SCHEMA_PATH = pathlib.Path(__file__).resolve().parent.parent / "plugins" / "mine" / "scripts" / "schema.sql"
+SCHEMA_PATH = pathlib.Path(__file__).resolve().parent.parent / "scripts" / "schema.sql"
 
 
 def make_db(tmp_path: pathlib.Path) -> sqlite3.Connection:
