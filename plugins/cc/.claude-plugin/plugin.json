@@ -1,11 +1,8 @@
 {
   "name": "cc",
-  "version": "0.6.0",
-  "description": "Multi-session awareness for Claude Code. See what other sessions are doing, avoid file conflicts, share messages across parallel sessions in real-time via channels.",
-  "author": {
-    "name": "Ani Potts",
-    "url": "https://github.com/anipotts"
-  },
+  "version": "1.0.0",
+  "description": "Cross-session messaging for Claude Code. Discover peers and send instant messages between parallel sessions.",
+  "author": { "name": "Ani Potts", "url": "https://github.com/anipotts" },
   "repository": "https://github.com/anipotts/claude-code-tips",
   "license": "MIT",
   "mcpServers": {
@@ -14,7 +11,5 @@
       "args": ["-c", "ln -sfn \"${CLAUDE_PLUGIN_DATA}/node_modules\" \"${CLAUDE_PLUGIN_ROOT}/node_modules\" 2>/dev/null; exec npx tsx \"${CLAUDE_PLUGIN_ROOT}/server.ts\""]
     }
   },
-  "channels": [
-    { "server": "cc" }
-  ]
+  "channels": [{ "server": "cc" }]
 }
