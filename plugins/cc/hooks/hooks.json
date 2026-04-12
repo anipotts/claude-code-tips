@@ -1,49 +1,23 @@
 {
-  "description": "cc — multi-session awareness hooks",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "diff -q \"${CLAUDE_PLUGIN_ROOT}/package.json\" \"${CLAUDE_PLUGIN_DATA}/package.json\" >/dev/null 2>&1 || (cd \"${CLAUDE_PLUGIN_DATA}\" && cp \"${CLAUDE_PLUGIN_ROOT}/package.json\" . && npm install --omit=dev 2>/dev/null) || rm -f \"${CLAUDE_PLUGIN_DATA}/package.json\"",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/cc.py roster",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/cc-hook.mjs register",
             "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/cc.py touch",
-            "timeout": 3
           }
         ]
       }
     ],
     "SessionEnd": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/cc.py cleanup",
-            "timeout": 3
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/cc-hook.mjs cleanup",
+            "timeout": 5
           }
         ]
       }
