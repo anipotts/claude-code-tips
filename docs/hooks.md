@@ -1,12 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# hooks
-
-this repo has 9 hooks you can use. here's how they work and how to build your own.
-
-hooks are the difference between "claude code does what i want" and "claude code does whatever it feels like." CLAUDE.md gives guidance. hooks give enforcement. one is a suggestion, the other is a wall.
-
----
+<!-- tested with: claude code v2.1.104 -->
 
 ## what hooks actually are
 

@@ -67,3 +67,5 @@ nothing to do manually. close the terminal. the data is there when you need it.
 - [cost](./cost.md) -- session cost patterns and optimization
 
 tested with: claude code v2.1.94
+
+tested with: claude code v2.1.104

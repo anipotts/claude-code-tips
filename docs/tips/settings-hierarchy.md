@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# settings hierarchy
-
-claude code reads settings from three levels. knowing which to use where saves you from "why isn't my hook firing" debugging sessions.
+<!-- tested with: claude code v2.1.104 -->
 
 ## the three levels
 

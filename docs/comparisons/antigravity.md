@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# claude code vs google antigravity
-
-> last verified: 2026-04-09 | sources: [antigravity official](https://antigravity.google/), [antigravity pricing](https://antigravity.google/pricing), [google developers blog](https://developers.googleblog.com/build-with-google-antigravity-our-new-agentic-development-platform/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing)
-
----
+<!-- tested with: claude code v2.1.104 -->
 
 ## at a glance
 

@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# subagents
-
-the fastest way to parallelize work in claude code. spawn separate claude instances for substantial tasks, keep the small stuff in your own context window.
+<!-- tested with: claude code v2.1.104 -->
 
 ## the decision tree
 

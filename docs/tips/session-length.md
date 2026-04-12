@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# session length: the data
-
-shorter sessions are more efficient. here's the data.
+<!-- tested with: claude code v2.1.104 -->
 
 ## the numbers
 

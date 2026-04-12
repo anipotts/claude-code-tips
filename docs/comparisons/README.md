@@ -1,14 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# choosing an AI coding tool
-
-**diplomatic, data-driven comparisons. no FUD, no fanboy energy.**
-
-every comparison here cites sources. pricing references link to official pages. "last verified" dates tell you when we checked. if something's wrong, open an issue -- these tools change fast.
-
-we use claude code daily and know it best. that means we can be specific about its strengths *and* honest about where competitors do things differently. the goal is to help you pick the right tool for your workflow, not to sell you on ours.
-
----
+<!-- tested with: claude code v2.1.104 -->
 
 ## comparisons
 

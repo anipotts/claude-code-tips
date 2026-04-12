@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# fast mode
-
-same model, less thinking. toggle with `/fast`. my recommendation: don't.
+<!-- tested with: claude code v2.1.104 -->
 
 ## what it is
 

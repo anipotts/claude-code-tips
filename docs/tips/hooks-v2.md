@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.94 -->
 
-# hooks v2: the four handler types
-
-hooks come in four flavors. pick the wrong one and you burn tokens, add latency, or silently fail.
+<!-- tested with: claude code v2.1.104 -->
 
 ## the four types
 
