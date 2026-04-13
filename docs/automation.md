@@ -1,14 +1,6 @@
-<!-- tested with: claude code v2.1.94 -->
+<!-- tested with:
 
-# automation
-
-my repo maintains itself. here's the full stack -- daemons, cron, github actions, and the guardrails that keep them from wrecking things.
-
----
-
-> **the golden rule: never auto-commit to main. never. not even "just this once."**
-
----
+<!-- tested with: claude code v2.1.104 -->
 
 ## my 12 pipelines
 
