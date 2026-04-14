@@ -25,6 +25,12 @@ good candidates:
 
 plan mode forces Claude to think before acting, which means fewer wrong turns, fewer compactions, and fewer wasted sessions.
 
+
+
+### new in v2.1.107: /team-onboarding command
+
+v2.1.107 adds `/team-onboarding` which automates planning for new team members joining a codebase. similar planning benefits to `/plan` but optimized for collaborative knowledge transfer. use this when onboarding teammates instead of manual planning.
+
 ## the only exception
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.

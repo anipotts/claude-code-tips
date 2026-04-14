@@ -97,6 +97,12 @@ use the scout's findings to write a targeted prompt for sonnet. haiku is ~60x ch
 
 ---
 
+
+
+### drift detection (v2.1.107+)
+
+v2.1.107 introduces drift detection for subagent teams. when multiple agents modify related code, the system flags potential conflicts or inconsistencies. this reduces merge conflicts and keeps agent work coherent across a team.
+
 ## pattern 4: worktree isolation
 
 `isolation: "worktree"` creates a git worktree for the agent. it makes all changes there. you review the diff, cherry-pick what you want, discard the rest.

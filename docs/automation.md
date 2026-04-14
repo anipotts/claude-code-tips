@@ -35,6 +35,10 @@ the goal: when i open the repo on monday, there's an issue summarizing what chan
 
 ---
 
+
+
+v2.1.107 note: `/doctor` and `/schedule` commands now provide better visibility into automation status and scheduled tasks. use them to audit your pipeline health.
+
 ## the daemon pattern
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.

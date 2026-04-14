@@ -93,6 +93,12 @@ critical for SessionStart hooks where blocking delays startup. claudemon uses as
 
 only `command` hooks support async. prompt, agent, and http hooks always run synchronously.
 
+
+
+### v2.1.107 watchdog updates
+
+v2.1.107 enhances hook descriptions and adds new watchdog settings that control hook behavior during team mode and long-running sessions. check `/doctor` for current watchdog status.
+
 ## the matcher system
 
 matchers are regex filters that control when hooks fire. without a matcher, the hook fires on every event.

@@ -14,6 +14,17 @@ claude code reads settings from three levels. knowing which to use where saves y
 
 they merge in that order. local overrides project overrides global.
 
+
+
+### new in v2.1.107: environment variables
+
+v2.1.107 adds five new environment variables for configuration:
+- `CLAUDE_VIEWMODE` -- controls UI layout (desktop app)
+- `CLAUDE_TEAMMATE_MODE` -- team collaboration settings (now defaults correctly)
+- `CLAUDE_WATCHDOG_*` -- monitoring and safety settings
+
+environment variables override all three settings file levels. use them for machine-specific or ephemeral overrides.
+
 ## when to use which
 
 | setting | where | why |
