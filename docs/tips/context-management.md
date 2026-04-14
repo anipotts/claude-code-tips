@@ -51,6 +51,31 @@ good: "the bug is in src/auth/token.ts around line 140, the JWT expiry check"
 
 ## five strategies that work
 
+### 5. use a context-save hook with PreCompact blocking
+
+a PreCompact hook fires before compression and writes session state to a file. v2.1.105+ lets hooks block compaction entirely by exiting with code 2 or returning `{"decision":"block"}`.
+
+without it, compaction wipes your plan. with it, claude reads the handoff and picks up where it left off. optionally block compaction if the session state is incomplete.
+
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/context-save.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+the [context-save.sh](../../hooks/context-save.sh) hook in this repo does exactly this. if your session has uncommitted work, exit 2 to block the compaction and give yourself time to wrap up.
+
 ### 1. scope before you start
 
 "implement the auth module" is a 2hr session. "add the JWT validation middleware" is 15 min. the tighter your scope, the less context you burn and the lower your compaction risk.

@@ -40,6 +40,10 @@ use worktree isolation for:
 
 skip it for read-only research. worktree setup adds overhead you don't need when the agent is just reading files.
 
+
+
+**v2.1.105+**: use the `EnterWorktree` tool with the `path` parameter to switch into an existing worktree without creating a new one. this is useful when you want to continue work in a worktree that was created earlier or by another agent.
+
 ## the scout pattern
 
 send a cheap model to explore, then a capable model to act. each subagent is its own billing stream, so model choice matters.

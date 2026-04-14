@@ -15,6 +15,14 @@ hooks come in four flavors. pick the wrong one and you burn tokens, add latency,
 
 `command` handles 90%+ of cases. it's the fastest, cheapest, and most predictable. the others exist for when bash can't make the decision alone.
 
+
+
+### background monitors (v2.1.105+)
+
+plugins can now register background monitors via a top-level `monitors` manifest key. monitors auto-arm at session start or on skill invoke. this is distinct from hook types — it's a way for plugins to watch things without explicit user action.
+
+use monitors when you want a plugin to react to changes automatically (e.g. a file watcher, a process monitor, a health checker). see [monitor.md](./monitor.md) for details.
+
 ### command
 
 the workhorse. runs a shell command, reads JSON from stdin, returns exit 0 (allow) or exit 2 (block). every hook in this repo is a command hook.

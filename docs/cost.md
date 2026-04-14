@@ -65,6 +65,10 @@ every claude code interaction is an API call. you send tokens in (prompt + conve
 
 ---
 
+
+
+> pricing last verified against [anthropic docs](https://docs.anthropic.com/en/docs/about-claude/models) — check for updates if you see different numbers in your account
+
 ## what actually costs money
 
 ranked by impact:
