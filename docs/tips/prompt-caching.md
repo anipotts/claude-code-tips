@@ -8,6 +8,14 @@ the single biggest cost lever in claude code. my overall cache hit rate is 95%. 
 
 claude code caches your system prompt, tool definitions, and CLAUDE.md as a prefix. when these stay the same across turns, 90% of input tokens hit the cache, meaning you pay 1/10th the cost on those tokens.
 
+
+
+## cache TTL control (v2.1.108+)
+
+default cache TTL is now configurable. set `ENABLE_PROMPT_CACHING_1H=true` to extend cache lifetime from 5 minutes to 1 hour, which improves hit rates on longer sessions. this is especially useful for sessions where you `/resume` or return later — the cache survives longer.
+
+force 5-minute TTL with `FORCE_PROMPT_CACHING_5M=true` if you need to invalidate cache frequently or test cache behavior.
+
 ## the trick
 
 keep your CLAUDE.md **short and stable**. every edit breaks the prefix cache for that session.
