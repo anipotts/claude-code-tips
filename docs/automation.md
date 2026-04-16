@@ -199,3 +199,10 @@ total monthly cost: **< $1**. github actions free tier covers all 12 workflows. 
 
 - [hooks](./hooks.md) -- enforcement hooks that protect against automation mistakes
 - [official docs](https://docs.anthropic.com/en/docs/claude-code/github-actions) -- github actions setup
+
+---
+
+
+### new in v2.1.111
+
+**13. ultrareview** (manual invocation) -- `/ultrareview` runs comprehensive multi-agent code review in parallel. invoke with no arguments to review current branch or `/ultrareview <PR#>` to fetch and review a specific GitHub PR. costs tokens but provides detailed cloud-hosted critique.

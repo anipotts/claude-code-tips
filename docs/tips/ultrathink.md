@@ -28,6 +28,10 @@ current setup is in src/auth/. don't break existing JWT flows.
 - debugging subtle issues where the first intuition is usually wrong
 - any prompt where you'd say "think carefully about this"
 
+
+
+**v2.1.111 alternative:** opus 4.7 users can now use `/effort` slider to tune reasoning depth directly, which provides more granular control than ultrathink. for non-opus models, ultrathink remains the way to trigger extended thinking.
+
 ## when it doesn't help
 
 - simple file edits, renames, or config changes

@@ -10,6 +10,10 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+
+**note (v2.1.111+):** opus 4.7 now supports `/effort` levels for fine-grained control over speed vs reasoning depth. use `/effort` for more granular tuning than fast mode. fast mode is now one point on a spectrum rather than a binary toggle.
+
 ## why i don't use it
 
 never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.

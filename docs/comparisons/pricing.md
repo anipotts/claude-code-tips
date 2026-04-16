@@ -88,6 +88,12 @@ currently free during public preview. weekly quotas limit heavy usage but most d
 
 ## hidden costs and gotchas
 
+
+
+### claude code (v2.1.111+)
+- opus 4.7 xhigh effort level uses more thinking tokens than high -- compare `/effort` settings before committing to xhigh for long sessions
+- /ultrareview runs parallel agents in the cloud (not billed as subagents) but still consumes input/output tokens for each agent's analysis
+
 ### claude code
 - opus is 5x the cost of sonnet. switching to opus mid-session for "just one question" can spike costs
 - long sessions (30+ turns) accumulate context that increases per-turn cost even with caching
