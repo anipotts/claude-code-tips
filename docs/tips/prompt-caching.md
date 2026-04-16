@@ -47,6 +47,11 @@ from real session data:
 
 longer sessions cache better bc the prefix stabilizes and cache_write amortizes over more turns. short sessions spend proportionally more on initial cache creation.
 
+
+
+
+> **note**: as of v2.1.110, session recap is enabled by default even for telemetry-disabled users. this adds a small system message at session end, which is logged to history but doesn't impact the cache prefix. your cache hit rates remain unchanged.
+
 ## try it
 
 1. check your current CLAUDE.md. is it under 30 lines?

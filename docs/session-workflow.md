@@ -12,6 +12,13 @@ on launch, claude code loads CLAUDE.md from the project root, reads any `.claude
 
 by the time you see the prompt, hooks are loaded, context is cached, and claude knows your conventions.
 
+
+
+
+## rendering modes (v2.1.110+)
+
+v2.1.110 added `/tui` for flicker-free fullscreen rendering and `/focus` to toggle focus view separately. if your terminal feels jittery during long sessions, try `/tui fullscreen`. focus view hides the sidebar for cleaner reading.
+
 ## context loading
 
 three things work together on startup:
