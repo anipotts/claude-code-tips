@@ -12,11 +12,20 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 ## why i don't use it
 
-never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
+## effort levels: the better alternative
 
-the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
+fast mode exists but `/effort` is the better control. fast mode is a binary toggle (on/off). effort levels give you granular control:
 
-the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
+```
+/effort low      # fast, minimal thinking (like fast mode)
+/effort medium   # balanced
+/effort high     # extended thinking (default for complex work)
+/effort xhigh    # maximum thinking (opus 4.7 only)
+```
+
+use `/effort low` for mechanical tasks (file moves, renames, simple edits). use `/effort high` or `/effort xhigh` for anything that needs reasoning.
+
+my recommendation: don't use fast mode. use `/effort low` for simple work and `/effort high` for everything else. xhigh is for when you're genuinely stuck and need the model to think harder.
 
 ## cost note
 

@@ -25,6 +25,12 @@ good candidates:
 
 plan mode forces Claude to think before acting, which means fewer wrong turns, fewer compactions, and fewer wasted sessions.
 
+
+
+## pairing plan mode with /effort
+
+plan mode + `/effort high` is a powerful combination. plan mode forces structured thinking before implementation. `/effort high` gives the planning phase more compute. together they catch more design issues before any code is written.
+
 ## the only exception
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.

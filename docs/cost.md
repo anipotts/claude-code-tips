@@ -65,6 +65,10 @@ every claude code interaction is an API call. you send tokens in (prompt + conve
 
 ---
 
+
+
+**note: opus 4.7 (v2.1.111+) now available with xhigh effort level.** xhigh uses extended thinking and costs more tokens. pricing table does not yet include opus 4.7 differential. check anthropic docs for current rates.
+
 ## what actually costs money
 
 ranked by impact:

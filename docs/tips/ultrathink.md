@@ -6,20 +6,26 @@ force claude code into extended thinking mode for complex problems. more thinkin
 
 ## how to use it
 
-add "ultrathink" anywhere in your prompt:
+## how to use it
+
+use `/effort` to set your thinking budget. `xhigh` enables extended thinking:
 
 ```
-ultrathink: design the database schema for a multi-tenant SaaS with row-level security
+/effort xhigh
+design the database schema for a multi-tenant SaaS with row-level security
 ```
 
-or at the start of a complex request:
+or in one command:
 
 ```
-ultrathink
-
-i need to refactor the auth module to support OAuth2 + SAML.
-current setup is in src/auth/. don't break existing JWT flows.
+/effort xhigh; design the database schema...
 ```
+
+effort levels (from fast to deep):
+- `low` -- minimal thinking, fastest output
+- `medium` -- balanced
+- `high` -- extended thinking (default for complex work)
+- `xhigh` -- maximum thinking tokens (opus 4.7 only)
 
 ## when it helps
 
@@ -27,6 +33,17 @@ current setup is in src/auth/. don't break existing JWT flows.
 - complex multi-file refactors where you need a plan first
 - debugging subtle issues where the first intuition is usually wrong
 - any prompt where you'd say "think carefully about this"
+
+
+
+## the xhigh vs high tradeoff
+
+`xhigh` costs more tokens (extended thinking is expensive). use it for:
+- novel problems where you have no intuition
+- multi-file architecture decisions
+- debugging that requires deep reasoning
+
+use `high` (the default) for most work. it includes extended thinking without the maximum token spend.
 
 ## when it doesn't help
 
