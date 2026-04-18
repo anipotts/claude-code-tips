@@ -51,6 +51,12 @@ good: "the bug is in src/auth/token.ts around line 140, the JWT expiry check"
 
 ## five strategies that work
 
+
+
+### 6. use auto mode strategically (v2.1.114+)
+
+auto mode switches models based on task complexity. pair it with plan mode: during planning, let auto mode keep costs down (haiku for reads, sonnet for thinking). during implementation, disable auto mode and lock to sonnet for consistency. this hybrid approach saves cost on exploration without sacrificing implementation quality.
+
 ### 1. scope before you start
 
 "implement the auth module" is a 2hr session. "add the JWT validation middleware" is 15 min. the tighter your scope, the less context you burn and the lower your compaction risk.

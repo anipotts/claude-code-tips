@@ -61,9 +61,7 @@ every claude code interaction is an API call. you send tokens in (prompt + conve
 | sonnet 4.6 | $3.00 | $15.00 | $0.30 | $3.75 |
 | opus 4.6 | $5.00 | $25.00 | $0.50 | $6.25 |
 
-> [current pricing](https://docs.anthropic.com/en/docs/about-claude/models)
-
----
+> [current pricing](https://docs.anthropic.com/en/docs/about-claude/models) | last verified: 2026-04-18
 
 ## what actually costs money
 

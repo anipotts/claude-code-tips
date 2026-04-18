@@ -28,6 +28,10 @@ current setup is in src/auth/. don't break existing JWT flows.
 - debugging subtle issues where the first intuition is usually wrong
 - any prompt where you'd say "think carefully about this"
 
+
+
+- paired with ultrareview for deep feedback loops on implementation quality
+
 ## when it doesn't help
 
 - simple file edits, renames, or config changes

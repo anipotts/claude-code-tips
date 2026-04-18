@@ -36,3 +36,10 @@ the only time you skip plan mode is when the task is so simple you already know 
 3. approve and watch it execute. compare the quality to sessions where you skipped planning
 
 [session workflow &rarr;](../session-workflow.md)
+
+---
+
+
+## ultrareview for implementation feedback (v2.1.113+)
+
+after planning, ultrareview (available in v2.1.113+) provides deep architectural feedback on the implementation without requiring manual review cycles. enables claude to evaluate the plan against actual code patterns in your repo before execution.

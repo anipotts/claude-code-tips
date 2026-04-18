@@ -10,6 +10,11 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+
+### auto mode (v2.1.114+)
+auto mode is different. it lets claude switch models mid-session based on task type. simple lookups drop to haiku automatically. complex design work bumps to opus. you don't toggle it manually — claude decides. disable it in settings if you want full control over model selection.
+
 ## why i don't use it
 
 never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
