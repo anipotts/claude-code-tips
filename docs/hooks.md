@@ -63,6 +63,10 @@ three categories of damage:
 
 ---
 
+
+
+**command wrapping in bash** -- v2.1.113+ security rules now match commands wrapped in `env`/`sudo`/`watch`/`ionice`/`setsid` to prevent bypass of deny rules.
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.

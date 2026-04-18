@@ -46,6 +46,10 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 | `chmod 777` on sensitive paths | prevents permission disasters |
 | `curl \| bash`, `wget \| sh` | blocks remote code execution |
 
+
+
+| `find -exec` or `find -delete` | prevents dangerous find operations with exec or delete actions |
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.

@@ -44,3 +44,6 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 - [gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)
 - [google AI subscriptions](https://gemini.google/subscriptions/)
 - [antigravity](https://antigravity.google/pricing)
+
+
+- [claude code v2.1.113+ changelog](https://github.com/anthropics/claude-code/releases)
