@@ -93,6 +93,10 @@ critical for SessionStart hooks where blocking delays startup. claudemon uses as
 
 only `command` hooks support async. prompt, agent, and http hooks always run synchronously.
 
+
+
+for background monitoring tasks, use the monitor tool instead of async hooks when you need to react to intermediate output. monitor is event-driven (zero cost when idle) vs hooks which fire synchronously.
+
 ## the matcher system
 
 matchers are regex filters that control when hooks fire. without a matcher, the hook fires on every event.

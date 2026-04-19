@@ -33,6 +33,10 @@ that's it. 10-20 lines. project structure, conventions, hard rules. no prose, no
 - very long CLAUDE.md files (more content = more to re-cache on changes)
 - switching models mid-session (different cache prefix)
 
+
+
+- creating multiple CLAUDE.md files in monorepos (one per workspace breaks cache across workspaces)
+
 ## real numbers
 
 from real session data:

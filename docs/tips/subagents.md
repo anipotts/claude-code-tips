@@ -95,3 +95,6 @@ match the type to the job. an explore agent that can't write files won't acciden
 3. for risky changes, always use `isolation: "worktree"`. the safety net is worth the setup time
 
 [full agents guide &rarr;](../agents.md) | [copyable agent examples &rarr;](../../examples/agents/)
+
+
+4. for monorepos, use skills in separate subfolders per workspace rather than one shared CLAUDE.md to avoid cache invalidation across subagent teams
