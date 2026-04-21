@@ -10,6 +10,10 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+
+**note (v2.1.116+):** the thinking spinner now shows inline progress ("still thinking", "thinking more", "almost done thinking") instead of a separate hint row. fast mode behavior relative to thinking budget may differ — check `/config` for current thinking settings.
+
 ## why i don't use it
 
 never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.

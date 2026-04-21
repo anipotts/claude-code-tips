@@ -63,6 +63,10 @@ three categories of damage:
 
 ---
 
+
+
+**platform-level safety (v2.1.116+):** destructive commands targeting `/`, `$HOME`, and other critical system paths now have a dangerous-path safety check enforced at the sandbox level, even if auto-allow is configured. safety-guard.sh remains recommended as an additional enforcement layer for other patterns (force push, squash merge, DROP TABLE).
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.
