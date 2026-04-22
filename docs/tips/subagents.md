@@ -88,6 +88,12 @@ specialized agent types get tailored system prompts and tool access:
 
 match the type to the job. an explore agent that can't write files won't accidentally modify anything.
 
+
+
+### v2.1.117: forked subagents
+
+forked subagents can now be enabled on external builds by setting `CLAUDE_CODE_FORK_SUBAGENT=1`. agent frontmatter `mcpServers` are now loaded for main-thread agent sessions via `--agent`, meaning agents can inherit MCP configuration from the parent session without explicit re-registration.
+
 ## try it
 
 1. next time you're about to do a 10+ step task, spawn a subagent instead. compare how long it takes vs doing it inline

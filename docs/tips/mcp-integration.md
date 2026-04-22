@@ -60,7 +60,7 @@ servers that both observe and modify. playwright is the canonical example: claud
 
 ## gotchas
 
-**startup latency.** MCP servers launch on first tool call. the first invocation takes 1-5 seconds. subsequent calls are fast.
+**startup latency.** MCP servers launch on first tool call. prior to v2.1.117, the first invocation took 1-5 seconds. v2.1.117+ enables concurrent connect by default when both local and claude.ai MCP servers are configured, reducing startup overhead.
 
 **system prompt bloat.** more tools means a larger prompt prefix. this hurts cache hit rates if the tool set changes between sessions. keep your active server count minimal.
 

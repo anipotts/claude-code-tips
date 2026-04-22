@@ -61,6 +61,12 @@ when a session ends (ctrl+c, `/exit`, or timeout), two things fire:
 
 nothing to do manually. close the terminal. the data is there when you need it.
 
+
+
+### v2.1.117: improved resume behavior
+
+`/resume` now offers to summarize stale, large sessions before re-reading them, matching the existing `--resume` flag behavior. this prevents you from re-loading 100+ turns of conversation history unnecessarily. if a session has been idle for a while, claude will ask if you want a summary first.
+
 ## further reading
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions

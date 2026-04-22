@@ -148,3 +148,11 @@ this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to 
 3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)
+
+---
+
+### plugin dependencies (v2.1.117+)
+
+when you install a plugin that depends on other plugins, claude code now auto-resolves missing dependencies from configured marketplaces. if a dependency fails to install, you'll see "not installed" with an install hint instead of the plugin blocking.
+
+managed-settings `blockedMarketplaces` and `strictKnownMarketplaces` are now enforced at install, update, refresh, and autoupdate time. this means admins can restrict which marketplaces plugins pull from.

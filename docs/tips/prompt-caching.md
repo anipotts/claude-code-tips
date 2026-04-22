@@ -54,3 +54,8 @@ longer sessions cache better bc the prefix stabilizes and cache_write amortizes 
 3. run `/mine` to check your cache hit rate after a few sessions
 
 [full cost breakdown &rarr;](../cost.md)
+
+
+### v2.1.117: native tool performance
+
+starting in v2.1.117, on macOS and Linux native builds, the `Glob` and `Grep` tools are replaced by embedded `bfs` and `ugrep`. these are faster searches without a separate tool round-trip. this improves cache efficiency by reducing tool call overhead on large codebases.
