@@ -51,6 +51,23 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 ---
 
+
+
+## v2.1.118: mcp_tool hooks
+
+hooks can now invoke MCP tools directly without shell overhead:
+
+```json
+{
+  "type": "mcp_tool",
+  "server": "database",
+  "tool": "validate_query",
+  "input": {"sql": "..."}
+}
+```
+
+this is useful for PreToolUse hooks that need to validate commands against external systems (databases, APIs, config services) before allowing execution.
+
 ## what hooks actually prevent
 
 three categories of damage:

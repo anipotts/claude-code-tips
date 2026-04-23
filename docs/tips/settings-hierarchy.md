@@ -32,6 +32,22 @@ they merge in that order. local overrides project overrides global.
 
 **hooks that personalize → local.** notifications, logging, personal workflows. nobody else needs your macOS notification hook.
 
+
+
+## v2.1.118+ auto mode expansion
+
+v2.1.118 added the ability to extend auto mode rules with `"$defaults"` in `autoMode.allow`, `autoMode.soft_deny`, or `autoMode.environment`. this lets you add custom rules alongside built-in rules instead of replacing them entirely.
+
+```json
+{
+  "autoMode": {
+    "allow": ["$defaults", "CustomToolName"]
+  }
+}
+```
+
+use this when you want the built-in safe defaults but need to whitelist one or two additional tools.
+
 ## try it
 
 ```bash

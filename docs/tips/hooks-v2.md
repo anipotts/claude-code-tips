@@ -15,6 +15,23 @@ hooks come in four flavors. pick the wrong one and you burn tokens, add latency,
 
 `command` handles 90%+ of cases. it's the fastest, cheapest, and most predictable. the others exist for when bash can't make the decision alone.
 
+
+
+### mcp_tool
+
+v2.1.118+ allows hooks to invoke MCP tools directly via `type: "mcp_tool"`. this eliminates the need to shell out to bash to call MCP-exposed commands.
+
+```json
+{
+  "type": "mcp_tool",
+  "server": "database",
+  "tool": "query",
+  "input": {"sql": "SELECT * FROM users WHERE id = 123"}
+}
+```
+
+useful for hooks that need to query external systems (databases, APIs) as part of their decision logic without spawning subprocess overhead.
+
 ### command
 
 the workhorse. runs a shell command, reads JSON from stdin, returns exit 0 (allow) or exit 2 (block). every hook in this repo is a command hook.

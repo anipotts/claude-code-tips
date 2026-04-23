@@ -32,6 +32,12 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 - subjective claims (code quality, UX) are labeled as such
 - we update these docs when tools ship major changes
 
+
+
+## last update
+
+changelog last checked: 2026-04-09 against claude code v2.1.118. vim visual mode, custom themes, mcp_tool hooks, and auto mode `$defaults` are v2.1.118+.
+
 ## sources used across all comparisons
 
 - [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)
