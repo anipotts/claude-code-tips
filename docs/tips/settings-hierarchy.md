@@ -14,6 +14,11 @@ claude code reads settings from three levels. knowing which to use where saves y
 
 they merge in that order. local overrides project overrides global.
 
+
+
+
+**v2.1.119 addition:** settings from `/config` (theme, editor mode, verbose, etc.) now persist to `~/.claude/settings.json` and participate in the global/project/local override precedence. this means settings configured interactively during a session are preserved across sessions at the appropriate scope level.
+
 ## when to use which
 
 | setting | where | why |

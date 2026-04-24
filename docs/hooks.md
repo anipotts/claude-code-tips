@@ -51,6 +51,11 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 ---
 
+
+
+
+**version update:** hooks remain stable through v2.1.119. v2.1.119 adds `duration_ms` to PostToolUse and PostToolUseFailure hook inputs, enabling better performance monitoring. existing hooks continue to work without modification.
+
 ## what hooks actually prevent
 
 three categories of damage:

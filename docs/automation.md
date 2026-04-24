@@ -35,6 +35,11 @@ the goal: when i open the repo on monday, there's an issue summarizing what chan
 
 ---
 
+
+
+
+**note:** opentelemetry integration in v2.1.119 now includes `tool_use_id` and `tool_input_size_bytes` in tool events, enabling more detailed cost and performance analysis for automation workflows.
+
 ## the daemon pattern
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
