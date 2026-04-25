@@ -30,7 +30,9 @@ claude code's hook/plugin/agent/skill/command stack is production-tested across 
 
 ### proven code generation quality
 
-based on our testing, claude models consistently perform well for code generation tasks, especially complex multi-file edits. third-party benchmarks (SWE-bench, HumanEval) also rank claude models at or near the top. gemini models are strong and improving fast, but based on our testing, claude code's code quality has an edge for multi-file edits. benchmarks aren't everything and this is subjective territory, but it's worth noting.
+based on our testing, claude models consistently perform well for code generation tasks, especially complex multi-file edits. third-party benchmarks (SWE-bench, HumanEval) also rank claude models at or near the top
+
+> last verified: 2026-04-15 | sources: [gemini repo](https://github.com/google-gemini/gemini-cli), [gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [google AI subscriptions](https://gemini.google/subscriptions/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing)
 
 ### session history and mining
 

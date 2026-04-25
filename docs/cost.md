@@ -131,13 +131,9 @@ send haiku to explore, sonnet to implement. haiku reads 30 files for pennies. so
 ### compact strategically
 
 `/compact` when context is bloated but you want to continue. good triggers:
-- 20+ turns and topic is shifting
-- just finished a subtask, starting a new one
-- claude is repeating itself or losing track
+- 20+ turns and top
 
-don't compact every 5 turns -- the compaction itself costs a full round trip.
-
----
+<!-- tested with: claude code v2.1.120 -->
 
 ## the burn hook
 

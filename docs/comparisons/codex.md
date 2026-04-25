@@ -51,7 +51,9 @@ the codex web agent runs in a cloud sandbox -- your local machine is never at ri
 
 ### multi-surface access
 
-codex ships as a CLI, VS Code extension, Cursor extension, Windsurf extension, and macOS desktop app. claude code covers terminal, VS Code, and JetBrains -- solid coverage, but codex has more surfaces.
+codex ships as a CLI, VS Code extension, Cursor extension, Windsurf extension, and macOS desktop
+
+> last verified: 2026-04-15 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ### token efficiency
 
