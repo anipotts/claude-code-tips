@@ -91,6 +91,10 @@ ranked by impact:
 
 ---
 
+
+
+**6. fast mode usage.** fast mode (v2.1.36+, beta) uses extra-usage billing, which charges overage tokens at higher rates. on the Max plan, fast mode can push you past the flat $200/mo budget. monitor `/mine` to see if fast mode sessions are costing more than normal sessions.
+
 ## cost optimization strategies
 
 ### model switching -- the biggest lever

@@ -12,15 +12,17 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 ## why i don't use it
 
-never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
+## why i don't use it
 
-the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
+fast mode uses extra-usage billing (v2.1.36+), which means cost is no longer flat on the Max plan. you pay overage rates when fast mode pushes usage above your subscription bucket. the speed gain (2.5x faster Opus 4.6) trades accuracy for velocity in a way that usually backfires.
 
-the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
+the exception: you're at a hackathon with 30 minutes until demo, and a slow-but-correct implementation loses the time constraint completely. fast mode + extra billing for 30 minutes is cheaper than missing the deadline. otherwise, let opus think.
 
 ## cost note
 
-fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
+## cost note
+
+fast mode (v2.1.36+) is not included in the Max plan's flat $200/mo budget. instead, it uses extra-usage billing: you pay overage rates when fast mode pushes usage beyond your subscription tier's included tokens. check your settings for `fastMode` and `extraUsageBilling` to understand your billing model. on per-token API billing, fast mode's speed gain rarely outweighs the extra tokens burned on corrections.
 
 ## the one exception
 

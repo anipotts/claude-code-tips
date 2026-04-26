@@ -21,3 +21,5 @@ short, standalone claude code tips. each one is a specific technique you can use
 | [monitor](./monitor.md) | watch background processes and react to output in real time |
 
 | [monitor](./monitor.md) | watch background processes, react to output in real time (v2.1.98+, now stable) |
+
+| [fast mode](./fast-mode.md) | 2.5x faster opus, extra-usage billing, when speed > accuracy |

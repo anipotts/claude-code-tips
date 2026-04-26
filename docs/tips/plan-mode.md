@@ -25,6 +25,10 @@ good candidates:
 
 plan mode forces Claude to think before acting, which means fewer wrong turns, fewer compactions, and fewer wasted sessions.
 
+
+
+**note**: fast mode and plan mode are independent toggles. planning doesn't benefit from fast mode (planning is thinking-heavy), so keep fast mode off during `/plan`. use `/fast` for execution only if you're optimizing for speed over accuracy.
+
 ## the only exception
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.
