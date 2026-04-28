@@ -12,9 +12,7 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 | `http` | POST to a URL, JSON body | 30s | free | external services, webhooks, metrics |
 | `prompt` | single-turn LLM eval | 30s | tokens | nuanced decisions, context-aware checks |
 | `agent` | subagent with full tool access (Read, Grep, Glob) | 60s | expensive | complex decisions that need file reads |
-| `mcp_tool` (v2.1.118) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
-
-`command` handles 90%+ of cases. it's the fastest, cheapest, and most predictable. `mcp_tool` is the newest: when your plugin already ships an MCP server with tools, hooks can call those tools directly without a shell shim.
+| `mcp_tool` (v2.1.118+) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
 
 ### command
 
@@ -94,6 +92,10 @@ return value: whatever the mcp tool returns as text is treated as the hook's std
 when to reach for mcp_tool: your plugin already ships an MCP server, and some hook work (e.g. reading the session roster, marking an inbox read) is really a tool call in disguise. removing the shell/node shim cuts a child process per hook fire and removes a file that can drift from the server's state model. the `cc` plugin in this repo uses three mcp_tool hooks (SessionStart, UserPromptSubmit, SessionEnd) to talk to its own `cc` server.
 
 one gotcha: SessionStart hooks sometimes fire before the MCP server is fully connected, in which case the call produces a non-blocking error. design the server's own startup to self-bootstrap (don't rely on SessionStart hook success for correctness).
+
+
+
+**v2.1.121 enhancement**: PostToolUse hooks can now use `hookSpecificOutput.updatedToolOutput` to replace tool output for all tools (not just MCP tools). this allows hooks to sanitize, enrich, or transform any tool result before claude sees it.
 
 ## the async pattern
 

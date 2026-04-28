@@ -124,6 +124,10 @@ then anyone can install:
 
 two steps: add the marketplace (once), then install individual plugins from it.
 
+
+
+**v2.1.121**: `claude plugin prune` removes orphaned auto-installed plugin dependencies. use `plugin uninstall --prune` to cascade removal.
+
 ## when to extract a plugin
 
 the signal is copy-pasting. if you're copying the same hook between projects, it's time for a plugin.

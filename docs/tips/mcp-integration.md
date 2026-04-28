@@ -46,6 +46,10 @@ anyone who clones the repo gets the same MCP setup. no manual `claude mcp add` n
 
 ## three patterns
 
+
+
+**note (v2.1.121)**: MCP servers can now use `alwaysLoad: true` in config to skip tool-search deferral and always be available, useful for essential tools that shouldn't be hidden behind search.
+
 ### 1. read-only data access
 
 give claude eyes into systems it can't normally see. the server exposes read tools, claude queries them. these are the safest MCP servers bc they can't modify anything. pair them with `readOnlyHint` annotations for auto-approval.

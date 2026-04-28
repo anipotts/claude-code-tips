@@ -14,6 +14,10 @@ on launch, claude code loads CLAUDE.md from the project root, reads any `.claude
 
 by the time you see the prompt, hooks are loaded, context is cached, and claude knows your conventions.
 
+
+
+**note (v2.1.121)**: terminal tab session titles are now generated in your configured `language` setting, giving better context at a glance.
+
 ## context loading
 
 three things work together on startup:

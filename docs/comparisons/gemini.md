@@ -56,6 +56,10 @@ gemini models support up to 1M tokens of context. opus 4.6 and sonnet 4.6 now al
 
 if your infrastructure runs on GCP, gemini has native integration -- Vertex AI auth, cloud project context, Google Search grounding for up-to-date information. claude code has no cloud provider integration. for GCP-native teams, this reduces friction.
 
+
+
+**note (v2.1.121)**: claude code now supports Vertex AI with X.509 certificate-based Workload Identity Federation (mTLS ADC), improving GCP integration parity.
+
 ### google search grounding
 
 gemini can ground its responses with live Google Search results, pulling in current documentation, error messages, and API references. claude code has `WebSearch` and `WebFetch` tools, but gemini's search grounding is more deeply integrated into the model's reasoning.
