@@ -71,3 +71,9 @@ this keeps the watcher stateless in terms of git operations. git stays inside Gi
 
 - related: `docs/rfcs/mini-control-plane.md` (watcher runs on operator, not laptop, not Actions).
 - related: `docs/rfcs/mine-v2-observability.md` (watcher publishes events to mine for audit trail).
+
+---
+
+### skill collection monitoring
+
+with the introduction of skill collection repositories and the /workflows:skill-collections command, the watcher should also track skill collection repo updates (stars, forks, description changes) and trigger changelog entries when significant activity is detected. this feeds into the broader "what's trending in the agent skills ecosystem" reporting that complements development workflows.

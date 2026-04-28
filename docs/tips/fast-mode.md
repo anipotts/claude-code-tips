@@ -12,11 +12,17 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 ## why i don't use it
 
-never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
+## when to consider fast mode
 
-the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
+my original stance was "never use fast mode." that's still the right baseline for normal development work. the reasoning: fast mode trades depth of reasoning for speed, and the mistakes you make from shallower thinking usually cost more tokens in corrections than you saved in faster initial execution.
 
-the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
+however, there are legitimate edge cases beyond hackathons:
+
+- mechanical refactors where the approach is already proven (you're executing a plan, not designing one)
+- low-stakes exploration where you're just spiking an idea and will rewrite anyway
+- cost-sensitive scenarios on per-token billing where speed genuinely matters
+
+the rule: if you're designing, architecting, or debugging, keep fast mode off. if you're executing a known plan, it may save time. test both in your workflow and measure the total token cost (initial + corrections) to know which is cheaper for your work style.
 
 ## cost note
 
