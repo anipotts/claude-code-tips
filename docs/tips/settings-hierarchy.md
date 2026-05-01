@@ -28,6 +28,24 @@ starting v2.1.119, display settings moved from `~/.claude.json` to the settings.
 
 if you have `~/.claude.json`, these settings still work but are deprecated. migrate them to `~/.claude/settings.json` under a new `display` key. the migration is one-time: check your old config, copy relevant keys, delete the deprecated file.
 
+
+
+### new in v2.1.126: claude project purge
+
+clean up all claude code state for a project with one command:
+
+```bash
+claude project purge /path/to/project
+```
+
+flags:
+- `--dry-run` -- show what would be deleted
+- `-y/--yes` -- skip confirmation
+- `-i/--interactive` -- pick what to delete
+- `--all` -- purge from all projects
+
+purges transcripts, tasks, file history, and config entries. useful for resetting a project or cleaning up stale state without touching your source code.
+
 ## when to use which
 
 | setting | where | why |

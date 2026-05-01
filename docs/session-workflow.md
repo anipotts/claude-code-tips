@@ -14,6 +14,12 @@ on launch, claude code loads CLAUDE.md from the project root, reads any `.claude
 
 by the time you see the prompt, hooks are loaded, context is cached, and claude knows your conventions.
 
+
+
+### windows users: powershell is now primary
+
+v2.1.126 detects PowerShell 7 (Microsoft Store, MSI, or .NET global tool) and treats it as the primary shell instead of defaulting to bash. if you use PowerShell on windows, claude code now respects that choice natively. no config change needed.
+
 ## context loading
 
 three things work together on startup:

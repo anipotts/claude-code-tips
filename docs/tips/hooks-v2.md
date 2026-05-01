@@ -31,6 +31,27 @@ use case: filter sensitive output (API keys, internal IPs), normalize error mess
 
 the script receives the tool result as `tool_result.content[0].text` in the stdin JSON. output the modified text and exit 0. claude sees your version, not the original.
 
+
+
+#### practical example: redacting sensitive output
+
+use `updatedToolOutput` to strip API keys, internal IPs, or database passwords from tool results before claude sees them:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+INPUT=$(cat)
+TOOL_OUTPUT=$(echo "$INPUT" | jq -r '.tool_result.content[0].text // empty')
+
+# redact API keys
+REDACTED=$(echo "$TOOL_OUTPUT" | sed -E 's/(api[_-]?key["'\'':]*)([a-z0-9]+)/\1[REDACTED]/gi')
+
+echo "{\"hookSpecificOutput\": {\"PostToolUse\": {\"updatedToolOutput\": \"$REDACTED\"}}}"
+exit 0
+```
+
+return the modified output as JSON. claude receives the redacted version, not the original. this is different from blocking (exit 2) — the tool succeeds, but claude never sees the sensitive data.
+
 ### command
 
 the workhorse. runs a shell command, reads JSON from stdin, returns exit 0 (allow) or exit 2 (block). every hook in this repo is a command hook.

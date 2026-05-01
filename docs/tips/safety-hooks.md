@@ -46,6 +46,12 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 | `chmod 777` on sensitive paths | prevents permission disasters |
 | `curl \| bash`, `wget \| sh` | blocks remote code execution |
 
+
+
+### note on v2.1.126 permission changes
+
+v2.1.126 adds `--dangerously-skip-permissions` flag to bypass write permission checks for protected paths (`.claude/`, `.git/`, `.vscode/`, shell config files). catastrophic removal commands (like `rm -rf /`) still prompt even with this flag. safety-guard.sh hooks still fire regardless — the hook system is independent of permission flags.
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.

@@ -51,6 +51,23 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 ---
 
+
+
+### emerging: output-redaction hooks
+
+v2.1.121+ introduced `updatedToolOutput` for PostToolUse hooks. consider building a hook that redacts sensitive data from tool results:
+
+```json
+{
+  "type": "command",
+  "command": "~/.claude/hooks/redact-secrets.sh",
+  "events": ["PostToolUse"],
+  "matcher": "Bash"
+}
+```
+
+use this for stripping API keys, database passwords, or internal IPs from bash output before claude processes them. the tool still succeeds, but claude never sees the sensitive data.
+
 ## what hooks actually prevent
 
 three categories of damage:
