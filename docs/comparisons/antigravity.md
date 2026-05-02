@@ -85,6 +85,10 @@ antigravity has native MCP integration with BigQuery, AlloyDB, Spanner, Cloud SQ
 
 ## the numbers
 
+| plan | claude code | google antigravity |
+|------|------------|-------------------|\n| free | limited usage | free (public preview, dates unknown) -- weekly quotas |
+| entry | $20/mo (Pro) | $0 (preview) or TBD (post-preview) |
+
 ### pricing breakdown
 
 | plan | claude code | google antigravity |

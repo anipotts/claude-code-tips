@@ -16,6 +16,41 @@ they merge in that order. local overrides project overrides global.
 
 
 
+
+
+
+
+### new in v2.1.126: notification channel control
+
+add `preferredNotifChannel` to your `~/.claude/settings.json` display settings to control where task-complete and permission notifications appear:
+
+```json
+{
+  "display": {
+    "preferredNotifChannel": "auto"
+  }
+}
+```
+
+valid values: `auto` (desktop in iTerm2/Ghostty/Kitty, fallback to stdout), `desktop`, `stdout`, `none`. default is `auto`, which detects your terminal and uses desktop notifications if available.
+
+### new in v2.1.121: status line input fields
+
+two new display settings control what appears in the input status line:
+
+- `effort.level` -- shows current effort setting (low/medium/high/xhigh/max)
+- `thinking.enabled` -- shows whether extended thinking is active
+
+add to your `~/.claude/settings.json` if you want these fields visible:
+
+```json
+{
+  "display": {
+    "statusLineInputFields": ["effort.level", "thinking.enabled"]
+  }
+}
+```
+
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:

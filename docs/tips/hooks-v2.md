@@ -14,6 +14,42 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 | `agent` | subagent with full tool access (Read, Grep, Glob) | 60s | expensive | complex decisions that need file reads |
 | `mcp_tool` (v2.1.118) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
 
+
+
+
+
+### mcp_tool event hooks (v2.1.126+)
+
+MCP tool handlers can now be invoked from hooks using the `mcp_tool` type. this lets you intercept and react to MCP calls without spinning up a shell or http process:
+
+```json
+{
+  "type": "mcp_tool",
+  "server": "database",
+  "tool": "query_audit",
+  "input": { "table": "users", "limit": 10 }
+}
+```
+
+use case: a PreToolUse hook that calls an MCP audit tool to log sensitive queries before they execute. no shell overhead, no http latency.
+
+### updatedToolOutput (PostToolUse, v2.1.121+)
+
+PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
+
+use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context. example: a bash hook that catches test failures and appends a link to the failing test file in your CI dashboard.
+
+```json
+{
+  "type": "command",
+  "command": "~/.claude/hooks/test-failure-context.sh",
+  "events": ["PostToolUse"],
+  "matcher": "Bash"
+}
+```
+
+the script receives the tool result as `tool_result.content[0].text` in the stdin JSON. output the modified text and exit 0. claude sees your version, not the original.
+
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.

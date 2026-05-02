@@ -201,3 +201,10 @@ i've never hit a rate limit on max. on pro, i'd have been throttled in the first
 - [lore plugin](../plugins/lore/) -- burn feature, cost tracking, usage analysis, knowledge graph
 - [agents](./agents.md) -- cost considerations for agent teams
 - [official pricing](https://docs.anthropic.com/en/docs/about-claude/models) -- current model pricing
+
+---
+
+
+### new in v2.1.126: provider-managed auth
+
+if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.
