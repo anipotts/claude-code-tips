@@ -2,7 +2,7 @@
 
 # AI coding tool pricing matrix
 
-> last verified: 2026-04-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+> last verified: 2026-05-02 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
 
 ---
 
@@ -11,7 +11,7 @@
 | tool | free | entry | mid-tier | heavy use | teams |
 |------|------|-------|----------|-----------|-------|
 | claude code | limited | $20/mo (Pro) | $100/mo (Max 5x) | $200/mo (Max 20x) | enterprise (API) |
-| cursor | limited (2-week trial) | $20/mo (Pro) | $60/mo (Pro+) | $200/mo (Ultra) | $40/user/mo |
+| cursor | Hobby (limited) | $20/mo (Pro) | $60/mo (Pro+) | $200/mo (Ultra) | $40/user/mo |
 | codex | limited (temporary) | $20/mo (ChatGPT Plus) | -- | $200/mo (ChatGPT Pro) | $30/user/mo (Business) |
 | gemini | generous (60 req/min) | $19.99/mo (AI Pro) | -- | $249.99/mo (AI Ultra) | Vertex AI / GCP pricing |
 | antigravity | free (public preview) | $0 (preview) | -- | custom (enterprise) | custom |
@@ -25,7 +25,7 @@
 | tool | what you get | verdict |
 |------|-------------|---------|
 | claude code | limited requests, rate-throttled | evaluation only |
-| cursor | 2-week pro trial, 2000 completions, 50 slow requests | trial, not sustained use |
+| cursor | limited agent requests and tab completions | trial, not sustained use |
 | codex | limited codex access (temporary offer) | trial |
 | gemini | 60 req/min, 1000 req/day, no credit card | real daily usage |
 | antigravity | free during public preview, weekly quotas, multi-model access | real daily usage (best free tier) |

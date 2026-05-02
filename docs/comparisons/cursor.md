@@ -2,7 +2,7 @@
 
 # claude code vs cursor
 
-> last verified: 2026-04-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-05-02 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -21,9 +21,9 @@
 | open source | yes | no |
 | team plan | -- (enterprise via API) | $40/user/mo (teams) |
 
-### cursor's credit system (june 2025+)
+### cursor's usage-based system
 
-Cursor uses a credit-based system -- check cursor.com/pricing for current limits. every paid plan includes a credit pool equal to your subscription cost. AI features consume credits based on the model used and request complexity. this means your effective usage depends on which models you lean on -- heavy claude opus usage burns credits faster than cursor-small.
+Cursor uses a usage-based model -- each plan includes a baseline set amount of usage. when you exceed your baseline, on-demand usage is billed in arrears. this replaces the older credit-pool terminology. model selection still affects consumption rate: heavy claude opus usage consumes more than cursor-small, and paid tiers offer 3x-20x multipliers on all models (OpenAI, Claude, Gemini). <!-- updated 2026-05-02 -->
 
 ---
 
@@ -81,10 +81,10 @@ cursor shows proposed changes as inline diffs in the editor -- green for additio
 
 | plan | claude code | cursor |
 |------|------------|--------|
-| free | limited usage | 2-week pro trial, 2000 completions, 50 slow requests |
-| entry | $20/mo (Pro) | $20/mo (Pro) -- 500 fast premium requests, credit pool |
-| mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) |
-| heavy use | $200/mo (Max 20x) | $200/mo (Ultra) |
+| free | limited usage | Hobby plan -- limited agent requests, tab completions |
+| entry | $20/mo (Pro) | $20/mo (Pro) -- extended limits, MCPs, skills, hooks, cloud agents |
+| mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) -- 3x usage limits |
+| heavy use | $200/mo (Max 20x) | $200/mo (Ultra) -- 20x usage limits |
 | teams | enterprise (API-based) | $40/user/mo |
 
 at the $20/mo tier, both tools are comparable. cursor gives you tab completion + chat + agent mode. claude code gives you full interactive terminal agent + extensibility stack. the value depends on your workflow.
