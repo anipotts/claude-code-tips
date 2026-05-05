@@ -68,6 +68,9 @@ servers that both observe and modify. playwright is the canonical example: claud
 
 **environment variables.** use the `env` field in `.mcp.json` for secrets. never hardcode credentials in the command args.
 
+
+**reconnect behavior (v2.1.128+):** MCP servers that reconnect no longer flood the conversation with full tool lists on every reconnect. re-announced tools are now summarized by server prefix, reducing context bloat.
+
 ## try it
 
 only if you actually need to. if the built-in tools (Read, Write, Edit, Bash, Grep, Glob) do the job, you don't need MCP.

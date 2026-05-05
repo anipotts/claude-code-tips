@@ -96,6 +96,9 @@ test it locally:
 /plugin marketplace add ./my-plugin
 ```
 
+
+**v2.1.128+:** plugins can now be distributed as `.zip` archives. use `claude --plugin-dir /path/to/plugin.zip` to install. this makes distribution easier for complex plugins with many files.
+
 ## distributing via marketplace
 
 to share your plugin, create a marketplace. push your plugin to github, then create a `.claude-plugin/marketplace.json`:

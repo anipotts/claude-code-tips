@@ -34,6 +34,9 @@ if you have `~/.claude.json`, these settings still work but are deprecated. migr
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.
 
+
+**v2.1.128+:** SDK hosts now receive a persistent `localSettings` suggestion for Bash permission prompts. when you select "Always allow", the setting is written to `.claude/settings.local.json` instead of requiring manual configuration. this makes permission management smoother for platform-embedded instances.
+
 ## when to use which
 
 | setting | where | why |

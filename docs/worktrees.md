@@ -23,6 +23,9 @@ claude code uses worktrees for agent isolation. when you spawn a subagent with `
 
 ---
 
+
+**breaking change in v2.1.128:** `EnterWorktree` now creates new branches from local HEAD instead of `origin/<default-branch>`. this fixes a bug where unpushed commits were silently dropped when creating a worktree. if you have unpushed work on your current branch, worktree isolation now preserves it.
+
 ## why worktrees matter for claude code
 
 without worktrees, parallel agents would step on each other -- editing the same files, creating merge conflicts, corrupting each other's work. worktrees give each agent its own sandbox.
