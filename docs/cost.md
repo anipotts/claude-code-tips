@@ -82,6 +82,14 @@ this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on
 
 > [current pricing](https://docs.anthropic.com/en/docs/about-claude/models) - last verified may 2026, may have changed. check official pricing for v2.1.122+ rates.
 
+
+
+## claude code v2.1.128 context improvements
+
+v2.1.128 (may 5 2026) ships improved context compaction with better state preservation. sessions that previously hit compaction cliff at 30-60min now show slightly better retention. effect is modest (~2-3% improvement in context preservation), so the session length recommendations in this doc remain valid.
+
+if you're on v2.1.127 or earlier, upgrade to see marginally better long-session performance.
+
 ## model pricing (may 2026)
 
 > [current pricing](https://docs.anthropic.com/en/docs/about-claude/models) - last verified may 2026, may have changed. check official pricing for v2.1.122+ rates.

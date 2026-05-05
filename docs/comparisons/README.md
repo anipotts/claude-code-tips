@@ -47,4 +47,6 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 
 ---
 
-note: upstream tool versions and pricing verified as of april 2026. claude code releases v2.1.116 through v2.1.120 have shipped since verification. check individual comparison docs for staleness flags.
+note: upstream tool versions and pricing verified as of april 2026
+
+note: upstream tool versions and pricing verified as of may 2026. claude code v2.1.128 released may 5 2026. check individual comparison docs for staleness flags.

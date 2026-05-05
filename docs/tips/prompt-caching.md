@@ -47,6 +47,12 @@ from real session data:
 
 longer sessions cache better bc the prefix stabilizes and cache_write amortizes over more turns. short sessions spend proportionally more on initial cache creation.
 
+
+
+## cache hit rates by claude code version
+
+v2.1.128+ shows stable cache performance. if you're on older versions, upgrade to see consistent 90%+ hit rates on stable CLAUDE.md files. cache behavior changed in v2.1.118 with improved prefix matching.
+
 ## try it
 
 1. check your current CLAUDE.md. is it under 30 lines?

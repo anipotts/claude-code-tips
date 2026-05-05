@@ -23,3 +23,7 @@ short, standalone claude code tips. each one is a specific technique you can use
 ---
 
 | [agent collections](./agent-collections.md) | curated list of open-source agent packs and community frameworks |
+
+---
+
+| [agent collections](./agent-collections.md) | curated list of open-source agent packs and community frameworks |
