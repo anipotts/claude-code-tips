@@ -34,17 +34,6 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 
 ## sources used across all comparisons
 
-- [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)
-- [claude code docs](https://code.claude.com/docs/en/overview)
-- [claude.ai plans](https://claude.com/pricing)
-- [openai codex CLI](https://github.com/openai/codex)
-- [openai codex pricing](https://developers.openai.com/codex/pricing/)
-- [cursor pricing](https://cursor.com/pricing)
-- [gemini](https://github.com/google-gemini/gemini-cli)
-- [gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)
-- [google AI subscriptions](https://gemini.google/subscriptions/)
-- [antigravity](https://antigravity.google/pricing)
+note: upstream tool versions
 
----
-
-note: upstream tool versions and pricing verified as of april 2026. claude code releases v2.1.116 through v2.1.120 have shipped since verification. check individual comparison docs for staleness flags.
+note: upstream tool versions and pricing verified as of may 2026. claude code releases v2.1.116 through v2.1.131 have shipped since verification. check individual comparison docs for staleness flags.

@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# plugins
-
-a plugin is a portable bundle of claude code customizations. hooks, commands, skills, agents, all in one package you can install with a single command.
+<!-- tested with: claude code v2.1.131 -->
 
 ## what a plugin is
 
@@ -96,6 +94,24 @@ test it locally:
 /plugin marketplace add ./my-plugin
 ```
 
+
+
+### manifest structure in v2.1.129+
+
+starting v2.1.129, `themes` and `monitors` declarations should live under an `"experimental"` scope:
+
+```json
+{
+  "name": "my-plugin",
+  "experimental": {
+    "themes": [ ... ],
+    "monitors": [ ... ]
+  }
+}
+```
+
+top-level declarations still work but `claude plugin validate` will warn. migrate to the `experimental` scope for cleaner separation.
+
 ## distributing via marketplace
 
 to share your plugin, create a marketplace. push your plugin to github, then create a `.claude-plugin/marketplace.json`:
@@ -150,3 +166,18 @@ this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to 
 3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)
+
+---
+
+
+## plugin cli flag (v2.1.129+)
+
+install a plugin from a url for the current session only:
+
+```bash
+claude --plugin-url https://example.com/my-plugin.zip
+```
+
+this is useful for testing a plugin before committing it to your global settings or sharing it via marketplace. the plugin loads for this session only and doesn't persist.
+
+to persist a plugin, use `/plugin marketplace add <name>` or add it to your settings.json.
