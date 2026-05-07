@@ -12,7 +12,9 @@ most cost discussions are vibes. "it's expensive" or "it's worth it" without dat
 
 ### monitor changes to background process cost
 
-prior to monitor (v<2.1.98), watching background processes required `/loop` polling -- full API calls on a timer, expensive when idle. monitor (v2.1.98+) is event-driven: the script runs continuously, tokens consumed only when output matches a filter. idle monitoring costs zero tokens.
+### monitor (v2.1.98+, now stable)
+
+prior to monitor, watching background processes required `/loop` polling -- full API calls on a timer, expensive when idle. monitor (v2.1.98+) is event-driven: the script runs continuously, tokens consumed only when output matches a filter. idle monitoring costs zero tokens. this is now a stable feature (tested with v2.1.122) with proven reliability across current versions.
 
 if you're on v2.1.98+, use monitor instead of `/loop` for all long-running process watching (test runners, dev servers, deploy status). it reduces cost by ~90% on idle processes.
 

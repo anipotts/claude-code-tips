@@ -6,6 +6,12 @@
 
 > last verified: 2026-05-03
 
+<!-- tested with: claude code v2.1.122 -->
+
+# claude code vs google antigravity
+
+> last verified: 2026-05-03 (v2.1.122)
+
 ## at a glance
 
 | feature | claude code | google antigravity |

@@ -18,6 +18,16 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
 
+use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context.
+
+### mcp_tool event hooks (v2.1.126+)
+
+MCP tool handlers can now be invoked from hooks using the `mcp_tool` type. this lets you intercept and react to MCP calls without spinning up a shell or http process.
+
+### updatedToolOutput (PostToolUse, v2.1.121+)
+
+PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
+
 use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context. example: a bash hook that catches test failures and appends a link to the failing test file in your CI dashboard.
 
 ### mcp_tool event hooks (v2.1.126+)
@@ -251,3 +261,16 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 3. always set a specific matcher. `"Bash"` is better than matching everything.
 
 [full hooks guide &rarr;](../hooks.md) | [hook scripts &rarr;](../../hooks/)
+
+---
+
+
+### accessing session ID in hooks
+
+v2.1.132 added `CLAUDE_CODE_SESSION_ID` environment variable to the Bash tool subprocess. hooks can now use this to correlate tool calls with sessions. set it in your hook scripts for logging or external service integration:
+
+```bash
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty')
+# or from Bash subprocess env:
+echo "$CLAUDE_CODE_SESSION_ID"
+```
