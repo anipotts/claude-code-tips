@@ -2,7 +2,7 @@
 
 # AI coding tool pricing matrix
 
-> last verified: 2026-04-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+> last verified: 2026-05-08 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
 
 ---
 
@@ -121,9 +121,11 @@ currently free during public preview. weekly quotas limit heavy usage but most d
 
 ## recommendation by budget
 
-### note on competitor activity (march 2026)
+### note on competitor activity (may 2026)
 
-openai codex continues alpha releases (0.115.0-alpha.15-17) but no stable version bumps. gemini-cli active development with oauth2 and headless fixes. no pricing changes detected across codex, gemini, or antigravity. claude code remains the dominant terminal agent for cost-conscious teams.
+<!-- updated 2026-05-08 -->
+
+openai codex released 0.129.0 (2026-05-07) with new features: modal vim editing in composer, enhanced hooks (pre/post-compaction support, PreToolUse context injection), plugin management with workspace sharing, and improved TUI workflow resumability. no pricing changes. gemini-cli continues active development. antigravity remains in free public preview. no pricing changes detected. claude code remains the dominant terminal agent for cost-conscious teams.
 
 ### $0/mo (free)
 use antigravity (free preview, includes frontier models) as your primary tool. supplement with gemini free tier for terminal workflows.

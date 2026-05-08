@@ -2,7 +2,7 @@
 
 # claude code vs openai codex CLI
 
-> last verified: 2026-04-09 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-05-08 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -13,9 +13,9 @@
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | $20/mo ChatGPT Plus / $200/mo Pro (includes codex access) |
 | model | opus 4.6, sonnet 4.6, haiku 4.5 | GPT-5.3-Codex, GPT-5.4, gpt-5.4-mini (codex-mini deprecated) |
 | context | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5), managed window with compaction | varies by model |
-| interaction | real-time interactive terminal | real-time terminal + async cloud agent (web) |
+| interaction | real-time interactive terminal | real-time terminal + async cloud agent (web), modal vim editing |
 | platform | terminal CLI, VS Code, JetBrains | terminal CLI, VS Code, Cursor, Windsurf, macOS app |
-| extensibility | hooks, plugins, skills, agents, commands, MCP servers | MCP support (stdio), approval modes, limited extension |
+| extensibility | hooks, plugins, skills, agents, commands, MCP servers | MCP support (stdio), hooks (pre/post-compaction, PreToolUse context), plugin management with workspace sharing |
 | open source | yes ([anthropics/claude-code](https://github.com/anthropics/claude-code)) | yes ([openai/codex](https://github.com/openai/codex)), Rust + TypeScript |
 | sandbox | runs locally, hooks for safety controls | cloud sandbox (web agent), local execution (CLI) |
 
@@ -45,6 +45,12 @@ hundreds of session-tested patterns in this repo alone. community plugins, docum
 
 ## where codex wins
 
+### enhanced extensibility (v0.129.0+)
+
+<!-- updated 2026-05-08 -->
+
+codex 0.129.0 added sophisticated hook support (runs before/after compaction, can inject PreToolUse context), plugin management with workspace sharing, and TUI resumability improvements. these bring codex closer to claude code's extensibility model. however, codex still lacks the plugin persistence layer and subagent capabilities that claude code offers.
+
 ### cloud sandbox by default
 
 the codex web agent runs in a cloud sandbox -- your local machine is never at risk. claude code runs locally, which means a bad `rm -rf` could hit your filesystem (though hooks can prevent this). codex CLI also runs locally, but the web agent's sandbox is a genuine safety advantage for risky tasks.
@@ -56,6 +62,12 @@ codex ships as a CLI, VS Code extension, Cursor extension, Windsurf extension, a
 ### token efficiency
 
 codex reportedly uses fewer tokens per task for comparable results, based on community reports. this could translate to lower API costs if you're on pay-per-token pricing. real-world results vary by task type.
+
+### modal vim editing in composer
+
+<!-- updated 2026-05-08 -->
+
+codex 0.129.0 added modal vim editing mode in the composer, allowing developers to use vim keybinds while writing prompts. this appeals to vim users who live in modal editing. claude code doesn't offer this -- interaction is always natural language in the terminal.
 
 ### async cloud agent
 

@@ -2,9 +2,7 @@
 
 # claude code vs google antigravity
 
-> last verified: 2026-04-09
-
-> last verified: 2026-05-03
+> last verified: 2026-05-08
 
 ## at a glance
 
