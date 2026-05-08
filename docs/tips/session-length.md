@@ -34,3 +34,6 @@ shorter sessions are more efficient. here's the data.
 run `/mine` to check your own session length distribution. if most of your sessions are 2hr+, you're probably working harder than you need to.
 
 [full cost analysis &rarr;](../cost.md)
+
+
+**note:** v2.1.136 fixed `--resume` / `--continue` not finding sessions when the project path contains underscores. if you use path-based session resumption, this fix should improve reliability.

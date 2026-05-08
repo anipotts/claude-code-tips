@@ -12,6 +12,10 @@ during planning, claude uses explore and plan agents to read your codebase, map 
 
 the key shift: planning moves the expensive mistakes to before any code is written. a bad plan costs you 2 minutes of reading. a bad first implementation costs you 15 minutes of rollback and re-prompting.
 
+
+
+**v2.1.136 fix:** plan mode now correctly blocks file writes when a matching `Edit(...)` allow rule exists in your settings. if you were seeing unexpected edits in plan mode, this release tightens the enforcement.
+
 ## use it for almost everything
 
 i literally start most of my sessions in plan mode. it's my global default. you should use plan mode for almost everything. if you're even debating whether to use plan mode, you should probably use plan mode.

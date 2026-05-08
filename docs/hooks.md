@@ -78,6 +78,10 @@ hook:       block force-push to main           -- enforcement
 
 ---
 
+
+
+**note (v2.1.136+):** auto mode now supports `hard_deny` classifier rules that block unconditionally. if you're using auto mode with hooks, `hard_deny` rules are another enforcement layer -- they bypass user intent entirely. useful for safety-critical decisions (never delete main branch, never run destructive commands). configure in settings under `autoMode.hard_deny`.
+
 ## how to set up hooks
 
 hooks live in JSON settings files at three levels:

@@ -38,6 +38,10 @@ if [[ "$EFFORT" == "max" ]]; then
 fi
 ```
 
+
+
+**auto mode enforcement (v2.1.136+):** if you're using auto mode, `hard_deny` classifier rules are available in settings under `autoMode.hard_deny`. these block unconditionally regardless of user intent or allow exceptions. use them for non-negotiable safety constraints (never force-push main, never DROP TABLE). hard_deny rules don't fire hooks -- they're evaluated before hook submission.
+
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
