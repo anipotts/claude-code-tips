@@ -14,13 +14,7 @@
 | cursor | limited (2-week trial) | $20/mo (Pro) | $60/mo (Pro+) | $200/mo (Ultra) | $40/user/mo |
 | codex | limited (temporary) | $20/mo (ChatGPT Plus) | -- | $200/mo (ChatGPT Pro) | $30/user/mo (Business) |
 | gemini | generous (60 req/min) | $19.99/mo (AI Pro) | -- | $249.99/mo (AI Ultra) | Vertex AI / GCP pricing |
-| antigravity | free (public preview) | $0 (preview) | -- | custom (enterprise) | custom |
-
----
-
-
-
-> note: antigravity pricing marked as TBD. verify current status at antigravity.google/pricing before recommending to users.
+| antigravity | free (public preview) | $0 (preview, expires TBD) | -- | custom (enterprise) | custom |
 
 ## what each tier actually includes
 

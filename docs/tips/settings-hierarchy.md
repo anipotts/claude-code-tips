@@ -115,3 +115,19 @@ cat .claude/settings.local.json | jq '.hooks'
 if you have hooks in the wrong level, move them. one `mv` command, and your settings are clean.
 
 [full hooks guide &rarr;](../hooks.md)
+
+---
+
+### effort.level setting (v2.1.121+)
+
+add `effort.level` to your display settings to show current effort in the status line:
+
+```json
+{
+  "display": {
+    "statusLineInputFields": ["effort.level"]
+  }
+}
+```
+
+effort levels control thinking budget: low, medium, high, xhigh, max. set globally in settings.json or per-session with `/effort`.

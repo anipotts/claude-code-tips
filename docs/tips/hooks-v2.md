@@ -38,6 +38,10 @@ if [[ "$EFFORT" == "max" ]]; then
 fi
 ```
 
+
+
+this is now stable and documented. hooks receive effort level via both JSON input and bash env var ($CLAUDE_EFFORT). use this to adjust hook behavior based on effort mode at runtime.
+
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.

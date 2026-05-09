@@ -41,6 +41,10 @@ add to `~/.claude/settings.json` or `.claude/settings.json`:
 
 this matters if you have local commits not yet pushed. the default changed in v2.1.133; if you relied on the old behavior (local HEAD), set `baseRef: "head"` to keep it.
 
+
+
+this setting is now stable. default changed in v2.1.133 to branch from `origin/<default>` (fresh state). if you have unpushed commits you want to keep in new worktrees, set `baseRef: "head"`.
+
 ## why worktrees matter for claude code
 
 without worktrees, parallel agents would step on each other -- editing the same files, creating merge conflicts, corrupting each other's work. worktrees give each agent its own sandbox.
