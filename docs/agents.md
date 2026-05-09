@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# agents
-
-how i use subagents and agent teams -- the patterns that work, the anti-patterns that waste money.
-
----
+<!-- tested with: claude code v2.1.138 -->
 
 ## the mental model
 

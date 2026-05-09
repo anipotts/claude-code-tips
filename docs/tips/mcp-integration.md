@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# mcp integration
-
-model context protocol lets you extend what claude code can see and do. but you probably don't need it.
+<!-- tested with: claude code v2.1.138 -->
 
 ## start with zero
 

@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# claude code vs openai codex CLI
-
-> last verified: 2026-04-09 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
-
----
+<!-- tested with: claude code v2.1.138 -->
 
 ## at a glance
 

@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# safety hooks in 5 minutes
-
-block force pushes, `rm -rf /`, DROP TABLE, and `curl | bash` with one hook script.
+<!-- tested with: claude code v2.1.138 -->
 
 ## setup
 

@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# hooks v2: the five handler types
-
-hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one and you burn tokens, add latency, or silently fail.
+<!-- tested with: claude code v2.1.138 -->
 
 ## the five types
 

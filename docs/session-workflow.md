@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# how i start a session
-
-how i actually start a claude code session.
-
-not the official docs version. the real version, with the muscle memory and the shortcuts.
+<!-- tested with: claude code v2.1.138 -->
 
 ## the first 30 seconds
 

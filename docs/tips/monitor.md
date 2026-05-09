@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# monitor
-
-watch a background process and react to its output line by line, without blocking anything. the first event-driven tool in claude code.
-
-shipped april 9 2026. requires v2.1.98+. announced by alistair (claude code team). his tweet hit 127k views bc people have been duct-taping this with tmux and file queues for months.
+<!-- tested with: claude code v2.1.138 -->
 
 ## the three modes, compared
 

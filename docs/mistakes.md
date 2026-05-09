@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# mistakes i made
-
-hundreds of sessions across dozens of projects. here are the mistakes i keep making -- and the fixes.
-
-some of these are my mistakes. some are patterns where claude code reliably does the wrong thing unless you set up guardrails. the distinction matters less than the fix.
+<!-- tested with: claude code v2.1.138 -->
 
 ## the expensive mistakes
 
