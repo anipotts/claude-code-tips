@@ -137,3 +137,22 @@ tmux split-window -v -c ../myproject-ui
 - [agents](./agents.md) -- agent teams and worktree isolation patterns
 - [example agents](../examples/agents/) -- try-worktree, watch-tests
 - [official docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents#worktree-isolation) -- worktree isolation reference
+
+---
+
+
+### worktree.baseRef setting (v2.1.133+)
+
+by default, new worktrees branch from `origin/<default-branch>` (the fresh remote state). set `worktree.baseRef: "head"` in your settings to branch from local `HEAD` instead (keeps unpushed commits in new worktrees).
+
+add to `~/.claude/settings.json` or `.claude/settings.json`:
+
+```json
+{
+  "worktree": {
+    "baseRef": "head"
+  }
+}
+```
+
+this matters if you have local commits not yet pushed. the default changed in v2.1.133; if you relied on the old behavior (local HEAD), set `baseRef: "head"` to keep it.

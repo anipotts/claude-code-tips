@@ -19,3 +19,7 @@ short, standalone claude code tips. each one is a specific technique you can use
 | [mcp integration](./mcp-integration.md) | wire up MCP servers, use them inside sessions |
 | [hooks v2](./hooks-v2.md) | command vs http vs prompt hooks, the async pattern |
 | [monitor](./monitor.md) | watch background processes, react to output in real time (v2.1.98+, stable) |
+
+---
+
+| [effort levels](./effort-levels.md) | low/medium/high/xhigh/max effort modes and when to use each |

@@ -44,6 +44,28 @@ PostToolUse hooks can now replace tool output before claude sees it. return `{"h
 
 use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context. example: a bash hook that catches test failures and appends a link to the failing test file in your CI dashboard.
 
+
+
+### effort level in hooks (v2.1.133+)
+
+hooks now receive the active effort setting via two channels:
+
+- **JSON input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
+- **Bash environment**: `$CLAUDE_EFFORT` variable
+
+use this to adjust hook behavior based on effort mode. example: safety-guard might be stricter at `low` effort but more permissive at `max`.
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+EFFORT=$(echo "$INPUT" | jq -r '.effort.level // "medium"')
+
+if [[ "$EFFORT" == "max" ]]; then
+  # relax some constraints at max effort
+  exit 0
+fi
+```
+
 ### mcp_tool event hooks (v2.1.126+)
 
 MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
