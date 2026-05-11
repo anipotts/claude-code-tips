@@ -17,7 +17,7 @@
 | inline editing | no (edits via tool calls shown as diffs) | yes -- highlight code, describe change, see inline diff |
 | chat panel | terminal conversation | sidebar chat with codebase context |
 | agentic mode | yes (native -- always agentic) | yes (composer agent mode) |
-| extensibility | hooks, plugins, skills, agents, commands, MCP servers | rules files, MCP support, limited extension points |
+| extensibility | hooks, plugins, skills, agents, commands, MCP servers | rules files, MCPs, skills, hooks (as of may 2026) |
 | open source | yes | no |
 | team plan | -- (enterprise via API) | $40/user/mo (teams) |
 
@@ -31,9 +31,11 @@ Cursor uses a credit-based system -- check cursor.com/pricing for current limits
 
 ### extensibility is a different league
 
-claude code has hooks (intercept any tool call before/after execution), plugins (persist data across sessions, run background analysis), skills (reusable workflow templates), agents (subprocesses with their own context), and commands (slash-invoked utilities). cursor has rules files and MCP support, but nothing like the hook/plugin/agent stack.
+<!-- updated 2026-05-11 -->
 
-this matters most for power users who want to build custom workflows: blocking dangerous commands, mining session data, running automated code sweeps, preserving context across compactions. these patterns don't exist in cursor's extension model.
+claude code has hooks (intercept any tool call before/after execution), plugins (persist data across sessions, run background analysis), skills (reusable workflow templates), agents (subprocesses with their own context), and commands (slash-invoked utilities). cursor now includes MCPs, skills, and hooks (as of may 2026), matching some of claude code's extensibility stack.
+
+however, claude code's full plugin architecture and persistent session analysis tooling remain unmatched. patterns like mining session data, running automated code sweeps, and cross-session state preservation don't exist in cursor's extension model.
 
 ### terminal-first workflow
 
