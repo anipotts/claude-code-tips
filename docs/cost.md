@@ -102,6 +102,18 @@ ranked by impact:
 
 ---
 
+
+
+### /goal sessions and coordinated workflows (v2.1.139+)
+
+v2.1.139 adds `/goal` which lets claude keep working across multiple turns until a completion condition is met. this changes session economics:
+
+- `/goal` sessions may be longer (coordinated across turns)
+- but they stay focused (explicit completion condition)
+- compare to open-ended marathons: `/goal` may actually reduce compaction bc the goal keeps claude on track
+
+if you're using `/goal`, monitor your compaction rate. goal-driven sessions should compact less than exploratory ones bc the objective is clear. on the Max plan, longer focused sessions are better than shorter unfocused ones.
+
 ## cost optimization strategies
 
 ### model switching -- the biggest lever

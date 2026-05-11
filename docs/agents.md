@@ -57,6 +57,19 @@ spawn all three at once. when they return, you have the full picture without hav
 
 
 
+
+
+### agent view and goal-driven agents (v2.1.139+)
+
+v2.1.139 adds agent view (`claude agents`) which shows all sessions in one list -- running, blocked on you, or done. combined with `/goal`, you can now:
+
+1. spawn multiple agents with different tasks
+2. each agent runs with its own /goal condition
+3. agent view shows progress on all of them
+4. you monitor and approve checkpoints as they hit
+
+this is superior to manual subagent spawning for agent teams because agent view gives you visibility and /goal prevents agents from getting stuck waiting for input.
+
 ## appendix: agent collections and frameworks
 
 ## appendix: agent collections and frameworks

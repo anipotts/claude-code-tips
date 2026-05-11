@@ -96,6 +96,33 @@ test it locally:
 /plugin marketplace add ./my-plugin
 ```
 
+
+
+### v2.1.139 additions: hook args and continueOnBlock
+
+two new hook features:
+
+**hook args (exec form)**: use `"args": ["command", "arg1", "arg2"]` instead of `"command": "..."` to spawn directly without shell. path placeholders like `${CLAUDE_PROJECT_DIR}` never need quoting.
+
+```json
+{
+  "type": "command",
+  "args": ["~/.claude/hooks/safety.sh", "${CLAUDE_PROJECT_DIR}"],
+  "events": ["PreToolUse"]
+}
+```
+
+**continueOnBlock (PostToolUse)**: set to `true` to feed the hook's rejection reason back to claude and continue the turn instead of stopping.
+
+```json
+{
+  "type": "command",
+  "command": "~/.claude/hooks/audit.sh",
+  "events": ["PostToolUse"],
+  "continueOnBlock": true
+}
+```
+
 ## distributing via marketplace
 
 to share your plugin, create a marketplace. push your plugin to github, then create a `.claude-plugin/marketplace.json`:

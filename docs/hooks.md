@@ -24,6 +24,32 @@ a hook:
 
 ---
 
+
+
+### v2.1.139 hook enhancements
+
+**args field (exec form)**: use `"args": ["command", "arg1"]` to spawn without a shell. this prevents quoting issues with path placeholders:
+
+```json
+{
+  "type": "command",
+  "args": ["~/.claude/hooks/my-hook.sh", "${CLAUDE_PROJECT_DIR}"]
+}
+```
+
+**continueOnBlock (PostToolUse)**: when a PostToolUse hook exits 2 (block), setting `"continueOnBlock": true` feeds the rejection reason back to claude as context, letting it decide next steps instead of hard-stopping the turn.
+
+use this for advisory hooks that block but don't abort:
+
+```json
+{
+  "type": "command",
+  "command": "~/.claude/hooks/warn-risky-pattern.sh",
+  "events": ["PostToolUse"],
+  "continueOnBlock": true
+}
+```
+
 ## the hooks i can't live without
 
 | hook | event | what it does |

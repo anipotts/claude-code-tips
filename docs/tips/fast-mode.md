@@ -18,6 +18,13 @@ the tradeoff isn't worth it for normal development. you get slightly faster outp
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
 
+
+
+
+### note: /goal as alternative
+
+v2.1.139 introduces `/goal` which lets claude work across multiple turns toward a completion condition. if you were considering fast mode for long-running tasks, `/goal` may be a better fit -- it keeps full reasoning depth while coordinating across turns. consider `/goal` before resorting to fast mode.
+
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
