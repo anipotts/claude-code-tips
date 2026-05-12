@@ -2,7 +2,9 @@
 
 # claude code vs cursor
 
-> last verified: 2026-04-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-05-12 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+
+<!-- updated 2026-05-12 -->
 
 ---
 
@@ -10,7 +12,7 @@
 
 | feature | claude code | cursor |
 |---------|------------|--------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (limited) / $20 pro / $60 pro+ / $200 ultra per month |
+| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (hobby) / $20 pro / $60 pro+ / $200 ultra per month |
 | model | opus 4.6, sonnet 4.6, haiku 4.5 | claude sonnet, GPT-4o, cursor-small, others (credit-based model selection) |
 | interface | terminal CLI, VS Code extension, JetBrains extension | forked VS Code IDE (standalone app) |
 | tab completion | no | yes -- inline ghost text, multi-line suggestions |
@@ -21,9 +23,11 @@
 | open source | yes | no |
 | team plan | -- (enterprise via API) | $40/user/mo (teams) |
 
-### cursor's credit system (june 2025+)
+### cursor's pricing model (may 2026+)
 
-Cursor uses a credit-based system -- check cursor.com/pricing for current limits. every paid plan includes a credit pool equal to your subscription cost. AI features consume credits based on the model used and request complexity. this means your effective usage depends on which models you lean on -- heavy claude opus usage burns credits faster than cursor-small.
+<!-- updated 2026-05-12 -->
+
+Cursor uses a usage-based billing system. every paid plan includes a base usage pool, then additional usage is billed on-demand. you can buy more usage as needed once your included amount is consumed. the platform now includes MCPs, skills, and hooks (previously undocumented in consumer-facing marketing) and Bugbot as an agent feature across all paid tiers.
 
 ---
 
@@ -81,15 +85,15 @@ cursor shows proposed changes as inline diffs in the editor -- green for additio
 
 | plan | claude code | cursor |
 |------|------------|--------|
-| free | limited usage | 2-week pro trial, 2000 completions, 50 slow requests |
-| entry | $20/mo (Pro) | $20/mo (Pro) -- 500 fast premium requests, credit pool |
-| mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) |
-| heavy use | $200/mo (Max 20x) | $200/mo (Ultra) |
+| free | limited usage | hobby: limited agent requests + tab completions |
+| entry | $20/mo (Pro) | $20/mo (Pro) -- extended agent limits, frontier models access, MCPs/skills/hooks, cloud agents |
+| mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) -- 3x usage on OpenAI/Claude/Gemini models |
+| heavy use | $200/mo (Max 20x) | $200/mo (Ultra) -- 20x usage on OpenAI/Claude/Gemini models, priority features |
 | teams | enterprise (API-based) | $40/user/mo |
 
-at the $20/mo tier, both tools are comparable. cursor gives you tab completion + chat + agent mode. claude code gives you full interactive terminal agent + extensibility stack. the value depends on your workflow.
+at the $20/mo tier, both tools are comparable. cursor gives you tab completion + chat + agent mode + cloud agents. claude code gives you full interactive terminal agent + extensibility stack. the value depends on your workflow.
 
-cursor's credit system means your effective usage at any tier depends on which models you use. heavy opus/GPT-4o usage drains credits faster than lighter models. claude code's subscription tiers give you rate limits, not credits -- you always get the same models, just more or less throughput.
+cursor's usage multipliers (3x/20x) apply across all available models -- your consumption across claude opus, GPT-4o, gemini, and others gets multiplied. on-demand overage pricing kicks in once included usage is spent. claude code's subscription tiers give you rate limits, not credits -- you always get the same models, just more or less throughput.
 
 ---
 

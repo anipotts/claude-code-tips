@@ -2,7 +2,9 @@
 
 # AI coding tool pricing matrix
 
-> last verified: 2026-04-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+> last verified: 2026-05-12 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+
+<!-- updated 2026-05-12 -->
 
 ---
 
@@ -26,10 +28,12 @@
 
 ### free tiers
 
+<!-- updated 2026-05-12 -->
+
 | tool | what you get | verdict |
 |------|-------------|---------|
 | claude code | limited requests, rate-throttled | evaluation only |
-| cursor | 2-week pro trial, 2000 completions, 50 slow requests | trial, not sustained use |
+| cursor | hobby: limited agent requests, limited tab completions, no card required | trial, not sustained use |
 | codex | limited codex access (temporary offer) | trial |
 | gemini | 60 req/min, 1000 req/day, no credit card | real daily usage |
 | antigravity | free during public preview, weekly quotas, multi-model access | real daily usage (best free tier) |
@@ -38,27 +42,31 @@
 
 ### $15-20/mo tier
 
+<!-- updated 2026-05-12 -->
+
 | tool | plan | what you get |
 |------|------|-------------|
 | claude code | Pro ($20) | full claude code access, all models, rate-limited |
-| cursor | Pro ($20) | unlimited completions, 500 fast premium requests, credit pool |
+| cursor | Pro ($20) | extended agent limits, frontier models access, MCPs/skills/hooks, cloud agents, bugbot |
 | codex | ChatGPT Plus ($20) | codex access, GPT-4o, web browsing, plugins |
 | gemini | AI Pro ($19.99) | higher limits, workspace AI, 2TB storage |
 | antigravity | $0 (preview) | free access to frontier models, weekly quotas |
 
-**winner**: depends on workflow. cursor gives you tab completion + chat + agent. claude code gives you terminal agent + extensibility. codex gives you the broadest openai product access. gemini gives you cloud storage and workspace integration. antigravity is still free (preview).
+**winner**: depends on workflow. cursor now includes cloud agents and extensibility features not previously advertised. claude code gives you terminal agent + deeper extensibility stack. codex gives you the broadest openai product access. gemini gives you cloud storage and workspace integration. antigravity is still free (preview).
 
 ### $100-200/mo tier
+
+<!-- updated 2026-05-12 -->
 
 | tool | plan | what you get |
 |------|------|-------------|
 | claude code | Max 5x ($100) / Max 20x ($200) | 5x or 20x Pro rate limits, max priority |
-| cursor | Pro+ ($60) / Ultra ($200) | larger credit pools, higher rate limits |
+| cursor | Pro+ ($60) / Ultra ($200) | 3x / 20x usage multiplier on all models (OpenAI/Claude/Gemini) |
 | codex | ChatGPT Pro ($200) | 2x codex limits, o3-pro, GPT-5, all openai models |
 | gemini | AI Ultra ($249.99) | highest-tier models, all google AI features |
 | antigravity | $0 (preview) / custom (enterprise) | free access continues, enterprise pricing TBD |
 
-**winner for individuals**: claude code Max 5x at $100/mo hits a sweet spot -- 5x the throughput of Pro for real power users. no other tool has an equivalent mid-tier. cursor's Pro+ at $60/mo is the closest.
+**winner for individuals**: claude code Max 5x at $100/mo hits a sweet spot -- 5x the throughput of Pro for real power users. cursor's Pro+ at $60/mo offers 3x multiplier across all models but usage-based overages apply. no other tool has an equivalent mid-tier.
 
 ---
 
