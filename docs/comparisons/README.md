@@ -47,10 +47,6 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 
 ---
 
-note: upstream tool versions and pricing verified as of april 2026
+note: upstream tool versions and pricing verified
 
-**note: tool versions and pricing verified as of april 2026. verify current status before recommending to users:**
-- [claude code docs](https://code.claude.com/docs/en/overview) for latest version
-- [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates
-- [antigravity pricing](https://antigravity.google/pricing) for google's offering
-- individual comparison docs for tool-specific staleness flags
+**note: tool versions and pricing verified as of may 2026. verify current status before recommending to users:**

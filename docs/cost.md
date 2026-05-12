@@ -80,6 +80,18 @@ this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on
 
 ## model pricing (may 2026)
 
+## model pricing (may 2026)
+
+> **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** this repo's prices snapshot frequently and go stale. last verified may 2026 but anthropic updates pricing regularly.
+
+known rates as of may 2026:
+
+| model | input (per M tokens) | output (per M tokens) |
+|-------|---------------------|----------------------|
+| claude haiku 4.5 | $1.00 | $5.00 |
+| claude sonnet 4.6 | $3.00 | $15.00 |
+| claude opus 4.6 | $5.00 | $25.00 |
+
 ## model pricing
 
 > **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** this repo's prices snapshot frequently and go stale. last verified may 2026 but anthropic updates pricing regularly.
