@@ -46,6 +46,22 @@ if you have `~/.claude.json`, these settings still work but are deprecated. migr
 
 
 
+
+
+### new in v2.1.133: worktree configuration
+
+add a `worktree` section to control how new worktrees are created:
+
+```json
+{
+  "worktree": {
+    "baseRef": "fresh"  // or "head" to keep unpushed local commits
+  }
+}
+```
+
+default is `fresh` (branches from `origin/<default>`). set to `head` if you want new worktrees to include unpushed local commits.
+
 ### new in v2.1.126: provider-managed auth
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.

@@ -14,8 +14,6 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 | `agent` | subagent with full tool access (Read, Grep, Glob) | 60s | expensive | complex decisions that need file reads |
 | `mcp_tool` (v2.1.118+) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
 
-
-
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:
@@ -46,7 +44,29 @@ use case: filter sensitive output (API keys, internal IPs), normalize error mess
 
 ### mcp_tool event hooks (v2.1.126+)
 
-MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
+### mcp_tool event hooks (v2.1.126+)
+
+MCP tool handlers can now be invoked from hooks using the `mcp_tool` type. this lets you intercept and react to MCP calls without spinning up a shell or http process:
+
+```json
+{
+  "type": "mcp_tool",
+  "server": "database",
+  "tool": "query_audit",
+  "input": { "table": "users", "limit": 10 }
+}
+```
+
+use case: a PreToolUse hook that calls an MCP audit tool to log sensitive queries before they execute. no shell overhead, no http latency.
+
+### effort.level field (v2.1.133+)
+
+hooks now receive the active effort setting via two channels:
+
+- **JSON input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
+- **Bash environment**: `$CLAUDE_EFFORT` variable
+
+use this to adjust hook behavior based on effort mode. example: safety-guard might be stricter at `low` effort but more permissive at `max`.
 
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 

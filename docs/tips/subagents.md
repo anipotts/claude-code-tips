@@ -88,6 +88,10 @@ specialized agent types get tailored system prompts and tool access:
 
 match the type to the job. an explore agent that can't write files won't accidentally modify anything.
 
+
+
+v2.1.140 made `subagent_type` matching case- and separator-insensitive. values like `"Code Reviewer"`, `"code-reviewer"`, and `"code_reviewer"` all resolve correctly. use whichever format feels natural.
+
 ## try it
 
 1. next time you're about to do a 10+ step task, spawn a subagent instead. compare how long it takes vs doing it inline
