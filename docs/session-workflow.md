@@ -58,3 +58,10 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
+
+---
+
+
+### rewind and summarize (v2.1.141+)
+
+the rewind menu now includes "Summarize up to here" option. this compresses earlier context while keeping recent turns intact -- a middle ground between `/compact` (full compression) and `/clear` (fresh start). use it when you want to preserve your immediate work but drop the earlier exploration context.

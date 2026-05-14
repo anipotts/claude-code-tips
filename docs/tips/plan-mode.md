@@ -29,6 +29,13 @@ plan mode forces Claude to think before acting, which means fewer wrong turns, f
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.
 
+
+
+
+### background agents preserve permission mode (v2.1.141+)
+
+when you spawn background agents via `/bg` or `←←`, they now preserve your current permission mode instead of reverting to default. this means a plan-mode session that spawns a background agent keeps plan mode active in that agent. if you want different permission behavior, set it explicitly in the agent config.
+
 ## try it
 
 1. pick a task that touches 3+ files. type `/plan` before your prompt

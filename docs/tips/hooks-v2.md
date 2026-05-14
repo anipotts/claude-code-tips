@@ -275,3 +275,21 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 3. always set a specific matcher. `"Bash"` is better than matching everything.
 
 [full hooks guide &rarr;](../hooks.md) | [hook scripts &rarr;](../../hooks/)
+
+---
+
+### terminalSequence output (v2.1.141+)
+
+hooks can now emit desktop notifications, window titles, and bells without a controlling terminal by returning `terminalSequence` in JSON output:
+
+```json
+{
+  "hookSpecificOutput": {
+    "PreToolUse": {
+      "terminalSequence": "\x07"  // bell
+    }
+  }
+}
+```
+
+use this to signal claude when a hook fires important events (permissions denied, dangerous command blocked). works in environments where stderr isn't connected to a terminal.

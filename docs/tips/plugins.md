@@ -150,3 +150,10 @@ this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to 
 3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)
+
+---
+
+
+### plugin cloning over HTTPS (v2.1.141+)
+
+set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` to clone GitHub plugin sources over HTTPS instead of SSH. useful in environments without a GitHub SSH key configured. by default, plugins clone via SSH.
