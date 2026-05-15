@@ -80,6 +80,12 @@ this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on
 
 ## model pricing (may 2026)
 
+
+
+### opus 4.7 (default for fast mode, v2.1.142+)
+
+fast mode now uses Opus 4.7 by default. set `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1` if you need to pin to Opus 4.6. pricing for Opus 4.7 should match or be close to Opus 4.6; verify at [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.
+
 ## model pricing
 
 > **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** last verified may 13 2026 (claude code v2.1.140). anthropic updates pricing regularly.

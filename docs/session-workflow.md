@@ -28,6 +28,12 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
+
+
+### fast mode with opus 4.7 (v2.1.142+)
+
+fast mode now defaults to Opus 4.7. if you're considering fast mode for throughput during long sessions, test whether the improved model changes the calculus. for most workflows, regular mode with strategic `/compact` still outperforms fast mode. override to Opus 4.6 if you want to test the old behavior: `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1`.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

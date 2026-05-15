@@ -60,6 +60,10 @@ take haiku's findings and write a targeted prompt for sonnet. haiku is roughly 6
 
 this pattern works bc exploration and implementation require different capabilities. exploration needs breadth and speed. implementation needs judgment and precision. match the model to the job.
 
+
+
+**note on model selection (v2.1.142+)**: fast mode now defaults to Opus 4.7. if you want cheaper exploration runs, haiku remains your best choice. for implementation, consider whether Opus 4.7's improvements justify the cost vs Sonnet 4.6.
+
 ## cost reality
 
 each subagent loads its own context window. that means paying the context-loading tax per agent.
