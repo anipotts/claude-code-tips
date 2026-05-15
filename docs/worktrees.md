@@ -55,6 +55,20 @@ three use cases:
 
 ---
 
+
+
+### worktree.baseRef configuration (v2.1.133+)
+
+by default, subagents create worktrees from `origin/<default>`. set `worktree.baseRef: "head"` to branch from local HEAD instead, which keeps unpushed commits in new worktrees. add to settings.json at project or global scope:
+
+```json
+{
+  "worktree": {
+    "baseRef": "head"
+  }
+}
+```
+
 ## the desktop app advantage
 
 the claude code desktop app has a built-in UI for managing worktrees. you can see all active worktrees, their branches, and their status in one view. it's significantly better than managing worktrees from the CLI.

@@ -16,6 +16,17 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 
 
+
+
+### effort level in hooks (v2.1.133+)
+
+hooks receive the active effort setting via two channels:
+
+- **JSON input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
+- **Bash environment**: `$CLAUDE_EFFORT` variable
+
+use this to adjust hook behavior based on effort mode. example: safety-guard might be stricter at `low` effort but more permissive at `max`.
+
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:

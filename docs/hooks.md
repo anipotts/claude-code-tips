@@ -51,6 +51,21 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 ---
 
+
+
+### v2.1.126+ mcp_tool hooks
+
+prefer `mcp_tool` type hooks over shell commands when an MCP server already owns the relevant state. example: instead of shelling out to check a database, use the MCP database tool directly. this reduces process overhead and token cost.
+
+```json
+{
+  "type": "mcp_tool",
+  "server": "database",
+  "tool": "query_audit",
+  "input": { "table": "sensitive_ops", "limit": 100 }
+}
+```
+
 ## what hooks actually prevent
 
 three categories of damage:

@@ -18,6 +18,12 @@ they merge in that order. local overrides project overrides global.
 
 
 
+
+
+### provider-managed auth (v2.1.126+)
+
+if claude code is embedded in an IDE plugin or platform integration, `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` env var may be set by the host. when present, provider/auth settings in settings.json are ignored -- authentication is managed by the host. this prevents conflicts between user config and platform-managed auth.
+
 ### worktree configuration (v2.1.133+)
 
 add a `worktree` section to control how new worktrees are created:
@@ -102,6 +108,22 @@ valid values: `auto` (desktop in iTerm2/Ghostty/Kitty, fallback to stdout), `des
 **hooks that build → project.** test runners, linters, CI validators. the team benefits from these.
 
 **hooks that personalize → local.** notifications, logging, personal workflows. nobody else needs your macOS notification hook.
+
+
+
+### worktree baseRef configuration (v2.1.133+)
+
+by default, new worktrees branch from `origin/<default-branch>` (fresh remote state). set `worktree.baseRef: "head"` in settings.json to branch from local HEAD instead, preserving unpushed local commits.
+
+```json
+{
+  "worktree": {
+    "baseRef": "head"
+  }
+}
+```
+
+this is useful if you have work in progress locally that you want subagents to build on top of.
 
 ## try it
 
