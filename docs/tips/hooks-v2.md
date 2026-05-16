@@ -16,6 +16,20 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 
 
+
+
+### stop hook blocking cap (v2.1.143+)
+
+stop hooks that block repeatedly now have a safety cap: the turn ends with a warning after 8 consecutive blocks. this prevents infinite loops where a hook keeps rejecting claude's attempts to execute a command.
+
+override the cap with:
+
+```bash
+export CLAUDE_CODE_STOP_HOOK_BLOCK_CAP=16
+```
+
+use this only if you have a legitimate multi-step blocking pattern that needs more than 8 iterations.
+
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:

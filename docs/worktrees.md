@@ -41,6 +41,22 @@ add to `~/.claude/settings.json` or `.claude/settings.json`:
 
 this matters if you have local commits not yet pushed. the default changed in v2.1.133; if you relied on the old behavior (local HEAD), set `baseRef: "head"` to keep it.
 
+
+
+### worktree.bgIsolation setting (v2.1.143+)
+
+for repos where git worktrees are impractical (mono-repos, complex submodule layouts), set `bgIsolation: "none"` to let background sessions edit the working copy directly:
+
+```json
+{
+  "worktree": {
+    "bgIsolation": "none"
+  }
+}
+```
+
+**caveat**: multiple background sessions can now conflict on the same files. use this only if your repo structure makes worktrees untenable. pair it with careful task scoping so background agents don't step on each other.
+
 ## why worktrees matter for claude code
 
 without worktrees, parallel agents would step on each other -- editing the same files, creating merge conflicts, corrupting each other's work. worktrees give each agent its own sandbox.

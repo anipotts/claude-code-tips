@@ -32,6 +32,27 @@ add a `worktree` section to control how new worktrees are created:
 
 default is `fresh` (branches from `origin/<default>`). set to `head` if you want new worktrees to include unpushed local commits.
 
+
+
+### worktree background isolation (v2.1.143+)
+
+add `worktree.bgIsolation` to control how background sessions interact with your working tree:
+
+```json
+{
+  "worktree": {
+    "baseRef": "fresh",
+    "bgIsolation": "none"
+  }
+}
+```
+
+valid values:
+- `default` -- background sessions enter worktrees (safe, isolated)
+- `none` -- background sessions edit the working copy directly (for repos where worktrees are impractical)
+
+use `"none"` if your repo has mono-repo or submodule constraints that make git worktrees difficult. be aware that multiple background sessions editing the same working copy can conflict.
+
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:

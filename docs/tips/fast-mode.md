@@ -16,6 +16,12 @@ the tradeoff isn't worth it for normal development. you get slightly faster outp
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
 
+
+
+### background sessions and fast mode (v2.1.143+)
+
+starting v2.1.143, background sessions now preserve the model and effort level you set after waking from idle. this means if you set a background agent to fast mode + haiku, it will stay there across wake cycles. this makes background agents more predictable for long-running tasks but also means you need to be intentional about which model + effort combo you start with.
+
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
