@@ -16,6 +16,14 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 
 
+
+
+### recent additions (v2.1.121+)
+
+- **updatedToolOutput** (PostToolUse, v2.1.121+): hooks can now replace tool output before claude sees it. use case: filter sensitive data, normalize error messages.
+- **mcp_tool events** (v2.1.126+): invoke MCP tools directly from hooks without spawning subprocesses. no shell overhead, no http latency.
+- **effort.level** (v2.1.133+): hooks receive active effort setting via JSON (`effort.level`) and bash env (`$CLAUDE_EFFORT`). adjust hook behavior based on effort mode.
+
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:
