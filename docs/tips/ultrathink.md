@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# ultrathink
-
-force claude code into extended thinking mode for complex problems. more thinking tokens = better reasoning on hard tasks.
+<!-- tested with: claude code v2.1.143 -->
 
 ## how to use it
 

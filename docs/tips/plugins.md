@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# plugins
-
-a plugin is a portable bundle of claude code customizations. hooks, commands, skills, agents, all in one package you can install with a single command.
+<!-- tested with: claude code v2.1.143 -->
 
 ## what a plugin is
 

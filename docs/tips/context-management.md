@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# context management
-
-the context window is a shared budget. every file read, every tool result, every turn of conversation eats into it. manage it or it manages you.
+<!-- tested with: claude code v2.1.143 -->
 
 ## the compaction cliff
 

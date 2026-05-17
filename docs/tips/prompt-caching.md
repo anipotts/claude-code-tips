@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# prompt caching
-
-the single biggest cost lever in claude code. my overall cache hit rate is 95%. here's why.
+<!-- tested with: claude code v2.1.143 -->
 
 ## how it works
 

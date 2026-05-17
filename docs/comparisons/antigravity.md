@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# claude code vs google antigravity
-
-> last verified: 2026-04-09
-
-> last verified: 2026-04-09 | updated: 2026-05-10
+<!-- tested with: claude code v2.1.143 -->
 
 ## at a glance
 

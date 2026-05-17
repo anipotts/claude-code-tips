@@ -1,8 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# plan mode
-
-stop claude from writing code until you both agree on what to build. toggle with `/plan`.
+<!-- tested with: claude code v2.1.143 -->
 
 ## what it does
 

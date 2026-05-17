@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# cost
-
-what claude code actually costs, how caching saves 81% of it, and the strategies that keep my bill sane.
-
----
+<!-- tested with: claude code v2.1.143 -->
 
 ## my real numbers
 

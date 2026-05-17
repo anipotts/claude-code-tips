@@ -1,10 +1,6 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# worktrees
-
-git worktrees are the secret weapon for parallel claude code work. the desktop app makes them even better.
-
----
+<!-- tested with: claude code v2.1.143 -->
 
 ## what worktrees are
 
