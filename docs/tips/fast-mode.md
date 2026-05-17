@@ -28,3 +28,7 @@ hackathon. 30 minutes to demo. you need something that compiles, not something t
 
 
 Note: v2.1.132 fixed an issue where `--permission-mode` flag was ignored when resuming a plan-mode session with `--continue`/`--resume`. if you use plan mode with fast mode in resumable workflows, verify your permission settings are preserved on resume.
+
+
+
+> **note (v2.1.132):** if using fast mode with plan-mode resumable sessions via `--continue`/`--resume`, verify permission settings are preserved. a fix in v2.1.132 ensures permission mode flags aren't lost on resume.
