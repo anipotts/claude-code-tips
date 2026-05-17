@@ -44,11 +44,7 @@ PostToolUse hooks can now replace tool output before claude sees it. return `{"h
 
 use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context. example: a bash hook that catches test failures and appends a link to the failing test file in your CI dashboard.
 
-### mcp_tool event hooks (v2.1.126+)
-
-MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
-
-### updatedToolOutput (PostToolUse, v2.1.121+)
+### updatedToolOutput detail (PostToolUse, v2.1.121+)
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
 
