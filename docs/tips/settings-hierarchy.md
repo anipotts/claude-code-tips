@@ -115,3 +115,19 @@ cat .claude/settings.local.json | jq '.hooks'
 if you have hooks in the wrong level, move them. one `mv` command, and your settings are clean.
 
 [full hooks guide &rarr;](../hooks.md)
+
+---
+
+### worktree configuration (v2.1.133+)
+
+add a `worktree` section to control how new worktrees are created:
+
+```json
+{
+  "worktree": {
+    "baseRef": "fresh"  // or "head" to keep unpushed local commits
+  }
+}
+```
+
+default is `fresh` (branches from `origin/<default>`). set to `head` if you want new worktrees to include unpushed local commits.

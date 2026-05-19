@@ -4,9 +4,11 @@
 
 ## what it is
 
-fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
+## what it is
 
-this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
+fast mode reduces compute budget for reasoning without changing the model. it does not switch models -- if you're on opus, you stay on opus. what changes is the thinking time: less extended thinking, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
+
+this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus (or sonnet, or haiku) with a tighter thinking budget.
 
 ## why i don't use it
 

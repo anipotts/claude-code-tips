@@ -275,3 +275,27 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 3. always set a specific matcher. `"Bash"` is better than matching everything.
 
 [full hooks guide &rarr;](../hooks.md) | [hook scripts &rarr;](../../hooks/)
+
+---
+
+### effort level in hooks (v2.1.133+)
+
+hooks now receive the active effort setting via two channels:
+
+- **JSON input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
+- **Bash environment**: `$CLAUDE_EFFORT` variable
+
+use this to adjust hook behavior based on effort mode. example: safety-guard might be stricter at `low` effort but more permissive at `max`.
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+EFFORT=$(echo "$INPUT" | jq -r '.effort.level // "medium"')
+# or from bash env:
+EFFORT="$CLAUDE_EFFORT"
+
+if [[ "$EFFORT" == "max" ]]; then
+  # relax some constraints at max effort
+  exit 0
+fi
+```

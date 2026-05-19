@@ -6,6 +6,8 @@
 
 > last verified: 2026-04-09 | updated: 2026-05-10
 
+> last verified: 2026-05-19 | updated: 2026-05-19
+
 ## at a glance
 
 | feature | claude code | google antigravity |
