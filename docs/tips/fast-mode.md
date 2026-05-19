@@ -8,6 +8,13 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+
+
+### note on model defaults (v2.1.144+)
+
+`/model` now changes the model for the current session only. to set a default model for all new sessions, press `d` in the model picker. this means you can switch models mid-session without affecting future sessions.
+
 ## why i don't use it
 
 never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.

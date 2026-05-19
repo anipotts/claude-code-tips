@@ -28,6 +28,13 @@ monitor is now a stable feature (v2.1.98+) and is the preferred method for long-
 
 that $200 covers everything. hundreds of sessions, thousands of subagent spawns. run `/lore` to see your own numbers.
 
+
+
+
+### background sessions (v2.1.144+)
+
+background sessions started via `claude --bg` now support `/resume`, allowing you to check on agent progress without interrupting. background subagent completion notifications now show elapsed time (e.g. "Agent completed · 3h 2m 5s"). background sessions still count against your monthly budget; use them for long-running agents where you don't need real-time interaction.
+
 ### what your plan costs
 
 | plan | monthly | how billing works |

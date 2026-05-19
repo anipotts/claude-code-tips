@@ -53,6 +53,13 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 
 
+
+
+
+### note on background sessions and hooks (v2.1.144+)
+
+hooks fire normally in background sessions. PreToolUse hooks will continue to block dangerous commands even when agents run in the background. SessionEnd hooks fire when the background session completes.
+
 ### hook performance notes (v2.1.140+)
 PreToolUse hooks on Bash commands need to complete in <50ms to avoid user-facing latency. the hooks listed above are optimized for speed -- they use jq for JSON parsing and regex for pattern matching rather than spawning subprocesses. profile your custom hooks with `time` if you add new ones.
 
