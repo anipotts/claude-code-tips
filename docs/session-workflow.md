@@ -44,6 +44,12 @@ from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ session
 
 the data says: sessions that hit compaction average 1.7 compactions. if you're compacting more than twice, the session is too long -- split it.
 
+
+
+### autoMemoryEnabled (v2.1.145+)
+
+if `autoMemoryEnabled: true` (default), claude automatically preserves memory before compaction. compaction becomes less destructive -- claude reads the preserved memory on the next turn and continues the plan. this changes the calculus: you can now compact more aggressively without losing context.
+
 ## ending a session
 
 when a session ends (ctrl+c, `/exit`, or timeout), two things fire:

@@ -16,6 +16,21 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 
 
+
+
+### v2.1.145 additions: Stop and SubagentStop hooks
+
+Stop and SubagentStop hooks now receive `background_tasks` and `session_crons` arrays in JSON input. use this to warn before stopping a session with active background work.
+
+```bash
+BACKGROUND_TASKS=$(echo "$INPUT" | jq -r '.background_tasks // []')
+if [[ $(echo "$BACKGROUND_TASKS" | jq 'length') -gt 0 ]]; then
+  echo "warning: $(echo "$BACKGROUND_TASKS" | jq 'length') background tasks still running"
+  exit 1
+fi
+exit 0
+```
+
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:
@@ -36,6 +51,22 @@ if [[ "$EFFORT" == "max" ]]; then
   # relax some constraints at max effort
   exit 0
 fi
+```
+
+
+
+### new effort option: xhigh (v2.1.145+)
+
+effort now has five levels: `low`, `medium`, `high`, `xhigh`, `max`. xhigh sits between high and max, useful for tasks that need deep reasoning but not quite max-level compute. update hooks that check effort to handle the new level:
+
+```bash
+EFFORT=$(echo "$INPUT" | jq -r '.effort.level // "medium"')
+case "$EFFORT" in
+  max|xhigh) # relax constraints at high effort
+    ;;
+  *) # standard constraints
+    ;;
+esac
 ```
 
 ### updatedToolOutput (PostToolUse, v2.1.121+)

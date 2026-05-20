@@ -51,6 +51,18 @@ good: "the bug is in src/auth/token.ts around line 140, the JWT expiry check"
 
 ## five strategies that work
 
+
+
+### 6. enable autoMemoryEnabled (v2.1.145+)
+
+set `autoMemoryEnabled: true` in `.claude/settings.json` (default as of v2.1.145). this auto-preserves session context before compaction fires, reducing the "forgetting after compaction" problem. with this enabled, long sessions lose less context per compaction.
+
+```json
+{
+  "autoMemoryEnabled": true
+}
+```
+
 ### 1. scope before you start
 
 "implement the auth module" is a 2hr session. "add the JWT validation middleware" is 15 min. the tighter your scope, the less context you burn and the lower your compaction risk.

@@ -20,6 +20,12 @@ the "toggle pattern" sounds nice in theory (start normal, switch to fast for exe
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
 
+
+
+### v2.1.145 note: CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE
+
+the env var `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` is now available for deployments. this suggests fast mode behavior may become configurable at the platform level in future versions. for end users, fast mode behavior remains unchanged unless your deployment explicitly sets this var.
+
 ## the one exception
 
 hackathon. 30 minutes to demo. you need something that compiles, not something that's correct. that's the only time speed legitimately matters more than depth.

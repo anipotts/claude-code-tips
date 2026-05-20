@@ -62,6 +62,14 @@ if you're using claude code through an embedding host platform (IDE plugin, plat
 
 
 
+
+
+### v2.1.145: new settings categories
+
+- `claudeMdExcludes` -- glob patterns to exclude from CLAUDE.md auto-injection (e.g., `["docs/**", "*.test.md"]`). add to project settings if your CLAUDE.md grows from many files.
+- `autoMemoryEnabled` -- auto-preserve session memory before compaction (default: true). set to false if you want manual `/compact` control only.
+- `worktree.bgIsolation` -- isolate background worktree spawns from parent session's file changes (default: true). set to false only if you need parent/bg worktree to share uncommitted state.
+
 ### new in v2.1.121: status line input fields
 
 two new display settings control what appears in the input status line:

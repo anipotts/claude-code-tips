@@ -40,6 +40,20 @@ use worktree isolation for:
 
 skip it for read-only research. worktree setup adds overhead you don't need when the agent is just reading files.
 
+
+
+### worktree.bgIsolation setting (v2.1.145+)
+
+by default, background worktrees (spawned by agents in the background) are isolated from parent session file changes via `worktree.bgIsolation: true`. this prevents agents from seeing your live edits mid-task. set to false only if you need real-time file sync between parent and background worktrees.
+
+```json
+{
+  "worktree": {
+    "bgIsolation": true
+  }
+}
+```
+
 ## the scout pattern
 
 send a cheap model to explore, then a capable model to act. each subagent is its own billing stream, so model choice matters.
