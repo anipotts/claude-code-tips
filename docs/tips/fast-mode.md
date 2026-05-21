@@ -16,6 +16,11 @@ the tradeoff isn't worth it for normal development. you get slightly faster outp
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
 
+
+
+
+**note on reasoning impact**: fast mode reduces the extended thinking budget that claude allocates to reasoning. on complex architectural tasks, ultrathink, or multi-file refactors, this reduction in thinking depth can produce lower-quality plans. the speed gain is real but the reasoning tradeoff is significant for non-trivial work.
+
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
