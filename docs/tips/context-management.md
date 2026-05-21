@@ -94,6 +94,11 @@ the [context-save.sh](../../hooks/context-save.sh) hook in this repo does exactl
 
 across hundreds of sessions, roughly a fifth of them hit compaction. the pattern is predictable: short sessions almost never compact. once you're past 30 minutes, about a third of sessions will compact. past an hour, it's a coin flip. my rule is simple: if a session compacts twice, finish the immediate task and start fresh. three compactions means the original plan is gone and you're flying blind. sessions that compact once still ship at the same rate as sessions that don't. sessions that compact twice ship at half the rate. keep sessions focused and under an hour. if a task needs two hours, split it into three focused sessions.
 
+
+
+
+**v2.1.146 update**: diff rendering performance improved for large file edits. this may slightly reduce tool execution time on sessions with many multi-file changes, but compaction patterns remain consistent.
+
 ## try it
 
 1. run `/mine` to check your compaction rate by session length. if most 30-min sessions are compacting, your prompts are too broad.

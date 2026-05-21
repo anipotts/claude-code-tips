@@ -38,21 +38,6 @@ a hook:
 | stale-branch | SessionStart | warns about local branches with deleted remotes |
 | notify | Notification | routes claude code alerts to macOS notifications |
 
-hook fire frequency is driven by tool usage. from real session data:
-
-| tool event | fires | what triggers hooks |
-|------------|-------|-------------------|
-| Bash (10,153) | most hook-triggering | safety-guard, no-squash, commit-nudge all fire on Bash |
-| Read (9,187) | panopticon logs these | panopticon tracks all read operations |
-| Edit (5,010) | panopticon tracks | md-lint-fix fires on .md edits, commit-nudge counts edits |
-| Write (1,696) | panopticon tracks | version-stamp checks written files at SessionEnd |
-
-PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times across all sessions. that's why they need to be fast (< 50ms).
-
----
-
-
-
 ### hook performance notes (v2.1.140+)
 PreToolUse hooks on Bash commands need to complete in <50ms to avoid user-facing latency. the hooks listed above are optimized for speed -- they use jq for JSON parsing and regex for pattern matching rather than spawning subprocesses. profile your custom hooks with `time` if you add new ones.
 

@@ -28,6 +28,11 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
+
+
+
+**v2.1.146 note**: `/simplify` was renamed to `/code-review` with optional effort parameter (e.g., `/code-review high`). use this to request code reviews at different detail levels without changing your session mode.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:
