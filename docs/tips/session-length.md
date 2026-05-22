@@ -34,3 +34,8 @@ shorter sessions are more efficient. here's the data.
 run `/mine` to check your own session length distribution. if most of your sessions are 2hr+, you're probably working harder than you need to.
 
 [full cost analysis &rarr;](../cost.md)
+
+
+### note on background sessions (v2.1.147+)
+
+v2.1.147 improved background session management (`Ctrl+T` in `claude agents`). pinned background sessions now stay alive when idle and are restarted in place to apply updates. this may affect session length metrics for users running long-lived background agents. check your actual patterns with `/mine` after upgrading.

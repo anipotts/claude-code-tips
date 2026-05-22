@@ -16,6 +16,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 
 
+
+
+### note on hook conditions with wildcards (v2.1.147+)
+
+v2.1.147 fixed hook `if` conditions. patterns like `PowerShell(git push*)` now match correctly; previously only `PowerShell(*)` worked. if you use wildcard matchers in hook conditions, verify they fire as expected after upgrading.
+
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:

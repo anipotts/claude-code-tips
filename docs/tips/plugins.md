@@ -124,6 +124,12 @@ then anyone can install:
 
 two steps: add the marketplace (once), then install individual plugins from it.
 
+
+
+### note on plugin agent type declarations (v2.1.147+)
+
+v2.1.147 fixed a regression where plugin agents declaring multiple `Agent(...)` types in `tools:` frontmatter would drop all but the last entry. if your plugin defines multiple agent types, verify all are recognized after upgrading.
+
 ## when to extract a plugin
 
 the signal is copy-pasting. if you're copying the same hook between projects, it's time for a plugin.
