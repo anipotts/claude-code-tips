@@ -34,3 +34,6 @@ shorter sessions are more efficient. here's the data.
 run `/mine` to check your own session length distribution. if most of your sessions are 2hr+, you're probably working harder than you need to.
 
 [full cost analysis &rarr;](../cost.md)
+
+
+2. run `/usage` after a session to see the per-category cost breakdown (skills, subagents, plugins, MCP). long sessions often show high plugin/MCP cost relative to core work.

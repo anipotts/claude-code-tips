@@ -58,3 +58,9 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
+
+---
+
+## analyzing session cost with /usage (v2.1.149+)
+
+after ending a session, run `/usage` in a fresh session to see what drove your costs. the output breaks down consumption by category: base conversation, skills, subagents, plugins, MCP servers. this tells you what to optimize next. if subagents consumed 60% of your budget, the next session should use cheaper models or fewer agents.

@@ -101,3 +101,6 @@ across hundreds of sessions, roughly a fifth of them hit compaction. the pattern
 3. scope your next task to 15 minutes of work and see if the session stays clean.
 
 [session length data &rarr;](./session-length.md) | [full cost analysis &rarr;](../cost.md)
+
+
+4. use `/usage` to see cost breakdown by category. if skills or subagents are consuming more than expected, that's a context bloat signal.
