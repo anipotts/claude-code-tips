@@ -297,3 +297,10 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 3. always set a specific matcher. `"Bash"` is better than matching everything.
 
 [full hooks guide &rarr;](../hooks.md) | [hook scripts &rarr;](../../hooks/)
+
+---
+
+
+### session cron and background task awareness (v2.1.145+)
+
+Stop and SubagentStop hooks now receive `background_tasks` and `session_crons` arrays, letting you react to active background work when a session ends. use this to warn before exiting with pending work or to log task completion state. example: check task count and exit 1 if work is still running.

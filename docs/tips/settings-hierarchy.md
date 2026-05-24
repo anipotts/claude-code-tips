@@ -18,6 +18,24 @@ they merge in that order. local overrides project overrides global.
 
 
 
+
+
+### display settings (v2.1.121+, v2.1.126+)
+
+three new display-level settings control what appears in your status line and notification behavior:
+
+```json
+{
+  "display": {
+    "statusLineInputFields": ["effort.level", "thinking.enabled"],
+    "preferredNotifChannel": "auto"
+  }
+}
+```
+
+- `statusLineInputFields`: show effort level and extended thinking status in the input prompt
+- `preferredNotifChannel`: where notifications appear (auto, desktop, stdout, none)
+
 ### worktree configuration (v2.1.133+)
 
 add a `worktree` section to control how new worktrees are created:
