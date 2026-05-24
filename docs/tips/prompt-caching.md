@@ -51,6 +51,6 @@ longer sessions cache better bc the prefix stabilizes and cache_write amortizes 
 
 1. check your current CLAUDE.md. is it under 30 lines?
 2. move anything that changes frequently (task lists, WIP notes) to a separate file
-3. run `/mine` to check your cache hit rate after a few sessions
+3. run `/lore` to check your cache hit rate after a few sessions
 
 [full cost breakdown &rarr;](../cost.md)

@@ -20,29 +20,11 @@ three things work together on startup:
 
 **CLAUDE.md** -- project conventions, structure, rules. cached aggressively, so keeping it stable saves money. i update mine maybe once a week. it tells claude what the repo is, how to name things, what never to do.
 
-**skills** -- the `/mine` skill gives claude access to session data (search, mistakes, burn, hotspots, loops). skills are like domain-specific knowledge packs that activate on command.
+**skills** -- the `/lore` skill gives claude access to session data (search, mistakes, burn, hotspots, loops). skills are like domain-specific knowledge packs that activate on command.
 
 **hooks** -- 11 scripts registered in settings.json. they don't add to the prompt -- they run silently in the background, blocking bad commands, logging actions, fixing lint. claude doesn't even know most of them exist.
 
 the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enforce boundaries.
-
-## the cascade method
-
-## when to /compact vs /clear
-
-from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:
-
-**/compact when:**
-- 20+ turns and you're shifting topics
-- context-save.sh hook is active (it preserves state before compression)
-- you see claude repeating itself or losing track of earlier decisions
-
-**/clear when:**
-- starting a completely new task
-- the previous task is done and committed
-- you want a fresh context window (cheaper than carrying dead context)
-
-the data says: sessions that hit compaction average 1.7 compactions. if you're compacting more than twice, the session is too long -- split it.
 
 ## ending a session
 
