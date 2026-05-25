@@ -32,6 +32,31 @@ add a `worktree` section to control how new worktrees are created:
 
 default is `fresh` (branches from `origin/<default>`). set to `head` if you want new worktrees to include unpushed local commits.
 
+
+
+### bundled skill/command rename tracking (v2.1.150+)
+
+when renaming skills or commands in your plugin/skill bundles, claude code v2.1.150+ tracks these renames to prevent broken references in sessions. add a `renames` section to track migrations:
+
+```json
+{
+  "skills": {
+    "old_skill_name": {
+      "renamedTo": "new_skill_name",
+      "deprecatedSince": "v2.1.150"
+    }
+  },
+  "commands": {
+    "old_command": {
+      "renamedTo": "new_command",
+      "deprecatedSince": "v2.1.150"
+    }
+  }
+}
+```
+
+this prevents "command not found" errors when resuming old sessions that reference renamed commands.
+
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:

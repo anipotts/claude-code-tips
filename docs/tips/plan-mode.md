@@ -25,6 +25,10 @@ good candidates:
 
 plan mode forces Claude to think before acting, which means fewer wrong turns, fewer compactions, and fewer wasted sessions.
 
+
+
+**note (v2.1.150+):** claude code now tracks plan execution state across session resumes. if you start a plan, approve it, then resume the session later, claude remembers which plan was approved and won't re-plan. this makes long-running tasks more efficient -- you don't re-plan on each resume.
+
 ## the only exception
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.

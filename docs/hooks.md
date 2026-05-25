@@ -68,6 +68,10 @@ three categories of damage:
 
 ---
 
+
+
+**note (v2.1.150+):** hook execution now includes bundled skill/command context. if a hook is invoked during skill execution, the JSON input includes `executingSkill` and `executingCommand` fields so hooks can react differently based on context. use this to allow certain operations only within approved skills.
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.

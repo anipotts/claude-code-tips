@@ -30,6 +30,29 @@ ai-powered maintenance is also viable on the cheap: weekly competitive-intel, do
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
 
+
+
+### skill-based automation (v2.1.150+)
+
+instead of raw daemons, define a skill that encapsulates your automation logic. skills persist state across invocations and can be scheduled via cron or triggered by monitor events. this is safer than daemon scripts bc skills have lifecycle management and built-in logging.
+
+```json
+{
+  "name": "check-and-fix-tests",
+  "description": "run tests, propose fixes for failures",
+  "steps": [
+    { "tool": "Bash", "input": { "command": "npm test 2>&1" } },
+    { "condition": "exit_code != 0", "then": [{ "subagent": "fix-test-failures" }] }
+  ]
+}
+```
+
+schedule it in cron:
+
+```bash
+0 * * * * cd /path/to/project && claude /skill check-and-fix-tests
+```
+
 ### safe daemon (recommended)
 
 ```bash
