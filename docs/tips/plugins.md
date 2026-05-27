@@ -124,6 +124,19 @@ then anyone can install:
 
 two steps: add the marketplace (once), then install individual plugins from it.
 
+
+### plugin scope management (v2.1.152+)
+
+`claude plugin marketplace remove` now accepts `--scope` for consistency:
+
+```bash
+claude plugin marketplace remove my-plugin --scope user
+claude plugin marketplace remove my-plugin --scope project
+claude plugin marketplace remove my-plugin --scope local
+```
+
+default scope is inferred from where the plugin was installed. explicit `--scope` symmetry matches `add`, `install`, and `uninstall` commands.
+
 ## when to extract a plugin
 
 the signal is copy-pasting. if you're copying the same hook between projects, it's time for a plugin.

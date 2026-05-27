@@ -14,7 +14,19 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 | `agent` | subagent with full tool access (Read, Grep, Glob) | 60s | expensive | complex decisions that need file reads |
 | `mcp_tool` (v2.1.118+) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
 
+### MessageDisplay hook (v2.1.152+)
 
+fires when the assistant message is about to be displayed. lets hooks transform, redact, or hide text as it renders.
+
+```json
+{
+  "type": "command",
+  "command": "~/.claude/hooks/redact-sensitive.sh",
+  "events": ["MessageDisplay"]
+}
+```
+
+use this to filter API keys, internal IPs, or other sensitive data from displayed responses. the hook receives the message text and can modify it before rendering.
 
 ### effort level in hooks (v2.1.133+)
 

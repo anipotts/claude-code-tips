@@ -26,6 +26,16 @@ three things work together on startup:
 
 the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enforce boundaries.
 
+
+### skill reloading (v2.1.152+)
+
+skills can now be reloaded mid-session without restarting:
+
+- `/reload-skills` -- rescans skill directories and reloads active skills
+- `SessionStart` hooks can return `reloadSkills: true` to trigger a reload on startup
+
+this means hook logic can install or update skills, making them available in the same session. useful for dynamic skill provisioning.
+
 ## the cascade method
 
 ## when to /compact vs /clear
@@ -53,6 +63,22 @@ when a session ends (ctrl+c, `/exit`, or timeout), two things fire:
 **panopticon** has already logged every tool call during the session to `~/.claude/panopticon.db`.
 
 nothing to do manually. close the terminal. the data is there when you need it.
+
+
+### session title and skill reloading
+
+`SessionStart` hooks can now return metadata about the session:
+
+```json
+{
+  "hookSpecificOutput": {
+    "sessionTitle": "Auth refactor - Day 2",
+    "reloadSkills": true
+  }
+}
+```
+
+this lets hooks customize the session title on startup and reload skills provisioned by the hook logic, making dynamic skill setup possible.
 
 ## further reading
 

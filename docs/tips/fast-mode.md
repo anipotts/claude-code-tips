@@ -16,6 +16,11 @@ the tradeoff isn't worth it for normal development. you get slightly faster outp
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
 
+
+### simplification vs fast mode (v2.1.152+)
+
+v2.1.152 ships `/simplify`, which invokes `/code-review --fix`. this is different from fast mode -- it's a deliberate code review step that improves quality, not a speed optimization that trades quality for latency. use `/simplify` when you want improvement suggestions applied. don't confuse it with fast mode, which is purely speed.
+
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
