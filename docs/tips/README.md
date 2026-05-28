@@ -23,3 +23,5 @@ short, standalone claude code tips. each one is a specific technique you can use
 | [monitor](./monitor.md) | watch background processes, react to output in real time (v2.1.98+, stable as of v2.1.145) |
 
 | [git worktree setup](./git-worktree-lfs.md) | skip git lfs downloads on clone, faster worktree creation (v2.1.153+) |
+
+| [workflows](./workflows.md) | orchestrate tens to hundreds of agents in background, handle large complex tasks (v2.1.154+) |

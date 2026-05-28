@@ -97,6 +97,16 @@ i've spawned thousands of subagents across hundreds of sessions. the average age
 
 on the Max plan ($200/mo flat), per-agent cost is absorbed by the subscription. agent teams become a throughput question, not a billing question.
 
+
+
+## workflows vs subagents (v2.1.154+)
+
+workflows are a new abstraction for large parallel work. they orchestrate tens to hundreds of agents automatically, without manual spawning. use workflows when your task naturally breaks into many independent pieces. use subagents when you want explicit control over each agent.
+
+**workflows**: ask `/workflows` to see active runs. claude manages parallelism and agent coordination. good for: large refactors, batch code sweeps, multi-module implementations.
+
+**subagents**: manually spawn with agent configs. good for: specific well-scoped tasks where you want to review each agent's work.
+
 ## the `subagent_type` parameter
 
 specialized agent types get tailored system prompts and tool access:

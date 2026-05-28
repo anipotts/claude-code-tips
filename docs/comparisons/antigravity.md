@@ -54,6 +54,11 @@ every claude code session produces parseable JSON transcripts. the lore plugin b
 
 ## where antigravity wins
 
+
+
+### dynamic workflows
+antrigravity (google) and claude code (v2.1.154) both now support workflow orchestration, but implementations differ. claude code's workflows scale to hundreds of agents in background for large tasks. antigravity's agent skills are more tightly integrated with the IDE. both enable large-scale parallel work.
+
 ### it's free (for now)
 
 antigravity is free during public preview with generous rate limits on gemini 3.1 pro. google AI Pro/Ultra subscribers get priority access. this is the lowest barrier to entry of any AI coding tool -- $0/mo vs claude code's $20/mo minimum for useful throughput. caveat: free users have weekly quotas, and google hasn't committed to keeping it free permanently.

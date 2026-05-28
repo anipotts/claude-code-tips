@@ -4,11 +4,15 @@
 
 ## what it is
 
-fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
+## what it is
+
+fast mode keeps you on opus (now opus 4.8 by default). it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
 
 this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+### opus 4.8 fast mode pricing (v2.1.154+)
 
+opus 4.8 fast mode costs 2x the standard rate for 2.5x output speed. this is a meaningful improvement over previous versions. for some workflows (tight deadlines, high throughput exploration), the cost/speed tradeoff is worth it.
 
 ### interaction with effort levels (v2.1.140+)
 
@@ -16,11 +20,17 @@ fast mode (lower thinking budget) now coexists with effort levels (`--effort low
 
 ## why i don't use it
 
-never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
+## when fast mode makes sense
 
-the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
+fast mode is useful for:
+- **tight deadlines**: when 2.5x speed justifies 2x cost (hackathons, demos, time-critical pushes)
+- **high-throughput exploration**: parallel reads across large codebases where speed lets you ask more questions in less time
+- **low-token tasks**: small edits or refactors where the base cost is low enough that doubling it doesn't hurt
 
-the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
+fast mode is NOT useful for:
+- **complex reasoning**: where deep thinking catches edge cases. fast mode trades depth for speed.
+- **multi-file refactors**: where subtle bugs hide in the details. the mistakes cost more than the time saved.
+- **marathon sessions**: context is already degraded in long sessions; compounding that with shallow reasoning is a bad bet.
 
 ## cost note
 

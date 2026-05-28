@@ -124,6 +124,22 @@ then anyone can install:
 
 two steps: add the marketplace (once), then install individual plugins from it.
 
+
+
+## defaultEnabled control (v2.1.154+)
+
+plugins can now declare `defaultEnabled: false` in `plugin.json`. this lets users opt-in to heavy plugins instead of auto-loading them.
+
+```json
+{
+  "name": "heavy-plugin",
+  "defaultEnabled": false,
+  "description": "opt-in heavy analysis plugin"
+}
+```
+
+users enable with `/plugin enable heavy-plugin`. dependencies are still auto-enabled. use this for plugins that consume significant tokens or hooks that fire frequently.
+
 ## when to extract a plugin
 
 the signal is copy-pasting. if you're copying the same hook between projects, it's time for a plugin.

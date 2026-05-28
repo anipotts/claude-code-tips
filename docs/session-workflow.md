@@ -32,6 +32,22 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
+
+
+## workflows for large tasks (v2.1.154+)
+
+if your task is too big for one session, ask claude to create a workflow:
+
+```
+create a workflow to:
+- refactor auth module to support oauth2
+- add test coverage for new endpoints
+- update documentation
+- run integration tests
+```
+
+claude creates a workflow that spawns agents for each piece and orchestrates them in background. run `/workflows` to see status. this replaces the old pattern of spawning multiple subagents manually.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:
