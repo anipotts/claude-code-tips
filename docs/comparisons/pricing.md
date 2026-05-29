@@ -22,6 +22,10 @@
 
 > note: antigravity pricing marked as TBD. verify current status at antigravity.google/pricing before recommending to users.
 
+
+
+> **note:** pricing verified v2.1.154+. opus 4.8 default and fast mode repricing change the value proposition significantly. claude code's fast mode is now 2x cost for 2.5x speed on opus 4.8.
+
 ## what each tier actually includes
 
 ### free tiers

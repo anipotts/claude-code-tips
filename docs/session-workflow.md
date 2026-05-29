@@ -32,6 +32,19 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 ## the cascade method
 
+
+
+## workflows: orchestration at scale (v2.1.154+)
+
+for complex multi-stage work, use `/workflows` instead of manually coordinating subagents. ask claude to create a workflow (e.g., "create a workflow that explores the codebase, plans the refactor, implements it, writes tests, and reviews the result") and it orchestrates tens to hundreds of agents automatically.
+
+workflows handle:
+- agent spawning and task decomposition
+- parallel execution of independent work
+- result aggregation and error handling
+
+this is the evolution beyond `/agent` subagents for large-scale work.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

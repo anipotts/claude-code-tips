@@ -97,6 +97,19 @@ i've spawned thousands of subagents across hundreds of sessions. the average age
 
 on the Max plan ($200/mo flat), per-agent cost is absorbed by the subscription. agent teams become a throughput question, not a billing question.
 
+
+
+## dynamic workflows (v2.1.154+)
+
+v2.1.154 introduced dynamic workflows, which orchestrate work across tens to hundreds of agents automatically. instead of manually spawning subagents, you ask claude to create a workflow and it handles the parallelization.
+
+use `/workflows` to view active workflow runs. workflows handle:
+- automatic agent spawning and coordination
+- task decomposition into parallel work
+- result aggregation and error handling
+
+this scales the subagent pattern beyond what you'd manually coordinate.
+
 ## the `subagent_type` parameter
 
 specialized agent types get tailored system prompts and tool access:

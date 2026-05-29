@@ -80,6 +80,14 @@ this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on
 
 ## model pricing (may 2026)
 
+## model pricing
+
+> **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** last verified v2.1.156 (opus 4.8 now default). pricing has changed significantly with opus 4.8 availability.
+
+opus 4.8 is now the default model as of v2.1.154. it has different input/output token costs than opus 4.6. fast mode on opus 4.8 costs 2x standard rate for 2.5x output speed.
+
+check the official anthropic pricing page for current per-token costs by model. do not rely on cached pricing tables -- these change frequently.
+
 ## model pricing (may 2026)
 
 > **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** last verified may 13 2026 (claude code v2.1.140). anthropic updates pricing regularly and this table goes stale fast.

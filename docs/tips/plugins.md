@@ -46,6 +46,14 @@ the manifest ties it together:
 
 `${CLAUDE_PLUGIN_ROOT}` resolves to wherever the plugin is installed. use it for all internal paths.
 
+
+
+## plugins and workflows (v2.1.154+)
+
+v2.1.154 added `defaultEnabled: false` plugin option. plugins can now declare themselves as opt-in in `plugin.json` or marketplace entries. enable with `/plugin` or `claude plugin enable`. dependencies of enabled plugins are still enabled automatically.
+
+the `/plugin` Discover tab now pins plugins with relevance signals matching your current directory ("suggested for this directory" annotation).
+
 ## minimum viable plugin
 
 you need exactly two things: one hook and one manifest.

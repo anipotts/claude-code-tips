@@ -21,6 +21,19 @@ i need to refactor the auth module to support OAuth2 + SAML.
 current setup is in src/auth/. don't break existing JWT flows.
 ```
 
+
+
+## workflows: the next step beyond ultrathink
+
+v2.1.154 introduces dynamic workflows: ask claude to create a workflow and it orchestrates work across tens to hundreds of agents in the background. workflows are the evolution beyond individual extended thinking sessions.
+
+use workflows for:
+- tasks that benefit from parallel agent execution
+- large codebases that need multiple agents exploring different modules
+- multi-stage work (explore → plan → implement → test → review)
+
+start with `/workflows` to see your active runs. ultrathink remains useful for single complex queries; workflows handle orchestration across many queries.
+
 ## when it helps
 
 - architecture decisions with multiple tradeoffs
