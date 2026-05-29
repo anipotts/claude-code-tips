@@ -2,7 +2,7 @@
 
 # claude code vs gemini
 
-> last verified: 2026-04-09 | sources: [gemini repo](https://github.com/google-gemini/gemini-cli), [gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [google AI subscriptions](https://gemini.google/subscriptions/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing)
+> last verified: 2026-04-09 | updated: 2026-05-29 | sources: [gemini repo](https://github.com/google-gemini/gemini-cli), [gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [google AI subscriptions](https://gemini.google/subscriptions/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing)
 
 ---
 
@@ -111,5 +111,7 @@ in practice, claude code's compaction system means you can work in sessions long
 
 **use both:**
 gemini's free tier makes it a zero-cost complement to claude code. use claude code as your primary tool for complex work and extensibility, and gemini for quick lookups, research tasks, or when you've hit claude code rate limits.
+
+<!-- updated 2026-05-29: gemini v0.45.0-preview.1 patch released -->
 
 > see also: [pricing comparison across all tools](pricing.md)

@@ -2,7 +2,7 @@
 
 # claude code vs openai codex CLI
 
-> last verified: 2026-04-09 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-05-29 | sources: [openai codex CLI](https://github.com/openai/codex), [codex pricing](https://developers.openai.com/codex/pricing/), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -109,5 +109,7 @@ claude code is the better choice for developers who want deep extensibility, rea
 codex is worth considering if you want cloud-sandboxed execution, async batch workflows via the web agent, or you're already deep in the openai ecosystem. the CLI experience is solid and the multi-surface availability (VS Code, Cursor, Windsurf, desktop app) is broader than claude code's.
 
 if you're choosing between the two, the question is: do you want a tool you can deeply customize and extend (claude code), or a tool with more deployment surfaces and a cloud sandbox (codex)? for power users who invest in their tools, claude code's extensibility is hard to match.
+
+<!-- updated 2026-05-29: codex 0.135.0 released with vim mode text-object editing, improved word/line-end behavior, richer diagnostics via `codex doctor` -->
 
 > see also: [pricing comparison across all tools](pricing.md)
