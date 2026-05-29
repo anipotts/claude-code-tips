@@ -10,7 +10,7 @@
 
 | feature | claude code | google antigravity |
 |---------|------------|-------------------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | **verify current status at [antigravity.google/pricing](https://antigravity.google/pricing)** -- was free during public preview, post-preview pricing TBD |
+| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | **verify current status at [antigravity.google/pricing](https://antigravity.google/pricing)** — was free during public preview (april 2026), post-preview pricing may have changed |
 
 ### background
 
