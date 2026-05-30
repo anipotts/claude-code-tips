@@ -87,6 +87,13 @@ use this to warn before stopping a session with active background work, or to lo
 
 MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
 
+
+
+### plugin-defined hooks (v2.1.157+)
+
+plugins loaded from `.claude/skills/` can now include hooks in their manifests just like manually registered hooks. hooks from plugins fire in the same lifecycle events (PreToolUse, PostToolUse, etc.) and follow the same timeout/cost rules as command/http/prompt hooks.
+
+
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.

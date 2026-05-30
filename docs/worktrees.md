@@ -59,6 +59,20 @@ three use cases:
 
 the claude code desktop app has a built-in UI for managing worktrees. you can see all active worktrees, their branches, and their status in one view. it's significantly better than managing worktrees from the CLI.
 
+
+
+### worktree cleanup (v2.1.157+)
+
+worktrees managed by Claude are now left unlocked when the agent finishes. this means you can clean them up with standard git commands:
+
+```bash
+git worktree remove <name>
+git worktree prune  # clean up stale entries
+```
+
+no special cleanup steps needed.
+
+
 ### when to use desktop vs CLI
 
 | scenario | desktop | CLI |

@@ -14,6 +14,13 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
 
+
+
+### auto mode availability (v2.1.158+)
+
+auto mode (if enabled via `CLAUDE_CODE_ENABLE_AUTO_MODE=1`) is now available on Bedrock, Vertex, and Foundry for Opus 4.7 and 4.8, in addition to the main Claude Code service. auto mode changes how models are selected and tool calls are approved, so verify your settings on enterprise platforms.
+
+
 ## why i don't use it
 
 never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
