@@ -12,7 +12,9 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 ### interaction with effort levels (v2.1.140+)
 
-fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
+### interaction with effort levels (v2.1.140+)
+
+fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort high --fast` may behave unexpectedly -- high effort expects time to think, fast mode tries to skip it. avoid that combination. `--effort max --fast` is actively counterproductive and should not be used.
 
 ## why i don't use it
 

@@ -131,3 +131,10 @@ cat .claude/settings.local.json | jq '.hooks'
 if you have hooks in the wrong level, move them. one `mv` command, and your settings are clean.
 
 [full hooks guide &rarr;](../hooks.md)
+
+---
+
+
+### baseRef default changed in v2.1.133
+
+worktree.baseRef default was changed in v2.1.133 to branch from `origin/<default-branch>` instead of local `HEAD`. if you have unpushed local commits and rely on new worktrees inheriting them, set `baseRef: "head"` in `.claude/settings.json` to restore old behavior.

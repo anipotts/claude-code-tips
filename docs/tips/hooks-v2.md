@@ -314,3 +314,18 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 3. always set a specific matcher. `"Bash"` is better than matching everything.
 
 [full hooks guide &rarr;](../hooks.md) | [hook scripts &rarr;](../../hooks/)
+
+---
+
+
+### session_crons context (v2.1.145+)
+
+Stop and SubagentStop hooks also receive `session_crons` field listing any cron tasks scheduled in the session. check this field to warn or log when exiting with active scheduled work:
+
+```bash
+SESSION_CRONS=$(echo "$INPUT" | jq -r '.session_crons // []')
+if [[ $(echo "$SESSION_CRONS" | jq 'length') -gt 0 ]]; then
+  echo "warning: $(echo $SESSION_CRONS | jq 'length') cron tasks scheduled, may not complete after exit"
+  exit 1
+fi
+```
