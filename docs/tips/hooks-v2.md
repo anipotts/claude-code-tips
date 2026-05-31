@@ -31,7 +31,23 @@ PostToolUse hooks can replace tool output before claude sees it. return `{"hookS
 
 ### Stop and SubagentStop context (v2.1.145+)
 
-Stop and SubagentStop hooks now receive `background_tasks` and `session_crons` fields. use this to warn before exiting with active background work or log task completion state.
+Stop and SubagentStop hooks now receive additional context about background tasks and session crons:
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+BACKGROUND_TASKS=$(echo "$INPUT" | jq -r '.background_tasks // []')
+SESSION_CRONS=$(echo "$INPUT" | jq -r '.session_crons // []')
+
+# react to active background work when session ends
+if [[ $(echo "$BACKGROUND_TASKS" | jq 'length') -gt 0 ]]; then
+  echo "warning: $(echo "$BACKGROUND_TASKS" | jq 'length') background tasks still running"
+  exit 1
+fi
+exit 0
+```
+
+use this to warn before stopping a session with active background work, or to log task completion state. this was available in v2.1.145 and remains stable through current versions.
 
 ### effort level in hooks (v2.1.133+)
 

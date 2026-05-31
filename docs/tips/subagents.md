@@ -64,6 +64,8 @@ this pattern works bc exploration and implementation require different capabilit
 
 ### worktree cloning with skipLfs (v2.1.153+)
 
+### worktree cloning with skipLfs (v2.1.153+, stable)
+
 when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:
 
 ```json

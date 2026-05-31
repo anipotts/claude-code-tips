@@ -16,11 +16,11 @@ fast mode (lower thinking budget) now coexists with effort levels (`--effort low
 
 ## why i don't use it
 
-never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
+never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage.
+
+fast mode with `--effort max` is a bad combination -- max effort expects time to think, while fast mode tries to minimize thinking budget. avoid that pairing. if you're using effort levels (v2.1.140+), understand that fast mode is a narrow output-speed toggle orthogonal to model selection. effort controls both.
 
 the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
-
-the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
 
 ## cost note
 
