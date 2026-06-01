@@ -6,6 +6,25 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ## the five types
 
+
+
+### stop hook context fields (v2.1.145+)
+
+Stop and SubagentStop hooks now receive `background_tasks` and `session_crons` in their JSON input. use this to check for active background work before exiting:
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+BACKGROUND_TASKS=$(echo "$INPUT" | jq -r '.background_tasks // []')
+if [[ $(echo "$BACKGROUND_TASKS" | jq 'length') -gt 0 ]]; then
+  echo "warning: background tasks still running" >&2
+  exit 1
+fi
+exit 0
+```
+
+this lets you enforce "no exit with active work" policies.
+
 ### the five types
 
 | type | what it is | timeout | cost | best for |

@@ -79,6 +79,12 @@ when spawning agents with `isolation: "worktree"`, large repos with git lfs file
 
 this speeds up worktree creation for repos with large binary assets. trades full lfs file access for faster setup.
 
+
+
+### agent performance in v2.1.159+
+
+agent startup time has improved with lazy worktree initialization. worktrees now clone only the default branch by default, not all branches. if your agent needs access to a specific non-default branch, pass `gitConfig.trackBranch` in the agent config.
+
 ## cost reality
 
 each subagent loads its own context window. that means paying the context-loading tax per agent.

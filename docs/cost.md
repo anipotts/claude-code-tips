@@ -76,6 +76,12 @@ if you're using anthropic bedrock, set `ANTHROPIC_BEDROCK_SERVICE_TIER` to contr
 
 this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on subscription plans, tier choice doesn't affect your monthly bill but does affect throughput and latency.
 
+
+
+### vertex ai unified pricing (v2.1.155+)
+
+vertex ai moved to unified claude model pricing (no more separate bedrock tiers). set `ANTHROPIC_VERTEX_REGION` for region-specific rate limiting but service tier selection no longer applies on vertex ai.
+
 ## model pricing
 
 > **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** pricing changes frequently. last verified may 2026 (claude code v2.1.122+).
