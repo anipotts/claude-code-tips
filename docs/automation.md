@@ -30,6 +30,20 @@ ai-powered maintenance is also viable on the cheap: weekly competitive-intel, do
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
 
+
+
+### auto-loaded plugins for automation (v2.1.157+)
+
+instead of manual daemon scripts, consider auto-loaded plugins in `.claude/skills/` for project-wide automation. they're simpler than cron + daemon patterns and share context setup across the team:
+
+```bash
+mkdir -p .claude/skills/my-automation
+cd .claude/skills/my-automation
+claude plugin init
+```
+
+plugins auto-load on session start, can register hooks and commands, and integrate with your existing workflows without extra daemon management.
+
 ### safe daemon (recommended)
 
 ```bash

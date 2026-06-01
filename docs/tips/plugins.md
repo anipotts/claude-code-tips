@@ -150,3 +150,20 @@ this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to 
 3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)
+
+---
+
+
+## auto-loaded plugins (v2.1.157+)
+
+starting v2.1.157, plugins in `.claude/skills/` directories are automatically loaded on session start. no marketplace required, no manual installation.
+
+to scaffold a new plugin:
+
+```bash
+claude plugin init my-plugin
+```
+
+this creates a plugin structure in `.claude/skills/my-plugin/` with manifest, hooks, and commands templates. commit it to your repo and it loads automatically for anyone who clones.
+
+for team workflows, auto-loaded plugins are simpler than marketplace distribution -- everyone gets the same hooks and commands without extra setup steps.

@@ -65,7 +65,9 @@ use case: filter sensitive output (API keys, internal IPs), normalize error mess
 
 ### Stop and SubagentStop hook fields (v2.1.145+)
 
-Stop and SubagentStop hooks now receive additional context about background tasks and session crons:
+### Stop and SubagentStop hook context (v2.1.145+)
+
+Stop and SubagentStop hooks now receive additional fields about active background work:
 
 ```bash
 #!/usr/bin/env bash
@@ -73,15 +75,19 @@ INPUT=$(cat)
 BACKGROUND_TASKS=$(echo "$INPUT" | jq -r '.background_tasks // []')
 SESSION_CRONS=$(echo "$INPUT" | jq -r '.session_crons // []')
 
-# react to active background work when session ends
+# warn before stopping a session with active background work
 if [[ $(echo "$BACKGROUND_TASKS" | jq 'length') -gt 0 ]]; then
-  echo "warning: background tasks still running, check status before exiting"
-  exit 1
+  echo "warning: $(echo "$BACKGROUND_TASKS" | jq 'length') background tasks still running" >&2
+  exit 1  # block exit, or exit 0 to allow with warning
 fi
 exit 0
 ```
 
-use this to warn before stopping a session with active background work, or to log task completion state.
+available fields:
+- `background_tasks` (array) -- active backgrounded shell processes
+- `session_crons` (array) -- scheduled session cron jobs
+
+use this to warn or block session exit when there's unfinished work.
 
 ### mcp_tool event hooks (v2.1.126+)
 

@@ -12,7 +12,11 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 ### interaction with effort levels (v2.1.140+)
 
-fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
+### interaction with effort levels (v2.1.140+)
+
+fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` creates a conflict (max expects time to think, fast skips it) and may behave unexpectedly -- avoid that combination.
+
+to check your active effort level, run `--effort` with no argument to see the current setting.
 
 ## why i don't use it
 
@@ -25,6 +29,12 @@ the "toggle pattern" sounds nice in theory (start normal, switch to fast for exe
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
+
+
+
+## effort levels vs fast mode (v2.1.140+)
+
+don't confuse fast mode with effort levels. effort (`--effort low|medium|high|xhigh|max`) controls model selection and reasoning allocation. fast mode just speeds output on your current model. on the max plan, both are free toggles -- neither changes your monthly bill. on api billing, effort level changes might affect token usage; fast mode reduces thinking time, which saves tokens.
 
 ## the one exception
 
