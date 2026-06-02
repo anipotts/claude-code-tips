@@ -4,11 +4,9 @@
 
 ## what it is
 
-fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
+fast mode reduces the compute budget allocated to reasoning, producing faster output without switching models. the model stays the same (opus, sonnet, or whichever you've selected), but fast mode reduces extended thinking time and tool call latency. claude still has full access to every tool and every file. it just spends less compute reasoning before acting.
 
-this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
-
-
+this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's your selected model with a tighter thinking budget.
 
 ### interaction with effort levels (v2.1.140+)
 

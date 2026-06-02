@@ -78,6 +78,12 @@ this setting changed default behavior in v2.1.133. if you relied on old behavior
 
 
 
+
+
+### provider-managed auth (v2.1.126+)
+
+if you're using claude code through an IDE plugin or platform integration, the host may set `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST`. when present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication. this prevents conflicts between user settings and platform-managed auth.
+
 ### new in v2.1.121: status line input fields
 
 two new display settings control what appears in the input status line:

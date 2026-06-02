@@ -50,6 +50,17 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+
+### additional protections (v2.1.160+)
+
+clause code now also prompts before writing to:
+- shell startup files (`.zshenv`, `.zlogin`, `.bash_login`)
+- git config (`~/.config/git/`)
+- build-tool config (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`)
+
+these write-prompts provide a second layer of protection on top of safety-guard blocking.
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.
