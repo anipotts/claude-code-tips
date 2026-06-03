@@ -16,6 +16,12 @@ prior to monitor (v<2.1.98), watching background processes required `/loop` poll
 
 if you're on v2.1.98+, use monitor instead of `/loop` for all long-running process watching (test runners, dev servers, deploy status). it reduces cost by ~90% on idle processes.
 
+
+
+### parallel tool calls (v2.1.161)
+
+v2.1.161 changed how parallel tool calls handle failures. a failed Bash command no longer cancels other calls in the same batch — each tool returns its own result independently. this means failed commands have less impact on subsequent parallel operations.
+
 ### note on monitoring
 
 the `/monitor` tool (v2.1.98+) changes cost dynamics for long-running background processes. stream filters and poll filters emit events only when conditions are met, not on a schedule. idle monitoring costs zero tokens. this reduces the cost of watching test runners, build processes, and deploy status checks compared to `/loop` polling.

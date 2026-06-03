@@ -8,6 +8,28 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 
 
+
+
+### effort level context in hooks (v2.1.133+)
+
+all hook types (command, http, prompt, agent, mcp_tool) now receive the active effort setting via two channels:
+
+- **json input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
+- **bash environment**: `$CLAUDE_EFFORT` variable
+
+use this to adjust hook behavior based on effort mode. example: safety-guard might be stricter at `low` effort but more permissive at `max`.
+
+```bash
+#!/usr/bin/env bash
+input=$(cat)
+effort=$(echo "$input" | jq -r '.effort.level // "medium"')
+
+if [[ "$effort" == "max" ]]; then
+  # relax some constraints at max effort
+  exit 0
+fi
+```
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to:
@@ -97,6 +119,28 @@ use this to warn before stopping a session with active background work, or to lo
 ### mcp_tool event hooks (v2.1.126+)
 
 MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
+
+
+
+### background tasks and session crons context (v2.1.145+)
+
+Stop and SubagentStop hooks now receive additional context about background tasks and session crons:
+
+```bash
+#!/usr/bin/env bash
+input=$(cat)
+background_tasks=$(echo "$input" | jq -r '.background_tasks // []')
+session_crons=$(echo "$input" | jq -r '.session_crons // []')
+
+# react to active background work when session ends
+if [[ $(echo "$background_tasks" | jq 'length') -gt 0 ]]; then
+  echo "warning: background tasks still running, check status before exiting"
+  exit 1
+fi
+exit 0
+```
+
+use this to warn before stopping a session with active background work, or to log task completion state.
 
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 

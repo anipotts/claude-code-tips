@@ -22,6 +22,12 @@ the tradeoff isn't worth it for normal development. you get slightly faster outp
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
 
+
+
+### interaction with effort levels (v2.1.140+)
+
+fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
+
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.

@@ -62,6 +62,25 @@ this pattern works bc exploration and implementation require different capabilit
 
 
 
+
+
+### worktree cloning with skipLfs (v2.1.153+)
+
+when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:
+
+```json
+{
+  "prompt": "refactor src/api/handlers.ts",
+  "description": "refactor api handlers",
+  "isolation": "worktree",
+  "gitConfig": {
+    "skipLfs": true
+  }
+}
+```
+
+this speeds up worktree creation for repos with large binary assets. trades full lfs file access for faster setup.
+
 ### worktree cloning with skipLfs (v2.1.153+)
 
 when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:
