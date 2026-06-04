@@ -56,6 +56,17 @@ when a session ends (ctrl+c, `/exit`, or timeout), two things fire:
 
 nothing to do manually. close the terminal. the data is there when you need it.
 
+
+
+### what changed in v2.1.162+
+
+SessionEnd still fires version stamping, but now you may also see:
+- sound notifications (if sound-notify hook is active)
+- background task warnings (if you have background processes still running)
+- PostToolBatch aggregated notifications (if you were watching multiple tools)
+
+these are all non-blocking. the session ends normally. check your hook config if you see unexpected notifications.
+
 ## further reading
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions

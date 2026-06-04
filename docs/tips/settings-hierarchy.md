@@ -34,17 +34,21 @@ default is `fresh` (branches from `origin/<default>`). set to `head` if you want
 
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
-starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:
+### migration note: ~/.claude.json → settings.json (v2.1.119+, historical)
 
-- `autoScrollEnabled`
-- `editorMode`
-- `showTurnDuration`
-- `teammateMode`
-- `terminalProgressBarEnabled`
+this migration completed in v2.1.119 (early 2026). if you're on v2.1.162+, this is already done. legacy `~/.claude.json` files are no longer read. if you have old display settings in `~/.claude.json`, migrate them to `~/.claude/settings.json` under a `display` key:
 
-if you have `~/.claude.json`, these settings still work but are deprecated. migrate them to `~/.claude/settings.json` under a new `display` key. the migration is one-time: check your old config, copy relevant keys, delete the deprecated file.
+```json
+{
+  "display": {
+    "autoScrollEnabled": true,
+    "editorMode": "split",
+    "showTurnDuration": true
+  }
+}
+```
 
-
+then delete `~/.claude.json`.
 
 ### new in v2.1.126: provider-managed auth
 

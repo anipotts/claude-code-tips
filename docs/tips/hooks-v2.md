@@ -6,7 +6,34 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ## the five types
 
+hooks fire on lifecycle events. handlers (command, http, prompt, agent, mcp_tool) determine how claude responds.
 
+### hook events (lifecycle triggers)
+
+| event | what triggers it | when to use |
+|-------|-----------------|-------------|
+| PreToolUse | before any tool call | safety checks, approval gates |
+| PostToolUse | after tool completes | logging, output filtering, notifications |
+| PreCompact | before context compaction | state preservation, handoff generation |
+| PostToolBatch | after a batch of tools completes | aggregated reactions, metrics |
+| UserPromptExpansion | user prompt is being processed | prompt enrichment, templating |
+| MessageDisplay | message about to render to user | filtering, formatting, notifications |
+| InstructionsLoaded | session initialization | setup, validation, feature flags |
+| SessionStart | session begins | stale-branch checks, config validation |
+| SessionEnd | session ends | version stamping, cleanup |
+| Stop / SubagentStop | session/subagent termination | background task warnings, final logging |
+
+### handler types (how hooks execute)
+
+| type | timeout | cost | best for |
+|------|---------|------|----------|
+| command | 600s | free | safety checks, file ops, logging |
+| http | 30s | free | webhooks, external services |
+| prompt | 30s | tokens | context-aware decisions |
+| agent | 60s | expensive | complex decisions needing file reads |
+| mcp_tool | 60s | free | invoking existing MCP capabilities |
+
+match the handler type to the event. PreToolUse for safety typically uses command (fast, zero cost). PostToolBatch for complex aggregation might use prompt or agent.
 
 ### safety prompts for sensitive file writes (v2.1.160+)
 

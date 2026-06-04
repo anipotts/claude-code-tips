@@ -20,7 +20,9 @@
 
 
 
-> note: antigravity pricing marked as TBD. verify current status at antigravity.google/pricing before recommending to users.
+> note: antigravity pricing marked as TBD
+
+> **last verified: 2026-04-09 for most tools. claude code pricing verified through v2.1.162 (june 2026). verify current status at [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), and competitor sites before recommending.**
 
 ## what each tier actually includes
 

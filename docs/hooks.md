@@ -55,6 +55,17 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 
 
+
+
+### new hooks in v2.1.162+
+
+| hook | event | what it does |
+|------|-------|-------------|
+| sound-notify | MessageDisplay / PostToolBatch | plays sound on message arrival or tool batch completion |
+| prompt-expander | UserPromptExpansion | enriches or templates user prompts before processing |
+
+PostToolBatch fires after a batch of tool calls completes (multiple tools in one iteration), enabling aggregated reactions like sound alerts, metrics aggregation, or batch logging. fires at a different granularity than PostToolUse (per-tool).
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added confirmation prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). these prompts apply in `acceptEdits` mode and provide a second safety layer alongside safety-guard.sh hooks.

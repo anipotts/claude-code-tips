@@ -47,6 +47,17 @@ from real session data:
 
 longer sessions cache better bc the prefix stabilizes and cache_write amortizes over more turns. short sessions spend proportionally more on initial cache creation.
 
+
+
+### cache performance with hook proliferation (v2.1.162+)
+
+with more hooks firing on more events (PostToolBatch, UserPromptExpansion, MessageDisplay), the system prompt expands to include more hook definitions. this can reduce cache efficiency if you have many hooks registered.
+
+mitigations:
+- disable unused hooks in `.claude/settings.json`
+- consolidate multiple small hooks into one larger command hook
+- use `mcp_tool` handlers instead of spawning subprocesses (no system prompt expansion)
+
 ## try it
 
 1. check your current CLAUDE.md. is it under 30 lines?
