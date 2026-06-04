@@ -68,6 +68,10 @@ servers that both observe and modify. playwright is the canonical example: claud
 
 **environment variables.** use the `env` field in `.mcp.json` for secrets. never hardcode credentials in the command args.
 
+
+
+**MCP timeout misconfiguration.** prior to v2.1.162, setting per-server `timeout` values below 1000ms would cause a 1-second watchdog to abort every tool call. v2.1.162 fixes this: values below 1000ms are now ignored (falling back to `MCP_TOOL_TIMEOUT` or default). if you have `.mcp.json` entries with `timeout: 500` or similar, they'll be ignored -- use 1000ms or higher.
+
 ## try it
 
 only if you actually need to. if the built-in tools (Read, Write, Edit, Bash, Grep, Glob) do the job, you don't need MCP.

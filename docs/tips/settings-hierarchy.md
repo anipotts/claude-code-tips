@@ -111,6 +111,37 @@ add `preferredNotifChannel` to your `~/.claude/settings.json` display settings t
 
 valid values: `auto` (desktop in iTerm2/Ghostty/Kitty, fallback to stdout), `desktop`, `stdout`, `none`. default is `auto`, which detects your terminal and uses desktop notifications if available.
 
+
+
+
+
+### WebFetch permission rules (v2.1.162+)
+
+v2.1.162 fixes a bug where WebFetch permission rules were not applied to built-in preapproved domains. explicit allow/deny/ask rules now take precedence over the auto-allow list. if you have domain-specific rules in your settings:
+
+```json
+{
+  "tools": {
+    "WebFetch": {
+      "domains": {
+        "api.example.com": "deny"
+      }
+    }
+  }
+}
+```
+
+they now work correctly even for normally-whitelisted domains.
+
+### read-only config startup (v2.1.162+)
+
+if your config directory (`~/.claude/`) is read-only or unwritable, claude code v2.1.162+ now starts with in-memory config and surfaces errors instead of hanging silently. if you see startup errors mentioning config permissions, either:
+
+- make `~/.claude/` writable: `chmod u+w ~/.claude/`
+- or move critical settings to environment variables (api keys, auth tokens)
+
+this was a silent hang in earlier versions; v2.1.162 fixes it.
+
 ## the rule
 
 **hooks that protect → global.** safety-guard, no-squash. these are guardrails you want on every project.

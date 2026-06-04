@@ -124,6 +124,12 @@ then anyone can install:
 
 two steps: add the marketplace (once), then install individual plugins from it.
 
+
+
+### slash command autocomplete behavior (v2.1.162+)
+
+clicking a slash command (like `/plan`, `/fork`, `/model`) in the autocomplete menu now fills it into your prompt instead of running it immediately. press Enter to execute. this prevents accidental command execution and lets you modify the command first.
+
 ## when to extract a plugin
 
 the signal is copy-pasting. if you're copying the same hook between projects, it's time for a plugin.

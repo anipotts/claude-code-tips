@@ -44,6 +44,23 @@ PostToolUse hooks can replace tool output before claude sees it. return `{"hookS
 
 Stop and SubagentStop hooks now receive `background_tasks` and `session_crons` fields. use this to warn before exiting with active background work or log task completion state.
 
+
+
+### agents JSON output (v2.1.162+)
+
+`claude agents --json` now includes a `waitingFor` field showing what a blocked session is waiting on (e.g. permission prompt, user input). use this in monitoring hooks to understand why agent teams are stalled:
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+WAITING_FOR=$(echo "$INPUT" | jq -r '.waitingFor // empty')
+
+if [[ -n "$WAITING_FOR" ]]; then
+  echo "agent blocked on: $WAITING_FOR" >&2
+fi
+exit 0
+```
+
 ### effort level in hooks (v2.1.133+)
 
 hooks now receive the active effort setting via two channels:

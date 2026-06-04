@@ -18,6 +18,18 @@ by the time you see the prompt, hooks are loaded, context is cached, and claude 
 
 if you see a notice about npm global install not auto-updating, run `/doctor` to see the fix. this was added in v2.1.153 to help diagnose update issues.
 
+
+
+### `/fork` standalone command (v2.1.162+)
+
+`/fork` is now a first-class built-in command (previously an alias of `/branch`). use it to create a subagent on a new branch in parallel with your current session:
+
+```
+/fork refactor the database layer
+```
+
+this is equivalent to creating a subagent with `isolation: "worktree"` but invokes it directly from your session.
+
 ## context loading
 
 three things work together on startup:

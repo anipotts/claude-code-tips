@@ -50,6 +50,12 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+
+### Windows path handling (v2.1.162+)
+
+v2.1.162 fixes a bug where permission rules with Windows backslashes (`~\`, `\\server\share`) or case-variant paths never matched. if you have Windows-style paths in your deny rules, they now work correctly. Read deny rules also now properly hide files from Glob/Grep results.
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.
