@@ -29,6 +29,10 @@ plan mode forces Claude to think before acting, which means fewer wrong turns, f
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.
 
+
+
+note: plan mode works best when your project has a stable CLAUDE.md. if you're in plan mode and update project conventions mid-session, cache invalidation may affect planning quality. keep convention changes to separate sessions or use `/plan` only after committing changes to CLAUDE.md.
+
 ## try it
 
 1. pick a task that touches 3+ files. type `/plan` before your prompt

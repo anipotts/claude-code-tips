@@ -74,6 +74,12 @@ use case: filter sensitive output (API keys, internal IPs), normalize error mess
 
 
 
+
+
+### hookSpecificOutput.additionalContext (v2.1.163+)
+
+Stop and SubagentStop hooks can now return `{"hookSpecificOutput": {"additionalContext": "your message"}}` to provide Claude feedback without being labeled a hook error. the session continues with the feedback appended to context instead of stopping on error.
+
 ### Stop and SubagentStop hook fields (v2.1.145+)
 
 Stop and SubagentStop hooks now receive additional context about background tasks and session crons:

@@ -30,6 +30,10 @@ three things work together on startup:
 
 the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enforce boundaries.
 
+
+
+note (v2.1.163+): if you have org-managed settings (enterprise/workspace auth), permission rules are now correctly applied for the entire session from startup. if your hooks were timing out before on first-turn auth, this regression fix should resolve it.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

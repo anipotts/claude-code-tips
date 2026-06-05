@@ -150,3 +150,17 @@ this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to 
 3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)
+
+---
+
+### listing plugins with /plugin list (v2.1.163+)
+
+v2.1.163 added the `/plugin list` command to list installed plugins. use `--enabled` or `--disabled` flags to filter:
+
+```
+/plugin list
+/plugin list --enabled
+/plugin list --disabled
+```
+
+this helps you audit which plugins are active and manage plugin dependencies.
