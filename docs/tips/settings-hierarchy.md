@@ -18,6 +18,20 @@ they merge in that order. local overrides project overrides global.
 
 
 
+
+
+### fallback model configuration (v2.1.166+)
+
+add a `fallbackModel` array to your settings to specify up to three models to try in order when the primary model is overloaded or unavailable:
+
+```json
+{
+  "fallbackModel": ["claude-sonnet-4-5", "claude-haiku-4-5"]
+}
+```
+
+this applies to both interactive sessions (`claude`) and `--fallback-model` flag. auth, rate-limit, request-size, and transport errors surface immediately without fallback.
+
 ### worktree configuration (v2.1.133+)
 
 add a `worktree` section to control how new worktrees are created:

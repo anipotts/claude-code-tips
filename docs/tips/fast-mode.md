@@ -14,6 +14,12 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 **note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. avoid `--effort max --fast` (contradictory): max effort expects time to think, fast mode tries to skip it.
 
+
+
+### fallbackModel interaction (v2.1.166+)
+
+fast mode now coexists with the `fallbackModel` setting introduced in v2.1.166. if your primary model becomes overloaded, claude code retries on a fallback model (if configured). fast mode does not disable this fallback behavior -- you get the speed benefit plus the reliability of fallback retry.
+
 ### interaction with effort levels (v2.1.140+)
 
 fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
@@ -25,6 +31,12 @@ never use fast mode. i mean it. the only scenario where fast mode makes sense is
 the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
+
+
+
+### fallback retry behavior (v2.1.166+)
+
+v2.1.166 added automatic fallback model retry for unexpected API errors (not rate-limit, auth, or request-size errors). fast mode does not interact with this -- if your primary model fails with an unexpected error, it will retry once on the fallback model if configured. this is transparent to fast mode.
 
 ## cost note
 

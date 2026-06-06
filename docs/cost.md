@@ -22,6 +22,10 @@ the `/monitor` tool (v2.1.98+) changes cost dynamics for long-running background
 
 monitor is now a stable feature (v2.1.98+) and is the preferred method for long-running background process watching. it replaces the earlier `/loop` polling pattern for most use cases.
 
+
+
+**provider availability note (v2.1.166+)**: monitor is available on anthropic API and claude.ai subscriptions. it is not available on bedrock, vertex AI, or microsoft foundry. if you use one of those providers, use `/loop` polling instead.
+
 ### what i pay
 
 **$200/mo.** Max plan. flat rate. no per-token billing. no surprises.

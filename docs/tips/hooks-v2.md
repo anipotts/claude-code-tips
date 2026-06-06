@@ -94,6 +94,12 @@ exit 0
 
 use this to warn before stopping a session with active background work, or to log task completion state.
 
+
+
+### deny rules glob patterns (v2.1.166+)
+
+v2.1.166 added glob pattern support in deny rule tool-name positions. you can now use `"*"` to deny all tools, or glob patterns like `"Read*"` to match multiple tools. allow rules reject non-MCP globs. unknown tool names in deny rules warn at startup.
+
 ### mcp_tool event hooks (v2.1.126+)
 
 MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
