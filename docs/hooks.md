@@ -62,6 +62,11 @@ v2.1.160 added confirmation prompts before writing to shell startup files (`.zsh
 ### hook performance notes (v2.1.140+)
 PreToolUse hooks on Bash commands need to complete in <50ms to avoid user-facing latency. the hooks listed above are optimized for speed -- they use jq for JSON parsing and regex for pattern matching rather than spawning subprocesses. profile your custom hooks with `time` if you add new ones.
 
+
+
+### cross-session message hardening (v2.1.166+)
+Messages relayed via `SendMessage` from other Claude sessions no longer carry user authority. receivers refuse relayed permission requests, and auto mode blocks them. if you use SendMessage in hooks or agents to coordinate across sessions, verify permission handling.
+
 ## what hooks actually prevent
 
 three categories of damage:

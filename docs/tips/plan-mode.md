@@ -29,6 +29,10 @@ plan mode forces Claude to think before acting, which means fewer wrong turns, f
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.
 
+
+
+**note (v2.1.166+):** plan mode now respects fallback model settings if your primary model is unavailable. this means a plan-mode session may automatically switch models mid-planning if overloaded. verify your fallbackModel configuration matches your planning expectations.
+
 ## try it
 
 1. pick a task that touches 3+ files. type `/plan` before your prompt

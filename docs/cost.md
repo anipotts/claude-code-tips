@@ -96,6 +96,10 @@ ranked by impact:
 
 ---
 
+
+
+**6. fallback model retries (v2.1.166+).** when the primary model is overloaded or returns an unexpected error, claude code retries once on a fallback model. set `fallbackModel` in settings.json to control which models to try. this can unexpectedly increase costs if fallbacks are more expensive than primary. configure fallbacks to match your budget.
+
 ## cost optimization strategies
 
 ### model switching -- the biggest lever

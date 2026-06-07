@@ -18,6 +18,10 @@ by the time you see the prompt, hooks are loaded, context is cached, and claude 
 
 if you see a notice about npm global install not auto-updating, run `/doctor` to see the fix. this was added in v2.1.153 to help diagnose update issues.
 
+
+
+**note (v2.1.166+):** if you set a `fallbackModel` in settings.json, it will be tried automatically if your primary model is overloaded. configure this upfront if you want to control which fallbacks are available.
+
 ## context loading
 
 three things work together on startup:
