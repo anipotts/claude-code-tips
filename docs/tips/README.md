@@ -5,6 +5,8 @@
 short, standalone claude code tips. each one is a specific technique you can use today.
 
 | tip | what it does |
+
+| tip | what it does |
 |-----|-------------|
 | [prompt caching](./prompt-caching.md) | how to get 90%+ cache hit rates and slash your bill |
 | [safety hooks](./safety-hooks.md) | block force pushes, rm -rf, and DROP TABLE in 5 minutes |
@@ -14,6 +16,7 @@ short, standalone claude code tips. each one is a specific technique you can use
 | [context management](./context-management.md) | compaction strategies, active tool rate, keeping sessions tight |
 | [plan mode](./plan-mode.md) | when planning saves time vs when it wastes it |
 | [fast mode](./fast-mode.md) | same model, faster output, the tradeoff |
+| [effort levels](./effort-levels.md) | control throughput, reasoning depth, and model selection (v2.1.140+) |
 | [plugins](./plugins.md) | build a plugin from scratch, what makes one worth installing |
 | [subagents](./subagents.md) | agent teams, worktree isolation, when parallel pays off |
 | [mcp integration](./mcp-integration.md) | wire up MCP servers, use them inside sessions |

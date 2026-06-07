@@ -211,3 +211,10 @@ v2.1.132 fixed `--resume` failing when emoji splits in tool error truncation and
 ### note on version-specific cost dynamics
 
 monitor (v2.1.98+) changed cost models for background process watching. if you're on v2.1.163+, verify monitor performance and cost metrics haven't shifted. /lore track record may have evolved.
+
+---
+
+
+### version tracking (v2.1.168+)
+
+this doc references claude code v2.1.122+ patterns. current version is v2.1.168. major version releases (v2.1.140+, v2.1.160+) introduced effort levels, safety prompts on sensitive file writes, and improved worktree handling. verify your version with `claude --version` and check release notes for cost-impacting changes.

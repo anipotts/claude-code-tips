@@ -49,4 +49,4 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 
 note: upstream tool versions
 
-**note: tool versions and pricing verified as of may 26 2026 (claude code v2.1.140+). these tools and their pricing change frequently. verify current status before recommending to users.**
+**note: tool versions and pricing verified as of may 26 2026 (claude code v2.1.140+, current v2.1.168). these tools and their pricing change frequently. verify current status before recommending to users.**
