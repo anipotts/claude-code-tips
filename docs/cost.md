@@ -80,6 +80,11 @@ this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on
 
 > **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** pricing changes frequently. last verified may 2026 (claude code v2.1.122+).
 
+
+
+
+**note (v2.1.170)**: claude fable 5 (mythos-class) is now available. this is anthropic's most capable general-use model. pricing for fable 5 should be verified at [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) as it may differ from opus 4.6 tier.
+
 ## what actually costs money
 
 ranked by impact:
