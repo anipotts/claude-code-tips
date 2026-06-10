@@ -84,3 +84,16 @@ this preserves your conversation context and cache prefix while changing the dir
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
+
+---
+
+
+### safe mode for troubleshooting (v2.1.169+)
+
+if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:
+
+```bash
+clause --safe-mode
+```
+
+this disables CLAUDE.md, plugins, skills, hooks, and MCP servers for the session. useful for troubleshooting or running in a clean state before debugging further.

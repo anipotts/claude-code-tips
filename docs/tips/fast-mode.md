@@ -2,15 +2,11 @@
 
 ## what it is
 
-fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
+## what it is
 
-this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
+fast mode keeps you on the primary model (claude fable 5 in v2.1.170+). it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
 
-
-
-
-
-**note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. avoid `--effort max --fast` (contradictory): max effort expects time to think, fast mode tries to skip it.
+this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same fable 5 with a tighter thinking budget.
 
 ### interaction with effort levels (v2.1.140+)
 
@@ -27,6 +23,10 @@ the "toggle pattern" sounds nice in theory (start normal, switch to fast for exe
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
+
+
+
+**fable 5 note (v2.1.170+):** fast mode now applies to claude fable 5 (the primary model). behavior remains the same: tighter thinking budget, faster output, same tool access. avoid `--effort max --fast` as with opus.
 
 ## the one exception
 

@@ -134,3 +134,8 @@ use antigravity (free preview, includes frontier models) as your primary tool. s
 if you're spending this much, you should be tracking per-session costs. use the [lore plugin](../../plugins/lore/) to measure actual usage and optimize model selection.
 
 > individual comparison docs: [codex](codex.md) | [cursor](cursor.md) | [gemini](gemini.md) | [antigravity](antigravity.md)
+
+---
+
+
+**note (v2.1.170):** claude fable 5 (mythos-class) is now the default top-tier model. model lineup and pricing may shift with fable 5 general availability. verify current pricing at [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models).

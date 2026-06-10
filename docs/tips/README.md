@@ -23,3 +23,7 @@ short, standalone claude code tips. each one is a specific technique you can use
 | [safe mode](./safe-mode.md) | troubleshoot by disabling hooks, plugins, skills, and MCP servers |
 
 | [cd command](./cd-command.md) | move to a new working directory mid-session without breaking cache |
+
+---
+
+| [safe mode](./safe-mode.md) | troubleshoot by disabling hooks, plugins, skills, and MCP servers (v2.1.169+) |

@@ -14,6 +14,10 @@ shorter sessions are more efficient. here's the data.
 | 1-2 hr | 43 | 1.6 | 3.3 | 51% | $16.74 |
 | 2 hr+ | 101 | 0.73 | 3.4 | 54% | $27.72 |
 
+
+
+**note (v2.1.170+):** session length data predates claude fable 5. fable 5's improved reasoning may change compaction rates and cost per session. re-run `/mine` on your own lore.db to see if session economics have shifted with the new model.
+
 ## what this means
 
 **active tool rate is flat at ~3.4/min.** claude doesn't slow down in long sessions. the wall-time rate drops 8.8x bc *you* slow down. longer review gaps, context switching, decision fatigue.

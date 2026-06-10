@@ -52,6 +52,20 @@ if you're using claude code through an embedding host platform (IDE plugin, plat
 
 
 
+
+
+### disableBundledSkills setting (v2.1.169+)
+
+add to your project or global settings to hide bundled skills and reduce system prompt size:
+
+```json
+{
+  "disableBundledSkills": true
+}
+```
+
+when true, `/mine`, `/lore`, `/advisor`, and other bundled commands are hidden from the model. useful if you want a minimal tool vocabulary or are managing your own skill stack.
+
 ### new in v2.1.133: worktree baseRef setting
 
 by default, new worktrees branch from `origin/<default-branch>` (fresh remote state). set `worktree.baseRef: "head"` to branch from local `HEAD` instead, preserving unpushed commits in new worktrees.

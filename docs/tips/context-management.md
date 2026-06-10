@@ -18,6 +18,10 @@ each compaction loses context. after 2 compactions, you're fighting drift. claud
 
 the sweet spot is 10-30 min. high throughput, low compaction, minimal context loss.
 
+
+
+**fable 5 update (v2.1.170+):** compaction rates in this table are from pre-fable 5 sessions. fable 5's improved context understanding may lower compaction frequency. monitor your own sessions with `/lore` to see if the cliff has shifted.
+
 ## claude doesn't slow down. you do
 
 active tool rate is flat at ~3.4 calls/min across all session lengths over 10 min. that holds steady whether you're 15 minutes in or 3 hours deep. claude's throughput doesn't degrade.
