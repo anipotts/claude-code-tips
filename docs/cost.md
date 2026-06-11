@@ -10,6 +10,11 @@ what claude code actually costs, how caching saves 81% of it, and the strategies
 
 most cost discussions are vibes. "it's expensive" or "it's worth it" without data. here are mine.
 
+
+
+### note on version updates (v2.1.172+)
+upstream claude code v2.1.172 includes updates to settings handling and context management. verify current cache hit rates and compaction behavior match this document's historical data. run `/lore` to check your actual session costs.
+
 ### monitor changes to background process cost
 
 prior to monitor (v<2.1.98), watching background processes required `/loop` polling -- full API calls on a timer, expensive when idle. monitor (v2.1.98+) is event-driven: the script runs continuously, tokens consumed only when output matches a filter. idle monitoring costs zero tokens.

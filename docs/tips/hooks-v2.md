@@ -27,6 +27,10 @@ These prompts apply in `acceptEdits` mode and prevent unintended command executi
 | `agent` | subagent with full tool access (Read, Grep, Glob) | 60s | expensive | complex decisions that need file reads |
 | `mcp_tool` (v2.1.118+) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
 
+
+
+**note (v2.1.172+):** hook behavior and available types may have evolved. consult `/doctor` or the official docs at code.claude.com/docs to verify current hook capabilities and parameters.
+
 ### effort.level in hooks (v2.1.133+)
 
 all hooks now receive the active effort setting via two channels:
