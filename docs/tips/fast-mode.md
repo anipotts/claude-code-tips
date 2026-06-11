@@ -14,7 +14,15 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 ### interaction with effort levels (v2.1.140+)
 
-fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
+### interaction with effort levels (v2.1.140+)
+
+fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose but have constraints:
+
+- `--effort low --fast`: minimizes both reasoning and output latency. appropriate for simple tasks.
+- `--effort max --fast`: contradictory. max effort expects time to think, fast mode tries to skip it. avoid this combination.
+- `--effort medium --fast`: reasonable for balanced workflows.
+
+if you specify both flags, claude code will warn if the combination is suboptimal.
 
 ## why i don't use it
 

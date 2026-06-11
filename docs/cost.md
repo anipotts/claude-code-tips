@@ -67,6 +67,10 @@ every claude code interaction is an API call. you send tokens in (prompt + conve
 
 
 
+
+
+**auto-compaction on 1M context limit (v2.1.172+)**: sessions using the full 1M context window without usage credits no longer get stuck. the session now automatically compacts back under the standard context limit. this prevents silent failures for free-tier and credit-limited users.
+
 ### bedrock and service tiers (v2.1.122+)
 
 if you're using anthropic bedrock, set `ANTHROPIC_BEDROCK_SERVICE_TIER` to control priority:

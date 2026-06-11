@@ -133,3 +133,15 @@ match the type to the job. an explore agent that can't write files won't acciden
 3. for risky changes, always use `isolation: "worktree"`. the safety net is worth the setup time
 
 [full agents guide &rarr;](../agents.md) | [copyable agent examples &rarr;](../../examples/agents/)
+
+---
+
+## nested subagents (v2.1.172+)
+
+sub-agents can now spawn their own sub-agents, up to 5 levels deep. this opens new patterns:
+
+**hierarchical exploration**: send a coordinator agent to map the problem, which spawns specialized scouts for different domains, which each spawn detail agents if needed.
+
+**fan-out workflows**: one agent coordinates; it spawns 3 parallel implementation agents; those 3 each spawn verification agents. all coordinated from one control session.
+
+use this sparingly. each nesting level adds latency and context overhead. 2-3 levels is the practical sweet spot. beyond that, the coordination cost exceeds the parallelism benefit.
