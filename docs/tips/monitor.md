@@ -100,3 +100,10 @@ use both: monitor for real-time watching, /loop for scheduled maintenance passes
 ---
 
 [subagents →](./subagents.md) · [hooks v2 →](./hooks-v2.md) · [context management →](./context-management.md)
+
+---
+
+
+### platform support (v2.1.98+)
+
+monitor is available on anthropic API and claude.ai subscriptions. it is not yet available on bedrock, vertex AI, or microsoft foundry. if you're using claude code through a cloud provider integration, check the provider's documentation to confirm monitor support before relying on it in automation.
