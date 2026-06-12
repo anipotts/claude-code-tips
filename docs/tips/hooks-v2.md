@@ -347,3 +347,9 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 ### v2.1.163 changes to hook event data
 
 v2.1.163+ may include additional event context for hooks. verify your hook inputs if upgrading from v2.1.122. check `/doctor` for hook compatibility warnings.
+
+---
+
+### verification note (v2.1.172+)
+
+hook behavior and available types may have evolved since v2.1.118. verify current hook capabilities via `/doctor` or the official docs at code.claude.com/docs. the five types documented here reflect v2.1.122+ behavior; check your version for any changes to handler types, timeout values, or JSON schema.

@@ -27,6 +27,8 @@ the `/monitor` tool (v2.1.98+) changes cost dynamics for long-running background
 
 monitor is now a stable feature (v2.1.98+) and is the preferred method for long-running background process watching. it replaces the earlier `/loop` polling pattern for most use cases.
 
+**note (v2.1.172+)**: verify current monitor behavior and cost characteristics match this document's description. run `/lore` to check your actual idle monitoring costs.
+
 ### what i pay
 
 **$200/mo.** Max plan. flat rate. no per-token billing. no surprises.
