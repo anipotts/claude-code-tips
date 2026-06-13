@@ -22,6 +22,11 @@ they merge in that order. local overrides project overrides global.
 
 **note (v2.1.172+):** settings schema may have changed. run `claude --help` or check `.claude/settings.json` examples in the claude-code-tips repo for current field names and structure.
 
+
+
+### v2.1.176 settings note
+verify current settings schema by running `claude --help` or consulting example configs in this repo. v2.1.172+ changed context management behavior which may affect settings field names and defaults.
+
 ### worktree configuration (v2.1.133+)
 
 add a `worktree` section to control how new worktrees are created:

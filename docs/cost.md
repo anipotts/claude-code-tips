@@ -39,6 +39,10 @@ monitor is now stable as of v2.1.98+ and mature across current versions (tested 
 
 that $200 covers everything. hundreds of sessions, thousands of subagent spawns. run `/lore` to see your own numbers.
 
+
+
+**v2.1.172+ note:** run `/lore` to verify your actual cache hit rates and session costs match this document's historical data. context management changes in v2.1.172+ may affect compaction frequency and cache behavior.
+
 ### what your plan costs
 
 | plan | monthly | how billing works |
