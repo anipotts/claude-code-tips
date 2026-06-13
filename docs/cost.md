@@ -29,6 +29,10 @@ monitor is now a stable feature (v2.1.98+) and is the preferred method for long-
 
 **note (v2.1.172+)**: verify current monitor behavior and cost characteristics match this document's description. run `/lore` to check your actual idle monitoring costs.
 
+
+
+monitor is now stable as of v2.1.98+ and mature across current versions (tested through v2.1.176). bedrock, vertex AI, and microsoft foundry support status not yet confirmed -- check `/doctor` if using these platforms.
+
 ### what i pay
 
 **$200/mo.** Max plan. flat rate. no per-token billing. no surprises.

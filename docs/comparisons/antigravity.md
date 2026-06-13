@@ -10,6 +10,10 @@
 |---------|------------|-------------------|
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | **verify current pricing at [antigravity.google/pricing](https://antigravity.google/pricing)** -- public preview status and pricing as of 2026-06-06 may differ from april verification |
 
+
+
+**note (june 13 2026)**: antigravity public preview status and pricing should be re-verified. google has not announced post-preview pricing. free tier access continues but may change.
+
 ### background
 
 google antigravity launched november 2025 alongside the gemini 3 model family. it was built by a team google hired from windsurf (formerly codeium) in july 2025 as part of a $2.4B deal that brought ~40 senior engineers into google deepmind. the product shares technological ancestry with windsurf but is a distinct google product. windsurf itself continues as a separate product under cognition AI, which acquired windsurf's remaining assets for ~$250M in july 2025.
