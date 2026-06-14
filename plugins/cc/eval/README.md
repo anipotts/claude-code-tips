@@ -1,4 +1,4 @@
-<!-- tested with: bun 1.3 + claude code v2.1.133 -->
+<!-- tested with: claude code v2.1.133 (bun 1.3) -->
 
 # cc eval harness
 
