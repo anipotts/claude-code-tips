@@ -37,6 +37,10 @@ These prompts apply in `acceptEdits` mode and prevent unintended command executi
 
 **note (v2.1.172+):** hook behavior and available types may have evolved. consult `/doctor` or the official docs at code.claude.com/docs to verify current hook capabilities and parameters.
 
+
+
+**verification note (v2.1.172+)**: hook types, fields, and behavior may have evolved. run `/doctor` or check official code.claude.com/docs for current hook capabilities before implementing custom hooks.
+
 ### effort.level in hooks (v2.1.133+)
 
 all hooks now receive the active effort setting via two channels:

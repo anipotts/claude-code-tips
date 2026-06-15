@@ -32,6 +32,10 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 - subjective claims (code quality, UX) are labeled as such
 - we update these docs when tools ship major changes
 
+
+
+**note**: official claude code docs at code.claude.com/docs are obfuscated as of may 2026. verification now requires `/doctor` command output or official anthropic announcements. claims about features should cite specific version numbers and testing methodology.
+
 ## sources used across all comparisons
 
 - [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)

@@ -33,6 +33,10 @@ monitor is now a stable feature (v2.1.98+) and is the preferred method for long-
 
 monitor is now stable as of v2.1.98+ and mature across current versions (tested through v2.1.176). bedrock, vertex AI, and microsoft foundry support status not yet confirmed -- check `/doctor` if using these platforms.
 
+
+
+**platform support note (v2.1.172+)**: monitor is stable on direct anthropic API and claude.ai subscriptions. bedrock, vertex AI, and microsoft foundry support status not yet confirmed. test monitor on your platform before relying on zero-cost idle monitoring.
+
 ### what i pay
 
 **$200/mo.** Max plan. flat rate. no per-token billing. no surprises.

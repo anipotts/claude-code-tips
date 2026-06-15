@@ -6,11 +6,7 @@
 
 ## at a glance
 
-| feature | claude code | google antigravity |
-|---------|------------|-------------------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | **VERIFY AT [antigravity.google/pricing](https://antigravity.google/pricing) -- upstream docs not readable as of this update** |
-
-**critical note**: upstream documentation for antigravity pricing and preview status is not accessible for verification. this doc was last verified 2026-04-09. before recommending antigravity to users, check current status directly at official google pages.
+**status (june 2026)**: antigravity's public preview status and pricing remain unconfirmed. last detailed verification was april 9 2026. before recommending to users, check [antigravity.google/pricing](https://antigravity.google/pricing) directly. this doc's claims are stale and should not be cited for purchase decisions.
 
 ### background
 
