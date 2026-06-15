@@ -80,6 +80,10 @@ use `/cd <path>` to move your session to a new working directory without breakin
 
 this preserves your conversation context and cache prefix while changing the directory claude works in. useful for switching between related tasks in sibling directories.
 
+
+
+**note (v2.1.176)**: /cd preserves cache prefix across directory changes, making it efficient for switching between related tasks. verify cache hit rate with `/lore` if switching directories frequently.
+
 ## further reading
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions
