@@ -70,6 +70,20 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### nested skills directories (v2.1.178+)
+
+skills in nested `.claude/skills` subdirectories now load when working on files in those directories. on name collision, the nested skill appears as `<dir>:<name>`. this lets you organize skills by project area without losing access to global skills.
+
+example:
+```
+.claude/skills/
+  common.skill     # available everywhere as `common`
+  auth/
+    validators.skill  # available as `auth:validators` when editing auth/ files
+```
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

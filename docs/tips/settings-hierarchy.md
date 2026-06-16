@@ -82,6 +82,25 @@ this setting changed default behavior in v2.1.133. if you relied on old behavior
 
 
 
+
+
+### permission rules with tool parameters (v2.1.178+)
+
+use `Tool(param:value)` syntax to restrict specific tool invocations:
+
+```json
+{
+  "permissions": {
+    "deniedTools": [
+      "Agent(model:opus)",
+      "Edit(path:*.sh)"
+    ]
+  }
+}
+```
+
+matches any param value with `*` wildcard. useful for cost control, safety (block dangerous paths), and workflow enforcement.
+
 ### new in v2.1.121: status line input fields
 
 two new display settings control what appears in the input status line:

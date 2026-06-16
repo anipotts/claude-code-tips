@@ -12,6 +12,10 @@ during planning, claude uses explore and plan agents to read your codebase, map 
 
 the key shift: planning moves the expensive mistakes to before any code is written. a bad plan costs you 2 minutes of reading. a bad first implementation costs you 15 minutes of rollback and re-prompting.
 
+
+
+**note (v2.1.178+)**: subagent spawns in plan mode are now evaluated by the classifier before launch. if a proposed action violates your permission rules, the classifier will flag it for review instead of launching the subagent blind. this prevents the "subagent requests blocked action" gap.
+
 ## use it for almost everything
 
 i literally start most of my sessions in plan mode. it's my global default. you should use plan mode for almost everything. if you're even debating whether to use plan mode, you should probably use plan mode.

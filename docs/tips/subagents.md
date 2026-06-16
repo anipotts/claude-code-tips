@@ -42,6 +42,23 @@ skip it for read-only research. worktree setup adds overhead you don't need when
 
 
 
+
+
+### blocking specific agent models (v2.1.178+)
+
+use `Tool(param:value)` syntax in permission rules to restrict which models subagents can use:
+
+```json
+{
+  "permissions": {
+    "allowedTools": "*",
+    "deniedTools": ["Agent(model:opus)"]
+  }
+}
+```
+
+this blocks opus subagents specifically while allowing sonnet and haiku. the param matcher supports `*` wildcard. useful for cost control when delegating to subagents.
+
 ### worktree cloning with skipLfs (v2.1.153+)
 
 when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:
