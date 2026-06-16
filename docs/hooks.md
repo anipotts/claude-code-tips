@@ -248,3 +248,20 @@ hooks should be:
 
 - [hooks directory](../hooks/) -- all 9 hook scripts with full source
 - [official hooks docs](https://docs.anthropic.com/en/docs/claude-code/hooks) -- complete reference
+
+---
+
+### permission rule matching (v2.1.178+)
+
+v2.1.178 added `Tool(param:value)` syntax for permission rules to match a tool's input parameters with wildcard support.
+
+```json
+{
+  "permissions": [
+    "Agent(model:opus)",
+    "Bash(command:*rm*)"
+  ]
+}
+```
+
+this lets you block specific model choices in subagents or dangerous command patterns in Bash without blocking the tool entirely.

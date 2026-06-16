@@ -21,6 +21,12 @@ prior to monitor (v<2.1.98), watching background processes required `/loop` poll
 
 if you're on v2.1.98+, use monitor instead of `/loop` for all long-running process watching (test runners, dev servers, deploy status). it reduces cost by ~90% on idle processes.
 
+
+
+### v2.1.179: mid-stream connection stability
+
+v2.1.179 fixed mid-stream connection drops where partial responses were lost. this improves reliability of long-running monitor watches and background tasks but doesn't change token cost. if you were seeing "running tool" spinner get stuck, that regression is now fixed.
+
 ### note on monitoring
 
 the `/monitor` tool (v2.1.98+) changes cost dynamics for long-running background processes. stream filters and poll filters emit events only when conditions are met, not on a schedule. idle monitoring costs zero tokens. this reduces the cost of watching test runners, build processes, and deploy status checks compared to `/loop` polling.

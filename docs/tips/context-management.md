@@ -55,7 +55,11 @@ good: "the bug is in src/auth/token.ts around line 140, the JWT expiry check"
 
 ### 6. use single-file grep reads efficiently
 
+### 6. use single-file grep reads efficiently (v2.1.160+)
+
 v2.1.160 removed the read-after-grep requirement for single-file `grep`/`egrep`/`fgrep` commands. if claude greps a single file to understand it before editing, that single grep now satisfies the read-before-edit check. this saves a separate Read call and keeps context tighter.
+
+v2.1.178+ extends this: nested `.claude/workflows/` and auto-workflow save now target the directory closest to your working file, reducing boilerplate across monorepos.
 
 ### 1. scope before you start
 

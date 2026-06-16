@@ -70,6 +70,12 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### ui improvements (v2.1.179+)
+
+v2.1.179 fixed the welcome screen to show at most one promotional banner per session (was stacking multiple). if you see multiple banners after upgrading, run `claude --version` to verify you're on 2.1.179+.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

@@ -241,3 +241,20 @@ open-source collections of pre-built agent configurations and team templates:
 - [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) -- community agent pack library (~20k stars)
 
 use these as templates for your own agent teams. many patterns (scout, specialist delegation, parallel research) have published implementations you can fork and adapt.
+
+---
+
+### nested skills in agent worktrees (v2.1.178+)
+
+when agents work in nested project directories, skills from `.claude/skills/` directories closest to the working file now load automatically. on name clashes, nested skills appear as `<dir>:<name>` so both stay available.
+
+this matters for monorepos: each agent inherits both project-root skills and directory-scoped skills from its working context.
+
+```
+myproject/
+  .claude/skills/
+    auth.yaml      <- available as 'auth' everywhere
+  packages/api/
+    .claude/skills/
+      auth.yaml    <- available as 'api:auth' when working here
+```
