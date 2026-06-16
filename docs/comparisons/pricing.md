@@ -29,7 +29,8 @@
 | tool | plan | what you get |
 |------|------|-------------|
 | claude code | Pro ($20) | full claude code access, all models, rate-limited |
-| cursor | Pro ($20) | unlimited completions, 500 fast premium requests, credit pool |
+| cursor | Pro ($20) | extended agent limits, frontier models, MCPs, skills, hooks, cloud agents |
+| github copilot | Pro ($10) | unlimited code completion, cloud agent, code review, 3rd party agents |
 | codex | ChatGPT Plus ($20) | codex access, GPT-4o, web browsing, plugins |
 | gemini | AI Pro ($19.99) | higher limits, workspace AI, 2TB storage |
 | antigravity | $0 (preview) | free access to frontier models, weekly quotas |
@@ -42,6 +43,7 @@
 |------|------|-------------|
 | claude code | Max 5x ($100) / Max 20x ($200) | 5x or 20x Pro rate limits, max priority |
 | cursor | Pro+ ($60) / Ultra ($200) | larger credit pools, higher rate limits |
+| github copilot | Pro+ ($39) / Max ($100) | premium models including opus, 4x-2.9x usage; priority access to new models |
 | codex | ChatGPT Pro ($200) | 2x codex limits, o3-pro, GPT-5, all openai models |
 | gemini | AI Ultra ($249.99) | highest-tier models, all google AI features |
 | antigravity | $0 (preview) / custom (enterprise) | free access continues, enterprise pricing TBD |
@@ -109,9 +111,10 @@ currently free during public preview. weekly quotas limit heavy usage but most d
 
 ## recommendation by budget
 
-### note on competitor activity (march 2026)
+### note on competitor activity (june 2026)
 
-openai codex continues alpha releases (0.115.0-alpha.15-17) but no stable version bumps. gemini-cli active development with oauth2 and headless fixes. no pricing changes detected across codex, gemini, or antigravity. claude code remains the dominant terminal agent for cost-conscious teams.
+<!-- updated 2026-06-16 -->
+cursor updated pro tier marketing from "credit pool" language to feature language (MCPs, skills, hooks, cloud agents). github copilot now tracks separately from openai codex with own pricing tiers ($10 pro, $39 pro+, $100 max). openai codex continues alpha releases (0.141.0) but no stable version bumps. gemini-cli active development. antigravity preview status remains free but unverified. claude code remains the dominant terminal agent for cost-conscious teams.
 
 ### $0/mo (free)
 use antigravity (free preview, includes frontier models) as your primary tool. supplement with gemini free tier for terminal workflows.

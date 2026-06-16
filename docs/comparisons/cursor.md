@@ -1,8 +1,9 @@
 <!-- tested with: claude code v2.1.122 -->
+<!-- updated 2026-06-16: cursor pro tier features updated -->
 
 # claude code vs cursor
 
-> last verified: 2026-04-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-06-16 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -81,8 +82,8 @@ cursor shows proposed changes as inline diffs in the editor -- green for additio
 
 | plan | claude code | cursor |
 |------|------------|--------|
-| free | limited usage | 2-week pro trial, 2000 completions, 50 slow requests |
-| entry | $20/mo (Pro) | $20/mo (Pro) -- 500 fast premium requests, credit pool |
+| free | limited usage | limited agent requests, limited tab completions |
+| entry | $20/mo (Pro) | $20/mo (Pro) -- extended agent limits, frontier models, MCPs, skills, hooks |
 | mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) |
 | heavy use | $200/mo (Max 20x) | $200/mo (Ultra) |
 | teams | enterprise (API-based) | $40/user/mo |
