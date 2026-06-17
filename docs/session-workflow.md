@@ -20,6 +20,10 @@ if you see a notice about npm global install not auto-updating, run `/doctor` to
 
 
 
+
+
+**note (v2.1.179+)**: if claude code behaves unexpectedly, run `/doctor` to diagnose issues with hooks, plugins, or settings drift. the tool provides version-specific guidance for your environment.
+
 ### safe mode (v2.1.169+)
 
 if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:
