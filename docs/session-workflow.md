@@ -30,6 +30,10 @@ claude --safe-mode
 
 this disables CLAUDE.md, plugins, skills, hooks, and MCP servers for the session. useful for troubleshooting or running in a clean state.
 
+
+
+**note (v2.1.179)**: safe mode continues to work as documented. no changes to disabling behavior (CLAUDE.md, plugins, skills, hooks, MCP servers).
+
 ## context loading
 
 three things work together on startup:

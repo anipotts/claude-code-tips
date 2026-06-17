@@ -12,7 +12,10 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ### managed settings in hooks (v2.1.175+)
 
+### managed settings in hooks (v2.1.175+)
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
+
+**note (v2.1.179)**: this behavior is stable. no changes to hook model selection semantics.
 
 ### safety prompts for sensitive file writes (v2.1.160+)
 
