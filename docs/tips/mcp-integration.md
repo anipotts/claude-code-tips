@@ -44,6 +44,10 @@ for project-level config, add an `.mcp.json` file to your repo root:
 
 anyone who clones the repo gets the same MCP setup. no manual `claude mcp add` needed.
 
+
+
+**OAuth MCP servers (v2.1.181+):** when connecting OAuth-enabled MCP servers, v2.1.181 now shows an MCP OAuth browser page that matches Claude Code's visual style and auto-closes on success. this reduces manual steps for credential setup.
+
 ## three patterns
 
 ### 1. read-only data access

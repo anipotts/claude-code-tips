@@ -10,6 +10,12 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 **note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose additively: `--effort low --fast` minimizes both reasoning and output latency. avoid `--effort max --fast` (contradictory): max effort expects time to think, fast mode tries to skip it.
 
+
+
+### new in v2.1.181: /config syntax
+
+v2.1.181 adds `/config key=value` to set any setting from the prompt (e.g., `/config thinking=false`). this works in interactive mode, `-p` mode, and remote control. if you use `/config` to switch models mid-session, fast mode's behavior may change depending on the target model and your effort level setting. avoid using `/config` to bypass effort or thinking restrictions.
+
 ### interaction with effort levels (v2.1.140+)
 
 fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.

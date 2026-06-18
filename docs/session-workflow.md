@@ -20,6 +20,10 @@ if you see a notice about npm global install not auto-updating, run `/doctor` to
 
 
 
+
+
+**note (v2.1.181):** startup performance on degraded networks improved. if account settings fetch is slow, the prompt no longer blocks the full 15 seconds. first prompt latency is now bounded more tightly.
+
 ### safe mode (v2.1.169+)
 
 if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:

@@ -76,6 +76,12 @@ if [[ "$EFFORT" == "max" ]]; then
 fi
 ```
 
+
+
+### new in v2.1.181: /config setting syntax in hooks
+
+v2.1.181 allows `/config key=value` from the prompt, which can change settings mid-session. hooks that rely on stable settings (like `availableModels` or `thinking.enabled`) may see changes between invocations. design hooks to re-read settings from the JSON input on each fire rather than caching assumptions.
+
 ### updatedToolOutput (PostToolUse, v2.1.121+)
 
 PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.

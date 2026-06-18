@@ -107,6 +107,10 @@ ranked by impact:
 
 ---
 
+
+
+**6. network degradation.** v2.1.181 fixes a regression where slow account settings fetches could delay startup by up to 15 seconds on degraded networks. this didn't add token cost but did waste wall time. the fix is in place; this note is historical.
+
 ## cost optimization strategies
 
 ### model switching -- the biggest lever
