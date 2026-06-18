@@ -42,6 +42,10 @@ three things work together on startup:
 
 the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enforce boundaries.
 
+
+
+**note (v2.1.181+):** context loading order and cache behavior may have changed. run a test session and check cache hit rates with `/lore` to verify that CLAUDE.md, skills, and hooks load as documented.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

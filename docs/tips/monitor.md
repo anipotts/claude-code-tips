@@ -45,6 +45,10 @@ monitor takes four things:
 
 you don't configure these manually. tell claude what to watch in plain english and it writes the command + filter. the parameters exist under the hood.
 
+
+
+**note (v2.1.181+):** monitor maturity and availability on bedrock/vertex/foundry/foundry should be re-verified. check `/doctor` for current platform support and cost characteristics.
+
 ## when to use monitor vs background
 
 ```

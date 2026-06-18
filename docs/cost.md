@@ -12,6 +12,11 @@ most cost discussions are vibes. "it's expensive" or "it's worth it" without dat
 
 
 
+
+
+### note on v2.1.181 billing verification
+pricing in this doc was last verified may 2026 against claude code v2.1.122. anthropic's official pricing page may have changed. run `/doctor` and check https://code.claude.com/docs/en/overview for current billing tiers, rate limits, and plan options before relying on historical cost data.
+
 ### note on version updates (v2.1.172+)
 upstream claude code v2.1.172 includes updates to settings handling and context management. verify current cache hit rates and compaction behavior match this document's historical data. run `/lore` to check your actual session costs.
 
