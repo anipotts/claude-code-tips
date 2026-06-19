@@ -10,6 +10,10 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 **note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose additively: `--effort low --fast` minimizes both reasoning and output latency. avoid `--effort max --fast` (contradictory): max effort expects time to think, fast mode tries to skip it.
 
+
+
+**note (v2.1.183+):** when requesting a model that's deprecated or auto-updated to a newer version, claude code now shows a warning on stderr (visible in print mode `-p` and in agent frontmatter). if you specify a deprecated model in fast mode, you may be automatically updated to a newer model without an explicit toggle.
+
 ### interaction with effort levels (v2.1.140+)
 
 fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.

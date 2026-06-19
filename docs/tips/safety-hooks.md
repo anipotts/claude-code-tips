@@ -50,6 +50,10 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+
+**note (v2.1.183+):** claude code now natively blocks destructive git commands (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) and infrastructure-as-code destroy commands (`terraform destroy`, `pulumi destroy`, `cdk destroy`) in auto mode when you didn't explicitly request them. the safety-guard.sh hook remains useful for custom patterns and non-auto workflows.
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.

@@ -74,6 +74,10 @@ three categories of damage:
 
 ---
 
+
+
+**native safety in v2.1.183+:** claude code now natively blocks destructive git and IaC commands in auto mode, reducing the burden on PreToolUse hooks. hooks remain useful for custom enforcement patterns and workflows that don't use auto mode.
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.

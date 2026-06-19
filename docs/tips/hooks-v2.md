@@ -14,6 +14,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
+
+
+### model auto-updates in hooks (v2.1.183+)
+
+when you request a deprecated model or specify one that's been auto-updated, claude code warns on stderr. hooks receive the originally-requested model in `model` field, not the auto-updated model. if your hook logic depends on exact model selection, check `/doctor` to verify which model is actually active.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to:

@@ -70,6 +70,10 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+**note (v2.1.183+):** if you used a deprecated or auto-updated model during the session, version-stamp.sh will record the actual model used by the session, which may differ from what you requested. run `/config model` to see the current model selection.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:
