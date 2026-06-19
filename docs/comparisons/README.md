@@ -35,6 +35,6 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 ## sources used across all comparisons
 
 - [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)
-- [claude code docs](https://code.claude.com/docs/en/overview) -- note: official docs page is obfuscated; verify claims against `/doctor` or official announcements
+- [claude code docs](https://code.claude.com/docs/en/overview) -- official documentation with full feature reference
 - [claude.ai plans](https://claude.com/pricing)
 - other tool links as previously listed

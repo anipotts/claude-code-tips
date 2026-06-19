@@ -42,6 +42,12 @@ three things work together on startup:
 
 the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enforce boundaries.
 
+
+
+
+### documentation index
+run `claude --help docs` or visit [code.claude.com/docs](https://code.claude.com/docs/en/overview) to fetch the complete documentation index before exploring new features.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:
