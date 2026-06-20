@@ -39,6 +39,12 @@ monitor is now stable as of v2.1.98+ and mature across current versions (tested 
 
 that $200 covers everything. hundreds of sessions, thousands of subagent spawns. run `/lore` to see your own numbers.
 
+
+
+### note on v2.1.183+ settings
+
+v2.1.183 adds six new settings keys: `remoteControlAtStartup`, `disableArtifact`, `attribution.sessionUrl`, `axScreenReader`, `disableClaudeAiConnectors`. these do not affect cost tracking. monitor your actual session costs via `/lore` to catch any behavior changes.
+
 ### what your plan costs
 
 | plan | monthly | how billing works |

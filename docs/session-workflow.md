@@ -20,6 +20,12 @@ if you see a notice about npm global install not auto-updating, run `/doctor` to
 
 
 
+
+
+### new in v2.1.183: remote control and artifact toggles
+
+v2.1.183 adds `remoteControlAtStartup` and `disableArtifact` settings. if you want to disable remote control prompts at session start, set `remoteControlAtStartup: false` in your `.claude/settings.json`. artifact display can be disabled with `disableArtifact: true` if you prefer terminal-only output.
+
 ### safe mode (v2.1.169+)
 
 if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:

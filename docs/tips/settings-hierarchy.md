@@ -70,6 +70,19 @@ by default, new worktrees branch from `origin/<default-branch>` (fresh remote st
 
 this setting changed default behavior in v2.1.133. if you relied on old behavior (local HEAD), set it explicitly.
 
+
+
+### new in v2.1.183: remote control, artifacts, and accessibility
+
+v2.1.183 adds three new settings:
+- `remoteControlAtStartup` (boolean/null) -- suppress remote control prompts at session start
+- `disableArtifact` (boolean) -- hide artifact rendering in terminal output
+- `axScreenReader` (boolean, default false) -- enable screen reader optimizations
+- `disableClaudeAiConnectors` (boolean) -- disable MCP connectors for claude.ai integration
+- `attribution.sessionUrl` (boolean, default true) -- include session URL in tool output
+
+add these to `~/.claude/settings.json` or `.claude/settings.json` as needed.
+
 ## when to use which
 
 | setting | where | why |
