@@ -64,6 +64,10 @@ from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ session
 
 the data says: sessions that hit compaction average 1.7 compactions. if you're compacting more than twice, the session is too long -- split it.
 
+
+
+**verification note**: verify current compact vs clear behavior against [official claude code docs](https://code.claude.com/docs/en/overview) before relying on these percentages in new versions.
+
 ## ending a session
 
 when a session ends (ctrl+c, `/exit`, or timeout), two things fire:

@@ -38,3 +38,5 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 - [claude code docs](https://code.claude.com/docs/en/overview) -- official documentation with full feature reference
 - [claude.ai plans](https://claude.com/pricing)
 - other tool links as previously listed
+
+- [official claude code docs index](https://code.claude.com/docs/llms.txt) -- complete documentation index for discovering all available pages

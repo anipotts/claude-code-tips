@@ -6,11 +6,10 @@
 
 ## at a glance
 
-| feature | claude code | google antigravity |
-|---------|------------|-------------------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | **VERIFY AT [antigravity.google/pricing](https://antigravity.google/pricing) -- upstream docs not readable as of this update** |
-
-**critical note**: upstream documentation for antigravity pricing and preview status is not accessible for verification. this doc was last verified 2026-04-09. before recommending antigravity to users, check current status directly at official google pages.
+**verification required**: this comparison is based on data from april 2026. antigravity is in active development. before recommending antigravity, verify current pricing, feature set, and preview status at the official sources:
+- [official claude code docs](https://code.claude.com/docs/en/overview)
+- [google antigravity official page](https://antigravity.google/)
+- [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)
 
 ### background
 
