@@ -20,7 +20,7 @@
     "wshobson/agents",
     "x1xhlol/system-prompts-and-models-of-ai-tools"
   ],
-  "anthropic/official_docs": "7d465ac4d808f0fc",
+  "anthropic/official_docs": "afa4bc3331622c5c",
   "competitor/openai_codex/releases": "rust-v0.142.0-alpha.7",
   "competitor/gemini/releases": "v0.47.0",
   "community/hackernews/seen": [
