@@ -14,6 +14,10 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
+
+
+**note (v2.1.183+)**: auto mode safety now blocks destructive git commands (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) and infrastructure destroy commands (`terraform destroy`, `pulumi destroy`, `cdk destroy`) unless explicitly requested. hooks that attempt these operations will be blocked automatically regardless of hook configuration.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to:

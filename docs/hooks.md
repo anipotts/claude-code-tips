@@ -74,6 +74,10 @@ three categories of damage:
 
 ---
 
+
+
+**note (v2.1.183+)**: many destructive commands are now blocked automatically in auto mode without hooks. safety-guard.sh is still useful for additional patterns and for explicit enforcement outside auto mode, but destructive git commands and infrastructure destroy operations get built-in protection.
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.
