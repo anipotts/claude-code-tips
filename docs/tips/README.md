@@ -1,7 +1,5 @@
 <!-- tested with: claude code v2.1.122 -->
 
-<!-- tested with: claude code v2.1.122 -->
-
 # tips
 
 short, standalone claude code tips. each one is a specific technique you can use today.
