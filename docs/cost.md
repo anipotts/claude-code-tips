@@ -23,15 +23,9 @@ if you're on v2.1.98+, use monitor instead of `/loop` for all long-running proce
 
 ### note on monitoring
 
-the `/monitor` tool (v2.1.98+) changes cost dynamics for long-running background processes. stream filters and poll filters emit events only when conditions are met, not on a schedule. idle monitoring costs zero tokens. this reduces the cost of watching test runners, build processes, and deploy status checks compared to `/loop` polling.
+### monitor support across platforms (v2.1.98+, stable v2.1.145+)
 
-monitor is now a stable feature (v2.1.98+) and is the preferred method for long-running background process watching. it replaces the earlier `/loop` polling pattern for most use cases.
-
-**note (v2.1.172+)**: verify current monitor behavior and cost characteristics match this document's description. run `/lore` to check your actual idle monitoring costs.
-
-
-
-monitor is now stable as of v2.1.98+ and mature across current versions (tested through v2.1.176). bedrock, vertex AI, and microsoft foundry support status not yet confirmed -- check `/doctor` if using these platforms.
+`/monitor` is stable and event-driven (zero cost when idle). **bedrock, vertex AI, and microsoft foundry support is unconfirmed.** if using these platforms, run `/doctor` to check monitor availability. on supported platforms (claude.ai, direct API), monitor is the preferred method for long-running background process watching.
 
 ### what i pay
 

@@ -353,3 +353,9 @@ v2.1.163+ may include additional event context for hooks. verify your hook input
 ### verification note (v2.1.172+)
 
 hook behavior and available types may have evolved since v2.1.118. verify current hook capabilities via `/doctor` or the official docs at code.claude.com/docs. the five types documented here reflect v2.1.122+ behavior; check your version for any changes to handler types, timeout values, or JSON schema.
+
+---
+
+### hook type stability (v2.1.172+)
+
+verify current hook types and behavior at [code.claude.com/docs](https://code.claude.com/docs/en/overview) or via `claude /doctor`. the five-type model (command, http, prompt, agent, mcp_tool) is stable as of v2.1.122 but may have evolved in later versions.

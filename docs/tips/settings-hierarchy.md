@@ -143,3 +143,9 @@ if you have hooks in the wrong level, move them. one `mv` command, and your sett
 when `enforceAvailableModels` is enabled by an admin or platform provider, the `availableModels` allowlist constrains not just model selection but also the Default model. if Default would resolve to a disallowed model, it falls back to the first allowed model instead. additionally, user and project settings can no longer widen a managed allowlist—they can only narrow it further.
 
 this affects: `/model` picker behavior, default model selection, and cross-session model resumption. if you see unexpected model fallback or can't select a previously-available model, check whether `enforceAvailableModels` is active in your global or managed settings.
+
+---
+
+### schema verification (v2.1.172+)
+
+run `claude --help settings` or check the official docs at [code.claude.com/docs](https://code.claude.com/docs/en/overview) to verify current settings schema. field names and structure may have changed since this document was written.
