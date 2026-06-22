@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name != 'issues' && github.event.pull_request.draft != true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: check for recent mention
         id: guard
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'issues'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: post triage mention
         env:
