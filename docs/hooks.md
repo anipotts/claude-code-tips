@@ -55,6 +55,12 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 
 
+
+
+### note on bash hook frequency (v2.1.186+)
+
+v2.1.186 added `respondToBashCommands` (default true) which makes `!` prefixed bash commands trigger auto-response. if enabled, bash hooks will fire more frequently. consider setting `"respondToBashCommands": false` in your CLAUDE.md or settings if you want to reduce PreToolUse hook load.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added confirmation prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). these prompts apply in `acceptEdits` mode and provide a second safety layer alongside safety-guard.sh hooks.

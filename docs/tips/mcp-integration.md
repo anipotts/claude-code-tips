@@ -73,3 +73,22 @@ servers that both observe and modify. playwright is the canonical example: claud
 only if you actually need to. if the built-in tools (Read, Write, Edit, Bash, Grep, Glob) do the job, you don't need MCP.
 
 [imessage-mcp (real example) &rarr;](https://github.com/anipotts/imessage-mcp)
+
+---
+
+### authenticating MCP servers (v2.1.186+)
+
+MCP servers that require authentication can now be configured from the CLI without opening the interactive `/mcp` menu:
+
+```bash
+claude mcp login <name>      # authenticate interactively
+claude mcp logout <name>     # revoke credentials
+```
+
+use `--no-browser` for SSH or remote environments:
+
+```bash
+claude mcp login <name> --no-browser
+```
+
+this is useful when adding MCP servers to your project's `.mcp.json` config -- you can authenticate from the command line instead of navigating the interactive menu.

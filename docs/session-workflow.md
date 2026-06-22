@@ -94,3 +94,17 @@ this preserves your conversation context and cache prefix while changing the dir
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
+
+---
+
+### bash command auto-response (v2.1.186+)
+
+by default, any bash command prefixed with `!` will trigger claude to respond to its output automatically. to disable and keep bash output context-only:
+
+```json
+{
+  "respondToBashCommands": false
+}
+```
+
+add this to `~/.claude/settings.json` or `.claude/settings.json` depending on whether you want it globally or per-project.

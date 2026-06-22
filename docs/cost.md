@@ -216,3 +216,7 @@ v2.1.132 fixed `--resume` failing when emoji splits in tool error truncation and
 ### note on version-specific cost dynamics
 
 monitor (v2.1.98+) changed cost models for background process watching. if you're on v2.1.163+, verify monitor performance and cost metrics haven't shifted. /lore track record may have evolved.
+
+---
+
+**6. bash command auto-response (v2.1.186+).** by default, `!` prefixed bash commands now trigger claude to respond automatically to their output without waiting for a new prompt. disable with `"respondToBashCommands": false` in settings.json if you want bash output to stay context-only. auto-response adds tokens per command execution.
