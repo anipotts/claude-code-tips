@@ -10,6 +10,12 @@ this is the most common misconception i see. people assume fast mode = dumber mo
 
 **note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose additively: `--effort low --fast` minimizes both reasoning and output latency. avoid `--effort max --fast` (contradictory): max effort expects time to think, fast mode tries to skip it.
 
+
+
+### model enforcement (v2.1.176+)
+
+if `enforceAvailableModels` is enabled and `availableModels` allowlist is set, `/fast` will refuse to toggle if it would switch to a blocked model. this prevents bypassing model restrictions via fast-mode alias selection.
+
 ### interaction with effort levels (v2.1.140+)
 
 fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.

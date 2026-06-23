@@ -30,6 +30,12 @@ ai-powered maintenance is also viable on the cheap: weekly competitive-intel, do
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
 
+
+
+### bash auto-response behavior (v2.1.186+)
+
+starting with v2.1.186, `!` bash commands trigger automatic Claude responses to output. in daemon and guardian patterns, this means long-running processes will automatically generate agent responses when output is detected. set `"respondToBashCommands": false` in your settings if you want context-only behavior instead.
+
 ### safe daemon (recommended)
 
 ```bash

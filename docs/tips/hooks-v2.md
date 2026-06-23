@@ -14,6 +14,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
+
+
+### bash auto-response in hooks (v2.1.186+)
+
+`!` bash commands now trigger Claude to respond automatically to the output. if you have hooks that invoke bash commands and want to suppress auto-response, set `"respondToBashCommands": false` in settings.json.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to:
