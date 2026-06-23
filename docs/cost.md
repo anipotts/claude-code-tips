@@ -27,6 +27,10 @@ if you're on v2.1.98+, use monitor instead of `/loop` for all long-running proce
 
 `/monitor` is stable and event-driven (zero cost when idle). **bedrock, vertex AI, and microsoft foundry support is unconfirmed.** if using these platforms, run `/doctor` to check monitor availability. on supported platforms (claude.ai, direct API), monitor is the preferred method for long-running background process watching.
 
+
+
+**status june 2026**: monitor availability across bedrock, vertex AI, and microsoft foundry has not been officially documented. always run `/doctor` to check monitor support on your active platform before relying on it for critical workflows.
+
 ### what i pay
 
 **$200/mo.** Max plan. flat rate. no per-token billing. no surprises.

@@ -48,6 +48,9 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 ### documentation index
 run `claude --help docs` or visit [code.claude.com/docs](https://code.claude.com/docs/en/overview) to fetch the complete documentation index before exploring new features.
 
+
+The official docs at [code.claude.com/docs](https://code.claude.com/docs/en/overview) maintain a complete documentation index at `/docs/llms.txt`. Always fetch this index before exploring new features or verifying current capabilities.
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

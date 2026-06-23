@@ -359,3 +359,9 @@ hook behavior and available types may have evolved since v2.1.118. verify curren
 ### hook type stability (v2.1.172+)
 
 verify current hook types and behavior at [code.claude.com/docs](https://code.claude.com/docs/en/overview) or via `claude /doctor`. the five-type model (command, http, prompt, agent, mcp_tool) is stable as of v2.1.122 but may have evolved in later versions.
+
+---
+
+#### verification of current hook types (v2.1.172+)
+
+hook behavior and available types may have evolved beyond v2.1.175. run `claude --help` or consult [official claude code docs](https://code.claude.com/docs/en/overview) to verify current hook handler types, timeout values, and context parameters before building new hooks.
