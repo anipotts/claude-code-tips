@@ -8,7 +8,29 @@ shipped april 9 2026. requires v2.1.98+. announced by alistair (claude code team
 
 ## the three modes, compared
 
-shipped april 9 2026. requires v2.1.98+. now stable and mature across current versions (v2.1.98+, tested with v2.1.122).
+## stream filter vs poll filter
+
+monitor has two modes depending on what you're watching.
+
+**stream filter**: for processes that continuously emit output (log tailing, dev servers, test runners). claude writes a script that pipes stdout through a filter. only matching lines become events.
+
+```
+"start npm run dev and monitor for errors"
+→ claude filters for: error, warn, failed, ECONNREFUSED
+→ you keep working. errors stream in as they happen.
+```
+
+**poll filter**: for things you need to check periodically (APIs, endpoints, deploy status). claude writes a script that polls at an interval and only emits when a condition is met.
+
+```
+"monitor our health endpoint every 30s, alert if status != 200"
+→ zero events while healthy
+→ instant notification when it breaks
+```
+
+ray amjad's analogy nails it: a security camera that only alerts on motion. the camera is always running, but you only pay attention (tokens) when something moves.
+
+**note (v2.1.187+).** monitor is not yet available on bedrock, vertex AI, or microsoft foundry. it is stable on claude.ai and direct API. check `/doctor` to verify monitor availability on your platform.
 
 ## stream filter vs poll filter
 

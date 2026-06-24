@@ -60,7 +60,11 @@ servers that both observe and modify. playwright is the canonical example: claud
 
 ## gotchas
 
+## gotchas
+
 **startup latency.** MCP servers launch on first tool call. the first invocation takes 1-5 seconds. subsequent calls are fast.
+
+**remote mcp tool timeouts (v2.1.187+).** remote MCP tool calls that hang with no response for 5 minutes now abort with an error instead of blocking indefinitely. override with `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT` environment variable if you need longer timeouts.
 
 **system prompt bloat.** more tools means a larger prompt prefix. this hurts cache hit rates if the tool set changes between sessions. keep your active server count minimal.
 

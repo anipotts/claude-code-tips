@@ -42,6 +42,12 @@ skip it for read-only research. worktree setup adds overhead you don't need when
 
 
 
+
+
+### subagent depth cap and worktree cleanup (v2.1.187+)
+
+v2.1.187 enforces a depth cap for spawned subagents. resumed subagents now restore their original spawn depth, and forked subagents count toward the cap. when agents are killed, their locked `.git/worktrees/` entries are automatically cleaned up (previously these could leak and accumulate). if you spawn many nested subagents, you may hit the depth limit -- consider flattening your agent hierarchy or reviewing active worktrees with `git worktree list`.
+
 ### worktree cloning with skipLfs (v2.1.153+)
 
 when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:
