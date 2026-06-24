@@ -57,6 +57,18 @@ three use cases:
 
 the claude code desktop app has a built-in UI for managing worktrees. you can see all active worktrees, their branches, and their status in one view. it's significantly better than managing worktrees from the CLI.
 
+
+
+### subagent depth and worktree fixes (v2.1.190)
+
+v2.1.190 fixed two issues affecting agent teams and worktrees:
+
+- **resumed subagents** now restore their original spawn depth (important for deep agent hierarchies)
+- **forked subagents** now correctly count toward the depth cap
+- **leaked worktree registrations** no longer clutter `.git/worktrees/` after cleanup
+
+if you use agent teams or spawn subagents deeper than 2 levels, verify your worktree cleanup and subagent resume behavior after upgrading.
+
 ### when to use desktop vs CLI
 
 | scenario | desktop | CLI |

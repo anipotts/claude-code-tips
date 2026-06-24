@@ -149,3 +149,34 @@ this affects: `/model` picker behavior, default model selection, and cross-sessi
 ### schema verification (v2.1.172+)
 
 run `claude --help settings` or check the official docs at [code.claude.com/docs](https://code.claude.com/docs/en/overview) to verify current settings schema. field names and structure may have changed since this document was written.
+
+---
+
+
+### sandbox.credentials setting (v2.1.190+)
+
+block sandboxed commands from reading credential files and secret environment variables:
+
+```json
+{
+  "sandbox": {
+    "credentials": "block"
+  }
+}
+```
+
+use this to prevent bash tools from accessing `~/.ssh/`, `~/.aws/`, `~/.config/`, environment variables with `SECRET`, `TOKEN`, `KEY` in the name, and `.env` files. set to `"block"` to enforce, or omit for default behavior.
+
+---
+
+
+### org-configured model restrictions (v2.1.187+)
+
+organizations can now restrict which models are available. when model restrictions are active:
+
+- `/model` picker shows only allowed models
+- `--model` flag respects restrictions
+- `ANTHROPIC_MODEL` env var respects restrictions
+- fast mode toggle (`/fast`) refuses if it would switch to a restricted model
+
+you'll see "restricted by your organization's settings" when a model is unavailable. this applies across all claude code surfaces.

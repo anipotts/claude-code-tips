@@ -99,6 +99,12 @@ hooks live in JSON settings files at three levels:
 | `.claude/settings.json` | single project | yes (commit it) |
 | `.claude/settings.local.json` | single project | no (gitignored) |
 
+
+
+### structured output and webhook stability (v2.1.190)
+
+v2.1.190 fixed `--json-schema` and workflow `agent({schema})` structured output: the model can no longer re-call `StructuredOutput` indefinitely after success, and follow-up turns now reliably return structured output. if you use structured output in hooks or agents, verify behavior after v2.1.187+.
+
 ### basic config structure
 
 ```json
