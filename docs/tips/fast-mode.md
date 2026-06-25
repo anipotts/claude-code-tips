@@ -18,6 +18,10 @@ fast mode (lower thinking budget) now coexists with effort levels (`--effort low
 
 **note (v2.1.176+)**: `/fast` now enforces `availableModels` restrictions. if `availableModels` allowlist is set and fast mode would switch to a blocked model, `/fast` refuses to toggle. this prevents bypassing model restrictions via fast-mode alias selection.
 
+
+
+**note (v2.1.176):** `/fast` now enforces `enforceAvailableModels` restrictions. if your organization restricts available models and fast mode would switch to a blocked model, `/fast` refuses to toggle. design sessions that work within your allowed model set.
+
 ## why i don't use it
 
 never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.

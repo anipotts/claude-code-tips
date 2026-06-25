@@ -37,6 +37,10 @@ These prompts apply in `acceptEdits` mode and prevent unintended command executi
 
 **note (v2.1.172+):** hook behavior and available types may have evolved. consult `/doctor` or the official docs at code.claude.com/docs to verify current hook capabilities and parameters.
 
+
+
+**note (v2.1.191):** hooks with comma-separated matchers (e.g. `"Bash,PowerShell"`) were silently failing prior to v2.1.191. upgrade to v2.1.191+ if you use comma-separated matcher syntax.
+
 ### effort.level in hooks (v2.1.133+)
 
 all hooks now receive the active effort setting via two channels:

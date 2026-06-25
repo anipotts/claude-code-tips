@@ -89,6 +89,10 @@ not available on bedrock, vertex AI, or microsoft foundry (yet).
 
 use both: monitor for real-time watching, /loop for scheduled maintenance passes. they're complementary.
 
+
+
+**note (v2.1.191):** background agents no longer resurrect after being stopped from the tasks panel. stopping an agent is now permanent. adjust your workflows if you relied on task resurrection behavior.
+
 ## try it
 
 1. start a dev server and watch for errors: `"start npm run dev and use the monitor tool to watch for any errors or warnings while I work on the auth feature"`. then browse your app and trigger a bug. watch claude catch it mid-stream.
