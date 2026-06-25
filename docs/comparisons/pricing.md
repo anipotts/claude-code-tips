@@ -2,12 +2,19 @@
 
 # AI coding tool pricing matrix
 
-> last verified: 2026-04-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+> last verified: 2026-04-09 | updated: 2026-06-25 (github copilot added) | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [github copilot pricing](https://github.com/features/copilot/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
 
 ---
 
 ## subscription pricing
 
+| tool | free tier | $10-20/mo | $39-60/mo | $100-200/mo | enterprise |
+|------|-----------|-----------|-----------|------------|-----------|
+| claude code | limited usage | Pro ($20) | Max 5x ($100) | Max 20x ($200) | API-based |
+| cursor | 2-week trial, 2000 completions | Pro ($20) | Pro+ ($60) | Ultra ($200) | custom |
+| copilot | Free ($0, 2k completions) | Pro ($10) | Pro+ ($39) | Max ($100) | custom |
+| codex | limited | ChatGPT Plus ($20) | -- | ChatGPT Pro ($200) | -- |
+| gemini | 60 req/min, 1k req/day | AI Pro ($19.99) | -- | AI Ultra ($249.99) | custom |
 | antigravity | free (public preview -- verify current status) | pricing TBD (contact sales) | -- | custom (enterprise) | custom |
 
 ## what each tier actually includes
@@ -18,11 +25,12 @@
 |------|-------------|---------|
 | claude code | limited requests, rate-throttled | evaluation only |
 | cursor | 2-week pro trial, 2000 completions, 50 slow requests | trial, not sustained use |
+| copilot | 2000 completions/month, haiku 4.5, GPT-5 mini | real daily usage |
 | codex | limited codex access (temporary offer) | trial |
 | gemini | 60 req/min, 1000 req/day, no credit card | real daily usage |
 | antigravity | free during public preview, weekly quotas, multi-model access | real daily usage (best free tier) |
 
-**winner**: antigravity. free access to gemini 3.1 pro, claude opus/sonnet, and GPT-OSS 120B during public preview. gemini is second with 1000 requests/day on its own models.
+**winner**: antigravity. free access to gemini 3.1 pro, claude opus/sonnet, and GPT-OSS 120B during public preview. copilot free tier is solid -- 2000 completions/month is substantial for light use.
 
 ### $15-20/mo tier
 
@@ -30,11 +38,12 @@
 |------|------|-------------|
 | claude code | Pro ($20) | full claude code access, all models, rate-limited |
 | cursor | Pro ($20) | unlimited completions, 500 fast premium requests, credit pool |
+| copilot | Pro ($10) | unlimited completions, cloud agent, code review, 3rd party agents, $15 credits |
 | codex | ChatGPT Plus ($20) | codex access, GPT-4o, web browsing, plugins |
 | gemini | AI Pro ($19.99) | higher limits, workspace AI, 2TB storage |
 | antigravity | $0 (preview) | free access to frontier models, weekly quotas |
 
-**winner**: depends on workflow. cursor gives you tab completion + chat + agent. claude code gives you terminal agent + extensibility. codex gives you the broadest openai product access. gemini gives you cloud storage and workspace integration. antigravity is still free (preview).
+**winner**: copilot Pro at $10/mo is the best value at this tier -- unlimited completions, cloud agent, and model selection for the lowest price. cursor Pro and claude code Pro are comparable depending on workflow preference.
 
 ### $100-200/mo tier
 
@@ -42,11 +51,12 @@
 |------|------|-------------|
 | claude code | Max 5x ($100) / Max 20x ($200) | 5x or 20x Pro rate limits, max priority |
 | cursor | Pro+ ($60) / Ultra ($200) | larger credit pools, higher rate limits |
+| copilot | Pro+ ($39) / Max ($100) | Pro+ adds opus/premium models + audit logs + 4x usage; Max adds priority access + 2.9x+ usage |
 | codex | ChatGPT Pro ($200) | 2x codex limits, o3-pro, GPT-5, all openai models |
 | gemini | AI Ultra ($249.99) | highest-tier models, all google AI features |
 | antigravity | $0 (preview) / custom (enterprise) | free access continues, enterprise pricing TBD |
 
-**winner for individuals**: claude code Max 5x at $100/mo hits a sweet spot -- 5x the throughput of Pro for real power users. no other tool has an equivalent mid-tier. cursor's Pro+ at $60/mo is the closest.
+**winner for individuals**: copilot Max at $100/mo offers model selection + priority access, a middle ground between copilot Pro+ ($39) and claude code Max 5x ($100). claude code Max 5x still best for pure throughput.
 
 ---
 
@@ -118,7 +128,8 @@ use antigravity (free preview, includes frontier models) as your primary tool. s
 
 ### $15-20/mo
 **if terminal-first**: claude code Pro ($20)
-**if IDE-first**: cursor Pro ($20) or antigravity (still free)
+**if IDE-first**: cursor Pro ($20), copilot Pro ($10), or antigravity (still free)
+**best value at this tier**: copilot Pro ($10)
 **if you want everything openai**: ChatGPT Plus ($20)
 
 ### $60-100/mo
