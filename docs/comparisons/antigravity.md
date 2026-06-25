@@ -6,9 +6,9 @@
 
 ## at a glance
 
-**verification required**: this comparison is based on data from april 2026. antigravity is in active development. before recommending antigravity, verify current pricing, feature set, and preview status at the official sources:
+**verification required**: this comparison is based on data from april 2026. antigravity is in active development. **verify current pricing, feature set, and preview status at the official sources before recommending:**
 - [official claude code docs](https://code.claude.com/docs/en/overview)
-- [google antigravity official page](https://antigravity.google/)
+- [google antigravity official page](https://antigravity.google/pricing) -- check current tier pricing
 - [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)
 
 ### background

@@ -33,6 +33,11 @@ if you're on v2.1.98+, use monitor instead of `/loop` for all long-running proce
 
 that $200 covers everything. hundreds of sessions, thousands of subagent spawns. run `/lore` to see your own numbers.
 
+
+
+### verify against official pricing
+always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates. claude code v2.1.172+ may have updated billing logic. run `/doctor` to confirm your plan's token limits and billing method.
+
 ### what your plan costs
 
 | plan | monthly | how billing works |
