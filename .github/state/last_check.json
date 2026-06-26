@@ -22,7 +22,7 @@
   ],
   "anthropic/official_docs": "b2aeae2450cab84f",
   "competitor/openai_codex/releases": "rust-v0.142.2",
-  "competitor/gemini/releases": "v0.49.0-nightly.20260625.gd845bc5d4",
+  "competitor/gemini/releases": "v0.51.0-nightly.20260626.gb14416447",
   "community/hackernews/seen": [
     "43163011",
     "46593022",
