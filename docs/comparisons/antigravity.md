@@ -6,10 +6,9 @@
 
 ## at a glance
 
-**verification required**: this comparison is based on data from april 2026. antigravity is in active development. **verify current pricing, feature set, and preview status at the official sources before recommending:**
-- [official claude code docs](https://code.claude.com/docs/en/overview)
-- [google antigravity official page](https://antigravity.google/pricing) -- check current tier pricing
-- [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)
+> last verified: 2026-04-09, updated: 2026-05-10
+>
+> **CRITICAL**: antigravity's public preview status and pricing are likely outdated. verify current tier pricing, feature set, and preview status immediately at [antigravity.google/pricing](https://antigravity.google/pricing) before recommending this tool to anyone. this doc was last verified april 2026.
 
 ### background
 
