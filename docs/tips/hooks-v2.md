@@ -14,6 +14,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
+
+
+### auto-mode classifier context (v2.1.193+)
+
+v2.1.193 adds `autoMode.classifyAllShell` setting that affects when Bash/PowerShell commands are classified. hooks now receive denial reasons and classification results in the transcript. if your hook logic depends on command execution flow, test it with `classifyAllShell: true` to ensure hooks fire at the right stage relative to classification.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to:

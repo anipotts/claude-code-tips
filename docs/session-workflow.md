@@ -80,6 +80,12 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### background agents at session end (v2.1.193+)
+
+v2.1.193 improves how background agents are handled during session end. pinned background agents no longer re-prompt to continue on auto-update, and backgrounding the main turn no longer spawns phantom resumed subagents. your background work carries over cleanly to new sessions if you have agents pinned.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

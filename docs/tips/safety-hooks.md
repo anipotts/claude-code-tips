@@ -69,6 +69,12 @@ fi
 
 the full [safety-guard.sh](../../hooks/safety-guard.sh) covers 6 categories. this example shows the pattern.
 
+
+
+### coordination with auto-mode (v2.1.193+)
+
+v2.1.193 adds denial reasons to the auto-mode classifier. safety-guard.sh continues to work as a PreToolUse hook, but now runs alongside (not instead of) the new classifier. both layers protect against dangerous commands. if you see a command blocked by auto-mode before reaching your hook, that's correct behavior -- it's an additional safety layer.
+
 ## try it
 
 after setup, test it:

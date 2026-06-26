@@ -45,6 +45,12 @@ monitor takes four things:
 
 you don't configure these manually. tell claude what to watch in plain english and it writes the command + filter. the parameters exist under the hood.
 
+
+
+### background shell pressure reaping (v2.1.193+)
+
+v2.1.193 adds automatic memory-pressure reaping for idle background shell commands spawned by monitor. long-running monitor processes that consume memory will be automatically cleaned up if system pressure is detected. disable this with `CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1` if you need monitor processes to persist indefinitely regardless of idle time.
+
 ## when to use monitor vs background
 
 ```

@@ -24,6 +24,12 @@ a hook:
 
 ---
 
+
+
+### auto-mode classifier integration (v2.1.193+)
+
+v2.1.193 adds `autoMode.classifyAllShell` setting that routes all Bash/PowerShell commands through an auto-mode classifier instead of only arbitrary-code-execution patterns. this means PreToolUse hooks may fire before or after classification depending on your settings. if you have hooks that depend on specific execution flow, verify they work correctly with this setting enabled or disabled in your `.claude/settings.json`.
+
 ## the hooks i can't live without
 
 | hook | event | what it does |
