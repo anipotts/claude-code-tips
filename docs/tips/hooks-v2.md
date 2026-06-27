@@ -37,6 +37,18 @@ These prompts apply in `acceptEdits` mode and prevent unintended command executi
 
 **note (v2.1.172+):** hook behavior and available types may have evolved. consult `/doctor` or the official docs at code.claude.com/docs to verify current hook capabilities and parameters.
 
+
+
+
+
+### CLAUDE_CODE_DISABLE_MOUSE_CLICKS environment variable (v2.1.195+)
+
+set `CLAUDE_CODE_DISABLE_MOUSE_CLICKS=1` to disable mouse click/drag/hover in fullscreen mode while keeping wheel scroll enabled. useful for hooks or scripts that need to prevent accidental mouse interactions while still allowing scroll navigation.
+
+### hook matcher exact-matching (v2.1.195+)
+
+hook matchers with hyphenated identifiers (e.g. `code-reviewer`, `mcp__brave-search`) now exact-match instead of substring-matching. if you need to match all tools from a hyphenated MCP server, use a regex suffix: `mcp__brave-search__.*`. this prevents accidental matches against similarly-named tools.
+
 ### effort.level in hooks (v2.1.133+)
 
 all hooks now receive the active effort setting via two channels:

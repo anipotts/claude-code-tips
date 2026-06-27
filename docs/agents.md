@@ -55,6 +55,10 @@ spawn all three at once. when they return, you have the full picture without hav
 
 ---
 
+
+
+**note (v2.1.195+)**: background agent processes are now more reliable. agents spawned in parallel won't lose data if your Claude Code version updates mid-session. the desktop app's agent management view makes tracking parallel agents significantly easier than CLI.
+
 ## pattern 2: specialist delegation
 
 instead of doing everything in one context window, delegate specific work to agents with a single job.

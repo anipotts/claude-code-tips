@@ -150,3 +150,10 @@ this repo is a plugin marketplace. check `/.claude-plugin/marketplace.json`. to 
 3. push to github, create a marketplace.json, and share with `/plugin marketplace add yourname/repo`
 
 [example plugins (handoff, broadcast) &rarr;](../../examples/plugins/)
+
+---
+
+
+## troubleshooting plugin enable/disable
+
+if toggling a plugin Enable/Disable via `/plugin` doesn't work, check that your plugin's `plugin.json` `name` field matches the marketplace entry name exactly. v2.1.195 fixed an issue where mismatched names caused enable/disable to fail silently.
