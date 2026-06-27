@@ -4,15 +4,13 @@
 
 ## what it is
 
+## what it is
+
 fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
 
 this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
-**note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose additively: `--effort low --fast` minimizes both reasoning and output latency. avoid `--effort max --fast` (contradictory): max effort expects time to think, fast mode tries to skip it.
-
-
-
-**verify current fast mode behavior**: fast mode semantics may have evolved in recent versions. check `/doctor` or official docs at code.claude.com/docs to confirm fast mode still keeps you on the same model and only adjusts thinking budget.
+**note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose additively: `--effort low --fast` minimizes both reasoning and output latency. **avoid `--effort max --fast`**: max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.
 
 ### interaction with effort levels (v2.1.140+)
 
@@ -29,6 +27,13 @@ never use fast mode. i mean it. the only scenario where fast mode makes sense is
 the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
 
 the "toggle pattern" sounds nice in theory (start normal, switch to fast for execution, switch back for review). in practice, the execution phase is exactly where you need deep reasoning. mechanical refactors across 20 files are where subtle bugs hide. fast mode skips the edge case thinking that catches them.
+
+
+
+
+### with effort levels (v2.1.140+)
+
+effort levels add another dimension. at `--effort low --fast`, you get minimal reasoning + minimal latency. at `--effort max`, you want deep thinking, so toggling fast mode into that state is self-defeating. design your sessions around effort level, not around toggling fast mode mid-conversation.
 
 ## cost note
 
