@@ -79,25 +79,6 @@ take haiku's findings and write a targeted prompt for sonnet. haiku is roughly 6
 
 this pattern works bc exploration and implementation require different capabilities. exploration needs breadth and speed. implementation needs judgment and precision. match the model to the job.
 
-
-
-### worktree cloning with skipLfs (v2.1.153+)
-
-when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:
-
-```json
-{
-  "prompt": "refactor src/api/handlers.ts",
-  "description": "refactor api handlers",
-  "isolation": "worktree",
-  "gitConfig": {
-    "skipLfs": true
-  }
-}
-```
-
-this speeds up worktree creation for repos with large binary assets. trades full lfs file access for faster setup.
-
 ## cost reality
 
 each subagent loads its own context window. that means paying the context-loading tax per agent.

@@ -22,20 +22,6 @@ they merge in that order. local overrides project overrides global.
 
 **note (v2.1.172+):** settings schema may have changed. run `claude --help` or check `.claude/settings.json` examples in the claude-code-tips repo for current field names and structure.
 
-### worktree configuration (v2.1.133+)
-
-add a `worktree` section to control how new worktrees are created:
-
-```json
-{
-  "worktree": {
-    "baseRef": "fresh"  // or "head" to keep unpushed local commits
-  }
-}
-```
-
-default is `fresh` (branches from `origin/<default>`). set to `head` if you want new worktrees to include unpushed local commits.
-
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:
@@ -54,11 +40,9 @@ if you have `~/.claude.json`, these settings still work but are deprecated. migr
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.
 
+## worktree baseRef setting (v2.1.133+)
 
-
-### new in v2.1.133: worktree baseRef setting
-
-by default, new worktrees branch from `origin/<default-branch>` (fresh remote state). set `worktree.baseRef: "head"` to branch from local `HEAD` instead, preserving unpushed commits in new worktrees.
+by default, new worktrees branch from `origin/<default-branch>` (the fresh remote state). set `worktree.baseRef: "head"` in your settings to branch from local `HEAD` instead, preserving unpushed commits in new worktrees:
 
 ```json
 {
@@ -68,7 +52,7 @@ by default, new worktrees branch from `origin/<default-branch>` (fresh remote st
 }
 ```
 
-this setting changed default behavior in v2.1.133. if you relied on old behavior (local HEAD), set it explicitly.
+add this to `~/.claude/settings.json`, `.claude/settings.json`, or `.claude/settings.local.json` depending on scope. this setting matters if you have local commits not yet pushed; the default changed in v2.1.133.
 
 ## when to use which
 

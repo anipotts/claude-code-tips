@@ -6,25 +6,6 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ## the five types
 
-
-
-
-
-### managed settings in hooks (v2.1.175+)
-
-when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
-
-### safety prompts for sensitive file writes (v2.1.160+)
-
-v2.1.160 added prompts before writing to:
-- Shell startup files (`.zshenv`, `.zlogin`, `.bash_login`)
-- Git config (`~/.config/git/`)
-- Build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`)
-
-These prompts apply in `acceptEdits` mode and prevent unintended command execution. Hooks that attempt writes to these paths will trigger user confirmation before proceeding.
-
-### the five types
-
 | type | what it is | timeout | cost | best for |
 |------|-----------|---------|------|----------|
 | `command` | shell script, receives JSON on stdin | 600s | free | safety checks, logging, file ops |
@@ -33,30 +14,21 @@ These prompts apply in `acceptEdits` mode and prevent unintended command executi
 | `agent` | subagent with full tool access (Read, Grep, Glob) | 60s | expensive | complex decisions that need file reads |
 | `mcp_tool` (v2.1.118+) | directly invoke an MCP tool on a connected server | 60s | free (no child process) | hook work that an MCP server already owns the state for |
 
+---
 
+## version-specific features
 
-**note (v2.1.172+):** hook behavior and available types may have evolved. consult `/doctor` or the official docs at code.claude.com/docs to verify current hook capabilities and parameters.
+### managed settings in hooks (v2.1.175+)
 
-### effort.level in hooks (v2.1.133+)
+when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
-all hooks now receive the active effort setting via two channels:
+### safety prompts for sensitive file writes (v2.1.160+)
 
-- **JSON input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
-- **Bash environment**: `$CLAUDE_EFFORT` variable
-
-use this to adjust hook behavior based on effort mode. example: safety-guard might be stricter at `low` effort but more permissive at `max`.
-
-### PostToolUse output replacement (v2.1.121+)
-
-PostToolUse hooks can replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement"}}}` to modify what claude receives. use case: filter sensitive output, normalize error messages, add context.
-
-### Stop and SubagentStop context (v2.1.145+)
-
-Stop and SubagentStop hooks now receive `background_tasks` and `session_crons` fields. use this to warn before exiting with active background work or log task completion state.
+v2.1.160 added prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). these prompts apply in `acceptEdits` mode and prevent unintended command execution.
 
 ### effort level in hooks (v2.1.133+)
 
-hooks now receive the active effort setting via two channels:
+all hooks now receive the active effort setting via two channels:
 
 - **JSON input**: `effort.level` field (one of: `low`, `medium`, `high`, `xhigh`, `max`)
 - **Bash environment**: `$CLAUDE_EFFORT` variable
@@ -76,15 +48,25 @@ if [[ "$EFFORT" == "max" ]]; then
 fi
 ```
 
-### updatedToolOutput (PostToolUse, v2.1.121+)
+### PostToolUse output replacement (v2.1.121+)
 
-PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
+PostToolUse hooks can replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
 
 use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context. example: a bash hook that catches test failures and appends a link to the failing test file in your CI dashboard.
 
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+INPUT=$(cat)
+OUTPUT=$(echo "$INPUT" | jq -r '.tool_result.content[0].text // empty')
 
+# redact sensitive patterns
+REDACTED=$(echo "$OUTPUT" | sed -E 's/(api[_-]?key|authorization)[:=] *[^ ]+/\1: [REDACTED]/gi')
 
-### Stop and SubagentStop hook fields (v2.1.145+)
+echo "{\"hookSpecificOutput\": {\"PostToolUse\": {\"updatedToolOutput\": \"$REDACTED\"}}}"
+```
+
+### Stop and SubagentStop context (v2.1.145+)
 
 Stop and SubagentStop hooks now receive additional context about background tasks and session crons:
 
@@ -104,65 +86,23 @@ exit 0
 
 use this to warn before stopping a session with active background work, or to log task completion state.
 
-
-
 ### safe mode disables hooks (v2.1.169+)
 
 starting claude code with `--safe-mode` disables all hooks, plugins, skills, and MCP servers. this is useful for troubleshooting when customizations are causing problems. hooks will not fire during safe mode sessions.
 
-### mcp_tool event hooks (v2.1.126+)
+### accessing session ID in hooks (v2.1.132+)
 
-MCP tool handlers can now be invoked from hooks using the `mcp_tool` type with event-driven logic. this lets you intercept and react to MCP calls without spinning up a shell or http process.
-
-### updatedToolOutput (PostToolUse, v2.1.121+)
-
-PostToolUse hooks can now replace tool output before claude sees it. return `{"hookSpecificOutput": {"PostToolUse": {"updatedToolOutput": "your replacement text"}}}` to modify what claude receives from the tool.
-
-use case: filter sensitive output (API keys, internal IPs), normalize error messages, add context. example: a bash hook that catches test failures and appends a link to the failing test file in your CI dashboard.
-
-```json
-{
-  "type": "command",
-  "command": "~/.claude/hooks/test-failure-context.sh",
-  "events": ["PostToolUse"],
-  "matcher": "Bash"
-}
-```
-
-the script receives the tool result as `tool_result.content[0].text` in the stdin JSON. output the modified text and exit 0. claude sees your version, not the original.
-
-
-
-
-
-example: filter API keys and internal IPs from bash output:
+v2.1.132 added `CLAUDE_CODE_SESSION_ID` environment variable to the Bash tool subprocess. hooks can now use this to correlate tool calls with sessions. set it in your hook scripts for logging or external service integration:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-INPUT=$(cat)
-OUTPUT=$(echo "$INPUT" | jq -r '.tool_result.content[0].text // empty')
-
-# redact sensitive patterns
-REDACTED=$(echo "$OUTPUT" | sed -E 's/(api[_-]?key|authorization)[:=] *[^ ]+/\1: [REDACTED]/gi')
-
-echo "{\"hookSpecificOutput\": {\"PostToolUse\": {\"updatedToolOutput\": \"$REDACTED\"}}}"
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty')
+# or from Bash subprocess env:
+echo "$CLAUDE_CODE_SESSION_ID"
 ```
 
-### mcp_tool event hooks (v2.1.126+)
+---
 
-MCP tool handlers can now be invoked from hooks using the `mcp_tool` type. this lets you intercept and react to MCP calls without spinning up a shell or http process:
-
-```json
-{
-  "type": "mcp_tool",
-  "server": "database",
-  "tool": "query_audit",
-  "input": { "table": "users", "limit": 10 }
-}
-```
-
-use case: a PreToolUse hook that calls an MCP audit tool to log sensitive queries before they execute. no shell overhead, no http latency.
+## handler type reference
 
 ### command
 
@@ -176,18 +116,6 @@ the workhorse. runs a shell command, reads JSON from stdin, returns exit 0 (allo
 ```
 
 performance target: under 50ms for PreToolUse hooks. these fire on every single tool call. a slow command hook adds latency to everything.
-
-
-
-### accessing session ID in hooks
-
-v2.1.132 added `CLAUDE_CODE_SESSION_ID` environment variable to the Bash tool subprocess. hooks can now use this to correlate tool calls with sessions. set it in your hook scripts for logging or external service integration:
-
-```bash
-SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty')
-# or from Bash subprocess env:
-echo "$CLAUDE_CODE_SESSION_ID"
-```
 
 ### http
 
@@ -254,6 +182,8 @@ return value: whatever the mcp tool returns as text is treated as the hook's std
 when to reach for mcp_tool: your plugin already ships an MCP server, and some hook work (e.g. reading the session roster, marking an inbox read) is really a tool call in disguise. removing the shell/node shim cuts a child process per hook fire and removes a file that can drift from the server's state model. the `cc` plugin in this repo uses three mcp_tool hooks (SessionStart, UserPromptSubmit, SessionEnd) to talk to its own `cc` server.
 
 one gotcha: SessionStart hooks sometimes fire before the MCP server is fully connected, in which case the call produces a non-blocking error. design the server's own startup to self-bootstrap (don't rely on SessionStart hook success for correctness).
+
+---
 
 ## the async pattern
 
@@ -344,18 +274,6 @@ start with a command hook on PreToolUse. safety-guard.sh in this repo is a good 
 
 ---
 
-### v2.1.163 changes to hook event data
-
-v2.1.163+ may include additional event context for hooks. verify your hook inputs if upgrading from v2.1.122. check `/doctor` for hook compatibility warnings.
-
----
-
 ### verification note (v2.1.172+)
 
 hook behavior and available types may have evolved since v2.1.118. verify current hook capabilities via `/doctor` or the official docs at code.claude.com/docs. the five types documented here reflect v2.1.122+ behavior; check your version for any changes to handler types, timeout values, or JSON schema.
-
----
-
-### hook type stability (v2.1.172+)
-
-verify current hook types and behavior at [code.claude.com/docs](https://code.claude.com/docs/en/overview) or via `claude /doctor`. the five-type model (command, http, prompt, agent, mcp_tool) is stable as of v2.1.122 but may have evolved in later versions.
