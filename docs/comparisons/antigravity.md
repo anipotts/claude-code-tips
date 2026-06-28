@@ -8,7 +8,7 @@
 
 > last verified: 2026-04-09, updated: 2026-05-10
 >
-> **CRITICAL**: antigravity's public preview status and pricing are likely outdated. verify current tier pricing, feature set, and preview status immediately at [antigravity.google/pricing](https://antigravity.google/pricing) before recommending this tool to anyone. this doc was last verified april 2026.
+> **CRITICAL**: antigravity's public preview status and pricing are likely outdated. verify current tier pricing, feature set, and preview status immediately before recommending this tool. this doc was last verified april 2026. google's product roadmap and pricing announcements may have changed since verification.
 
 ### background
 
