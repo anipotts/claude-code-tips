@@ -36,6 +36,17 @@ if you have `~/.claude.json`, these settings still work but are deprecated. migr
 
 
 
+
+
+### new in v2.1.195: environment variable controls
+
+v2.1.195 added two new environment variables for runtime control:
+
+- `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` -- disable mouse click handling in terminal UI
+- `OTEL_LOG_ASSISTANT_RESPONSES` -- enable OpenTelemetry logging of assistant responses (for observability/debugging)
+
+these apply globally and cannot be overridden per-session. set them in your shell rc file if needed.
+
 ### new in v2.1.126: provider-managed auth
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.

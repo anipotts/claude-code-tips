@@ -13,7 +13,9 @@ most cost discussions are vibes. "it's expensive" or "it's worth it" without dat
 
 
 ### note on version updates (v2.1.172+)
-upstream claude code v2.1.172 includes updates to settings handling and context management. verify current cache hit rates and compaction behavior match this document's historical data. run `/lore` to check your actual session costs.
+
+### note on version updates (v2.1.195+)
+upstream claude code v2.1.195 is current as of June 2026. verify cache hit rates and compaction behavior match this document's historical data (last verified with v2.1.122). run `/lore` to check your actual session costs.
 
 ### monitor changes to background process cost
 
