@@ -175,7 +175,7 @@ jobs:
 
       - name: Cache argos language packs
         if: steps.check.outputs.should_translate == 'true' && steps.backend.outputs.backend == 'argos'
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.local/share/argos-translate
           key: argos-v1-${{ runner.os }}-${{ hashFiles('.github/scripts/translate_readme.py') }}
