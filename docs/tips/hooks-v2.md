@@ -16,6 +16,10 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+**hook stability note**: hook types and parameters are stable as of v2.1.122, but platform support varies. bedrock, vertex AI, and microsoft foundry may not support all hook types equally. run `/doctor` to check which hook types are available on your platform.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)

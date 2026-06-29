@@ -53,6 +53,12 @@ good: "the bug is in src/auth/token.ts around line 140, the JWT expiry check"
 
 
 
+
+
+### 6. verify compaction behavior with /doctor
+
+compaction strategy and cache prefix stability may differ across versions and billing methods (subscription vs API vs Bedrock/Vertex). run `/doctor` to check your active session's compaction strategy. if you're on a different platform or version, the percentages in this doc may not apply.
+
 ### 6. use single-file grep reads efficiently
 
 v2.1.160 removed the read-after-grep requirement for single-file `grep`/`egrep`/`fgrep` commands. if claude greps a single file to understand it before editing, that single grep now satisfies the read-before-edit check. this saves a separate Read call and keeps context tighter.

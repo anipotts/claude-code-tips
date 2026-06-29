@@ -50,6 +50,10 @@ always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-cl
 
 on pro or max, **you don't pay per token.** the lore.db cost estimates are hypothetical: they show what your usage would cost at API list prices, not what you actually pay. legacy `~/.claude/mine.db` is auto-migrated by lore on first run.
 
+
+
+**note (current)**: billing mechanics and cache hit rate optimization may have changed in versions after v2.1.122. always run `/lore` to measure your actual session costs, and `/doctor` to verify your plan's token limits and billing method. anthropic pricing page is the source of truth for current rates.
+
 ### why caching still matters on a flat plan
 
 even though you don't pay per token, caching affects:
