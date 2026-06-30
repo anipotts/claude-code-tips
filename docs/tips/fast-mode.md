@@ -4,6 +4,8 @@
 
 ## what it is
 
+fast mode keeps you on the default model (currently Claude Sonnet 5 in v2.1.197). it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
+
 ## what it is
 
 fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.

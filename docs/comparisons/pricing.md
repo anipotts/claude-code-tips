@@ -8,7 +8,15 @@
 
 ## subscription pricing
 
-| antigravity | free (public preview -- verify current status) | pricing TBD (contact sales) | -- | custom (enterprise) | custom |
+| plan | claude code | cursor |
+|------|------------|--------|
+| free | limited usage | 2-week pro trial, 2000 completions, 50 slow requests |
+| entry | $20/mo (Pro) | $20/mo (Pro) -- 500 fast premium requests, credit pool |
+| mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) |
+| heavy use | $200/mo (Max 20x) | $200/mo (Ultra) |
+| teams | enterprise (API-based) | $40/user/mo |
+
+**note (v2.1.197):** Claude Sonnet 5 available with promotional pricing $2/$10 per Mtok (input/output) through August 31, 2026. Standard API pricing may differ after promotion ends.
 
 ## what each tier actually includes
 

@@ -37,6 +37,10 @@ that $200 covers everything. hundreds of sessions, thousands of subagent spawns.
 
 
 
+
+
+**v2.1.197 update (august 2026):** Sonnet 5 promotional pricing ($2/$10 per Mtok through Aug 31) changes cost economics. Sonnet 5 becomes the preferred model for most work if cost is primary concern. verify current pricing as promotional period ends.
+
 ### verify against official pricing
 always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates. claude code v2.1.172+ may have updated billing logic. run `/doctor` to confirm your plan's token limits and billing method.
 
@@ -90,7 +94,9 @@ this env var is sent as `X-Amzn-Bedrock-Service-Tier` header on all requests. on
 
 ## model pricing
 
-> **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** pricing changes frequently. last verified may 2026 (claude code v2.1.122+).
+> **always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates.** pricing changes frequently. last verified august 2026 (claude code v2.1.197+).
+
+Clause Sonnet 5 launched with promotional pricing of $2 input / $10 output per million tokens through August 31, 2026. Sonnet 5 has native 1M token context window, replacing Sonnet 4.6.
 
 ## what actually costs money
 

@@ -9,18 +9,9 @@
 ## at a glance
 
 | feature | claude code | gemini |
-|---------|------------|------------|
+|---------|------------|------------|  
 | pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | generous free tier (60 req/min, 1000 req/day) / $19.99 AI Pro / $249.99 AI Ultra |
-| model | opus 4.6, sonnet 4.6, haiku 4.5 | gemini 2.5 flash, gemini 3.1 pro (1M token context) |
-| context | 1M tokens (Opus 4.6, Sonnet 4.6), 200K (Haiku 4.5), managed window with compaction | up to 1M tokens |
-| interface | terminal CLI, VS Code, JetBrains | terminal CLI |
-| extensibility | hooks, plugins, skills, agents, commands, MCP servers | MCP servers, GEMINI.md context files, extensions |
-| open source | yes ([anthropics/claude-code](https://github.com/anthropics/claude-code)) | yes, Apache 2.0 ([google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli)) |
-| auth | anthropic API key or claude.ai subscription | google login, API key, or Vertex AI |
-| non-interactive mode | `--print` flag for scripting | `-p` flag with JSON output support |
-| google integration | none | native Google Cloud, Google Search grounding, GitHub integration |
-
----
+| model | sonnet 5, opus 4.6, haiku 4.5 (sonnet 5 default, promotional pricing $2/$10 through Aug 31) | gemini 2.5 flash, gemini 3.1 pro (1M token context) |
 
 ## where claude code wins
 

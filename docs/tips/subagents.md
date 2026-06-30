@@ -75,9 +75,7 @@ send a cheap model to explore, then a capable model to act. each subagent is its
 
 **step 2: sonnet implements the change**
 
-take haiku's findings and write a targeted prompt for sonnet. haiku is roughly 60x cheaper on input tokens. a 5-minute exploration that reads 30 files costs almost nothing.
-
-this pattern works bc exploration and implementation require different capabilities. exploration needs breadth and speed. implementation needs judgment and precision. match the model to the job.
+take haiku's findings and write a targeted prompt for sonnet. with sonnet 5 promotional pricing at $2/$10 per Mtok (through Aug 31), the cost gap between haiku and sonnet has narrowed. verify current pricing before committing to this pattern.
 
 ## cost reality
 
