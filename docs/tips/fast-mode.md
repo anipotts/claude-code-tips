@@ -36,6 +36,13 @@ with effort levels (v2.1.140+) now available, effort controls are the preferred 
 
 the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
 
+
+
+
+### organization model defaults (v2.1.196+)
+
+if your organization has set default models via the org console, fast mode respects those defaults. if fast mode would switch to a model that's not in your org's allowlist (`enforceAvailableModels`), it refuses to toggle and shows a message. check your org's model settings in the claude.ai console if fast mode stops working unexpectedly.
+
 ### with effort levels (v2.1.140+)
 
 effort levels add another dimension. at `--effort low --fast`, you get minimal reasoning + minimal latency. at `--effort max`, you want deep thinking, so toggling fast mode into that state is self-defeating. design your sessions around effort level, not around toggling fast mode mid-conversation.

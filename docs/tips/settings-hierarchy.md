@@ -144,3 +144,17 @@ this affects: `/model` picker behavior, default model selection, and cross-sessi
 ### schema verification (v2.1.172+)
 
 run `claude --help settings` or check the official docs at [code.claude.com/docs](https://code.claude.com/docs/en/overview) to verify current settings schema. field names and structure may have changed since this document was written.
+
+---
+
+## new in v2.1.176: enforceAvailableModels
+
+restrict which models claude code can use in a session. set `enforceAvailableModels` to an allowlist of model names. when this is set, `/model` switches are limited to the allowlist, and hooks that request models outside the list silently fall back to the first allowed model.
+
+```json
+{
+  "enforceAvailableModels": ["claude-opus-4.6", "claude-sonnet-4.6"]
+}
+```
+
+use this in org/role settings to enforce model governance. individual sessions cannot bypass this restriction. `/fast` mode also respects the allowlist and refuses to toggle if it would switch to a blocked model.

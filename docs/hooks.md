@@ -74,6 +74,12 @@ three categories of damage:
 
 ---
 
+
+
+### hook model restrictions (v2.1.175+)
+
+if your organization or session has `enforceAvailableModels` set, prompt and agent hooks can't override it. a hook requesting opus when sonnet is the only allowed model will silently use sonnet. configure hooks to be model-agnostic, or design fallback behavior that handles model unavailability gracefully.
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.

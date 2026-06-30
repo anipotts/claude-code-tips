@@ -44,6 +44,16 @@ for project-level config, add an `.mcp.json` file to your repo root:
 
 anyone who clones the repo gets the same MCP setup. no manual `claude mcp add` needed.
 
+
+
+### security: mcp server approval (v2.1.196+)
+
+starting v2.1.196, MCP servers defined in committed `.claude/settings.json` no longer auto-spawn in untrusted workspaces. instead, they show `⏸ Pending approval` in the session. this prevents malicious repos from auto-loading dangerous MCP servers.
+
+if you clone a repo with `.mcp.json` and see pending approval, review the server list before approving. in trusted project repos (your own work), approval is automatic.
+
+this also applies to `claude mcp list` and `claude mcp get` — they won't spawn `.mcp.json` servers without explicit approval first.
+
 ## three patterns
 
 ### 1. read-only data access
