@@ -17,6 +17,12 @@ most cost discussions are vibes. "it's expensive" or "it's worth it" without dat
 ### note on version updates (v2.1.195+)
 upstream claude code v2.1.195 is current as of June 2026. verify cache hit rates and compaction behavior match this document's historical data (last verified with v2.1.122). run `/lore` to check your actual session costs.
 
+
+
+### note on version updates (v2.1.197+)
+
+upstream claude code v2.1.197 is current as of July 1, 2026. verify billing logic, token accounting, and caching behavior match this document's historical data (last verified with v2.1.122). significant billing changes may have occurred between v2.1.122 and v2.1.197. run `/lore` to check your actual session costs.
+
 ### monitor changes to background process cost
 
 prior to monitor (v<2.1.98), watching background processes required `/loop` polling -- full API calls on a timer, expensive when idle. monitor (v2.1.98+) is event-driven: the script runs continuously, tokens consumed only when output matches a filter. idle monitoring costs zero tokens.

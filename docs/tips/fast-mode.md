@@ -4,6 +4,12 @@
 
 ## what it is
 
+
+
+### model restrictions (v2.1.176+)
+
+if `enforceAvailableModels` is enabled in settings, `/fast` will refuse to toggle if it would switch to a model outside the allowlist. this prevents bypassing model restrictions via fast mode. design your fast-mode workflows to stay within your configured available models.
+
 ## what it is
 
 fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
