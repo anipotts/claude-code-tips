@@ -38,6 +38,12 @@ if you have `~/.claude.json`, these settings still work but are deprecated. migr
 
 
 
+
+
+### verify schema against current version (v2.1.197+)
+
+if you're on v2.1.195 or later, check the official claude code docs or run `claude --help settings` to verify the current settings.json schema. structure may have changed since v2.1.122 documentation.
+
 ### new in v2.1.195: environment variable controls
 
 v2.1.195 added two new environment variables for runtime control:
