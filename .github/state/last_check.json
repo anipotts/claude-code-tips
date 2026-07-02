@@ -21,8 +21,8 @@
     "x1xhlol/system-prompts-and-models-of-ai-tools"
   ],
   "anthropic/official_docs": "b244a50c6a934c37",
-  "competitor/openai_codex/releases": "rust-v0.142.5",
-  "competitor/gemini/releases": "v0.51.0-nightly.20260701.g7f00c5fe5",
+  "competitor/openai_codex/releases": "rust-v0.143.0-alpha.33",
+  "competitor/gemini/releases": "v0.51.0-nightly.20260702.gff00dacd9",
   "community/hackernews/seen": [
     "43163011",
     "46593022",
