@@ -10,6 +10,10 @@ shipped april 9 2026. requires v2.1.98+. announced by alistair (claude code team
 
 shipped april 9 2026. requires v2.1.98+. now stable and mature across current versions (v2.1.98+, tested with v2.1.122).
 
+
+
+**platform availability (v2.1.98+)**: monitor is stable on claude.ai and direct API. bedrock, vertex AI, and microsoft foundry support remains unconfirmed -- run `/doctor` to verify availability on your platform before relying on monitor for production workflows.
+
 ## stream filter vs poll filter
 
 monitor has two modes depending on what you're watching.

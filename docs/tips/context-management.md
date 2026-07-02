@@ -107,3 +107,10 @@ across hundreds of sessions, roughly a fifth of them hit compaction. the pattern
 3. scope your next task to 15 minutes of work and see if the session stays clean.
 
 [session length data &rarr;](./session-length.md) | [full cost analysis &rarr;](../cost.md)
+
+---
+
+
+### 6. leverage single-file grep optimization (v2.1.160+)
+
+v2.1.160 removed the read-after-grep requirement for single-file `grep`/`egrep`/`fgrep` commands. if claude greps a single file to understand it before editing, that single grep now satisfies the read-before-edit check. this saves a separate Read call and keeps context tighter on targeted edits.
