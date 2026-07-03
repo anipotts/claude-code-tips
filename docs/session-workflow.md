@@ -85,6 +85,11 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+
+**v2.1.199+**: hook error messages are now visible when SessionStart or SessionEnd hooks block execution, improving transparency around hook-based restrictions.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

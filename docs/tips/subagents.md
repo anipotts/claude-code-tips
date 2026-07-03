@@ -97,6 +97,11 @@ i've spawned thousands of subagents across hundreds of sessions. the average age
 
 on the Max plan ($200/mo flat), per-agent cost is absorbed by the subscription. agent teams become a throughput question, not a billing question.
 
+
+
+
+**v2.1.199 error handling**: subagents now report API errors (rate limits, usage limits) to the parent agent instead of silently failing or incorrectly marking them as successful. when a subagent is cut off by a rate limit, it returns its partial work with an error notice.
+
 ## the `subagent_type` parameter
 
 specialized agent types get tailored system prompts and tool access:

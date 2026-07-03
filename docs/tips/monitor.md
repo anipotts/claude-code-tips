@@ -49,6 +49,11 @@ monitor takes four things:
 
 you don't configure these manually. tell claude what to watch in plain english and it writes the command + filter. the parameters exist under the hood.
 
+
+
+
+**v2.1.199+**: background job progress indicators are now more reliable. long-running commands no longer cause stalled progress displays, and low-memory conditions show actionable guidance instead of generic errors.
+
 ## when to use monitor vs background
 
 ```

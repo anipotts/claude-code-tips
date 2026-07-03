@@ -55,6 +55,11 @@ PreToolUse hooks (safety-guard, no-squash) fire on every Bash call -- 10K+ times
 
 
 
+
+
+
+**v2.1.199 hook error visibility**: SessionStart, Setup, and SubagentStart hooks now display stderr when exiting with code 2 (block), making hook failures more transparent for debugging.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added confirmation prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). these prompts apply in `acceptEdits` mode and provide a second safety layer alongside safety-guard.sh hooks.

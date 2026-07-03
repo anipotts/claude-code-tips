@@ -10,7 +10,11 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 ### model restrictions (v2.1.176+)
 
+### model restrictions (v2.1.176+)
+
 if `enforceAvailableModels` is enabled in settings, `/fast` will refuse to toggle if it would switch to a model outside the allowlist. this prevents bypassing model restrictions via fast mode. design your fast-mode workflows to stay within your configured available models.
+
+**v2.1.199+**: model restriction enforcement is now consistent — fast mode respects allowlists and fails explicitly rather than silently falling back.
 
 ## what it is
 

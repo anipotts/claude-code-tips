@@ -25,6 +25,11 @@ good candidates:
 
 plan mode forces Claude to think before acting, which means fewer wrong turns, fewer compactions, and fewer wasted sessions.
 
+
+
+
+**v2.1.199+**: stacked slash-skill invocations like `/skill-a /skill-b do XYZ` now load all leading skills (up to 5), not just the first. this enables more complex planning workflows with multiple skills in a single prompt.
+
 ## the only exception
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.

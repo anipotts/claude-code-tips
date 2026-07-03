@@ -16,6 +16,13 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+
+### v2.1.199 agent error handling
+
+agent hooks can now rely on improved error reporting: subagents cut off by rate limits return partial work, and API errors are reported accurately instead of silently failing. hook logic that expects agent results should handle partial responses gracefully.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)
