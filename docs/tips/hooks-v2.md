@@ -16,6 +16,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+### background agent stability (v2.1.200+)
+
+v2.1.200 fixed several background-agent issues: stale daemon locks preventing restart, daemon handover failures on downgrades, and subagent output truncation under rate limits. if you use agent teams or background agents, upgrade to v2.1.200 to ensure reliable agent roster management and clean shutdowns.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)

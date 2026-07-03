@@ -8,6 +8,12 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 **with effort levels (v2.1.140+)**: fast mode is now a narrow toggle on output speed, separate from effort level controls. effort controls throughput and reasoning depth; fast mode controls latency. they compose: `--effort low --fast` minimizes both. **critically: avoid `--effort max --fast`** -- max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.
 
+
+
+### compatibility with permission modes (v2.1.200+)
+
+fast mode works independently of permission mode. the new default `manual` mode (v2.1.200+) means claude will prompt before executing tool calls, even in fast mode. if you use fast mode in automated workflows, set `--permission-mode auto` or `"defaultMode": "auto"` to preserve auto-execution.
+
 ### model restrictions (v2.1.176+)
 
 if `enforceAvailableModels` is enabled in settings, `/fast` will refuse to toggle if it would switch to a model outside the allowlist. this prevents bypassing model restrictions via fast mode. design your fast-mode workflows to stay within your configured available models.

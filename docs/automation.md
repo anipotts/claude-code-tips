@@ -46,6 +46,18 @@ done
 
 key: `--allowedTools` explicitly excludes Write and Edit. prompt says "DO NOT modify." output is logged for review.
 
+
+
+### permission mode in v2.1.200+
+
+starting v2.1.200, the default permission mode is `manual`. daemons that expect auto-execution must explicitly set `--permission-mode auto` or `"defaultMode": "auto"` in `.claude/settings.json`. update your daemon scripts:
+
+```bash
+claude --permission-mode auto -p "..."
+```
+
+without this, daemons will prompt before every tool execution, blocking unattended workflows.
+
 ### the guardian agent pattern
 
 safer than raw daemons. watches for test failures and proposes fixes, but never applies them automatically:

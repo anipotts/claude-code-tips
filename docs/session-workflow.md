@@ -85,6 +85,12 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### permission mode changes (v2.1.200+)
+
+starting v2.1.200, the default permission mode is now `manual` (not `default`). this means claude code will prompt before executing tool calls by default instead of auto-continuing. if you run background sessions or unattended workflows, explicitly set `--permission-mode auto` or `"defaultMode": "auto"` in settings to preserve the old behavior.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:
