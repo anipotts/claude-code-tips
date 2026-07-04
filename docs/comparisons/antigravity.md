@@ -24,7 +24,7 @@ antigravity's status post-public-preview is unconfirmed as of may 2026. during p
 
 
 
-**verification note (june 8 2026)**: antigravity's public preview status and pricing should be re-verified at [antigravity.google/pricing](https://antigravity.google/pricing). last detailed check was april 9 2026.
+**verification note (july 4 2026)**: antigravity's public preview status and pricing should be re-verified at [antigravity.google/pricing](https://antigravity.google/pricing). pricing page fetch failed on 2026-07-04 -- unable to verify current status.
 
 ## where claude code wins
 
