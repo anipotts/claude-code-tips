@@ -48,6 +48,10 @@ the tradeoff isn't worth it for normal development. you get slightly faster outp
 
 effort levels add another dimension. at `--effort low --fast`, you get minimal reasoning + minimal latency. at `--effort max`, you want deep thinking, so toggling fast mode into that state is self-defeating. design your sessions around effort level, not around toggling fast mode mid-conversation.
 
+
+
+**v2.1.201 note**: effort level behavior and fast mode interactions may have changed since v2.1.140. verify current behavior with `/doctor` and check official docs at code.claude.com/docs/llms.txt for model selection and fast mode semantics in the latest version.
+
 ## cost note
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.

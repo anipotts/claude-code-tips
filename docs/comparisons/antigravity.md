@@ -12,19 +12,9 @@
 
 ### background
 
-google antigravity launched november 2025 alongside the gemini 3 model family. it was built by a team google hired from windsurf (formerly codeium) in july 2025 as part of a $2.4B deal that brought ~40 senior engineers into google deepmind. the product shares technological ancestry with windsurf but is a distinct google product. windsurf itself continues as a separate product under cognition AI, which acquired windsurf's remaining assets for ~$250M in july 2025.
+google antigravity launched november 2025 alongside the gemini 3 model family. it was built by a team google hired from windsurf (formerly codeium) in july 2025 as part of a $2.4B deal.
 
-antigravity is currently in **public preview** and free for individual users. google has not announced post-preview pricing.
-
-antigravity's status post-public-preview is unconfirmed as of may 2026. during preview it was free. **verify current pricing and availability at [antigravity.google/pricing](https://antigravity.google/pricing) before recommending.**
-
-
-
-**status update (may 26 2026)**: verify current pricing and preview status at [antigravity.google/pricing](https://antigravity.google/pricing) -- public preview terms may have changed since april verification.
-
-
-
-**verification note (june 8 2026)**: antigravity's public preview status and pricing should be re-verified at [antigravity.google/pricing](https://antigravity.google/pricing). last detailed check was april 9 2026.
+**CRITICAL -- STALE**: This document was last verified april 2026 with v2.1.122. as of july 2026, antigravity's public preview status, pricing, and feature set are unconfirmed. verify immediately at [antigravity.google/pricing](https://antigravity.google/pricing) before recommending this tool. google's product roadmap, pricing tiers, and preview status may have changed significantly in the past 3 months.
 
 ## where claude code wins
 

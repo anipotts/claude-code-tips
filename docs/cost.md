@@ -8,9 +8,13 @@ what claude code actually costs, how caching saves 81% of it, and the strategies
 
 ## my real numbers
 
-most cost discussions are vibes. "it's expensive" or "it's worth it" without data. here are mine.
+### my real numbers (historical -- verify current rates)
 
+**note**: claude code v2.1.201 is current as of July 2026. billing structure, caching behavior, and model pricing may have changed since last detailed audit (v2.1.122). run `/doctor` to verify your actual billing method and `/lore` to track real session costs. the patterns below reflect historical data and may not match your current usage.
 
+**$200/mo.** Max plan. flat rate. (verify current pricing at anthropic pricing docs)
+
+that $200 covered hundreds of sessions historically. run `/lore` to see your own numbers with current billing.
 
 ### note on version updates (v2.1.172+)
 
