@@ -97,6 +97,12 @@ i've spawned thousands of subagents across hundreds of sessions. the average age
 
 on the Max plan ($200/mo flat), per-agent cost is absorbed by the subscription. agent teams become a throughput question, not a billing question.
 
+
+
+### subagent output handling (v2.1.200+)
+
+v2.1.200 fixed a bug where subagents cut off by rate limits before producing any text would return empty results. they now fail cleanly with a proper error. this means rate-limited subagents are now easier to debug and retry. if you see this behavior on v2.1.199 or earlier, upgrade to get proper error reporting.
+
 ## the `subagent_type` parameter
 
 specialized agent types get tailored system prompts and tool access:

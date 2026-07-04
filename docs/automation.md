@@ -30,6 +30,17 @@ ai-powered maintenance is also viable on the cheap: weekly competitive-intel, do
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
 
+
+
+### background session stability (v2.1.200+)
+
+v2.1.200 fixed critical issues with background sessions:
+- sessions no longer silently stop mid-turn after sleep/wake
+- daemon handover now preserves recent build state (older binaries cannot take over)
+- background agents now restart cleanly after crashes (stale daemon.lock issue fixed)
+
+these fixes make the safe daemon pattern more reliable for long-running monitoring. if you're on v2.1.199 or earlier, upgrade to v2.1.200+ before relying on background daemons for production monitoring.
+
 ### safe daemon (recommended)
 
 ```bash

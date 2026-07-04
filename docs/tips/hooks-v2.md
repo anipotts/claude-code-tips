@@ -16,6 +16,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+### v2.1.201 sonnet 5 harness changes
+
+v2.1.201 removes mid-conversation system role reminders for Claude Sonnet 5 sessions. this does not affect hook execution but may reduce console noise in long sonnet 5 sessions. no hook configuration changes needed.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)

@@ -20,6 +20,30 @@ if you see a notice about npm global install not auto-updating, run `/doctor` to
 
 
 
+
+
+### permission mode change (v2.1.200+)
+
+v2.1.200 changed the default permission mode from `default` to `manual`. this means claude code now asks before executing actions rather than proceeding automatically. update your `--permission-mode` flags and settings if you relied on the old behavior:
+
+```bash
+# old behavior (v2.1.199 and earlier): default mode was auto-approve
+# new behavior (v2.1.200+): default mode is manual (requires approval)
+
+# to restore old auto-approve behavior:
+claude --permission-mode auto
+```
+
+Update `.claude/settings.json` or `~/.claude/settings.json` if you prefer automatic approval:
+
+```json
+{
+  "permission": {
+    "defaultMode": "auto"
+  }
+}
+```
+
 ### safe mode (v2.1.169+)
 
 if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:
