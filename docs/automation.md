@@ -30,6 +30,12 @@ ai-powered maintenance is also viable on the cheap: weekly competitive-intel, do
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
 
+
+
+### safe mode prevents customization issues
+
+if a hook or plugin misbehaves in your daemon, restart with `--safe-mode` to disable all customizations and verify the base tool works correctly.
+
 ### safe daemon (recommended)
 
 ```bash

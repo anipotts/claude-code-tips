@@ -12,7 +12,11 @@ most cost discussions are vibes. "it's expensive" or "it's worth it" without dat
 
 
 
-### note on version updates (v2.1.172+)
+### note on version updates
+
+### note on version updates (v2.1.201+)
+
+upstream claude code v2.1.201 is current as of July 2026. before relying on cost data from this document (last verified with v2.1.122), run `/doctor` to verify your actual billing method, token limits, and caching behavior. changes may have occurred. run `/lore` to check your actual per-session costs and compare against this document's historical patterns.
 
 ### note on version updates (v2.1.195+)
 upstream claude code v2.1.195 is current as of June 2026. verify cache hit rates and compaction behavior match this document's historical data (last verified with v2.1.122). run `/lore` to check your actual session costs.

@@ -20,6 +20,18 @@ if you see a notice about npm global install not auto-updating, run `/doctor` to
 
 
 
+
+
+### safe mode for troubleshooting (v2.1.169+)
+
+if claude code misbehaves or customizations cause issues, start with `--safe-mode`:
+
+```bash
+claude --safe-mode
+```
+
+this disables CLAUDE.md, plugins, skills, hooks, and MCP servers. useful for debugging.
+
 ### safe mode (v2.1.169+)
 
 if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:

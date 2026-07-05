@@ -22,6 +22,17 @@ they merge in that order. local overrides project overrides global.
 
 **note (v2.1.172+):** settings schema may have changed. run `claude --help` or check `.claude/settings.json` examples in the claude-code-tips repo for current field names and structure.
 
+
+
+### environment variable controls (v2.1.195+)
+
+v2.1.195 added two new environment variables:
+
+- `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` — disable mouse click handling in terminal UI
+- `OTEL_LOG_ASSISTANT_RESPONSES` — enable OpenTelemetry logging of assistant responses
+
+set these in your shell rc file for persistent behavior.
+
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:
