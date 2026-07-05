@@ -85,6 +85,9 @@ not available on bedrock, vertex AI, or microsoft foundry (yet).
 
 **platform support note**: monitor is stable on claude.ai and direct API (v2.1.98+, tested v2.1.122+). bedrock, vertex AI, and microsoft foundry support remains unconfirmed -- run `/doctor` to verify availability on your platform.
 
+
+ **note (v2.1.201+)**: verify platform support status has not changed since v2.1.122 baseline.
+
 ## vs /loop
 
 | | monitor | /loop |
