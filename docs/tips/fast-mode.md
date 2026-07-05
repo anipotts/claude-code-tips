@@ -6,35 +6,17 @@
 
 fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
 
-**with effort levels (v2.1.140+)**: fast mode is now a narrow toggle on output speed, separate from effort level controls. effort controls throughput and reasoning depth; fast mode controls latency. they compose: `--effort low --fast` minimizes both. **critically: avoid `--effort max --fast`** -- max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.
+this is the most common misconception: people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
+
+## version notes
+
+### effort levels (v2.1.140+)
+
+fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. **avoid `--effort max --fast`** -- max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.
 
 ### model restrictions (v2.1.176+)
 
 if `enforceAvailableModels` is enabled in settings, `/fast` will refuse to toggle if it would switch to a model outside the allowlist. this prevents bypassing model restrictions via fast mode. design your fast-mode workflows to stay within your configured available models.
-
-## what it is
-
-fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
-
-this is the most common misconception. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
-
-**with effort levels (v2.1.140+)**: fast mode is now a narrow toggle on output speed, separate from effort level controls. effort controls throughput and reasoning depth; fast mode controls latency. they compose: `--effort low --fast` minimizes both. avoid `--effort max --fast` -- they contradict.
-
-## what it is
-
-fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
-
-this is the most common misconception i see. people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
-
-**note (v2.1.140+)**: fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose additively: `--effort low --fast` minimizes both reasoning and output latency. **avoid `--effort max --fast`**: max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.
-
-### interaction with effort levels (v2.1.140+)
-
-fast mode (lower thinking budget) now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput, model selection, and reasoning depth across the session. fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. `--effort max --fast` may behave unexpectedly -- max effort expects time to think, fast mode tries to skip it. avoid that combination.
-
-
-
-**note (v2.1.176+)**: `/fast` now enforces `availableModels` restrictions. if `availableModels` allowlist is set and fast mode would switch to a blocked model, `/fast` refuses to toggle. this prevents bypassing model restrictions via fast-mode alias selection.
 
 ## why i don't use it
 
