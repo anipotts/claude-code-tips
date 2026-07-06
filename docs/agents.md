@@ -55,6 +55,10 @@ spawn all three at once. when they return, you have the full picture without hav
 
 ---
 
+
+
+**update (july 2026, v2.1.201):** agent team patterns have evolved. the shanraisshan/claude-code-best-practice repo documents v6.10.0 BMAD workflows with 8 coordinated agents running parallel pipelines (8-step dispatch-execute-verify patterns). for large parallel teams (3+ agents), consult that repo's dev-workflows docs for production patterns.
+
 ## pattern 2: specialist delegation
 
 instead of doing everything in one context window, delegate specific work to agents with a single job.

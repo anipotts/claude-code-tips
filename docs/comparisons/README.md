@@ -32,6 +32,12 @@ side-by-side pricing for all tools in one table: [pricing.md](pricing.md)
 - subjective claims (code quality, UX) are labeled as such
 - we update these docs when tools ship major changes
 
+
+
+- last comprehensive verification: april 2026
+- last update with upstream changes: july 2026 (badge/changelog updates only, no feature changes detected)
+- for tools in public preview (antigravity), re-verify pricing and status before recommending
+
 ## sources used across all comparisons
 
 - [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models)

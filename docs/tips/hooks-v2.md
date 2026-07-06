@@ -66,6 +66,10 @@ REDACTED=$(echo "$OUTPUT" | sed -E 's/(api[_-]?key|authorization)[:=] *[^ ]+/\1:
 echo "{\"hookSpecificOutput\": {\"PostToolUse\": {\"updatedToolOutput\": \"$REDACTED\"}}}"
 ```
 
+
+
+**note (v2.1.201):** output replacement still works. if using extended thinking or high effort levels, hook latency may be more noticeable due to increased model reasoning time. keep PostToolUse hooks under 50ms to avoid user-facing delays.
+
 ### Stop and SubagentStop context (v2.1.145+)
 
 Stop and SubagentStop hooks now receive additional context about background tasks and session crons:
