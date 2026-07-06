@@ -23,6 +23,12 @@ upstream claude code v2.1.195 is current as of June 2026. verify cache hit rates
 
 upstream claude code v2.1.197 is current as of July 1, 2026. **before using cost data from this document, run `/doctor` to verify your actual billing method, token limits, and caching behavior**. significant changes may have occurred between v2.1.122 (last detailed verification) and v2.1.197. run `/lore` to check your actual per-session costs and compare against this document's historical patterns.
 
+
+
+### note on version updates (v2.1.201+)
+
+upstream claude code v2.1.201 is current as of July 2026. **before using cost data from this document, verify your actual billing method, token limits, and caching behavior with `/doctor`**. cache hit rates, compaction frequency, and per-session costs may have changed since v2.1.122 (last detailed verification). run `/lore` to check your current per-session costs and compare against historical patterns in this document.
+
 ### monitor changes to background process cost
 
 prior to monitor (v<2.1.98), watching background processes required `/loop` polling -- full API calls on a timer, expensive when idle. monitor (v2.1.98+) is event-driven: the script runs continuously, tokens consumed only when output matches a filter. idle monitoring costs zero tokens.

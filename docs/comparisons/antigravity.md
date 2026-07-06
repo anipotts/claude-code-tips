@@ -26,6 +26,10 @@ antigravity's status post-public-preview is unconfirmed as of may 2026. during p
 
 **verification note (june 8 2026)**: antigravity's public preview status and pricing should be re-verified at [antigravity.google/pricing](https://antigravity.google/pricing). last detailed check was april 9 2026.
 
+
+
+**URGENT (july 2026): antigravity's public preview status, pricing, and feature set should be re-verified immediately at [antigravity.google/pricing](https://antigravity.google/pricing). this document was last detailed verified april 2026. google may have announced post-preview pricing, changed feature availability, or ended the public preview. do not recommend this tool to users without current pricing verification.**
+
 ## where claude code wins
 
 ### terminal-first workflow

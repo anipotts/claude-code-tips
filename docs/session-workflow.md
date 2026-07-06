@@ -49,6 +49,10 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 **verify context loading behavior**: check official claude code docs at code.claude.com/docs/en/overview for current context loading order, cache prefix stability, and hook timing. implementation details may have changed since v2.1.122.
 
+
+
+**verify against v2.1.201**: context loading order, CLAUDE.md caching behavior, and hook timing may have changed. check official docs at [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) or run `claude --help docs` to fetch the current documentation index.
+
 ### documentation index
 
 run `claude --help docs` or visit [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) to fetch the complete documentation index. note: official docs may reflect features or changes newer than this guide (last verified v2.1.122).
