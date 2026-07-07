@@ -34,3 +34,6 @@ shorter sessions are more efficient. here's the data.
 run `/mine` to check your own session length distribution. if most of your sessions are 2hr+, you're probably working harder than you need to.
 
 [full cost analysis &rarr;](../cost.md)
+
+
+**note (v2.1.202+):** the session length data in this document is from v2.1.122. run `/lore` and compare your own session distribution against these historical benchmarks. cache hit rates, compaction frequency, and tool throughput may have changed significantly.
