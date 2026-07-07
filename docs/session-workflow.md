@@ -85,6 +85,20 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### background session management (v2.1.202+)
+
+v2.1.202 fixes an issue where `/rename` on background sessions was reverted when the job restarted. you can now reliably rename a background session and address it by its new name across restarts:
+
+```
+/rename my-long-task "auth-refactor"
+# later, in another session:
+/attach auth-refactor
+```
+
+this makes long-running background work easier to track and manage.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

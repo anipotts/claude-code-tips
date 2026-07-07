@@ -14,6 +14,12 @@ this is the most common misconception: people assume fast mode = dumber model. i
 
 fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. **avoid `--effort max --fast`** -- max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.
 
+
+
+### dynamic workflow size (v2.1.202+)
+
+v2.1.202 adds a "Dynamic workflow size" setting in `/config` that controls how large Claude makes dynamic workflows (small/medium/large agent counts). this is an advisory guideline for workflow generation, not an enforced cap. it interacts with effort levels: at `--effort max`, workflows may grow larger; at `--effort low`, workflows stay compact. fast mode is orthogonal to this setting.
+
 ### model restrictions (v2.1.176+)
 
 if `enforceAvailableModels` is enabled in settings, `/fast` will refuse to toggle if it would switch to a model outside the allowlist. this prevents bypassing model restrictions via fast mode. design your fast-mode workflows to stay within your configured available models.

@@ -56,6 +56,18 @@ always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-cl
 
 on pro or max, **you don't pay per token.** the lore.db cost estimates are hypothetical: they show what your usage would cost at API list prices, not what you actually pay. legacy `~/.claude/mine.db` is auto-migrated by lore on first run.
 
+
+
+### dynamic workflow size (v2.1.202+)
+
+v2.1.202 adds a "Dynamic workflow size" setting accessible via `/config`. this setting is an advisory guideline (small/medium/large) that influences how many agents Claude spawns in dynamic workflows. it does not change your monthly bill on flat-rate plans, but it does affect throughput and context consumption:
+
+- `small`: fewer agents, less parallel work, tighter context
+- `medium`: balanced (default)
+- `large`: more agents, more parallelism, higher context pressure
+
+on Max plans, larger workflows don't cost extra but may hit rate limits faster if you spawn many agents. tune this based on your session complexity and available bandwidth.
+
 ### why caching still matters on a flat plan
 
 even though you don't pay per token, caching affects:

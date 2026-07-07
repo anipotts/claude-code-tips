@@ -102,6 +102,25 @@ echo "$CLAUDE_CODE_SESSION_ID"
 
 ---
 
+
+
+### accessing workflow context in hooks (v2.1.202+)
+
+v2.1.202 adds `workflow.run_id` and `workflow.name` to OpenTelemetry attributes emitted by workflow-spawned agents. if you're building hooks that react to agent-spawned work, you can now correlate tool calls back to the parent workflow:
+
+```bash
+#!/usr/bin/env bash
+INPUT=$(cat)
+WORKFLOW_RUN_ID=$(echo "$INPUT" | jq -r '.workflow.run_id // empty')
+WORKFLOW_NAME=$(echo "$INPUT" | jq -r '.workflow.name // empty')
+
+if [[ -n "$WORKFLOW_RUN_ID" ]]; then
+  echo "tool call from workflow: $WORKFLOW_NAME ($WORKFLOW_RUN_ID)"
+fi
+```
+
+use this for logging, metrics, or conditional hook behavior based on whether a tool call originated from a parent workflow.
+
 ## handler type reference
 
 ### command
