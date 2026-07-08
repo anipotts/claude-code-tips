@@ -85,6 +85,13 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### headless session hook reliability (v2.1.204+)
+
+if you run claude code in headless mode (background agents, remote workers), SessionEnd hooks (like version-stamp.sh) are now guaranteed to stream and complete before the session closes. prior to v2.1.204, hook events could fail to stream, causing remote workers to be idle-reaped mid-hook. upgrade to v2.1.204 for reliable hook execution in headless contexts.
+
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

@@ -42,6 +42,18 @@ skip it for read-only research. worktree setup adds overhead you don't need when
 
 
 
+
+
+### worktree isolation fixes (v2.1.203+)
+
+v2.1.203 fixed two critical worktree isolation bugs:
+
+- **shell commands in wrong checkout**: subagents no longer accidentally run bash commands in the parent checkout instead of their own worktree. isolation is now enforced.
+- **nested repository support**: worktree creation now accepts nested repositories in multi-repo workspaces. agents can isolate and edit in monorepo structures.
+
+these were bugs, not design limitations. if you hit isolation issues on v2.1.202 or earlier, upgrade to v2.1.203+.
+
+
 ### worktree cloning with skipLfs (v2.1.153+)
 
 when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:

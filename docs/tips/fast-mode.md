@@ -10,6 +10,13 @@ this is the most common misconception: people assume fast mode = dumber model. i
 
 ## version notes
 
+
+
+### interaction with background/headless sessions (v2.1.203+)
+
+fast mode behavior in background and headless sessions (agents, remote workers) now respects effort levels consistently. prior versions had regressions in background session responsiveness; v2.1.203+ ensures fast mode and effort levels compose correctly across all session types.
+
+
 ### effort levels (v2.1.140+)
 
 fast mode now coexists with effort levels (`--effort low|medium|high|xhigh|max`). effort controls throughput and reasoning depth; fast mode is a narrow toggle on output speed. they compose: `--effort low --fast` minimizes both reasoning and output latency. **avoid `--effort max --fast`** -- max effort expects time to think, fast mode tries to skip it. these are contradictory and may behave unexpectedly.

@@ -68,6 +68,11 @@ servers that both observe and modify. playwright is the canonical example: claud
 
 **environment variables.** use the `env` field in `.mcp.json` for secrets. never hardcode credentials in the command args.
 
+
+
+**additional working directories and MCP roots (v2.1.203+)**: when you add additional working directories to a session, MCP servers are notified via `roots/list` and receive a `notifications/roots/list_changed` event. use this to update MCP tool contexts when the session's file scope changes.
+
+
 ## try it
 
 only if you actually need to. if the built-in tools (Read, Write, Edit, Bash, Grep, Glob) do the job, you don't need MCP.

@@ -86,6 +86,13 @@ exit 0
 
 use this to warn before stopping a session with active background work, or to log task completion state.
 
+
+
+### hook event streaming fix (v2.1.204+)
+
+v2.1.204 fixed hook events not streaming during SessionStart hooks in headless sessions, which could cause remote workers to be idle-reaped mid-hook. if you use headless sessions with SessionStart hooks (e.g., daemon patterns, remote workers), upgrade to v2.1.204 to ensure hooks complete before session starts.
+
+
 ### safe mode disables hooks (v2.1.169+)
 
 starting claude code with `--safe-mode` disables all hooks, plugins, skills, and MCP servers. this is useful for troubleshooting when customizations are causing problems. hooks will not fire during safe mode sessions.
