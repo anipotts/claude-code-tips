@@ -73,6 +73,11 @@ the data says: sessions that hit compaction average 1.7 compactions. if you're c
 
 **verification note**: verify current compact vs clear behavior against [official claude code docs](https://code.claude.com/docs/en/overview) before relying on these percentages in new versions.
 
+
+
+
+**note (v2.1.204+)**: compaction behavior and rates may have improved since v2.1.122. the 32%/54% compaction percentages reflect historical data. run `/lore` on your current version to see actual compaction rates for your sessions.
+
 ## ending a session
 
 when a session ends (ctrl+c, `/exit`, or timeout), two things fire:

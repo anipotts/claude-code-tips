@@ -22,6 +22,11 @@ they merge in that order. local overrides project overrides global.
 
 **note (v2.1.172+):** settings schema may have changed. run `claude --help` or check `.claude/settings.json` examples in the claude-code-tips repo for current field names and structure.
 
+
+
+
+**schema verification (v2.1.204+)**: settings.json structure may have evolved since v2.1.172. run `claude --help settings` or check the official [claude code docs](https://code.claude.com/docs/en/overview) to verify current field names and schema before copying examples from this guide.
+
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:
