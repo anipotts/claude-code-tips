@@ -74,6 +74,10 @@ three categories of damage:
 
 ---
 
+
+
+**session transcript protection** -- v2.1.205 adds an auto mode rule that blocks tampering with session transcript files. if your PreToolUse hooks attempt to modify `.claude/sessions/` or transcript JSON files, they will be blocked. use the transcript API instead of direct file manipulation.
+
 ## hooks vs CLAUDE.md rules
 
 use CLAUDE.md when you want to **guide behavior** -- coding style, naming conventions, preferred patterns. claude reads it, usually follows it, occasionally forgets.

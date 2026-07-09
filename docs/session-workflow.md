@@ -90,6 +90,10 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+**note (v2.1.205+):** session transcripts are now protected from tampering by auto mode rules. the version-stamp.sh hook and panopticon logging continue to work as documented -- they use safe APIs for session data access.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

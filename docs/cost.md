@@ -56,6 +56,10 @@ always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-cl
 
 on pro or max, **you don't pay per token.** the lore.db cost estimates are hypothetical: they show what your usage would cost at API list prices, not what you actually pay. legacy `~/.claude/mine.db` is auto-migrated by lore on first run.
 
+
+
+**note (v2.1.205+):** session transcript files are now protected by auto mode rules. the lore plugin and session mining workflows remain unaffected as they use documented APIs, not direct file access. verify `/lore` still functions if you rely on session transcript analysis.
+
 ### why caching still matters on a flat plan
 
 even though you don't pay per token, caching affects:

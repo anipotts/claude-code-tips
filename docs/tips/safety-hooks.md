@@ -50,6 +50,12 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+
+| pattern | why |
+|---------|-----|
+| session transcript tampering | v2.1.205+ blocks direct modifications to `.claude/sessions/` and session transcript files in auto mode |
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.
