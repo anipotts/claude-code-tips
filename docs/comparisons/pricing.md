@@ -2,7 +2,7 @@
 
 # AI coding tool pricing matrix
 
-> last verified: 2026-04-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+> last verified: 2026-07-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
 
 ---
 
@@ -29,7 +29,7 @@
 | tool | plan | what you get |
 |------|------|-------------|
 | claude code | Pro ($20) | full claude code access, all models, rate-limited |
-| cursor | Pro ($20) | unlimited completions, 500 fast premium requests, credit pool |
+| cursor | Pro ($16) | unlimited completions, 500 fast premium requests, credit pool <!-- updated 2026-07-09 --> |
 | codex | ChatGPT Plus ($20) | codex access, GPT-4o, web browsing, plugins |
 | gemini | AI Pro ($19.99) | higher limits, workspace AI, 2TB storage |
 | antigravity | $0 (preview) | free access to frontier models, weekly quotas |

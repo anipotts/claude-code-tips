@@ -2,7 +2,7 @@
 
 # claude code vs cursor
 
-> last verified: 2026-04-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-07-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -10,7 +10,7 @@
 
 | feature | claude code | cursor |
 |---------|------------|--------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (limited) / $20 pro / $60 pro+ / $200 ultra per month |
+| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (limited) / $16 pro / $60 pro+ / $200 ultra per month <!-- updated 2026-07-09 --> |
 | model | opus 4.6, sonnet 4.6, haiku 4.5 | claude sonnet, GPT-4o, cursor-small, others (credit-based model selection) |
 | interface | terminal CLI, VS Code extension, JetBrains extension | forked VS Code IDE (standalone app) |
 | tab completion | no | yes -- inline ghost text, multi-line suggestions |
@@ -82,10 +82,10 @@ cursor shows proposed changes as inline diffs in the editor -- green for additio
 | plan | claude code | cursor |
 |------|------------|--------|
 | free | limited usage | 2-week pro trial, 2000 completions, 50 slow requests |
-| entry | $20/mo (Pro) | $20/mo (Pro) -- 500 fast premium requests, credit pool |
+| entry | $20/mo (Pro) | $16/mo (Pro) -- 500 fast premium requests, credit pool <!-- updated 2026-07-09 --> |
 | mid-tier | $100/mo (Max 5x) | $60/mo (Pro+) |
 | heavy use | $200/mo (Max 20x) | $200/mo (Ultra) |
-| teams | enterprise (API-based) | $40/user/mo |
+| teams | enterprise (API-based) | $32/user/mo <!-- updated 2026-07-09 --> |
 
 at the $20/mo tier, both tools are comparable. cursor gives you tab completion + chat + agent mode. claude code gives you full interactive terminal agent + extensibility stack. the value depends on your workflow.
 
