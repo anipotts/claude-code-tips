@@ -100,6 +100,12 @@ use `/cd <path>` to move your session to a new working directory without breakin
 
 this preserves your conversation context and cache prefix while changing the directory claude works in. useful for switching between related tasks in sibling directories.
 
+
+
+### directory suggestions in /cd (v2.1.206+)
+
+`/cd` now provides directory path suggestions matching `/add-dir` behavior. type `/cd ../` and see completions for available directories. this makes navigating between worktrees and related projects faster without needing to know exact paths.
+
 ## further reading
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions

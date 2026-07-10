@@ -50,6 +50,10 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+
+**note (v2.1.206)**: `/commit-push-pr` now auto-allows `git push` to the repo's configured push remote (`remote.pushDefault`) in addition to `origin`. this provides an additional safety layer beyond safety-guard.sh for preventing accidental pushes to wrong remotes.
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.

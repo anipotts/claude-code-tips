@@ -90,6 +90,24 @@ use this to warn before stopping a session with active background work, or to lo
 
 starting claude code with `--safe-mode` disables all hooks, plugins, skills, and MCP servers. this is useful for troubleshooting when customizations are causing problems. hooks will not fire during safe mode sessions.
 
+
+
+### mcp server timeout configuration (v2.1.206+)
+
+v2.1.206 fixed MCP servers configured via `--mcp-config` or `.mcp.json` ignoring per-server `request_timeout_ms`. set this in your `.mcp.json` to override the 60s default for long-running MCP tool calls:
+
+```json
+{
+  "mcpServers": {
+    "myserver": {
+      "command": "npx",
+      "args": ["@mcp/server"],
+      "request_timeout_ms": 120000
+    }
+  }
+}
+```
+
 ### accessing session ID in hooks (v2.1.132+)
 
 v2.1.132 added `CLAUDE_CODE_SESSION_ID` environment variable to the Bash tool subprocess. hooks can now use this to correlate tool calls with sessions. set it in your hook scripts for logging or external service integration:
