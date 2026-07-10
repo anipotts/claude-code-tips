@@ -23,7 +23,9 @@ upstream claude code v2.1.195 is current as of June 2026. verify cache hit rates
 
 ### note on version updates (v2.1.205+)
 
-upstream claude code v2.1.205 is current as of July 2026. **before using cost data from this document, run `/doctor` to verify your actual billing method, token limits, and caching behavior**. significant changes may have occurred between v2.1.122 (last detailed verification) and v2.1.205. caching, compaction rates, and token efficiency may differ. run `/lore` to check your actual per-session costs and compare against this document's historical patterns.
+### note on version updates (v2.1.206+)
+
+upstream claude code v2.1.206 is current as of July 2026. **before relying on cost data from this document, run `/doctor` to verify your actual billing method, token limits, caching behavior, and compaction rates**. significant changes may have occurred between v2.1.122 (last detailed verification) and v2.1.206. run `/lore` to check your actual per-session costs.
 
 ### monitor changes to background process cost
 

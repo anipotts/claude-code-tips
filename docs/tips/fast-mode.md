@@ -42,3 +42,9 @@ hackathon. 30 minutes to demo. you need something that compiles, not something t
 
 
 Note: v2.1.132 fixed an issue where `--permission-mode` flag was ignored when resuming a plan-mode session with `--continue`/`--resume`. if you use plan mode with fast mode in resumable workflows, verify your permission settings are preserved on resume.
+
+---
+
+### v2.1.206 update
+
+v2.1.206 released july 2026. verify current fast mode behavior, effort level interaction, and model enforcement against official docs at [code.claude.com/docs](https://code.claude.com/docs/en/overview).

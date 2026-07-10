@@ -104,3 +104,9 @@ this preserves your conversation context and cache prefix while changing the dir
 
 - [hooks](./hooks.md) -- the hooks that fire during sessions
 - [cost](./cost.md) -- session cost patterns and optimization
+
+---
+
+### version status (v2.1.206)
+
+v2.1.206 is current as of July 2026. session workflow details (version-stamp timing, compaction behavior, hook firing order) should be verified against official docs at [code.claude.com/docs](https://code.claude.com/docs/en/overview) if using v2.1.206+.
