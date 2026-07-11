@@ -20,6 +20,11 @@ if you see a notice about npm global install not auto-updating, run `/doctor` to
 
 
 
+
+### auto mode behavior (v2.1.207+)
+
+if auto mode is enabled (default on Bedrock, Vertex AI, Foundry), claude code may switch models mid-session based on task complexity. if you prefer consistent model usage, check your settings or run `/doctor` to see if auto mode is active.
+
 ### safe mode (v2.1.169+)
 
 if claude code misbehaves or you suspect a hook/plugin is causing issues, start with `--safe-mode` to disable all customizations:

@@ -8,6 +8,11 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception: people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+### interaction with auto mode (v2.1.207+)
+
+if auto mode is enabled, fast mode toggles may interact unexpectedly with model switching. auto mode may override your fast mode choice if it detects a task needing a different model. check your settings with `disableAutoMode` if you need consistent model behavior.
+
 ## version notes
 
 ### effort levels (v2.1.140+)

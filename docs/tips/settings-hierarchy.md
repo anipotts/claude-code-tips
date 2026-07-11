@@ -27,6 +27,19 @@ they merge in that order. local overrides project overrides global.
 
 **schema verification (v2.1.204+)**: settings.json structure may have evolved since v2.1.172. run `claude --help settings` or check the official [claude code docs](https://code.claude.com/docs/en/overview) to verify current field names and schema before copying examples from this guide.
 
+
+### auto mode setting (v2.1.207+)
+
+v2.1.207 makes auto mode default on Bedrock, Vertex AI, and Foundry. disable it per-project or globally by adding `disableAutoMode: true` to your settings:
+
+```json
+{
+  "disableAutoMode": true
+}
+```
+
+auto mode may switch models based on task complexity. if you prefer explicit model control, set this flag.
+
 ### migration note: ~/.claude.json → settings.json (v2.1.119+)
 
 starting v2.1.119, display settings moved from `~/.claude.json` to the settings.json scope:

@@ -45,6 +45,11 @@ these are the tool-level patterns that show up in the data:
 
 the real insight: only 8 errors were captured across hundreds of sessions. the error *rate* is low. the expensive mistakes aren't errors -- they're bad decisions that succeed (like force-pushing or editing without reading).
 
+
+### worktree config pollution (v2.1.207+ fix)
+
+v2.1.207 fixes a bug where `extensions.worktreeConfig` was left in `.git/config` after worktree cleanup, breaking go-git tools. if you're on an older version and see go-git errors, manually clean up `.git/config` by removing any `extensions.worktreeConfig` lines.
+
 ## what /lore mistakes actually shows
 
 the `mistakes` feature in the lore plugin tracks error patterns across sessions. it watches for tool calls that fail, commands that get blocked by hooks, and patterns that repeat.
