@@ -81,11 +81,7 @@ before monitor, the only way to watch something was `/loop`, which is time-drive
 
 this also works in the agent SDK, not just the CLI. so if you're building autonomous agents, they can now react to external events natively.
 
-not available on bedrock, vertex AI, or microsoft foundry (yet).
-
-
-
-**platform support note**: monitor is stable on claude.ai and direct API (v2.1.98+, tested v2.1.122+). bedrock, vertex AI, and microsoft foundry support remains unconfirmed -- run `/doctor` to verify availability on your platform.
+**platform support (v2.1.98+, tested v2.1.122)**: monitor is stable on claude.ai and direct API. bedrock, vertex AI, and microsoft foundry support remains unconfirmed -- run `/doctor` on your current version to verify availability on your platform.
 
 ## vs /loop
 
