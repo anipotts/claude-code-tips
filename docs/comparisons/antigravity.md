@@ -12,23 +12,13 @@
 
 ### background
 
-google antigravity launched november 2025 alongside the gemini 3 model family. it was built by a team google hired from windsurf (formerly codeium) in july 2025 as part of a $2.4B deal that brought ~40 senior engineers into google deepmind. the product shares technological ancestry with windsurf but is a distinct google product. windsurf itself continues as a separate product under cognition AI, which acquired windsurf's remaining assets for ~$250M in july 2025.
+### background
 
-antigravity is currently in **public preview** and free for individual users. google has not announced post-preview pricing.
+google antigravity launched november 2025. it was built by a team google hired from windsurf in july 2025. windsurf itself continues as a separate product under cognition AI.
 
-antigravity's status post-public-preview is unconfirmed as of may 2026. during preview it was free. **verify current pricing and availability at [antigravity.google/pricing](https://antigravity.google/pricing) before recommending.**
+**status as of july 2026**: antigravity's public preview status, pricing, and feature set may have changed since april 2026 verification. **verify current status at [antigravity.google/pricing](https://antigravity.google/pricing) before recommending.**
 
-
-
-**status update (may 26 2026)**: verify current pricing and preview status at [antigravity.google/pricing](https://antigravity.google/pricing) -- public preview terms may have changed since april verification.
-
-
-
-**verification note (june 8 2026)**: antigravity's public preview status and pricing should be re-verified at [antigravity.google/pricing](https://antigravity.google/pricing). last detailed check was april 9 2026.
-
-
-
-**status note (july 2026)**: antigravity's pricing and feature set should be re-verified before recommending. public preview status may have changed since april 2026 last verification.
+if antigravity has moved to GA pricing: update pricing table, update free/paid tiers, note any new features.
 
 ## where claude code wins
 

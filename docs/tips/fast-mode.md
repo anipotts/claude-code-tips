@@ -20,11 +20,11 @@ if `enforceAvailableModels` is enabled in settings, `/fast` will refuse to toggl
 
 ## why i don't use it
 
-never use fast mode. i mean it. the only scenario where fast mode makes sense is if you're at a hackathon with 30 minutes left before demo, or you're someone who literally doesn't care about burning through usage. fast mode can easily run up over a hundred dollars of usage in half an hour.
+## why i don't use it
 
-with effort levels (v2.1.140+) now available, effort controls are the preferred way to manage throughput and reasoning depth. avoid combining `--effort max --fast` -- they contradict each other. design your sessions around effort level, not around toggling fast mode mid-conversation.
+use `--effort` levels instead of fast mode. effort controls is the modern approach: `--effort low` for quick lookups, `--effort high|xhigh|max` for complex reasoning. fast mode still exists for backward compatibility but effort levels are the preferred mechanism.
 
-the tradeoff isn't worth it for normal development. you get slightly faster output at the cost of shallower reasoning, which means more mistakes, which means more corrections, which means you end up spending MORE time and tokens than if you'd just let Opus think. keep it off.
+avoid combining `--effort max --fast` -- they contradict each other. max effort expects time to think; fast mode tries to skip it. design your sessions around effort level, not around toggling fast mode mid-conversation.
 
 ### with effort levels (v2.1.140+)
 
