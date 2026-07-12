@@ -19,3 +19,9 @@ short, standalone claude code tips. each one is a specific technique you can use
 | [mcp integration](./mcp-integration.md) | wire up MCP servers, use them inside sessions |
 | [hooks v2](./hooks-v2.md) | command vs http vs prompt hooks, the async pattern |
 | [monitor](./monitor.md) | watch background processes, react to output in real time (v2.1.98+, stable as of v2.1.145) |
+
+## forward-looking RFCs
+
+| rfc | what it proposes |
+|-----|-----------------|
+| [lore v2](../rfcs/lore-v2-observability.md) | observability as a service: plugins consuming lore through a stable MCP interface |
