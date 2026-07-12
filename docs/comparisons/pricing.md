@@ -2,13 +2,22 @@
 
 # AI coding tool pricing matrix
 
-> last verified: 2026-04-09 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+> last verified: 2026-07-12 | sources: [claude.ai plans](https://claude.com/pricing), [cursor pricing](https://cursor.com/pricing), [codex pricing](https://developers.openai.com/codex/pricing/), [gemini subscriptions](https://gemini.google/subscriptions/), [antigravity](https://antigravity.google/pricing)
+
+<!-- note: cursor pro+/ultra pricing not clearly displayed on current pricing page as of 2026-07-12 -- verify before recommending -->
 
 ---
 
 ## subscription pricing
 
-| antigravity | free (public preview -- verify current status) | pricing TBD (contact sales) | -- | custom (enterprise) | custom |
+| tool | free | entry ($15-20) | mid ($39-60) | heavy ($100-200) | enterprise |
+|------|------|---|---|---|---|
+| claude code | limited requests | $20 pro | $100 max 5x | $200 max 20x | custom (API) |
+| cursor | limited agent, 2000 completions | $20 pro | pro+/ultra (verify pricing) | pro+/ultra | custom |
+| github copilot | $0 (2000 completions) | $10 pro | $39 pro+ | $100 max | $39/user (pooled) |
+| antigravity | free (public preview -- verify current status) | pricing TBD | -- | (contact sales) | custom |
+
+<!-- updated 2026-07-12: github copilot pricing structure verified -->
 
 ## what each tier actually includes
 
@@ -18,23 +27,29 @@
 |------|-------------|---------|
 | claude code | limited requests, rate-throttled | evaluation only |
 | cursor | 2-week pro trial, 2000 completions, 50 slow requests | trial, not sustained use |
+| github copilot | 2000 completions/month, access to haiku 4.5 + gpt-5 mini | real daily usage |
 | codex | limited codex access (temporary offer) | trial |
 | gemini | 60 req/min, 1000 req/day, no credit card | real daily usage |
 | antigravity | free during public preview, weekly quotas, multi-model access | real daily usage (best free tier) |
 
-**winner**: antigravity. free access to gemini 3.1 pro, claude opus/sonnet, and GPT-OSS 120B during public preview. gemini is second with 1000 requests/day on its own models.
+**winner**: antigravity during public preview. github copilot free tier ($0) is competitive with 2000 completions/month. gemini and codex are secondary options.
+
+<!-- updated 2026-07-12 -->
 
 ### $15-20/mo tier
 
 | tool | plan | what you get |
 |------|------|-------------|
 | claude code | Pro ($20) | full claude code access, all models, rate-limited |
-| cursor | Pro ($20) | unlimited completions, 500 fast premium requests, credit pool |
+| cursor | Pro ($20) | unlimited completions, extended limits, credit pool |
+| github copilot | Pro ($10) | unlimited code completion, cloud agent, code review, $15 credits |
 | codex | ChatGPT Plus ($20) | codex access, GPT-4o, web browsing, plugins |
 | gemini | AI Pro ($19.99) | higher limits, workspace AI, 2TB storage |
 | antigravity | $0 (preview) | free access to frontier models, weekly quotas |
 
-**winner**: depends on workflow. cursor gives you tab completion + chat + agent. claude code gives you terminal agent + extensibility. codex gives you the broadest openai product access. gemini gives you cloud storage and workspace integration. antigravity is still free (preview).
+**winner**: depends on workflow. github copilot pro at $10 is the lowest paid tier. cursor and claude code at $20 offer terminal agent + extensibility (claude code) or IDE integration + tab completion (cursor). gemini and antigravity are secondary.
+
+<!-- updated 2026-07-12 -->
 
 ### $100-200/mo tier
 
@@ -42,11 +57,14 @@
 |------|------|-------------|
 | claude code | Max 5x ($100) / Max 20x ($200) | 5x or 20x Pro rate limits, max priority |
 | cursor | Pro+ ($60) / Ultra ($200) | larger credit pools, higher rate limits |
+| github copilot | Max ($100) | 2.9x pro+ usage, $200 credits, priority features |
 | codex | ChatGPT Pro ($200) | 2x codex limits, o3-pro, GPT-5, all openai models |
 | gemini | AI Ultra ($249.99) | highest-tier models, all google AI features |
 | antigravity | $0 (preview) / custom (enterprise) | free access continues, enterprise pricing TBD |
 
-**winner for individuals**: claude code Max 5x at $100/mo hits a sweet spot -- 5x the throughput of Pro for real power users. no other tool has an equivalent mid-tier. cursor's Pro+ at $60/mo is the closest.
+**winner for individuals**: claude code Max 5x at $100/mo hits a sweet spot -- 5x the throughput of Pro for real power users. github copilot max at $100 and cursor ultra at $200 are alternatives. gemini ultra is the most expensive individual tier.
+
+<!-- updated 2026-07-12 -->
 
 ---
 
@@ -90,6 +108,11 @@ currently free during public preview. weekly quotas limit heavy usage but most d
 - running out of credits mid-month forces model downgrades or upgrade
 - annual billing saves 20% but locks you in
 
+### github copilot
+- credit system ($15 pro, $70 pro+, $200 max) separate from subscription -- running out of credits forces upgrade
+- gradual rollout means new signups may be waitlisted
+- business/enterprise tiers ($19-39/user) require pooled credit management
+
 ### codex
 - no middle tier between $20 and $200 -- the jump is 10x
 - API key usage has separate pricing from ChatGPT subscription
@@ -105,32 +128,37 @@ currently free during public preview. weekly quotas limit heavy usage but most d
 - weekly quotas throttle heavy users during preview
 - post-preview pricing model is unknown -- could be subscription, credits, or usage-based
 
+<!-- updated 2026-07-12: github copilot added as new competitor tier -->
+
 ---
 
 ## recommendation by budget
 
-### note on competitor activity (march 2026)
+### note on competitor activity (july 2026)
 
-openai codex continues alpha releases (0.115.0-alpha.15-17) but no stable version bumps. gemini-cli active development with oauth2 and headless fixes. no pricing changes detected across codex, gemini, or antigravity. claude code remains the dominant terminal agent for cost-conscious teams.
+github copilot restructured tiers: free ($0, 2000 completions), pro ($10), pro+ ($39), max ($100) with credit system. cursor verified with bugbot, cloud agents, and new features (grok/composer). no pricing changes detected on codex or antigravity tiers. claude code remains dominant for terminal-centric workflows.
 
 ### $0/mo (free)
-use antigravity (free preview, includes frontier models) as your primary tool. supplement with gemini free tier for terminal workflows.
+use antigravity (free preview, includes frontier models) or github copilot (2000 completions/month). both beat gemini free tier in capability.
 
-### $15-20/mo
+### $10-20/mo
+**lowest cost with features**: github copilot Pro ($10) -- includes cloud agent and code review
 **if terminal-first**: claude code Pro ($20)
 **if IDE-first**: cursor Pro ($20) or antigravity (still free)
 **if you want everything openai**: ChatGPT Plus ($20)
 
-### $60-100/mo
-**power user**: claude code Max 5x ($100) -- best value at this tier
-**IDE power user**: cursor Pro+ ($60)
+### $39-60/mo
+**IDE power user**: cursor Pro+ ($60) or github copilot Pro+ ($39)
+**power user**: claude code Max 5x ($100) -- better value if you'll use the throughput
 
-### $200/mo
-**claude code Max 20x**: best for developers who live in claude code all day
-**cursor Ultra**: best for developers who live in cursor all day
-**ChatGPT Pro**: best for openai ecosystem access beyond just coding
+### $100-200/mo
+**claude code Max 5x** ($100): best value for terminal-centric power users
+**github copilot Max** ($100): best for IDE-embedded cloud agents
+**cursor Ultra** ($200): best for developers who live in cursor all day
 
 ### $200+/mo
 if you're spending this much, you should be tracking per-session costs. use the [lore plugin](../../plugins/lore/) to measure actual usage and optimize model selection.
 
 > individual comparison docs: [codex](codex.md) | [cursor](cursor.md) | [gemini](gemini.md) | [antigravity](antigravity.md)
+
+<!-- updated 2026-07-12: github copilot pricing structure added -->

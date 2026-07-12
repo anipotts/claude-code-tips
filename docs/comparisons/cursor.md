@@ -2,7 +2,7 @@
 
 # claude code vs cursor
 
-> last verified: 2026-04-09 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
+> last verified: 2026-07-12 | sources: [cursor pricing](https://cursor.com/pricing), [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models), [claude.ai plans](https://claude.com/pricing), [claude code docs](https://code.claude.com/docs/en/overview)
 
 ---
 
@@ -10,16 +10,20 @@
 
 | feature | claude code | cursor |
 |---------|------------|--------|
-| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (limited) / $20 pro / $60 pro+ / $200 ultra per month |
-| model | opus 4.6, sonnet 4.6, haiku 4.5 | claude sonnet, GPT-4o, cursor-small, others (credit-based model selection) |
+| pricing | free tier / $20 pro / $100 max 5x / $200 max 20x per month | free (limited) / $20 pro / variable pro+ / variable ultra per month |
+| model | opus 4.6, sonnet 4.6, haiku 4.5 | claude sonnet, GPT-4o, cursor-small, grok, others (credit-based model selection) |
 | interface | terminal CLI, VS Code extension, JetBrains extension | forked VS Code IDE (standalone app) |
 | tab completion | no | yes -- inline ghost text, multi-line suggestions |
 | inline editing | no (edits via tool calls shown as diffs) | yes -- highlight code, describe change, see inline diff |
 | chat panel | terminal conversation | sidebar chat with codebase context |
-| agentic mode | yes (native -- always agentic) | yes (composer agent mode) |
-| extensibility | hooks, plugins, skills, agents, commands, MCP servers | rules files, MCP support, limited extension points |
+| agentic mode | yes (native -- always agentic) | yes (composer/agent mode) |
+| code review | no | yes (bugbot -- usage-based) |
+| cloud agents | no | yes (cloud-based agent execution) |
+| extensibility | hooks, plugins, skills, agents, commands, MCP servers | rules files, MCP support, skills, hooks, limited extension points |
 | open source | yes | no |
 | team plan | -- (enterprise via API) | $40/user/mo (teams) |
+
+<!-- updated 2026-07-12 -->
 
 ### cursor's credit system (june 2025+)
 
@@ -59,7 +63,9 @@ claude code is open source. you can read the code, understand the tool calls, fo
 
 cursor's AI features are woven into the editor experience. tab completion suggests code as you type. inline editing lets you highlight code and describe a change. the chat panel has full codebase context. code diffs appear in the editor gutter. this is the most polished AI-in-editor experience available.
 
-claude code shows diffs in the terminal and applies them. it works, but it's not the same as seeing changes inline in your editor with syntax highlighting and one-click accept/reject.
+cursor now includes bugbot for automated code review and cloud agents that run work asynchronously in the cloud. claude code shows diffs in the terminal and applies them. it works, but it's not the same as seeing changes inline in your editor with syntax highlighting and one-click accept/reject.
+
+<!-- updated 2026-07-12 -->
 
 ### tab completion
 
