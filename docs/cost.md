@@ -50,6 +50,12 @@ that $200 covers everything. hundreds of sessions, thousands of subagent spawns.
 ### verify against official pricing
 always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates. claude code v2.1.172+ may have updated billing logic. run `/doctor` to confirm your plan's token limits and billing method.
 
+
+
+### version note (v2.1.207)
+
+token efficiency, compaction rates, and caching behavior described in this guide reflect v2.1.122 baseline. run `/doctor` and `/lore` on your current version to verify actual cache hit rates, token consumption, and compaction frequency. improvements in v2.1.145+ through v2.1.207 may have reduced costs below the historical percentages documented here.
+
 ### what your plan costs
 
 | plan | monthly | how billing works |

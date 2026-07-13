@@ -58,6 +58,12 @@ v2.1.195 added two new environment variables for runtime control:
 
 these apply globally and cannot be overridden per-session. set them in your shell rc file if needed.
 
+
+
+### new in v2.1.207: possible additional changes
+
+runtime controls, auth mechanisms, and feature flags may have changed further between v2.1.195 and v2.1.207. check `claude --help` or the [official docs](https://code.claude.com/docs/en/overview) for definitive current list. if you're upgrading from v2.1.122 or earlier, run `claude --doctor` to audit your settings against the current schema.
+
 ### new in v2.1.126: provider-managed auth
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.

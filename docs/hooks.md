@@ -62,6 +62,12 @@ v2.1.160 added confirmation prompts before writing to shell startup files (`.zsh
 ### hook performance notes (v2.1.140+)
 PreToolUse hooks on Bash commands need to complete in <50ms to avoid user-facing latency. the hooks listed above are optimized for speed -- they use jq for JSON parsing and regex for pattern matching rather than spawning subprocesses. profile your custom hooks with `time` if you add new ones.
 
+
+
+### hook behavior in v2.1.207+
+
+hook types, timeout handling, and permission-mode interaction may have changed since v2.1.140. if building custom hooks, test them on your current version and verify exit codes and output formats against `/help hooks` or the official docs. hook ordering and priority behavior in complex setups should be validated experimentally rather than assumed.
+
 ## what hooks actually prevent
 
 three categories of damage:
