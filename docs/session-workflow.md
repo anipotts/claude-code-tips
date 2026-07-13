@@ -53,6 +53,13 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 **note (v2.1.207)**: context loading behavior, cache prefix stability, and hook timing may have changed. verify current behavior at [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) before relying on these details.
 
+
+
+
+### /doctor and /ultraplan reclassification (v2.1.205+)
+
+`/doctor` is now a bundled Skill (not a native command), and `/ultraplan` is classified as a Workflow in official docs. both commands still exist and work as documented. this distinction matters for plugin developers and customization: Workflows and Skills have different hook/MCP integration patterns than native commands.
+
 ### documentation index
 
 run `claude --help docs` or visit [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) to fetch the complete documentation index. note: official docs may reflect features or changes newer than this guide (last verified v2.1.122).

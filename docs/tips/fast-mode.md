@@ -4,9 +4,13 @@
 
 ## what it is
 
+## what it is
+
 fast mode keeps you on opus. it does not switch to a cheaper or smaller model. what changes is the compute budget: less extended thinking time, faster tool calls, quicker responses. claude still has full access to every tool and every file. it just spends less time reasoning before acting.
 
 this is the most common misconception: people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
+
+**note (v2.1.140+):** effort levels are now the preferred way to control throughput and reasoning depth. fast mode is a separate toggle for output latency. they compose: `--effort low --fast` minimizes both reasoning and output speed. **do not combine `--effort max --fast`** -- this creates contradictory signals (max effort expects thinking time, fast mode skips it).
 
 ## version notes
 

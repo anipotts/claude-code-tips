@@ -22,6 +22,11 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
+
+
+
+**note (v2.1.207):** when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may silently fall back to an allowed model if the requested model is outside the allowlist. design hooks to be model-agnostic or query the active model before making assumptions about which model will be used.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). these prompts apply in `acceptEdits` mode and prevent unintended command execution.

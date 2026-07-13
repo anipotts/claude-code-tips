@@ -47,6 +47,11 @@ that $200 covers everything. hundreds of sessions, thousands of subagent spawns.
 
 
 
+
+
+
+**note (v2.1.207):** cache hit rates and compaction costs in this section reflect v2.1.122 baseline. v2.1.205+ may have optimized caching and compaction. run `/lore` to check your actual cache performance against these historical figures.
+
 ### verify against official pricing
 always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) for current rates. claude code v2.1.172+ may have updated billing logic. run `/doctor` to confirm your plan's token limits and billing method.
 

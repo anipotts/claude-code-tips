@@ -22,6 +22,11 @@ the sweet spot is 10-30 min. high throughput, low compaction, minimal context lo
 
 **note (v2.1.205)**: compaction rates and behavior may have improved since v2.1.122. the 32%/54% percentages reflect historical data. run `/lore` on your current version to see actual compaction rates for your sessions and compare against this baseline.
 
+
+
+
+**note (v2.1.207):** these percentages reflect v2.1.122 baseline. compaction behavior may have improved in v2.1.205+. run `/lore` to see actual compaction rates in your current version.
+
 ## claude doesn't slow down. you do
 
 active tool rate is flat at ~3.4 calls/min across all session lengths over 10 min. that holds steady whether you're 15 minutes in or 3 hours deep. claude's throughput doesn't degrade.
