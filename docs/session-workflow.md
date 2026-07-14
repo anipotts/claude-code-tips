@@ -82,6 +82,10 @@ the data says: sessions that hit compaction average 1.7 compactions. if you're c
 
 **note (v2.1.204+)**: compaction behavior and rates may have improved since v2.1.122. the 32%/54% compaction percentages reflect historical data. run `/lore` on your current version to see actual compaction rates for your sessions.
 
+
+
+**note (v2.1.208+)**: v2.1.208 fixed the context window briefly resetting to 200k after CLI auto-updates, which was causing false "100% context used" warnings on session resume. if you were seeing unexpected compaction triggers after updates, this is likely fixed. the 32%/54% compaction percentages reflect data from v2.1.122 and may be lower now.
+
 ## ending a session
 
 when a session ends (ctrl+c, `/exit`, or timeout), two things fire:

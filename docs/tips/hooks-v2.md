@@ -16,6 +16,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+### screen reader mode for hooks (v2.1.208+)
+
+v2.1.208 added screen reader mode via `claude --ax-screen-reader`, `CLAUDE_AX_SCREEN_READER=1` env var, or `"axScreenReader": true` in settings. hooks that output to screen readers should format output as plain text without terminal colors or formatting. this is opt-in and does not affect hook behavior — it changes how the terminal renders hook output.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)
@@ -101,6 +107,21 @@ echo "$CLAUDE_CODE_SESSION_ID"
 ```
 
 ---
+
+
+
+### vim insert mode remaps (v2.1.208+)
+
+v2.1.208 added `vimInsertModeRemaps` setting to map two-key sequences (like `jj`) to Escape in vim mode. this setting is terminal-level, not hook-specific, but affects how input is processed during hook execution. set in settings.json:
+
+```json
+{
+  "vimInsertModeRemaps": {
+    "jj": "Escape",
+    "kk": "Escape"
+  }
+}
+```
 
 ## handler type reference
 

@@ -8,6 +8,12 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception: people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+
+### fast mode and model switching (v2.1.208+)
+
+v2.1.208 fixed an issue where fast mode would stay disabled after switching to a different model. fast mode now restores automatically when you switch back to a model that supports it. if you toggle fast mode on opus and then switch to sonnet and back to opus, fast mode re-enables automatically.
+
 ## version notes
 
 ### effort levels (v2.1.140+)
