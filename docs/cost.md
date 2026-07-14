@@ -35,6 +35,11 @@ if you're on v2.1.98+, use monitor instead of `/loop` for all long-running proce
 
 ### note on monitoring
 
+
+### output truncation fix (v2.1.209)
+
+v2.1.209 fixed truncated stream-json/JSON output and missing result messages when piping large responses from `claude -p`. if you're using `claude -p` for scripting or data export and seeing incomplete JSON, upgrade to v2.1.209+. this fix is especially important for tools like lore and analytics that depend on complete JSON output.
+
 ### monitor support across platforms (v2.1.98+, stable v2.1.145+)
 
 `/monitor` is stable and event-driven (zero cost when idle). **bedrock, vertex AI, and microsoft foundry support is unconfirmed.** if using these platforms, run `/doctor` to check monitor availability. on supported platforms (claude.ai, direct API), monitor is the preferred method for long-running background process watching.

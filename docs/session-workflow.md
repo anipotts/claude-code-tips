@@ -57,6 +57,17 @@ the order matters: CLAUDE.md sets the rules, skills give capabilities, hooks enf
 
 run `claude --help docs` or visit [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) to fetch the complete documentation index. note: official docs may reflect features or changes newer than this guide (last verified v2.1.122).
 
+
+### process wrapper support (v2.1.208+)
+
+v2.1.208 added `CLAUDE_CODE_PROCESS_WRAPPER` environment variable support. if your organization uses a corporate launcher or process wrapper, set this env var to run every Claude Code self-spawn (agent view, background service) through the wrapper executable. this is useful for compliance and monitoring in enterprise environments.
+
+set in your shell rc file:
+
+```bash
+export CLAUDE_CODE_PROCESS_WRAPPER=/path/to/wrapper
+```
+
 ## when to /compact vs /clear
 
 from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:

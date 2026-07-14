@@ -34,6 +34,11 @@ effort levels add another dimension. at `--effort low --fast`, you get minimal r
 
 fast mode doesn't change your cost on the max plan. you're paying $200/mo flat regardless. the only thing that changes is speed. on per-token billing, fast mode can actually cost MORE bc the mistakes and corrections generate extra tokens that dwarf any savings from reduced thinking.
 
+
+### fast mode restoration (v2.1.208+)
+
+v2.1.208 fixed a bug where fast mode stayed off after switching to a model that supports it. fast mode now restores automatically when enabled in settings and you switch back to a compatible model. this improves workflow continuity if you toggle between models mid-session.
+
 ## the one exception
 
 hackathon. 30 minutes to demo. you need something that compiles, not something that's correct. that's the only time speed legitimately matters more than depth.

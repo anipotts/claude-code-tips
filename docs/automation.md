@@ -30,6 +30,13 @@ ai-powered maintenance is also viable on the cheap: weekly competitive-intel, do
 
 a file watcher monitors your project for changes and pipes them to claude code. sounds amazing. can also destroy your project.
 
+
+### background session improvements (v2.1.208+)
+
+v2.1.208 fixed `/model` and other dialogs being blocked in background sessions. if you're running agents with `claude agents` (background mode), dialogs and model switching now work correctly. previously these were overly restricted; the guard has been relaxed to allow legitimate tool use.
+
+if you have background agents that need to switch models mid-execution or interact with dialogs, they should now function as expected.
+
 ### safe daemon (recommended)
 
 ```bash

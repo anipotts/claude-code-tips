@@ -22,6 +22,11 @@ the sweet spot is 10-30 min. high throughput, low compaction, minimal context lo
 
 **note (v2.1.205)**: compaction rates and behavior may have improved since v2.1.122. the 32%/54% percentages reflect historical data. run `/lore` on your current version to see actual compaction rates for your sessions and compare against this baseline.
 
+
+### context window reset fix (v2.1.209)
+
+v2.1.209 fixed a bug where the context window briefly reset to 200k after auto-updates, causing false "100% context used" warnings when resuming long-context sessions. if you see this warning after an update, the session is still valid -- the window indicator resets correctly on the next turn. this was a display bug, not a real context issue.
+
 ## claude doesn't slow down. you do
 
 active tool rate is flat at ~3.4 calls/min across all session lengths over 10 min. that holds steady whether you're 15 minutes in or 3 hours deep. claude's throughput doesn't degrade.

@@ -58,6 +58,23 @@ v2.1.195 added two new environment variables for runtime control:
 
 these apply globally and cannot be overridden per-session. set them in your shell rc file if needed.
 
+
+### new in v2.1.208: accessibility and vim settings
+
+v2.1.208 added two new settings for user experience:
+
+- `axScreenReader` -- enable plain-text rendering for screen reader users. set to `true` or use `claude --ax-screen-reader` flag
+- `vimInsertModeRemaps` -- map two-key insert-mode sequences like `jj` to Escape in vim mode. useful for vim keybinding users
+
+add to `~/.claude/settings.json` if you use screen readers or vim keybindings:
+
+```json
+{
+  "axScreenReader": true,
+  "vimInsertModeRemaps": true
+}
+```
+
 ### new in v2.1.126: provider-managed auth
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.
