@@ -94,6 +94,12 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### /doctor improvements (v2.1.210+)
+
+v2.1.210 fixed `/doctor` to propose auto-mode defaults on Bedrock, Vertex AI, and Foundry platforms. these platforms no longer require an opt-in for auto mode. if you're on one of these providers, `/doctor` will now correctly recommend the appropriate default.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

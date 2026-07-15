@@ -42,6 +42,12 @@ skip it for read-only research. worktree setup adds overhead you don't need when
 
 
 
+
+
+### worktree isolation fix (v2.1.210+)
+
+v2.1.210 fixed a critical bug where subagents with `isolation: "worktree"` could execute git-mutating commands (push, commit, rebase) against the main repo checkout instead of their own isolated worktree. if you spawned subagents on v2.1.209 or earlier and they modified git state unexpectedly, upgrade to v2.1.210+. new subagents now have proper isolation enforcement.
+
 ### worktree cloning with skipLfs (v2.1.153+)
 
 when spawning agents with `isolation: "worktree"`, large repos with git lfs files can be slow to clone. set `skipLfs: true` in your agent config to skip lfs downloads:

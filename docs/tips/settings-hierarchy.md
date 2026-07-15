@@ -62,6 +62,17 @@ these apply globally and cannot be overridden per-session. set them in your shel
 
 if you're using claude code through an embedding host platform (IDE plugin, platform integration), `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` will be set by the host. when this env var is present, provider/auth settings in `.claude/settings.json` are ignored -- the host manages authentication instead. this prevents config conflicts between user settings and platform-managed auth.
 
+
+
+### new in v2.1.210: permission rule startup warnings
+
+v2.1.210 added startup warnings for deprecated permission rules:
+- `Write(path)` -- use `Edit(path)` instead
+- `NotebookEdit(path)` -- use `Edit(path)` instead
+- `Glob(path)` -- use `Read(path)` instead
+
+if your settings use these rules, update them to the recommended alternatives. the old rules still work but will warn on startup.
+
 ## worktree baseRef setting (v2.1.133+)
 
 by default, new worktrees branch from `origin/<default-branch>` (the fresh remote state). set `worktree.baseRef: "head"` in your settings to branch from local `HEAD` instead, preserving unpushed commits in new worktrees:

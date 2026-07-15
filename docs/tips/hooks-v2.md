@@ -90,6 +90,12 @@ use this to warn before stopping a session with active background work, or to lo
 
 starting claude code with `--safe-mode` disables all hooks, plugins, skills, and MCP servers. this is useful for troubleshooting when customizations are causing problems. hooks will not fire during safe mode sessions.
 
+
+
+### worktree isolation in hooks (v2.1.210+)
+
+v2.1.210 strengthened worktree isolation enforcement. PreToolUse and PostToolUse hooks for Bash commands in subagents with `isolation: "worktree"` should account for the fact that git-mutating commands (push, commit, rebase) are now strictly confined to the isolated worktree and cannot affect the parent repo. this improves safety but may affect hooks that relied on side-channel access to the main repo.
+
 ### accessing session ID in hooks (v2.1.132+)
 
 v2.1.132 added `CLAUDE_CODE_SESSION_ID` environment variable to the Bash tool subprocess. hooks can now use this to correlate tool calls with sessions. set it in your hook scripts for logging or external service integration:
