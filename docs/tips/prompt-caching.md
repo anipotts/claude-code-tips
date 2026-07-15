@@ -54,3 +54,6 @@ longer sessions cache better bc the prefix stabilizes and cache_write amortizes 
 3. run `/mine` to check your cache hit rate after a few sessions
 
 [full cost breakdown &rarr;](../cost.md)
+
+
+**note**: cache hit rates from this guide reflect historical data (v2.1.122+). run `/lore` after your sessions to verify your actual cache hit rate on your current version. caching behavior and prefix stability may have improved in recent releases.

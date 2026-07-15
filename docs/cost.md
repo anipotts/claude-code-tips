@@ -25,7 +25,9 @@ upstream claude code v2.1.195 is current as of June 2026. verify cache hit rates
 
 ### note on version updates (v2.1.207+)
 
-upstream claude code v2.1.207 is current as of July 2026. **before using cost data from this document, run `/doctor` to verify your actual billing method, token limits, and caching behavior**. significant changes may have occurred between v2.1.122 (last detailed verification) and v2.1.207. caching, compaction rates, and token efficiency may differ. run `/lore` to check your actual per-session costs and compare against this document's historical patterns.
+### note on version updates (v2.1.207+)
+
+upstream claude code v2.1.207 is current as of July 2026. **before using cost data from this document, run `/doctor` to verify your actual billing method, token limits, and caching behavior**. significant changes may have occurred between v2.1.122 (last detailed verification) and v2.1.207. always reference [anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/models) and official [claude code docs](https://code.claude.com/docs/en/overview) for current token rates and billing logic.
 
 ### monitor changes to background process cost
 
