@@ -55,6 +55,17 @@ spawn all three at once. when they return, you have the full picture without hav
 
 ---
 
+
+
+### forwarding subagent output (v2.1.211+)
+
+v2.1.211 adds `--forward-subagent-text` flag and `CLAUDE_CODE_FORWARD_SUBAGENT_TEXT` environment variable to include subagent text responses and thinking in stream-json output. use this when integrating claude code agents into external systems and you need access to the full subagent reasoning, not just the final result.
+
+```bash
+export CLAUDE_CODE_FORWARD_SUBAGENT_TEXT=true
+claude --stream-json < prompt.txt
+```
+
 ## pattern 2: specialist delegation
 
 instead of doing everything in one context window, delegate specific work to agents with a single job.

@@ -62,6 +62,12 @@ v2.1.160 added confirmation prompts before writing to shell startup files (`.zsh
 ### hook performance notes (v2.1.140+)
 PreToolUse hooks on Bash commands need to complete in <50ms to avoid user-facing latency. the hooks listed above are optimized for speed -- they use jq for JSON parsing and regex for pattern matching rather than spawning subprocesses. profile your custom hooks with `time` if you add new ones.
 
+
+
+### hook security: permission preview neutralization (v2.1.211+)
+
+v2.1.211 fixed permission previews relayed to chat channels to neutralize bidirectional-override, zero-width, and look-alike quote characters. this prevents tool inputs from visually altering approval messages in shared contexts. if you route hook decisions or tool calls through chat channels, this fix improves safety by preventing character-level obfuscation attacks on approval prompts.
+
 ## what hooks actually prevent
 
 three categories of damage:

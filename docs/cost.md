@@ -12,6 +12,12 @@ most cost discussions are vibes. "it's expensive" or "it's worth it" without dat
 
 
 
+
+
+### session credential handling (v2.1.211+)
+
+v2.1.211 fixed parallel Claude Code sessions all logging out simultaneously after wake-from-sleep when many sessions share one credential store. if you run multiple concurrent sessions and use a shared auth backend, this fix prevents cascade logouts. sessions now maintain independent credential state even when the machine wakes from sleep.
+
 ### note on version updates (v2.1.172+)
 
 ### note on version updates (v2.1.195+)

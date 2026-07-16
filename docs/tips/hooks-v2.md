@@ -22,6 +22,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 when `enforceAvailableModels` is enabled, prompt and agent hooks that select models may not get their requested model. a hook that tries to use opus when only sonnet is allowed will silently fall back to sonnet. design hooks that are agnostic to model, or check the active model in your hook logic before making model-specific assumptions.
 
+
+
+### subagent model override fix (v2.1.211+)
+
+v2.1.211 fixed a bug where subagents spawned with an explicit model override would revert to the parent's model when resumed or sent a follow-up message. if you were working around this by re-specifying the model on resume, you can remove that workaround -- model overrides now persist correctly across resume and follow-up messages.
+
 ### safety prompts for sensitive file writes (v2.1.160+)
 
 v2.1.160 added prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). these prompts apply in `acceptEdits` mode and prevent unintended command execution.
@@ -89,6 +95,12 @@ use this to warn before stopping a session with active background work, or to lo
 ### safe mode disables hooks (v2.1.169+)
 
 starting claude code with `--safe-mode` disables all hooks, plugins, skills, and MCP servers. this is useful for troubleshooting when customizations are causing problems. hooks will not fire during safe mode sessions.
+
+
+
+### hook ask decisions vs auto mode (v2.1.211+)
+
+v2.1.211 fixed auto mode overriding a PreToolUse hook's `ask` decision for unsandboxed Bash. previously, if a hook returned `ask`, auto mode could still proceed without prompting. now, a hook `ask` decision floors the approval requirement at a prompt -- auto mode cannot bypass it. this ensures critical safety hooks can always force user confirmation, even when auto mode is active.
 
 ### accessing session ID in hooks (v2.1.132+)
 
