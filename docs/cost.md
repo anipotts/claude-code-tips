@@ -8,9 +8,9 @@ what claude code actually costs, how caching saves 81% of it, and the strategies
 
 ## my real numbers
 
-most cost discussions are vibes. "it's expensive" or "it's worth it" without data. here are mine.
+**$200/mo.** Max plan. flat rate. no per-token billing.
 
-
+⚠️ **note**: this data is based on v2.1.122 (last detailed verification). current version is v2.1.207+. billing logic, caching efficiency, and compaction behavior may have changed. run `/doctor` to confirm your plan's actual limits and `/lore` to check your current per-session costs against this baseline.
 
 ### note on version updates (v2.1.172+)
 

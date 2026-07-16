@@ -47,6 +47,10 @@ from real session data:
 
 longer sessions cache better bc the prefix stabilizes and cache_write amortizes over more turns. short sessions spend proportionally more on initial cache creation.
 
+
+
+⚠️ **data freshness**: these cache hit rates are from v2.1.122 (last verified april 2026). current version is v2.1.207+. caching behavior, token efficiency, and cache prefix stability may have improved. run `/lore` to check your actual cache hit rate and compare against this historical baseline.
+
 ## try it
 
 1. check your current CLAUDE.md. is it under 30 lines?

@@ -14,6 +14,10 @@ shorter sessions are more efficient. here's the data.
 | 1-2 hr | 43 | 1.6 | 3.3 | 51% | $16.74 |
 | 2 hr+ | 101 | 0.73 | 3.4 | 54% | $27.72 |
 
+
+
+⚠️ **historical baseline**: these numbers reflect v2.1.122 session data (april 2026). compaction behavior and context efficiency have likely improved in v2.1.204+. run `/lore` to check your actual session metrics and compare against this baseline.
+
 ## what this means
 
 **active tool rate is flat at ~3.4/min.** claude doesn't slow down in long sessions. the wall-time rate drops 8.8x bc *you* slow down. longer review gaps, context switching, decision fatigue.
