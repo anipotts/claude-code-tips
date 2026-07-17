@@ -59,7 +59,7 @@ run `claude --help docs` or visit [code.claude.com/docs/en/overview](https://cod
 
 ## when to /compact vs /clear
 
-from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. here's when to use each:
+from real data collected with v2.1.122: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ sessions did. **verify current compaction rates**: run `/lore` on your current version to see actual compaction rates for your sessions. v2.1.204+ may have improved compaction behavior, so your rates may differ from these historical baselines.
 
 **/compact when:**
 - 20+ turns and you're shifting topics
@@ -72,15 +72,6 @@ from real data: 32% of 30-60 min sessions needed compaction, 54% of 2hr+ session
 - you want a fresh context window (cheaper than carrying dead context)
 
 the data says: sessions that hit compaction average 1.7 compactions. if you're compacting more than twice, the session is too long -- split it.
-
-
-
-**verification note**: verify current compact vs clear behavior against [official claude code docs](https://code.claude.com/docs/en/overview) before relying on these percentages in new versions.
-
-
-
-
-**note (v2.1.204+)**: compaction behavior and rates may have improved since v2.1.122. the 32%/54% compaction percentages reflect historical data. run `/lore` on your current version to see actual compaction rates for your sessions.
 
 ## ending a session
 

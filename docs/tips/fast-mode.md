@@ -8,6 +8,10 @@ fast mode keeps you on opus. it does not switch to a cheaper or smaller model. w
 
 this is the most common misconception: people assume fast mode = dumber model. it's not. it's the same opus with a tighter thinking budget.
 
+
+
+**version note (v2.1.207+)**: fast mode behavior may have changed. verify current behavior at [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview). fast mode's interaction with effort levels and model restrictions should be verified on your current version.
+
 ## version notes
 
 ### effort levels (v2.1.140+)

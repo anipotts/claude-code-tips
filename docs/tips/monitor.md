@@ -14,7 +14,9 @@ shipped april 9 2026. requires v2.1.98+. now stable and mature across current ve
 
 **platform availability (v2.1.98+)**
 
-**platform availability (v2.1.98+ through v2.1.205)**: monitor is stable on claude.ai and direct API. bedrock, vertex AI, and microsoft foundry support status may have changed in v2.1.205 -- run `/doctor` to verify availability on your platform before relying on monitor for production workflows.
+**platform availability (v2.1.98+ through v2.1.205)**
+
+**platform availability (v2.1.98+, verified through v2.1.122)**: monitor is stable on claude.ai and direct API. bedrock, vertex AI, and microsoft foundry support status is unconfirmed. run `/doctor` to verify availability on your platform before relying on monitor for production workflows. upstream version is now v2.1.207; verify current platform support before deploying to non-standard platforms.
 
 ## stream filter vs poll filter
 
