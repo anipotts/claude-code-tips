@@ -16,6 +16,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+### v2.1.212: plan mode permission fixes
+
+plan mode now enforces permission prompts before running file-modifying bash commands (e.g. `touch`, `rm`). hooks receive this as part of the permission system context. if a PreToolUse hook blocks a command with `exit 2`, plan mode respects that block and prompts the user.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)

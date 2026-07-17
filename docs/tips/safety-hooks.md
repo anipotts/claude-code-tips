@@ -50,6 +50,15 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+
+### v2.1.212: additional safety layers
+
+v2.1.212 adds automatic safety controls beyond hook-based blocking:
+- plan mode now requires permission prompts before executing file-modifying bash commands (`touch`, `rm`, etc.)
+- WebSearch is capped at 200 calls per session (configurable via `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`) to stop search loops
+- MCP tool calls running >2 minutes move to background automatically (configurable via `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS`) so your session stays responsive
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.

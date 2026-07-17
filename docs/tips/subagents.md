@@ -11,36 +11,24 @@ task needs 1-3 tool calls?
   yes -> do it yourself. spawning an agent is overhead.
 
 task needs 5+ tool calls and is independent?
-  yes -> spawn a subagent.
+  yes -> use `/subtask` (in-session) or `/fork` (background).
+  - `/subtask`: shares context, tighter feedback, synchronous
+  - `/fork`: separate session, parallel work, asynchronous
 
 need multiple perspectives or parallel exploration?
-  yes -> use agent teams (2-4 agents, each in its own worktree).
+  yes -> use agent teams (2-4 agents with `/fork`, each in its own worktree).
+  note: per-session cap is 200 subagents (configurable via `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`)
 ```
-
-the rule is simple: if the task is worth explaining to another person from scratch, it's worth a subagent. if you can just do it, do it.
 
 ## worktree isolation
 
-`isolation: "worktree"` is the key parameter. it creates a full git worktree for the agent, with its own branch and working directory. changes stay isolated until you explicitly merge.
+worktree isolation is one approach. v2.1.212 introduces two complementary commands:
 
-```json
-{
-  "prompt": "refactor src/api/handlers.ts to use the new middleware pattern. update all route registrations.",
-  "description": "refactor api handlers",
-  "isolation": "worktree"
-}
-```
+**`/subtask`** -- runs an in-session subagent that shares your context window. faster, cheaper, tighter feedback loop. good for focused delegated work where you want the parent agent to track progress.
 
-the agent works on a separate branch. your working tree is untouched. if the refactor goes sideways, nothing happened. if it works, you merge the branch.
+**`/fork`** -- copies your conversation into a new background session (separate row in `claude agents`). you keep working while the forked session runs independently. good for long-running parallel work where you don't want to block.
 
-use worktree isolation for:
-- risky refactors where rollback matters
-- experimental approaches you want to evaluate before committing
-- any change that could break your current working state
-
-skip it for read-only research. worktree setup adds overhead you don't need when the agent is just reading files.
-
-
+worktrees (`isolation: "worktree"`) are still the isolation mechanism for both -- they just use different session topology.
 
 ### worktree cloning with skipLfs (v2.1.153+)
 
@@ -96,6 +84,16 @@ a single sonnet doing all this sequentially might cost $3-4 bc it reuses context
 i've spawned thousands of subagents across hundreds of sessions. the average agent runs around 15-20 tool calls. the insight that matters: many short agents are cheaper and more effective than a few long-running ones. a team of 3 focused Explore agents finishing in a couple minutes each will outperform one agent trying to do everything in a 30-minute marathon. on the Max plan, agent teams don't cost extra. they're a throughput multiplier, not a billing event. the real cost is context: each agent gets its own context window, so you're trading parent context space for parallel execution. keep agents focused, give them clear prompts, and let them finish fast.
 
 on the Max plan ($200/mo flat), per-agent cost is absorbed by the subscription. agent teams become a throughput question, not a billing question.
+
+
+
+### v2.1.212: subagent budget constraints
+
+v2.1.212 adds hard limits:
+- per-session subagent cap: 200 (default, override with `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`)
+- `/clear` resets the budget for the session
+
+this prevents runaway delegation loops. if you hit the limit, create a new session or use `/clear` to reset.
 
 ## the `subagent_type` parameter
 

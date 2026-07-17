@@ -51,6 +51,12 @@ monitor takes four things:
 
 you don't configure these manually. tell claude what to watch in plain english and it writes the command + filter. the parameters exist under the hood.
 
+
+
+### v2.1.212: WebSearch limit
+
+monitor can trigger WebSearch tool calls in stream/poll filters. v2.1.212 caps WebSearch at 200 calls per session (configurable via `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`) to prevent search loops. if a monitor filter depends on WebSearch, ensure it won't exceed the cap.
+
 ## when to use monitor vs background
 
 ```

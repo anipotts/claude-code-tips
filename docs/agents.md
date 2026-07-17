@@ -8,13 +8,15 @@ how i use subagents and agent teams -- the patterns that work, the anti-patterns
 
 ## the mental model
 
-a subagent is a separate claude instance with its own context window. it can read files, search code, and optionally make changes in an isolated worktree. subagents are powerful but expensive -- each one is a full billing stream.
+a subagent can take two forms in v2.1.212+:
 
-agent teams are a level above -- multiple independent agents working in parallel on separate tasks with their own worktrees. they coordinate through a shared task board, not conversation.
+**in-session subagent (`/subtask`)** -- runs within your session, shares the context window, uses synchronous tool calls. faster feedback loop, cheaper context cost, better for tightly-coupled work.
 
-the theme: **delegate substantial, independent work. do small stuff yourself.**
+**background subagent (`/fork`)** -- copies your conversation into a new background session with its own context window. you keep working while it runs independently. good for parallel exploratory work that doesn't need tight real-time feedback.
 
----
+each subagent reads files, searches code, and optionally makes changes (in isolation if using worktrees). subagents are powerful but have costs: `/subtask` consumes your context, `/fork` spins up a new billing stream.
+
+the theme: **delegate substantial, independent work. use `/subtask` for tightly-coupled tasks, `/fork` for parallel exploration.**
 
 ## when to use subagents vs doing it yourself
 

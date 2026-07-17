@@ -94,6 +94,12 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+### v2.1.212: `/resume` for background sessions
+
+typing `/resume` in the agent view (background sessions list) now opens a picker of all past sessions, including deleted ones. select one to resume it as a background session. this is useful for picking up long-running work without switching terminals.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:
