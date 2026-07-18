@@ -16,6 +16,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 ---
 
+
+
+### permissions and model enforcement (v2.1.214+)
+
+v2.1.214 enhanced permission checks: Bash checks now fail closed on file-descriptor redirects, reject commands over 10,000 characters without prompt, and properly parse zsh variable subscripts in `[[ ]]` comparisons. windows PowerShell 5.1 permission bypass fixed. remote session permission prompts now wait for local confirmation before proceeding. hooks cannot override these checks -- permission enforcement is now stricter across all platforms.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)
@@ -90,6 +96,12 @@ use this to warn before stopping a session with active background work, or to lo
 
 starting claude code with `--safe-mode` disables all hooks, plugins, skills, and MCP servers. this is useful for troubleshooting when customizations are causing problems. hooks will not fire during safe mode sessions.
 
+
+
+### opentelemetry correlation in hooks (v2.1.214+)
+
+v2.1.214 added `message.uuid`, `client_request_id`, and `tool_source` attributes to OpenTelemetry log events. hooks can now leverage these fields for message-level correlation and tool provenance tracking. set `CLAUDE_CODE_OTEL_CONTENT_MAX_LENGTH` environment variable (default 60 KB) to control truncation of OpenTelemetry content attributes in hook logs.
+
 ### accessing session ID in hooks (v2.1.132+)
 
 v2.1.132 added `CLAUDE_CODE_SESSION_ID` environment variable to the Bash tool subprocess. hooks can now use this to correlate tool calls with sessions. set it in your hook scripts for logging or external service integration:
@@ -101,6 +113,12 @@ echo "$CLAUDE_CODE_SESSION_ID"
 ```
 
 ---
+
+
+
+### long-running tool call progress heartbeat (v2.1.214+)
+
+v2.1.214 added periodic progress heartbeats for tool calls exceeding typical execution time. this provides visibility into long-running processes (compilation, deployment, large file operations) that previously went silent. hooks that monitor tool execution may now receive heartbeat events. check `tool_state.heartbeat` in hook input JSON to detect and log progress.
 
 ## handler type reference
 

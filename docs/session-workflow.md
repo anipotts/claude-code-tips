@@ -82,6 +82,10 @@ the data says: sessions that hit compaction average 1.7 compactions. if you're c
 
 **note (v2.1.204+)**: compaction behavior and rates may have improved since v2.1.122. the 32%/54% compaction percentages reflect historical data. run `/lore` on your current version to see actual compaction rates for your sessions.
 
+
+
+**note (v2.1.214)**: v2.1.214 added EndConversation tool for handling highly abusive users or jailbreak attempts. if a session becomes adversarial, claude can now end it directly rather than requiring manual intervention. this does not affect normal `/compact` vs `/clear` decisions but provides new exit options for security-critical scenarios.
+
 ## ending a session
 
 when a session ends (ctrl+c, `/exit`, or timeout), two things fire:

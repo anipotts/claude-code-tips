@@ -50,6 +50,11 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.160+):** in addition to safety-guard.sh blocking, claude code now prompts before writing to shell startup files and build-tool config files. this provides a second layer of protection for sensitive writes.
 
+
+| `docker` commands with daemon redirects | v2.1.214+ blocks docker/podman with `--url`, `--connection`, `--identity` flags that redirect the daemon | new in v2.1.214 |
+
+**note (v2.1.214+)**: claude code now prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). this provides a second safety layer before files are written, complementing safety-guard.sh hooks.
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.
