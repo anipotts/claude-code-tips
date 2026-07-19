@@ -31,6 +31,6 @@ shorter sessions are more efficient. here's the data.
 
 ## try it
 
-run `/mine` to check your own session length distribution. if most of your sessions are 2hr+, you're probably working harder than you need to.
+run `/lore` to check your own session length distribution. if most of your sessions are 2hr+, you're probably working harder than you need to.
 
 [full cost analysis &rarr;](../cost.md)

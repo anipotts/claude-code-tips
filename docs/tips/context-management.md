@@ -106,7 +106,7 @@ across hundreds of sessions, roughly a fifth of them hit compaction. the pattern
 
 ## try it
 
-1. run `/mine` to check your compaction rate by session length. if most 30-min sessions are compacting, your prompts are too broad.
+1. run `/lore` to check your compaction rate by session length. if most 30-min sessions are compacting, your prompts are too broad.
 2. add a PreCompact hook to save state before compression hits.
 3. scope your next task to 15 minutes of work and see if the session stays clean.
 

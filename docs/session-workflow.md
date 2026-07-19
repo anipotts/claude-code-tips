@@ -36,7 +36,7 @@ three things work together on startup:
 
 **CLAUDE.md** -- project conventions, structure, rules. cached aggressively, so keeping it stable saves money. i update mine maybe once a week. it tells claude what the repo is, how to name things, what never to do.
 
-**skills** -- the `/mine` skill gives claude access to session data (search, mistakes, burn, hotspots, loops). skills are like domain-specific knowledge packs that activate on command.
+**skills** -- the `/lore` skill gives claude access to session data (search, mistakes, burn, hotspots, loops). skills are like domain-specific knowledge packs that activate on command.
 
 **hooks** -- 11 scripts registered in settings.json. they don't add to the prompt -- they run silently in the background, blocking bad commands, logging actions, fixing lint. claude doesn't even know most of them exist.
 
