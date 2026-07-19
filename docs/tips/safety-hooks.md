@@ -55,6 +55,12 @@ chmod +x ~/.claude/hooks/safety-guard.sh
 
 **note (v2.1.214+)**: claude code now prompts before writing to shell startup files (`.zshenv`, `.zlogin`, `.bash_login`), git config (`~/.config/git/`), and build-tool config files (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`). this provides a second safety layer before files are written, complementing safety-guard.sh hooks.
 
+
+
+| `docker` with daemon redirects (--url, --connection, --identity) | v2.1.214+ permission layer blocks these | new in v2.1.214 |
+| bash commands >10,000 chars without prompt | prevents command-injection exploits | new in v2.1.214 |
+| zsh variable subscripts in [[ ]] comparisons | fixes permission check bypass | new in v2.1.214 |
+
 ## how it works
 
 the hook receives JSON on stdin with the tool name and input. it checks the bash command against known dangerous patterns. exit 0 = allow, exit 2 = block.

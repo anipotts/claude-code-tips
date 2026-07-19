@@ -98,6 +98,10 @@ nothing to do manually. close the terminal. the data is there when you need it.
 
 
 
+
+
+**EndConversation tool** (v2.1.214+) -- claude can now end sessions directly for highly abusive users or jailbreak attempts. this is automatic and requires no manual intervention. if a session ends via EndConversation, no hooks fire (session termination is immediate). this is rare and you won't see it in normal development workflows.
+
 ### changing directories mid-session (v2.1.169+)
 
 use `/cd <path>` to move your session to a new working directory without breaking the prompt cache:

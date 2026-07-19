@@ -25,6 +25,10 @@ good candidates:
 
 plan mode forces Claude to think before acting, which means fewer wrong turns, fewer compactions, and fewer wasted sessions.
 
+
+
+**note (v2.1.215+)**: the `/verify` and `/code-review` skills are no longer auto-run. invoke them explicitly with `/verify` or `/code-review` when you want them. this doesn't change plan mode's value -- it just means the auto-verification step is gone. if you relied on auto-verify after plan execution, add `/verify` as a manual follow-up.
+
 ## the only exception
 
 the only time you skip plan mode is when the task is so simple you already know exactly which file to edit and exactly how to check it. single-line fix, typo correction, "add this import." those don't need a plan. if you can describe the entire change in one sentence, just let claude go.

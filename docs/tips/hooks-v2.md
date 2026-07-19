@@ -22,6 +22,12 @@ hooks come in five flavors now (v2.1.118 added `mcp_tool`). pick the wrong one a
 
 v2.1.214 enhanced permission checks: Bash checks now fail closed on file-descriptor redirects, reject commands over 10,000 characters without prompt, and properly parse zsh variable subscripts in `[[ ]]` comparisons. windows PowerShell 5.1 permission bypass fixed. remote session permission prompts now wait for local confirmation before proceeding. hooks cannot override these checks -- permission enforcement is now stricter across all platforms.
 
+
+
+### docker permission prompts (v2.1.214+)
+
+docker commands (including podman's docker shim) carrying daemon-redirect flags (`--url`, `--connection`, `--identity`) now require permission prompts. this prevents accidental daemon hijacking. safety-guard.sh hooks can pre-filter these, but claude code's permission layer enforces them at execution time.
+
 ## version-specific features
 
 ### managed settings in hooks (v2.1.175+)
@@ -53,6 +59,12 @@ if [[ "$EFFORT" == "max" ]]; then
   exit 0
 fi
 ```
+
+
+
+### opentelemetry logging enhancements (v2.1.214+)
+
+v2.1.214 adds `message.uuid`, `client_request_id`, and `tool_source` attributes to OpenTelemetry log events. set `CLAUDE_CODE_OTEL_CONTENT_MAX_LENGTH` env var to configure the 60 KB truncation limit on OTEL content attributes. hooks that emit telemetry can now correlate messages at the message-level instead of session-level.
 
 ### PostToolUse output replacement (v2.1.121+)
 
