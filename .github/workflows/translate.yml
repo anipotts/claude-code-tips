@@ -169,7 +169,7 @@ jobs:
       # ---- argos-translate path (offline fallback, no key required) ----
       - name: Set up Python (argos)
         if: steps.check.outputs.should_translate == 'true' && steps.backend.outputs.backend == 'argos'
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
