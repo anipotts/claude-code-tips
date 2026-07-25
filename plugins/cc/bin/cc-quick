@@ -21,11 +21,14 @@ CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 CC_DIR="${CC_STATE_DIR:-$CLAUDE_DIR/channels/cc}"
 DB="$CC_DIR/sessions.db"
 INBOX="$CC_DIR/inbox"
+STALE_SESSION_AFTER_MS="${CC_STALE_SESSION_MS:-300000}"
 
 die() { echo "cc-quick: $*" >&2; exit 1; }
 env_err() { echo "cc-quick: $*" >&2; exit 2; }
 
 [ -f "$DB" ] || env_err "sessions.db not at $DB — install/start cc first"
+[[ "$STALE_SESSION_AFTER_MS" =~ ^[1-9][0-9]*$ ]] ||
+  env_err "CC_STALE_SESSION_MS must be a positive integer"
 MY_SID="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
 [ -n "$MY_SID" ] || env_err "CLAUDE_CODE_SESSION_ID not set; can't identify self"
 MY_SHORT="${MY_SID:0:8}"
@@ -33,6 +36,19 @@ MY_CWD_BASENAME="$(basename "$PWD")"
 
 # ms-precision timestamp (date +%s%N is ns; trim to 13 chars for ms)
 now_ms() { date +%s%N | cut -c1-13; }
+
+stale_cutoff_ms() {
+  printf '%s\n' "$(( $(now_ms) - STALE_SESSION_AFTER_MS ))"
+}
+
+# Dirty exits leave ended_at_ms unset. Reconcile old rows before any command
+# treats the database as a live roster. Historical rows remain queryable.
+reconcile_stale_sessions() {
+  local cutoff
+  cutoff="$(stale_cutoff_ms)"
+  sqlite3 "$DB" \
+    "UPDATE sessions SET ended_at_ms = last_seen_at_ms WHERE ended_at_ms IS NULL AND last_seen_at_ms <= $cutoff;"
+}
 
 # urlsafe random hex of length N. uuidgen if available else /dev/urandom.
 rand_hex() {
@@ -47,11 +63,14 @@ rand_hex() {
 # session_id. Echos the full id, or empty string if not found.
 resolve_target() {
   local ref="$1"
+  local cutoff
+  cutoff="$(stale_cutoff_ms)"
   # try short id first (8 hex), then full id, then cwd basename. Prefer
   # most-recently-active match on ambiguity.
   sqlite3 "$DB" <<SQL | head -1
 SELECT id FROM sessions
 WHERE ended_at_ms IS NULL
+  AND last_seen_at_ms > $cutoff
   AND (substr(id,1,8) = '$ref' OR id = '$ref' OR cwd LIKE '%/$ref')
 ORDER BY last_seen_at_ms DESC
 LIMIT 1;
@@ -59,6 +78,9 @@ SQL
 }
 
 cmd_roster() {
+  local cutoff
+  reconcile_stale_sessions
+  cutoff="$(stale_cutoff_ms)"
   sqlite3 -header -column "$DB" <<SQL
 SELECT substr(id,1,8) AS sid,
        cwd,
@@ -66,6 +88,7 @@ SELECT substr(id,1,8) AS sid,
        datetime(last_seen_at_ms/1000, 'unixepoch', 'localtime') AS last_seen
 FROM sessions
 WHERE ended_at_ms IS NULL
+  AND last_seen_at_ms > $cutoff
 ORDER BY last_seen_at_ms DESC;
 SQL
 }
@@ -76,6 +99,7 @@ cmd_send() {
   local subject="${3:-}"
   [ -n "$target_ref" ] || die "send: missing target (short id, full id, or cwd basename)"
   [ -n "$message" ] || die "send: missing message"
+  reconcile_stale_sessions
 
   local target_sid
   target_sid=$(resolve_target "$target_ref")
@@ -128,7 +152,10 @@ SQL
 cmd_check() {
   local since_s="${1:-1800}"  # default 30min
   local since_ms
+  local cutoff
+  reconcile_stale_sessions
   since_ms=$(( $(now_ms) - since_s * 1000 ))
+  cutoff="$(stale_cutoff_ms)"
 
   echo "=== announcements (last ${since_s}s, peers only) ==="
   sqlite3 -header -column "$DB" <<SQL
@@ -138,6 +165,7 @@ SELECT substr(a.session_id,1,8) AS sid,
 FROM announcements a
 JOIN sessions s ON s.id = a.session_id
 WHERE s.ended_at_ms IS NULL
+  AND s.last_seen_at_ms > $cutoff
   AND a.session_id != '$MY_SID'
   AND a.created_at_ms > $since_ms
 ORDER BY a.created_at_ms DESC LIMIT 20;
@@ -151,6 +179,7 @@ SELECT substr(rf.session_id,1,8) AS sid,
 FROM recent_files rf
 JOIN sessions s ON s.id = rf.session_id
 WHERE s.ended_at_ms IS NULL
+  AND s.last_seen_at_ms > $cutoff
   AND rf.session_id != '$MY_SID'
   AND rf.touched_at_ms > $since_ms
 ORDER BY rf.touched_at_ms DESC LIMIT 20;
