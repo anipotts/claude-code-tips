@@ -2,7 +2,7 @@
 
 ## reporting
 
-report vulnerabilities through [github security advisories](https://github.com/anipotts/claude-code-tips/security/advisories/new) or email `hello@anipotts.com`.
+report vulnerabilities through [github security advisories](https://github.com/anipotts/coding-agent-tips/security/advisories/new) or email `hello@anipotts.com`.
 
 please do not open a public issue for a vulnerability that could expose local files, credentials, transcripts, or command execution.
 

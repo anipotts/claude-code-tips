@@ -44,7 +44,8 @@
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
-        "https://github.com/anipotts/coding-agent-tips/commit/c340f65"
+        "https://github.com/anipotts/coding-agent-tips/commit/c340f65",
+        "https://github.com/anipotts/coding-agent-tips/commit/184632a"
       ],
       "notes": "the signed commit adds the astro and starlight publication, active frontmatter, responsive evidence rail, and canonical route set"
     },
@@ -91,7 +92,8 @@
       "elapsedSeconds": null,
       "evidence": [
         "https://github.com/anipotts/coding-agent-tips/blob/main/design-qa.md",
-        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/artifacts/codex-launch-checks.md"
+        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/artifacts/codex-launch-checks.md",
+        "https://github.com/anipotts/coding-agent-tips/commit/184632a"
       ],
       "notes": "the production build, canonical identity, responsive layouts, evidence behavior, and concept fidelity were reviewed"
     }
@@ -108,6 +110,11 @@
       "kind": "commit",
       "url": "https://github.com/anipotts/coding-agent-tips/commit/c340f65",
       "description": "publication implementation"
+    },
+    {
+      "kind": "commit",
+      "url": "https://github.com/anipotts/coding-agent-tips/commit/184632a",
+      "description": "mobile-first field-run language and github icon revision from visual review"
     },
     {
       "kind": "verification",

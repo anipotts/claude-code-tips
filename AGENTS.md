@@ -1,4 +1,4 @@
-# codex + claude code field guide
+# coding agent tips
 
 this repository is an opinionated, source-backed handbook for experienced coding-agent users. codex and claude code are co-equal primary guides. legacy claude code plugins remain available only for the compatibility window documented in `docs/legacy-tools.md`.
 
@@ -13,7 +13,7 @@ this repository is an opinionated, source-backed handbook for experienced coding
 
 ## verification
 
-run `python3 .github/scripts/check_sources.py`, shell and json syntax checks, `bun test plugins/cc/tests`, and `pytest plugins/lore/tests` before publishing a broad change.
+run the source, field-run, astro, generated-route, markdown, shell, and json checks before publishing a broad change. run `bun test plugins/cc/tests` and `pytest plugins/lore/tests` while the legacy compatibility window is active.
 
 ## review
 
