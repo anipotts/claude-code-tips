@@ -43,7 +43,9 @@ records failed scenarios and operator interventions rather than editing them out
 
 the first baseline records codex implementing the v4 publication from commit
 `60aa685`. the public task specification is this repository's accepted launch plan.
-the run record is added only after its artifacts and measurements exist.
+the [codex publication baseline](/field-lab/runs/codex-publication-baseline-2026-08-07/)
+publishes completed scenarios, skipped scenarios, artifacts, redactions, and
+limitations together.
 
 the equivalent current claude code run is pending. current claude code guidance
 remains source-verified until that run is performed from the same base commit and
