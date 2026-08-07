@@ -1,46 +1,27 @@
 # contributing
 
-thanks for looking at this repo. it's a personal claude code setup turned open source, so contributions are welcome but opinionated about what fits.
+contributions should make the field guide more accurate, more useful in practice, or easier to maintain.
 
-## what fits
+## useful contributions
 
-- new hooks, agents, or skills that are **self-contained examples** someone can copy into their own config
-- docs/tips that teach a concept, with real data where it matters
-- bug fixes, CI tightening, typo sweeps
-- competitive comparison updates (cite pricing pages, changelogs, official sources; no FUD)
+- corrections backed by a primary source.
+- hands-on results with a reproducible environment and date.
+- clearer distinctions between a surface, harness, model, and orchestration layer.
+- security or installation fixes for legacy tools during the compatibility window.
 
-## what doesn't
+## out of scope
 
-- cross-dependencies between the example hooks/agents/commands (each one should stand alone)
-- emojis in files unless explicitly asked for
-- personal narrative, private docs, or scratch files (see `.gitignore` and the repo's `no-personal-files` rules)
-- em dashes (U+2014) in shipped markdown or JSON; use `-`, `:`, `.`, or `,` instead
+- vendor benchmark roundups without workflow evidence.
+- generated comparison prose or translated mirrors.
+- new features for the frozen `cc`, `lore`, or `time` plugins.
+- promotional claims, referral links, or rankings based on sponsorship.
 
-## before you open a PR
+## pull request standard
 
-1. run the CI locally if you can (`plugin-smoke-test`, `validate`, `pr-quality-gate`) or just push and let Actions run
-2. tests pass (`bun test plugins/cc/tests` for cc; `pytest plugins/lore/tests` for lore; plugin-smoke-test workflow for all three)
-3. no em dashes in files you touched: `grep -RIn $'\xe2\x80\x94' <your files>`
-4. commit messages follow conventional format: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `style:`, `test:`
-5. one commit per logical change; no `git add -A` (stage specific files by name)
+1. explain the user decision the change improves.
+2. link every new product fact to an official source and add it to `docs/sources.json`.
+3. label hands-on observations, source-verified facts, and inference correctly.
+4. run `python3 .github/scripts/check_sources.py` and the relevant code tests.
+5. keep one logical change per commit and explain why it belongs in the repository.
 
-## testing a plugin locally
-
-```bash
-# from a repo that uses claude code
-claude --plugin-dir /path/to/claude-code-tips/plugins/cc
-# or for lore (knowledge graph)
-claude --plugin-dir /path/to/claude-code-tips/plugins/lore
-# or for time (resource meters)
-claude --plugin-dir /path/to/claude-code-tips/plugins/time
-```
-
-the plugin is discovered via `.claude-plugin/plugin.json`; hooks wire up automatically.
-
-## commit signing
-
-commits from humans should be signed (`git commit -S`). automated bot commits (dependabot, release workflows) are exempt.
-
-## questions
-
-open a GitHub issue. for security reports, see [SECURITY.md](./SECURITY.md).
+security reports should follow [SECURITY.md](./SECURITY.md).

@@ -1,11 +1,10 @@
-<!-- tested with: claude code v2.1.122 -->
+> legacy compatibility notice: `cc` is frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. see [legacy tools](../../docs/legacy-tools.md).
+
+<!-- tested with: claude code v2.1.220 -->
 
 # cc
 
-session mesh for claude code. like email cc: every session on your machine
-stays informed of what its siblings are doing, and you see what they're doing,
-so two agents never silently clobber the same file. zero-token when quiet,
-200-400 tokens of real cross-session awareness when active.
+historical documentation for a local claude code session-messaging plugin. `cc` records session presence, awareness digests, file-overlap signals, and direct messages in local state. it can reduce coordination mistakes, but it does not prevent concurrent edits or replace worktree ownership and review.
 
 ## install
 

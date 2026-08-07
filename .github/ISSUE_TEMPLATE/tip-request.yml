@@ -1,26 +1,30 @@
-name: Tip or Guide Request
-description: Suggest a new tip, guide section, or topic to cover
-labels: ["content"]
+name: guide proposal
+description: propose a source-backed addition to the field guide
+labels: [content]
 body:
   - type: input
-    id: topic
+    id: decision
     attributes:
-      label: Topic
-      description: What Claude Code feature or workflow should we cover?
-      placeholder: e.g., "agent teams with tmux", "HTTP hooks for Slack"
+      label: reader decision
+      description: what decision would this addition help an experienced builder make?
+    validations:
+      required: true
+  - type: dropdown
+    id: layer
+    attributes:
+      label: primary layer
+      options:
+        - surface
+        - harness
+        - model
+        - orchestration
+        - shared operating practice
     validations:
       required: true
   - type: textarea
-    id: context
+    id: sources
     attributes:
-      label: Context
-      description: Why is this useful? What problem does it solve?
-      placeholder: Describe the use case or link to relevant docs
-  - type: dropdown
-    id: level
-    attributes:
-      label: Difficulty level
-      options:
-        - beginner
-        - intermediate
-        - advanced
+      label: primary sources or hands-on evidence
+      description: include official documentation, a source repository, or a reproducible test environment
+    validations:
+      required: true

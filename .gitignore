@@ -1,7 +1,6 @@
 assets/
 content/
-data/*
-!data/stats.json
+data/
 handoffs/
 AUDIT.md
 .phase-a-audit.md

@@ -1,11 +1,20 @@
-<!-- tested with: claude code v2.1.122 -->
+# codex + claude code field guide
 
-# claude-code-tips (codex / openai agents pointer)
+this repository is an opinionated, source-backed handbook for experienced coding-agent users. codex and claude code are co-equal primary guides. legacy claude code plugins remain available only for the compatibility window documented in `docs/legacy-tools.md`.
 
-personal claude code setup, open source. hooks, example agents/commands, opinionated docs. marketplace: `anipotts/claude-code-tips`.
+## public standard
 
-this file mirrors `CLAUDE.md` for codex and other openai-convention agents. same repo, same rules, same review contract.
+- write for a staff engineer, hiring manager, or technically serious builder who may encounter one page without prior context.
+- separate observed behavior, official product facts, and inference.
+- prefer primary sources and record them in `docs/sources.json`.
+- do not use generated activity, commit frequency, or vendor benchmarks as evidence of quality.
+- keep the voice direct, lowercase, and professional. avoid hype, fan language, and unsupported authority claims.
+- preserve compatibility paths through 2026-11-05. legacy changes are limited to security, data-loss, and installation blockers.
 
-## Review conventions
+## verification
 
-when reviewing pull requests or issues, read and follow .github/AI_REVIEW_RUBRIC.md exactly. four buckets (blocking / apply / discuss / dismissed), exact output format, auto-dismiss list for voice-conflicting style nits.
+run `python3 .github/scripts/check_sources.py`, shell and json syntax checks, `bun test plugins/cc/tests`, and `pytest plugins/lore/tests` before publishing a broad change.
+
+## review
+
+evaluate factual support, taxonomy, safety, maintenance cost, and whether the recommendation follows from the evidence. do not optimize prose for engagement at the expense of precision.

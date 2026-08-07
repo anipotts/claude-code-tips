@@ -1,8 +1,10 @@
-<!-- tested with: claude code v2.1.122 -->
+> legacy compatibility notice: `lore` is frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. see [legacy tools](../../docs/legacy-tools.md).
+
+<!-- tested with: claude code v2.1.220 -->
 
 # lore
 
-your accumulated claude code lore as a deterministic knowledge graph. every session, file, project, tool, and resume relationship becomes a node or edge that builds itself from your transcripts. all data stays local at `~/.claude/lore/lore.db`.
+historical documentation for a local claude code transcript-analysis plugin. `lore` ingests session records into sqlite for search and derived relationships. the database stays local by default, but it can contain sensitive source, prompt, and usage metadata. review retention and backup behavior before installation.
 
 ## install
 

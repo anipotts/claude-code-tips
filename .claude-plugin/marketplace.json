@@ -4,14 +4,14 @@
     "name": "Ani Potts"
   },
   "metadata": {
-    "description": "claude code plugins by ani potts: session mesh, knowledge graph over your history, and time awareness.",
+    "description": "legacy claude code plugins preserved for compatibility through 2026-11-05.",
     "version": "3.1.0"
   },
   "plugins": [
     {
       "name": "cc",
       "source": "./plugins/cc",
-      "description": "session mesh for claude code (email-cc semantics): awareness digests, file-overlap alerts, topic subscriptions, cross-session messaging.",
+      "description": "legacy session mesh for claude code. frozen through 2026-11-05; security and installation fixes only.",
       "author": { "name": "Ani Potts" },
       "license": "MIT",
       "category": "collaboration"
@@ -19,7 +19,7 @@
     {
       "name": "lore",
       "source": "./plugins/lore",
-      "description": "your accumulated claude code lore as a deterministic knowledge graph. every session, file, project, tool, and resume edge becomes a node. /lore:graph, /lore:remember, /lore:export.",
+      "description": "legacy local transcript analytics for claude code. frozen through 2026-11-05; review retention and privacy before use.",
       "author": { "name": "Ani Potts" },
       "license": "MIT",
       "category": "analytics"
@@ -27,7 +27,7 @@
     {
       "name": "time",
       "source": "./plugins/time",
-      "description": "claude's awareness of how alive it is. 5h + 7d + context-window meters with a budgeting rule. /time-estimate, /time-calibrate, /time-benchmark, /fuel state|handoff.",
+      "description": "legacy usage and context meters for claude code. frozen through 2026-11-05; undocumented client state may drift.",
       "author": { "name": "Ani Potts" },
       "license": "MIT",
       "category": "awareness"

@@ -1,6 +1,8 @@
 <!-- tested with: claude code v2.1.122 -->
 
-# hooks
+# legacy hooks
+
+> these hooks are frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. review each script against current claude code hook payloads and your own threat model before use. see [legacy tools](../docs/legacy-tools.md).
 
 standalone scripts that plug into claude code's hook system. copy one, wire it up, done.
 
@@ -64,4 +66,4 @@ then add the matching config to your `.claude/settings.json` or `~/.claude/setti
 - hooks read JSON from stdin via `jq`
 - exit code `0` = allow, exit code `2` = block (PreToolUse only)
 - all scripts use `#!/usr/bin/env bash` with `set -euo pipefail`
-- see the [hooks guide](../docs/hooks.md) for full reference
+- see the current [claude code guide](../docs/claude-code/README.md) for how hooks fit with skills, plugins, permissions, and policy

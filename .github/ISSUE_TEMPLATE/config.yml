@@ -1,8 +1,11 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Claude Code Official Docs
-    url: https://code.claude.com/docs/en/overview
-    about: Check official docs first
-  - name: Discussions
-    url: https://github.com/anipotts/claude-code-tips/discussions
-    about: Ask questions or share your own tips
+  - name: codex documentation
+    url: https://developers.openai.com/codex/codex-manual.md
+    about: check the current codex manual
+  - name: claude code documentation
+    url: https://code.claude.com/docs/en
+    about: check the current claude code documentation
+  - name: security report
+    url: https://github.com/anipotts/claude-code-tips/security/advisories/new
+    about: report a vulnerability privately
