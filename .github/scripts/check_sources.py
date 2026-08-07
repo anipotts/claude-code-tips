@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
-"""Validate the public source registry and optional freshness constraints."""
+"""Validate evidence metadata and optionally check upstream freshness signals."""
 
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
 import sys
 from datetime import date
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "docs" / "sources.json"
-REQUIRED_FIELDS = {
+REQUIRED_SOURCE_FIELDS = {
     "id",
     "product",
     "layer",
@@ -25,19 +28,23 @@ REQUIRED_FIELDS = {
     "evidence",
 }
 LAYERS = {"surface", "harness", "model", "orchestration"}
-EVIDENCE = {"hands-on", "source-verified", "inference", "retired"}
+EVIDENCE = {"hands-on", "source-verified", "inference", "unknown"}
+STATUSES = {"current", "pending", "legacy"}
 MAX_AGE_DAYS = {"pricing": 14, "core": 30, "watchlist": 45, "stable": 90}
+WATCHED_STATUSES = {"core", "stable"}
 GUIDE_PATHS = [
+    ROOT / "docs" / "README.md",
     ROOT / "docs" / "codex" / "README.md",
     ROOT / "docs" / "claude-code" / "README.md",
     ROOT / "docs" / "shared" / "operating-system.md",
     ROOT / "docs" / "market" / "README.md",
     ROOT / "docs" / "market" / "hardware.md",
+    ROOT / "docs" / "field-lab" / "README.md",
     ROOT / "docs" / "methodology.md",
+    ROOT / "docs" / "changes.md",
     ROOT / "docs" / "legacy-tools.md",
 ]
-GUIDE_FIELDS = {"products", "last_verified", "evidence", "source_ids"}
-GUIDE_META = re.compile(r"<!-- guide-meta: (\{.*\}) -->")
+FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 
 
 def parse_args() -> argparse.Namespace:
@@ -45,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--freshness",
         action="store_true",
-        help="also enforce review windows and current package versions",
+        help="enforce review windows, versions, and watched upstream terms",
     )
     return parser.parse_args()
 
@@ -53,6 +60,29 @@ def parse_args() -> argparse.Namespace:
 def load_registry() -> dict:
     with REGISTRY.open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def inline_list(frontmatter: str, field: str) -> list[str] | None:
+    match = re.search(rf"^{re.escape(field)}:\s*\[(.*?)\]\s*$", frontmatter, re.MULTILINE)
+    if not match:
+        return None
+    value = match.group(1).strip()
+    if not value:
+        return []
+    return [item.strip().strip("'\"") for item in value.split(",")]
+
+
+def scalar(frontmatter: str, field: str) -> str | None:
+    match = re.search(rf"^{re.escape(field)}:\s*(.*?)\s*$", frontmatter, re.MULTILINE)
+    return match.group(1).strip("'\"") if match else None
+
+
+def normalized_upstream_text(url: str) -> str:
+    request = Request(url, headers={"User-Agent": "coding-agent-tips-freshness/1"})
+    with urlopen(request, timeout=30) as response:
+        raw = response.read().decode("utf-8", errors="replace")
+    without_markup = re.sub(r"<[^>]+>", " ", html.unescape(raw))
+    return re.sub(r"\s+", " ", without_markup).casefold()
 
 
 def validate_registry(data: dict, freshness: bool) -> list[str]:
@@ -69,7 +99,7 @@ def validate_registry(data: dict, freshness: bool) -> list[str]:
     seen: set[str] = set()
     for index, source in enumerate(sources):
         label = source.get("id", f"source[{index}]")
-        missing = REQUIRED_FIELDS - source.keys()
+        missing = REQUIRED_SOURCE_FIELDS - source.keys()
         if missing:
             errors.append(f"{label}: missing fields {sorted(missing)}")
             continue
@@ -97,11 +127,33 @@ def validate_registry(data: dict, freshness: bool) -> list[str]:
 
         if checked > today:
             errors.append(f"{label}: last_checked is in the future")
+
+        watch = source.get("watch")
+        if source["status"] in WATCHED_STATUSES:
+            if not isinstance(watch, dict) or watch.get("kind") != "terms":
+                errors.append(f"{label}: core and stable sources require a terms watch")
+            elif not isinstance(watch.get("terms"), list) or not watch["terms"]:
+                errors.append(f"{label}: watch terms must be a non-empty list")
+
         if freshness:
             max_age = MAX_AGE_DAYS[source["status"]]
             age = (today - checked).days
             if age > max_age:
                 errors.append(f"{label}: {age} days old, limit is {max_age}")
+
+            if watch:
+                try:
+                    upstream = normalized_upstream_text(source["url"])
+                except (HTTPError, URLError, TimeoutError) as exc:
+                    errors.append(f"{label}: upstream watch failed: {exc}")
+                else:
+                    missing_terms = [
+                        term for term in watch["terms"] if term.casefold() not in upstream
+                    ]
+                    if missing_terms:
+                        errors.append(
+                            f"{label}: watched terms missing upstream {missing_terms}"
+                        )
 
     if freshness:
         expected = data.get("product_versions", {})
@@ -129,41 +181,52 @@ def validate_guides(data: dict) -> list[str]:
             errors.append(f"{relative}: guide file is missing")
             continue
 
-        match = GUIDE_META.search(path.read_text(encoding="utf-8"))
+        match = FRONTMATTER.search(path.read_text(encoding="utf-8"))
         if not match:
-            errors.append(f"{relative}: guide-meta comment is missing")
+            errors.append(f"{relative}: yaml frontmatter is missing")
             continue
+        frontmatter = match.group(1)
 
-        try:
-            metadata = json.loads(match.group(1))
-        except json.JSONDecodeError as exc:
-            errors.append(f"{relative}: invalid guide-meta json: {exc}")
-            continue
+        products = inline_list(frontmatter, "products")
+        evidence = inline_list(frontmatter, "evidence")
+        sources = inline_list(frontmatter, "sources")
+        verified_raw = scalar(frontmatter, "lastVerified")
+        status = scalar(frontmatter, "status")
 
-        missing = GUIDE_FIELDS - metadata.keys()
-        if missing:
-            errors.append(f"{relative}: missing guide metadata {sorted(missing)}")
-        for field in ("products", "evidence", "source_ids"):
-            if not isinstance(metadata.get(field), list):
-                errors.append(f"{relative}: {field} must be a list")
-
-        if not metadata.get("products"):
+        for field, value in (("products", products), ("evidence", evidence), ("sources", sources)):
+            if value is None:
+                errors.append(f"{relative}: {field} must be an inline list")
+        if products == []:
             errors.append(f"{relative}: products must not be empty")
-        unknown_evidence = set(metadata.get("evidence", [])) - EVIDENCE
-        if unknown_evidence:
-            errors.append(f"{relative}: unknown evidence labels {sorted(unknown_evidence)}")
+        if evidence is not None:
+            unknown_evidence = set(evidence) - EVIDENCE
+            if unknown_evidence:
+                errors.append(f"{relative}: unknown evidence labels {sorted(unknown_evidence)}")
+        if sources is not None:
+            unknown_sources = set(sources) - known_sources
+            if unknown_sources:
+                errors.append(f"{relative}: unknown source ids {sorted(unknown_sources)}")
+        if status not in STATUSES:
+            errors.append(f"{relative}: invalid status {status!r}")
 
-        unknown = set(metadata.get("source_ids", [])) - known_sources
-        if unknown:
-            errors.append(f"{relative}: unknown source ids {sorted(unknown)}")
+        rail_kinds = re.findall(r"^\s+- kind:\s*(\S+)\s*$", frontmatter, re.MULTILINE)
+        rail_sources = re.findall(r"^\s+sourceId:\s*(\S+)\s*$", frontmatter, re.MULTILINE)
+        if not rail_kinds:
+            errors.append(f"{relative}: evidenceRail must not be empty")
+        unknown_rail_kinds = set(rail_kinds) - EVIDENCE
+        if unknown_rail_kinds:
+            errors.append(f"{relative}: unknown evidenceRail kinds {sorted(unknown_rail_kinds)}")
+        unknown_rail_sources = set(rail_sources) - known_sources
+        if unknown_rail_sources:
+            errors.append(f"{relative}: unknown evidenceRail source ids {sorted(unknown_rail_sources)}")
 
         try:
-            verified = date.fromisoformat(metadata.get("last_verified", ""))
+            verified = date.fromisoformat(verified_raw or "")
         except ValueError:
-            errors.append(f"{relative}: invalid last_verified date")
+            errors.append(f"{relative}: invalid lastVerified date")
         else:
             if verified > today:
-                errors.append(f"{relative}: last_verified is in the future")
+                errors.append(f"{relative}: lastVerified is in the future")
 
     return errors
 

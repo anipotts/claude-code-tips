@@ -1,4 +1,4 @@
-# lychee link checker config for claude-code-tips
+# lychee link checker config for coding agent tips
 
 # accept these status codes as valid (429 = rate limited, 403 = auth-walled)
 accept = [200, 204, 301, 302, 403, 429]

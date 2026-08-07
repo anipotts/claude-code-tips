@@ -13,7 +13,11 @@
       "status": "core",
       "url": "https://developers.openai.com/codex/codex-manual.md",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": ["AGENTS.md", "config.toml", "Codex"]
+      }
     },
     {
       "id": "anthropic-claude-overview",
@@ -22,7 +26,11 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Claude Code", "terminal", "IDE"]
+      }
     },
     {
       "id": "anthropic-features-overview",
@@ -31,7 +39,11 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/features-overview",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": ["skills", "hooks", "subagents"]
+      }
     },
     {
       "id": "anthropic-desktop",
@@ -40,7 +52,11 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/desktop",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Claude Code on desktop", "worktree", "diff"]
+      }
     },
     {
       "id": "vscode-agent-host",
@@ -166,7 +182,11 @@
       "status": "stable",
       "url": "https://git-scm.com/docs/git-worktree",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": ["git worktree", "add", "prune"]
+      }
     }
   ]
 }
