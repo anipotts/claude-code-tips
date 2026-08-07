@@ -10,6 +10,7 @@
     "check": "astro check",
     "check:field-runs": "node scripts/check-field-runs.mjs",
     "test:site": "node scripts/test-site.mjs",
+    "test:a11y": "node scripts/test-a11y.mjs",
     "preview": "astro preview"
   },
   "dependencies": {

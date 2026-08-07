@@ -44,6 +44,7 @@ bun run check:field-runs
 bun run check
 bun run build
 bun run test:site
+bun run test:a11y
 ```
 
 legacy plugin paths and their final-support policy are documented at

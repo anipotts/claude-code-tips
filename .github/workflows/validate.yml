@@ -39,6 +39,12 @@ jobs:
       - name: verify generated publication
         run: bun run test:site
 
+      - name: install accessibility browser
+        run: bunx playwright install --with-deps chromium
+
+      - name: scan mobile and desktop accessibility
+        run: bun run test:a11y
+
   handbook:
     runs-on: ubuntu-latest
     timeout-minutes: 10

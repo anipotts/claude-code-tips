@@ -35,6 +35,7 @@ bun run check:field-runs
 bun run check
 bun run build
 bun run test:site
+bun run test:a11y
 ```
 
 changes under `plugins/` or `hooks/` must also preserve the compatibility suite:
