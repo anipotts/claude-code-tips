@@ -123,6 +123,12 @@ header.header { border-bottom: 1px solid var(--rule); box-shadow: none; }
 .sidebar-pane { border-inline-end: 1px solid var(--rule); }
 .sidebar-content { font-size: .84rem; }
 .sidebar-content summary, .sidebar-content .large { font-weight: 650; }
+.sidebar-content a[aria-current='page'] {
+  background: var(--cobalt);
+  color: var(--white) !important;
+  font-weight: 650;
+}
+.sidebar-content a[aria-current='page']:hover { background: #0c37ba; color: var(--white) !important; }
 .content-panel { border-top: 0 !important; }
 .sl-markdown-content { color: var(--ink); font-size: 1.04rem; line-height: 1.68; }
 .sl-markdown-content h2, .sl-markdown-content h3 { color: var(--ink); letter-spacing: -.035em; }

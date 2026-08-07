@@ -47,7 +47,7 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
 <BaseLayout title={`${run.title} | coding agent tips`} description={`an inspectable ${run.product} field run with scenarios, artifacts, redactions, and limitations.`}>
   <main id="main" class="run-page">
     <header class="run-header">
-      <p>field lab / launch baseline</p>
+      <p>field lab / site launch</p>
       <h1>{run.title}</h1>
       <dl>
         <div><dt>status</dt><dd>{statusLabel}</dd></div>
@@ -60,7 +60,7 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
     </header>
 
     <section aria-labelledby="scenario-title">
-      <div class="run-section-heading"><p>01 / scenarios</p><h2 id="scenario-title">what ran and what did not</h2></div>
+      <div class="run-section-heading"><p>01 / scenarios</p><h2 id="scenario-title">what worked &amp; what didn't</h2></div>
       <div class="scenario-table">
         {run.scenarios.map((scenario) => (
           <article>
@@ -73,7 +73,7 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
     </section>
 
     <section aria-labelledby="artifact-title">
-      <div class="run-section-heading"><p>02 / artifacts</p><h2 id="artifact-title">public evidence</h2></div>
+      <div class="run-section-heading"><p>02 / evidence</p><h2 id="artifact-title">what you can inspect</h2></div>
       <ul class="artifact-list">
         <li><a href={run.taskSpecification}>task specification</a><span>the predeclared outcome and pass conditions</span></li>
         {run.artifacts.map((artifact) => <li><a href={artifact.url}>{artifactLabel(artifact.kind)}</a><span>{artifact.description}</span></li>)}
@@ -81,12 +81,12 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
     </section>
 
     <section class="run-grid">
-      <div><div class="run-section-heading"><p>03 / machine</p><h2>sanitized profile</h2></div><dl class="compact-data"><div><dt>platform</dt><dd>{run.machineProfile.platform}</dd></div><div><dt>architecture</dt><dd>{run.machineProfile.architecture}</dd></div><div><dt>memory</dt><dd>{display(run.machineProfile.memoryGb)}</dd></div><div><dt>notes</dt><dd>{run.machineProfile.notes}</dd></div></dl></div>
-      <div><div class="run-section-heading"><p>04 / limits</p><h2>what this run cannot establish</h2></div><ul>{run.limitations.map((limitation) => <li>{limitation}</li>)}</ul></div>
+      <div><div class="run-section-heading"><p>03 / machine</p><h2>the machine behind the run</h2></div><dl class="compact-data"><div><dt>platform</dt><dd>{run.machineProfile.platform}</dd></div><div><dt>architecture</dt><dd>{run.machineProfile.architecture}</dd></div><div><dt>memory</dt><dd>{display(run.machineProfile.memoryGb)}</dd></div><div><dt>notes</dt><dd>{run.machineProfile.notes}</dd></div></dl></div>
+      <div><div class="run-section-heading"><p>04 / limits</p><h2>what this run couldn't prove</h2></div><ul>{run.limitations.map((limitation) => <li>{limitation}</li>)}</ul></div>
     </section>
 
     <section aria-labelledby="redaction-title">
-      <div class="run-section-heading"><p>05 / redactions</p><h2 id="redaction-title">excluded from publication</h2></div>
+      <div class="run-section-heading"><p>05 / privacy</p><h2 id="redaction-title">what stayed private</h2></div>
       <ul>{run.redactions.map((redaction) => <li>{redaction}</li>)}</ul>
     </section>
   </main>

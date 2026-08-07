@@ -19,7 +19,8 @@ direction. canonical markdown overrides any accidental mockup wording.
 | homepage hierarchy | publication identity, canonical h1, system taxonomy, operating-model chooser | canonical h1 appears once; taxonomy and chooser remain distinct | pass |
 | guide hierarchy | navigation, readable article column, claim evidence | starlight navigation plus a dedicated evidence rail | pass |
 | narrow screens | evidence meaning survives without a side rail | evidence summary moves directly beneath page metadata | pass |
-| field-run language | internal identifiers remain inspectable without dominating the reader experience | friendly run and scenario titles are shown while stable ids stay in data and urls | pass |
+| field-run language | internal identifiers remain inspectable without dominating the reader experience | the page names the coding agent tips site directly, uses plain-language section headings, and keeps stable ids in data and urls | pass |
+| active navigation | current location is obvious without sacrificing legibility | cobalt background with white text and a darker hover state | pass |
 | decoration | no gradients, generic cards, logos, dashboards, or ornamental motion | none introduced; functional icons use the pinned phosphor set | pass |
 
 ## responsive review
