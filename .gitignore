@@ -9,6 +9,10 @@ docs/upstream-watcher-design.md
 !.claude/commands/
 !.claude/rules/
 node_modules/
+.astro/
+dist/
+playwright-report/
+test-results/
 .DS_Store
 *.pyc
 __pycache__/

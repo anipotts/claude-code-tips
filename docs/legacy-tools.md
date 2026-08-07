@@ -1,6 +1,20 @@
-# legacy claude code tools
-
-<!-- guide-meta: {"products":["cc","lore","time"],"last_verified":"2026-08-07","evidence":["retired"],"source_ids":["anthropic-features-overview"]} -->
+---
+title: legacy claude code tools
+description: compatibility and retirement policy for the historical cc, lore, time, hook, and example surfaces.
+products: [cc, lore, time]
+lastVerified: 2026-08-07
+status: legacy
+evidence: [source-verified]
+sources: [anthropic-features-overview]
+evidenceRail:
+  - kind: source-verified
+    label: current native features
+    section: why-the-tools-are-retiring
+    sourceId: anthropic-features-overview
+  - kind: unknown
+    label: no automatic migration parity
+    section: migration
+---
 
 status: retired from active development
 

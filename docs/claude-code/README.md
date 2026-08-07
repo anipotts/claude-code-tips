@@ -1,6 +1,28 @@
-# claude code field guide
-
-<!-- guide-meta: {"products":["claude-code"],"last_verified":"2026-08-07","evidence":["source-verified"],"source_ids":["anthropic-claude-overview","anthropic-features-overview","anthropic-desktop"]} -->
+---
+title: claude code field guide
+description: source-verified guidance for claude code terminal, desktop, ide, agents, hooks, and permissions.
+products: [claude-code]
+lastVerified: 2026-08-07
+status: pending
+evidence: [source-verified, unknown]
+sources: [anthropic-claude-overview, anthropic-features-overview, anthropic-desktop]
+evidenceRail:
+  - kind: source-verified
+    label: claude code overview
+    section: current-shape
+    sourceId: anthropic-claude-overview
+  - kind: source-verified
+    label: current features
+    section: skills-hooks-plugins-and-agents
+    sourceId: anthropic-features-overview
+  - kind: source-verified
+    label: desktop documentation
+    section: desktop-and-context-switch-cost
+    sourceId: anthropic-desktop
+  - kind: unknown
+    label: current hands-on rerun pending
+    section: professional-default
+---
 
 evidence: historical hands-on use; current capabilities are source-verified through 2.1.224
 
@@ -8,7 +30,7 @@ last verified: 2026-08-07
 
 primary source: [official claude code documentation](https://code.claude.com/docs/en)
 
-local note: 2.1.220 is installed, but the current hands-on protocol in [methodology](../methodology.md) has not been rerun for this reset. recommendations below that depend on current product behavior are therefore source-verified rather than presented as fresh comparative testing.
+local note: 2.1.220 is installed, but the current hands-on protocol in [methodology](/method/) has not been rerun for this reset. recommendations below that depend on current product behavior are therefore source-verified rather than presented as fresh comparative testing.
 
 ## current shape
 

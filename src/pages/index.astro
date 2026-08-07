@@ -1,0 +1,143 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'coding agent tips';
+const description =
+  'evidence-backed guidance for coding agents in production software, from individual projects to startups and big tech.';
+const layers = [
+  {
+    icon: 'ph:app-window',
+    name: 'surface',
+    description: 'where you steer and review',
+    examples: 'terminal · desktop app · ide · web',
+  },
+  {
+    icon: 'ph:terminal-window',
+    name: 'harness',
+    description: 'the coding-agent runtime',
+    examples: 'codex · claude code · qwen code',
+  },
+  {
+    icon: 'ph:brain',
+    name: 'model',
+    description: 'the inference layer',
+    examples: 'hosted · open-weight · local',
+  },
+  {
+    icon: 'ph:git-branch',
+    name: 'orchestration',
+    description: 'how parallel work is coordinated',
+    examples: 'worktrees · agents · control planes',
+  },
+];
+
+const models = [
+  ['terminal + first-party app', 'deep local control with one supervision surface', 'extra app and execution-location complexity', '/guides/operating-system/'],
+  ['ide-integrated agent', 'selection context, diagnostics, inline review', 'editor coupling and local resource pressure', '/market/'],
+  ['terminal-only agent', 'low interface overhead and scriptability', 'more manual coordination across concurrent work', '/guides/operating-system/'],
+  ['local or open stack', 'model choice, privacy, and infrastructure control', 'hardware, serving, and evaluation ownership', '/market/hardware/'],
+];
+
+const guides = [
+  ['codex', 'hands-on + source-verified', 'cli, desktop, ide, cloud, worktrees, permissions', '/guides/codex/'],
+  ['claude code', 'source-verified · run pending', 'terminal, desktop, ide, agents, hooks, permissions', '/guides/claude-code/'],
+  ['shared operating system', 'hands-on + inference', 'authority, worktrees, verification, handoffs', '/guides/operating-system/'],
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <main id="main">
+    <section class="home-hero">
+      <aside class="home-evidence" aria-label="homepage evidence">
+        <p>evidence</p>
+        <a href="/field-lab/"><span class="dot hands-on"></span>hands-on</a>
+        <a href="/method/"><span class="dot source"></span>source-verified</a>
+        <a href="/method/"><span class="dot inference"></span>inference</a>
+        <p class="verified">verified<br />2026-08-07</p>
+      </aside>
+      <div class="hero-copy">
+        <p class="eyebrow">field guide · production engineering</p>
+        <h1>a guide to coding agents in production software (projects, startups &amp; big tech)</h1>
+        <p class="dek">
+          practical guidance for choosing, operating, and reviewing coding-agent systems when the work has real users, real constraints, and consequences.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-action" href="/guides/">read the guides</a>
+          <a class="text-action" href="/field-lab/">inspect the field lab <Icon name="ph:arrow-right" aria-hidden="true" /></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="taxonomy page-band" aria-labelledby="taxonomy-title">
+      <header class="section-heading">
+        <p>01 / taxonomy</p>
+        <h2 id="taxonomy-title">name the layer before comparing the tool</h2>
+        <p>a surface, harness, model, and orchestration layer solve different parts of the system.</p>
+      </header>
+      <div class="layer-grid">
+        {
+          layers.map((layer, index) => (
+            <article>
+              <span class="layer-number">0{index + 1}</span>
+              <Icon name={layer.icon} aria-hidden="true" />
+              <h3>{layer.name}</h3>
+              <p>{layer.description}</p>
+              <small>{layer.examples}</small>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="page-band models" aria-labelledby="model-title">
+      <header class="section-heading">
+        <p>02 / operating models</p>
+        <h2 id="model-title">choose for the review loop you actually run</h2>
+      </header>
+      <div class="model-table">
+        <div class="model-head" aria-hidden="true"><span>system</span><span>advantage</span><span>cost</span><span></span></div>
+        {
+          models.map(([name, advantage, cost, href]) => (
+            <a class="model-row" href={href}>
+              <strong>{name}</strong><span>{advantage}</span><span>{cost}</span><Icon name="ph:arrow-up-right" aria-hidden="true" />
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="page-band guide-list" aria-labelledby="guide-title">
+      <header class="section-heading split-heading">
+        <div><p>03 / current guides</p><h2 id="guide-title">field notes with visible limits</h2></div>
+        <a href="/method/">how evidence works <Icon name="ph:arrow-right" aria-hidden="true" /></a>
+      </header>
+      {
+        guides.map(([name, evidence, scope, href]) => (
+          <a class="guide-row" href={href}>
+            <h3>{name}</h3><span class="status-line">{evidence}</span><p>{scope}</p><Icon name="ph:arrow-right" aria-hidden="true" />
+          </a>
+        ))
+      }
+    </section>
+
+    <section class="field-band" aria-labelledby="field-title">
+      <div>
+        <p class="eyebrow">04 / reproducible field lab</p>
+        <h2 id="field-title">the claims should survive inspection</h2>
+      </div>
+      <div>
+        <p>the protocol records the task, base commit, runtime, interventions, checks, artifacts, redactions, and limitations. missing measurements stay missing.</p>
+        <a href="/field-lab/">inspect the protocol and runs <Icon name="ph:arrow-right" aria-hidden="true" /></a>
+      </div>
+    </section>
+
+    <section class="page-band changes-band" aria-labelledby="changes-title">
+      <header class="section-heading"><p>05 / latest material change</p><h2 id="changes-title">the repository becomes the publication</h2></header>
+      <div class="change-entry"><time datetime="2026-08-07">2026-08-07</time><p>introduced the layered market model, evidence contract, field lab, and paired codex and claude code guides.</p><a href="/changes/">read changes <Icon name="ph:arrow-right" aria-hidden="true" /></a></div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <p>coding agent tips</p><p>evidence over feature counts</p><nav aria-label="footer"><a href="/legacy/">legacy policy</a><a href="https://github.com/anipotts/coding-agent-tips">github</a></nav>
+  </footer>
+</BaseLayout>

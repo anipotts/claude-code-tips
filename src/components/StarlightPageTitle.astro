@@ -1,0 +1,14 @@
+---
+import EvidenceRail from './EvidenceRail.astro';
+
+const { title, products, lastVerified, status, evidenceRail } = Astro.locals.starlightRoute.entry.data;
+const verifiedDate = lastVerified.toISOString().slice(0, 10);
+---
+
+<p class="page-kicker">field guide / {products.join(' + ')}</p>
+<h1 id="_top">{title}</h1>
+<div class="page-meta" aria-label="page metadata">
+  <span>verified {verifiedDate}</span>
+  <span>status {status}</span>
+</div>
+<div class="inline-rail"><EvidenceRail entries={evidenceRail} mobile /></div>

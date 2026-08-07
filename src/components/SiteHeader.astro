@@ -1,0 +1,28 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const current = Astro.url.pathname;
+const links = [
+  { href: '/guides/', label: 'guides' },
+  { href: '/market/', label: 'market' },
+  { href: '/field-lab/', label: 'field lab' },
+  { href: '/method/', label: 'method' },
+];
+---
+
+<header class:list={['site-header', { compact }]}>
+  <a class="site-name" href="/" aria-label="coding agent tips home">
+    <span>coding agent tips</span>
+  </a>
+  <nav aria-label="primary">
+    {
+      links.map(({ href, label }) => (
+        <a href={href} aria-current={current.startsWith(href) ? 'page' : undefined}>{label}</a>
+      ))
+    }
+  </nav>
+  <a class="github-link" href="https://github.com/anipotts/coding-agent-tips">github</a>
+</header>

@@ -1,6 +1,23 @@
-# hardware economics
-
-<!-- guide-meta: {"products":["cross-runtime"],"last_verified":"2026-08-07","evidence":["hands-on","inference"],"source_ids":["git-worktrees"]} -->
+---
+title: hardware economics
+description: memory, storage, concurrency, and attention costs for hosted and local coding-agent workflows.
+products: [cross-runtime]
+lastVerified: 2026-08-07
+status: current
+evidence: [hands-on, source-verified, inference]
+sources: [git-worktrees]
+evidenceRail:
+  - kind: hands-on
+    label: macos agent workflows
+    section: concurrency-is-multiplicative
+  - kind: source-verified
+    label: git worktree behavior
+    section: ssd-pressure
+    sourceId: git-worktrees
+  - kind: inference
+    label: planning bands, not benchmarks
+    section: memory-planning-bands
+---
 
 evidence: hands-on for macos agent workflows; capacity bands are inference, not benchmarks
 

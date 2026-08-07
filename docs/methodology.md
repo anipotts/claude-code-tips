@@ -1,6 +1,25 @@
-# methodology
-
-<!-- guide-meta: {"products":["cross-runtime"],"last_verified":"2026-08-07","evidence":["hands-on","source-verified","inference","retired"],"source_ids":[]} -->
+---
+title: methodology
+description: evidence labels, source policy, freshness windows, and the reproducible hands-on protocol.
+products: [cross-runtime]
+lastVerified: 2026-08-07
+status: current
+evidence: [hands-on, source-verified, inference, unknown]
+sources: []
+evidenceRail:
+  - kind: hands-on
+    label: reproducible field runs
+    section: hands-on-protocol
+  - kind: source-verified
+    label: primary-source policy
+    section: source-order
+  - kind: inference
+    label: editorial judgment
+    section: editorial-standard
+  - kind: unknown
+    label: missing evidence stays visible
+    section: evidence-labels
+---
 
 last verified: 2026-08-07
 
@@ -13,7 +32,7 @@ every material recommendation uses one of four labels:
 | hands-on | reproduced by the author in a named environment and version |
 | source-verified | confirmed in current primary documentation or source code |
 | inference | a judgment derived from observed capabilities, labeled as such |
-| retired | preserved for compatibility or history and no longer recommended |
+| unknown | current evidence is missing or insufficient |
 
 vendor benchmark results remain vendor claims unless independently reproduced. they can describe a model release, but they do not establish the best workflow for a reader.
 

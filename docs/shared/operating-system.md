@@ -1,6 +1,23 @@
-# a shared operating system for coding agents
-
-<!-- guide-meta: {"products":["codex","claude-code"],"last_verified":"2026-08-07","evidence":["hands-on","inference"],"source_ids":["openai-codex-manual","anthropic-features-overview","git-worktrees"]} -->
+---
+title: a shared operating system for coding agents
+description: durable instructions, evidence, isolation, approvals, verification, and handoffs across coding-agent runtimes.
+products: [codex, claude-code]
+lastVerified: 2026-08-07
+status: current
+evidence: [hands-on, source-verified, inference]
+sources: [openai-codex-manual, anthropic-features-overview, git-worktrees]
+evidenceRail:
+  - kind: source-verified
+    label: native runtime controls
+    section: begin-with-repository-truth
+    sourceId: openai-codex-manual
+  - kind: hands-on
+    label: repository operating practice
+    section: use-evidence-to-resolve-uncertainty
+  - kind: inference
+    label: cross-runtime principles
+    section: review-the-system-not-only-the-diff
+---
 
 evidence: hands-on and cross-runtime inference
 

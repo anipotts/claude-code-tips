@@ -1,0 +1,27 @@
+---
+import Search from '@astrojs/starlight/components/Search.astro';
+import SiteHeader from './SiteHeader.astro';
+---
+
+<SiteHeader compact />
+<div class="search-access"><Search /></div>
+
+<style>
+  .search-access {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .search-access:focus-within {
+    inset-inline-end: 1rem;
+    inset-block-start: 0.6rem;
+    inline-size: min(24rem, calc(100vw - 2rem));
+    block-size: auto;
+    clip-path: none;
+    overflow: visible;
+    z-index: 10;
+  }
+</style>

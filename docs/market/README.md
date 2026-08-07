@@ -1,6 +1,25 @@
-# market map for coding-agent systems
-
-<!-- guide-meta: {"products":["market"],"last_verified":"2026-08-07","evidence":["hands-on","source-verified","inference"],"source_ids":["openai-codex-manual","anthropic-claude-overview","vscode-agent-host","cursor-docs","conductor-harnesses","t3-code","opencode","kimi-code","kimi-k3","qwen-code","qwen-models","grok-build","grok-4-5"]} -->
+---
+title: market map for coding-agent systems
+description: choose a coding-agent stack by separating surfaces, harnesses, models, and orchestration.
+products: [market]
+lastVerified: 2026-08-07
+status: current
+evidence: [hands-on, source-verified, inference]
+sources: [openai-codex-manual, anthropic-claude-overview, vscode-agent-host, cursor-docs, conductor-harnesses, t3-code, opencode, kimi-code, kimi-k3, qwen-code, qwen-models, grok-build, grok-4-5]
+evidenceRail:
+  - kind: hands-on
+    label: current codex use
+    section: contender-map
+  - kind: source-verified
+    label: official product sources
+    section: contender-map
+  - kind: inference
+    label: operating-model recommendations
+    section: chooser-with-defaults
+  - kind: unknown
+    label: products awaiting hands-on review
+    section: contender-map
+---
 
 evidence: codex is current hands-on; claude code combines historical use with current source verification; other products are source-verified
 
@@ -94,7 +113,7 @@ subscription or token price is only one part of the system:
 - maintenance cost: config, plugins, provider adapters, updates, and policy.
 - reliability cost: recovery when a session, model, network request, or tool call fails.
 
-the [hardware guide](./hardware.md) covers the local resource side.
+the [hardware guide](/market/hardware/) covers the local resource side.
 
 ## recommendation
 

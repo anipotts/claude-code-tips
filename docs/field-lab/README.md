@@ -1,4 +1,22 @@
-# field lab
+---
+title: field lab
+description: reproducible scenarios, sanitized run records, public artifacts, and explicit limitations.
+products: [codex, claude-code]
+lastVerified: 2026-08-07
+status: current
+evidence: [hands-on, inference, unknown]
+sources: []
+evidenceRail:
+  - kind: hands-on
+    label: codex launch baseline
+    section: launch-baseline
+  - kind: inference
+    label: operator-centered protocol
+    section: interpretation
+  - kind: unknown
+    label: claude code rerun pending
+    section: launch-baseline
+---
 
 the field lab evaluates coding-agent systems through repeatable engineering work.
 it measures what the operator must understand, supervise, recover, and verify.
@@ -33,7 +51,7 @@ task specification.
 
 ## published data
 
-run records conform to [run.schema.json](./run.schema.json). public artifacts may
+run records conform to the repository [run schema](https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/run.schema.json). public artifacts may
 include commits, pull requests, test logs, screenshots, and concise design-review
 notes.
 
