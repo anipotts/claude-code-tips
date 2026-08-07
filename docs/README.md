@@ -11,6 +11,8 @@ the field guide is organized by decision rather than feature count.
 
 - [operating system](./shared/operating-system.md)
 - [methodology](./methodology.md)
+- [field lab](./field-lab/README.md)
+- [decision record](./decisions/README.md)
 
 ## choosing a stack
 
