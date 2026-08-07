@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "runId": "codex-publication-baseline-2026-08-07",
+  "title": "building the first public edition with codex",
   "status": "partial",
   "product": "codex",
   "productVersion": "0.146.0",
@@ -19,6 +20,7 @@
   "scenarios": [
     {
       "id": "architecture-inspection",
+      "title": "understand the existing system",
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
@@ -28,6 +30,7 @@
     },
     {
       "id": "planning",
+      "title": "set the plan and public boundaries",
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
@@ -37,6 +40,7 @@
     },
     {
       "id": "implementation",
+      "title": "build the publication",
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
@@ -46,6 +50,7 @@
     },
     {
       "id": "failure-and-recovery",
+      "title": "find problems and recover",
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
@@ -55,6 +60,7 @@
     },
     {
       "id": "session-continuity",
+      "title": "preserve decisions across the work",
       "result": "partial",
       "elapsedSeconds": null,
       "evidence": [
@@ -64,6 +70,7 @@
     },
     {
       "id": "delegated-analysis",
+      "title": "delegate a bounded review",
       "result": "not-run",
       "elapsedSeconds": null,
       "evidence": [],
@@ -71,6 +78,7 @@
     },
     {
       "id": "isolated-worktree",
+      "title": "work in a separate checkout",
       "result": "not-run",
       "elapsedSeconds": null,
       "evidence": [],
@@ -78,6 +86,7 @@
     },
     {
       "id": "final-review",
+      "title": "review the result",
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [

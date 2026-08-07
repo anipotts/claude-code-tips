@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   compact?: boolean;
 }
@@ -24,5 +26,7 @@ const links = [
       ))
     }
   </nav>
-  <a class="github-link" href="https://github.com/anipotts/coding-agent-tips">github</a>
+  <a class="github-link" href="https://github.com/anipotts/coding-agent-tips" aria-label="coding agent tips on GitHub">
+    <Icon name="ph:github-logo" aria-hidden="true" />
+  </a>
 </header>

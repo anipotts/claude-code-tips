@@ -7,6 +7,7 @@
   "required": [
     "schemaVersion",
     "runId",
+    "title",
     "status",
     "product",
     "productVersion",
@@ -27,6 +28,7 @@
   "properties": {
     "schemaVersion": { "const": 1 },
     "runId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
+    "title": { "type": "string", "minLength": 1 },
     "status": { "enum": ["complete", "partial", "pending"] },
     "product": { "type": "string", "minLength": 1 },
     "productVersion": { "type": ["string", "null"] },
@@ -52,9 +54,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "result", "elapsedSeconds", "evidence", "notes"],
+        "required": ["id", "title", "result", "elapsedSeconds", "evidence", "notes"],
         "properties": {
           "id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string", "minLength": 1 },
           "result": { "enum": ["pass", "fail", "partial", "not-run"] },
           "elapsedSeconds": { "type": ["number", "null"], "minimum": 0 },
           "evidence": {

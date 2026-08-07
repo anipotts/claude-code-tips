@@ -47,7 +47,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .site-header nav { display: flex; gap: clamp(1.4rem, 3vw, 3rem); font-size: .88rem; }
 .site-header nav a, .github-link { color: var(--slate); text-decoration: none; }
 .site-header nav a:hover, .site-header nav a[aria-current='page'], .github-link:hover { color: var(--cobalt); }
-.github-link { justify-self: end; font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.github-link { display: grid; place-items: center; justify-self: end; color: var(--ink); }
+.github-link svg { inline-size: 1.35rem; block-size: 1.35rem; }
 
 .home-hero { min-height: 41rem; display: grid; grid-template-columns: minmax(10rem, 18vw) minmax(0, 1fr); border-bottom: 1px solid var(--rule); }
 .home-evidence { padding: 8rem 2.25rem 2rem clamp(1.25rem, 4vw, 4rem); border-right: 1px solid var(--rule); font-family: var(--font-mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; }
@@ -115,6 +116,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .site-footer p { margin: 0; }
 .site-footer p:nth-child(2) { color: var(--slate); }
 .site-footer nav { display: flex; gap: 2rem; }
+.footer-github svg { inline-size: 1.15rem; block-size: 1.15rem; }
 
 /* Starlight publication shell */
 header.header { border-bottom: 1px solid var(--rule); box-shadow: none; }

@@ -19,6 +19,7 @@ direction. canonical markdown overrides any accidental mockup wording.
 | homepage hierarchy | publication identity, canonical h1, system taxonomy, operating-model chooser | canonical h1 appears once; taxonomy and chooser remain distinct | pass |
 | guide hierarchy | navigation, readable article column, claim evidence | starlight navigation plus a dedicated evidence rail | pass |
 | narrow screens | evidence meaning survives without a side rail | evidence summary moves directly beneath page metadata | pass |
+| field-run language | internal identifiers remain inspectable without dominating the reader experience | friendly run and scenario titles are shown while stable ids stay in data and urls | pass |
 | decoration | no gradients, generic cards, logos, dashboards, or ornamental motion | none introduced; functional icons use the pinned phosphor set | pass |
 
 ## responsive review
@@ -38,6 +39,8 @@ direction. canonical markdown overrides any accidental mockup wording.
 - the guide uses starlight's persistent section navigation instead of the
   concept's custom contents rail. this preserves the chosen framework's search,
   keyboard, and documentation-navigation behavior.
+- github destinations use the familiar github icon in site chrome, which is
+  faster to scan on the mobile-first header than an uppercase text label.
 - screenshots remain pull-request review artifacts instead of repository
   binaries.
 

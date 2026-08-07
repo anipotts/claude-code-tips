@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 type Scenario = {
   id: string;
+  title: string;
   result: 'pass' | 'fail' | 'partial' | 'not-run';
   elapsedSeconds: number | null;
   evidence: string[];
@@ -11,6 +12,7 @@ type Scenario = {
 
 type FieldRun = {
   runId: string;
+  title: string;
   status: 'complete' | 'partial' | 'pending';
   product: string;
   productVersion: string | null;
@@ -36,20 +38,24 @@ export function getStaticPaths() {
 
 const { run } = Astro.props as { run: FieldRun };
 const display = (value: string | number | null) => value ?? 'not recorded';
+const statusLabel = { complete: 'complete', partial: 'partially complete', pending: 'planned' }[run.status];
+const resultLabel = { pass: 'passed', fail: 'needs work', partial: 'partial', 'not-run': 'not run' };
+const completedDate = run.completedAt ? run.completedAt.slice(0, 10) : null;
+const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
 ---
 
-<BaseLayout title={`${run.runId} | coding agent tips`} description={`inspectable ${run.product} field run with scenarios, artifacts, redactions, and limitations.`}>
+<BaseLayout title={`${run.title} | coding agent tips`} description={`an inspectable ${run.product} field run with scenarios, artifacts, redactions, and limitations.`}>
   <main id="main" class="run-page">
     <header class="run-header">
-      <p>field lab / run</p>
-      <h1>{run.runId}</h1>
+      <p>field lab / launch baseline</p>
+      <h1>{run.title}</h1>
       <dl>
-        <div><dt>status</dt><dd>{run.status}</dd></div>
+        <div><dt>status</dt><dd>{statusLabel}</dd></div>
         <div><dt>product</dt><dd>{run.product} {display(run.productVersion)}</dd></div>
         <div><dt>surface</dt><dd>{run.surface}</dd></div>
         <div><dt>model</dt><dd>{display(run.model)}</dd></div>
         <div><dt>base commit</dt><dd><code>{run.baseCommit.slice(0, 12)}</code></dd></div>
-        <div><dt>completed</dt><dd>{display(run.completedAt)}</dd></div>
+        <div><dt>completed</dt><dd>{display(completedDate)}</dd></div>
       </dl>
     </header>
 
@@ -58,7 +64,7 @@ const display = (value: string | number | null) => value ?? 'not recorded';
       <div class="scenario-table">
         {run.scenarios.map((scenario) => (
           <article>
-            <div><span class:list={['result', scenario.result]}>{scenario.result}</span><h3>{scenario.id}</h3></div>
+            <div><span class:list={['result', scenario.result]}>{resultLabel[scenario.result]}</span><h3>{scenario.title}</h3></div>
             <p>{scenario.notes}</p>
             <ul>{scenario.evidence.map((url) => <li><a href={url}>inspect evidence</a></li>)}</ul>
           </article>
@@ -70,7 +76,7 @@ const display = (value: string | number | null) => value ?? 'not recorded';
       <div class="run-section-heading"><p>02 / artifacts</p><h2 id="artifact-title">public evidence</h2></div>
       <ul class="artifact-list">
         <li><a href={run.taskSpecification}>task specification</a><span>the predeclared outcome and pass conditions</span></li>
-        {run.artifacts.map((artifact) => <li><a href={artifact.url}>{artifact.kind}</a><span>{artifact.description}</span></li>)}
+        {run.artifacts.map((artifact) => <li><a href={artifact.url}>{artifactLabel(artifact.kind)}</a><span>{artifact.description}</span></li>)}
       </ul>
     </section>
 
@@ -113,8 +119,11 @@ const display = (value: string | number | null) => value ?? 'not recorded';
   .run-grid ul, .run-page section:last-child ul { padding-left: 1.2rem; color: var(--slate); line-height: 1.6; }
   .compact-data { margin: 0; }
   @media (max-width: 48rem) {
-    .run-page { padding-top: 4rem; }
-    .run-header dl { grid-template-columns: 1fr; margin-bottom: 4rem; }
+    .run-page { padding-top: 3.5rem; }
+    .run-header h1 { font-size: clamp(2.55rem, 12vw, 3.25rem); line-height: .98; letter-spacing: -.055em; }
+    .run-header dl { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 2.5rem 0 4rem; }
+    .run-header dl div { min-width: 0; padding-right: .75rem; }
+    .run-header dd { overflow-wrap: anywhere; }
     .scenario-table article { grid-template-columns: 1fr; gap: .8rem; }
     .artifact-list li { grid-template-columns: 1fr; gap: .5rem; }
     .run-grid { grid-template-columns: 1fr; }
