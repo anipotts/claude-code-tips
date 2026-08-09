@@ -93,9 +93,10 @@
       "evidence": [
         "https://github.com/anipotts/coding-agent-tips/blob/main/design-qa.md",
         "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/artifacts/codex-launch-checks.md",
-        "https://github.com/anipotts/coding-agent-tips/commit/184632a"
+        "https://github.com/anipotts/coding-agent-tips/commit/184632a",
+        "https://github.com/anipotts/coding-agent-tips/commit/d6d58e5"
       ],
-      "notes": "the production build, canonical identity, responsive layouts, evidence behavior, and concept fidelity were reviewed"
+      "notes": "the production build, canonical identity, responsive layouts, evidence behavior, and concept fidelity were reviewed; a follow-up shell review unified the homepage and guide geometry"
     }
   ],
   "operatorInterventions": 0,
@@ -115,6 +116,11 @@
       "kind": "commit",
       "url": "https://github.com/anipotts/coding-agent-tips/commit/184632a",
       "description": "mobile-first field-run language and github icon revision from visual review"
+    },
+    {
+      "kind": "commit",
+      "url": "https://github.com/anipotts/coding-agent-tips/commit/d6d58e5",
+      "description": "responsive publication shell and editorial density revision from desktop and mobile review"
     },
     {
       "kind": "verification",
