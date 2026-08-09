@@ -11,7 +11,7 @@ export default defineConfig({
   integrations: [
     icon({
       include: {
-        ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo'],
+        ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo', 'list'],
       },
     }),
     sitemap(),

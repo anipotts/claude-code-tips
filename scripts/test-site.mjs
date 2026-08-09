@@ -75,6 +75,15 @@ if (h1Values.length !== 1 || h1Values[0] !== canonicalH1) {
   failures.push(`/: expected one exact canonical h1, received ${JSON.stringify(h1Values)}`);
 }
 
+for (const route of ['/', '/field-lab/runs/codex-publication-baseline-2026-08-07/']) {
+  const html = await readFile(routeFile(route), 'utf8');
+  const mobileNavigation = html.match(/<nav id="mobile-primary-menu"[^>]*>(.*?)<\/nav>/s)?.[1] ?? '';
+  const mobileLinks = [...mobileNavigation.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
+  if (mobileLinks.join(',') !== '/guides/,/market/,/field-lab/,/method/') {
+    failures.push(`${route}: standalone mobile navigation is missing or incomplete`);
+  }
+}
+
 const sitemapFiles = (await readdir(dist)).filter((file) => file.startsWith('sitemap') && file.endsWith('.xml'));
 if (sitemapFiles.length === 0) {
   failures.push('sitemap output is missing');

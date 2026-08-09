@@ -31,6 +31,8 @@ evidenceRail:
 - aligned the homepage and guide content columns on desktop.
 - removed the decorative homepage evidence rail and unused mobile navigation spacer.
 - made article evidence a full-height desktop rail and a closed mobile disclosure.
+- kept primary navigation available on mobile homepage and field-run routes.
+- tightened the first article-section gap after short introductory notes.
 - added the github icon with a 27-star count verified on 2026-08-09.
 - removed redundant page labels and prohibited mid-dot dividers in public copy.
 

@@ -50,15 +50,17 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .skip-link { position: fixed; inset: 0 auto auto 0; z-index: 100; padding: .65rem 1rem; background: var(--ink); color: var(--white); transform: translateY(-120%); }
 .skip-link:focus { transform: translateY(0); }
 
-.site-header { height: var(--site-header-height); min-height: var(--site-header-height); padding: 0 var(--site-gutter); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; background: var(--white); }
+.site-header { position: relative; z-index: 50; height: var(--site-header-height); min-height: var(--site-header-height); padding: 0 var(--site-gutter); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; background: var(--white); }
 .site-header.compact { height: 100%; min-height: 0; padding: 0; inline-size: 100%; border-bottom: 0; }
 .site-name { display: inline-flex; align-items: center; gap: .7rem; width: max-content; text-decoration: none; font-weight: 700; letter-spacing: -.015em; }
-.site-header nav { display: flex; gap: clamp(1.4rem, 3vw, 3rem); font-size: .88rem; }
-.site-header nav a, .github-link { color: var(--slate); text-decoration: none; }
-.site-header nav a:hover, .site-header nav a[aria-current='page'], .github-link:hover { color: var(--cobalt); }
+.site-header > nav { display: flex; gap: clamp(1.4rem, 3vw, 3rem); font-size: .88rem; }
+.site-header > nav a, .github-link { color: var(--slate); text-decoration: none; }
+.site-header > nav a:hover, .site-header > nav a[aria-current='page'], .github-link:hover { color: var(--cobalt); }
+.header-actions { display: flex; align-items: center; justify-self: end; gap: .75rem; }
 .github-link { display: inline-flex; align-items: center; gap: .4rem; justify-self: end; color: var(--ink); }
 .github-link svg { inline-size: 1.35rem; block-size: 1.35rem; }
 .github-stars { font: .68rem var(--font-mono); }
+.mobile-site-menu { display: none; }
 
 .home-hero { min-height: 40rem; border-bottom: 1px solid var(--rule); }
 .hero-copy { max-width: 72rem; margin-inline-start: var(--sl-sidebar-width); padding: clamp(5rem, 8vw, 7rem) var(--sl-content-pad-x) 5rem; }
@@ -136,6 +138,7 @@ header.header { height: var(--site-header-height); padding: 0 var(--site-gutter)
 .sl-markdown-content h2, .sl-markdown-content h3 { color: var(--ink); letter-spacing: -.035em; }
 .sl-markdown-content h2 { margin-top: 3.8rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); font-size: 2rem; }
 .sl-markdown-content > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.sl-markdown-content > h2:first-of-type:not(:first-child) { margin-top: 2rem; padding-top: 0; border-top: 0; }
 .sl-markdown-content h3 { font-size: 1.35rem; }
 .sl-markdown-content a { color: var(--cobalt); text-underline-offset: .2rem; }
 .sl-markdown-content table { display: table; inline-size: 100%; font-size: .9rem; }
@@ -181,8 +184,16 @@ header.header { height: var(--site-header-height); padding: 0 var(--site-gutter)
   html { scroll-behavior: auto; }
   .site-header { min-height: 4rem; grid-template-columns: 1fr auto; }
   header.header { padding-inline-end: calc(var(--site-gutter) + 3rem) !important; }
-  .site-header nav { display: none; }
+  .site-header > nav { display: none; }
   .site-name { font-size: .9rem; }
+  .mobile-site-menu { display: block; }
+  .mobile-site-menu summary { display: grid; place-items: center; inline-size: 2.75rem; block-size: 2.75rem; border: 1px solid var(--rule); color: var(--ink); cursor: pointer; list-style: none; }
+  .mobile-site-menu summary::-webkit-details-marker { display: none; }
+  .mobile-site-menu summary svg { inline-size: 1.1rem; block-size: 1.1rem; }
+  .mobile-site-menu[open] summary { border-color: var(--cobalt); background: var(--cobalt); color: var(--white); }
+  .mobile-site-menu nav { position: absolute; inset: 100% 0 auto; display: grid; padding: .75rem var(--site-gutter) 1rem; border-bottom: 1px solid var(--rule); background: var(--white); box-shadow: 0 .75rem 1.5rem rgba(16, 17, 20, .08); }
+  .mobile-site-menu nav a { padding: .75rem; color: var(--ink); text-decoration: none; }
+  .mobile-site-menu nav a:hover, .mobile-site-menu nav a[aria-current='page'] { background: #e9efff; color: var(--cobalt); }
   .home-hero { min-height: 0; display: block; }
   .hero-copy { margin-inline-start: 0; padding: 3.5rem 1.25rem 3.75rem; }
   .hero-copy h1 { font-size: clamp(2.9rem, 13vw, 4.8rem); }

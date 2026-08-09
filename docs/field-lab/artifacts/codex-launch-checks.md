@@ -10,12 +10,25 @@ date: 2026-08-09
 | production build | pass | `bun run build`: 13 static pages plus pagefind and sitemap |
 | canonical h1 | pass | one exact match at `/` in the browser |
 | horizontal overflow | pass | none at 375, 768, 1024, or 1440 pixels |
+| responsive route matrix | pass | all 12 public routes checked at four widths with one h1, a 64-pixel header, canonical metadata, and no overflow |
 | publication shell | pass | home and guide headers are 64 pixels; their desktop content shares one left edge |
 | desktop evidence rail | pass | full-height rail visible beside guides at 1440 pixels |
 | mobile evidence summary | pass | closed disclosure beneath guide metadata at 375 pixels |
+| mobile primary navigation | pass | homepage and field-run routes expose the same four destinations as the desktop header |
 | active internal markdown links | pass | active guide links use public routes rather than source filenames |
 | editorial separators | pass | public routes contain no mid-dot dividers |
 | github repository signal | pass | github icon and 27-star count appear in the shared header |
+| production dependency audit | pass | `bun audit --production`: no vulnerabilities found |
+
+## pre-merge gates
+
+- the github actions accessibility scan remains required because the local
+  sandbox cannot launch its pinned chromium process.
+- direct 200 percent browser zoom could not be exercised through the in-app
+  browser permission boundary. the 375 through 1440 responsive reflow checks do
+  not substitute for that final manual check.
+- external links remain subject to the repository's lychee check in github
+  actions. internal generated-route links passed locally.
 
 ## recovery notes
 

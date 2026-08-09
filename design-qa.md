@@ -24,6 +24,7 @@ direction. canonical markdown overrides any accidental mockup wording.
 | active navigation | current location is obvious without sacrificing legibility | cobalt background with white text and a darker hover state | pass |
 | evidence rail | evidence remains distinct without looking detached from the page | a full-height soft-gray rail holds only entries relevant to the current page | pass |
 | repository signal | github is recognizable and useful at a glance | the github icon includes 27 stars, verified on 2026-08-09 | pass |
+| mobile navigation | every route keeps a short path to the publication's main sections | starlight pages use the framework menu; the homepage and field-run shell use the same four-link mobile menu | pass |
 | editorial economy | labels carry information instead of repeating context | redundant page kickers and decorative evidence labels are removed; mid-dot dividers are prohibited | pass |
 | decoration | no gradients, generic cards, logos, dashboards, or ornamental motion | none introduced; functional icons use the pinned phosphor set | pass |
 
@@ -57,7 +58,22 @@ direction. canonical markdown overrides any accidental mockup wording.
 - the canonical h1 is readable without clipping on desktop and mobile.
 - the page starts immediately below the header at every reviewed width. no
   unused mobile table-of-contents spacer remains.
+- introductory source notes use a 32-pixel gap before the first section instead
+  of inheriting the larger between-section rhythm.
+- the homepage and field-run page retain primary navigation on mobile through a
+  native disclosure menu with 44-pixel control dimensions.
 - visible focus treatment is defined globally and reduced motion is honored.
 - no public copy or interface label uses a mid-dot divider.
 - the publication contains no fake run result or fresh claude code hands-on
   claim.
+
+## evidence limits
+
+- the in-app audit confirmed semantic navigation, a focusable 44-pixel mobile
+  menu control, and its open state. the browser automation surface did not
+  advance tab focus, so full keyboard traversal remains a pre-merge manual gate.
+- direct 200 percent browser zoom was blocked by the in-app browser permission
+  boundary. responsive reflow passed at 375, 768, 1024, and 1440 pixels, but it
+  does not replace the final zoom check.
+- the github actions axe scan remains authoritative for serious and critical
+  automated accessibility findings.

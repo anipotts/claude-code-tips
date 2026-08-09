@@ -21,6 +21,9 @@ route, or article body.
 - keep desktop navigation and evidence columns full height. collapse page
   evidence into a disclosure on narrow screens so article content appears in
   the first viewport.
+- keep the four primary destinations available from every mobile route.
+  starlight pages retain the framework menu; standalone pages use a native
+  disclosure in the shared header.
 - show a build-time verified GitHub star count beside the GitHub icon. store the
   value and verification date in one repository-owned data module.
 - remove mid-dot dividers. remove labels that only repeat nearby context.
@@ -42,6 +45,8 @@ route, or article body.
 - the star count is honest as of its recorded date and must be refreshed during
   material publication updates.
 - evidence remains available on mobile without dominating the initial screen.
+- standalone pages no longer lose primary navigation when the desktop links
+  collapse.
 
 ## verification
 
