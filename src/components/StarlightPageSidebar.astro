@@ -1,12 +1,7 @@
 ---
-import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import EvidenceRail from './EvidenceRail.astro';
 
 const entries = Astro.locals.starlightRoute.entry.data.evidenceRail;
 ---
 
-<div class="mobile-rail">
-  <EvidenceRail entries={entries} mobile />
-  {Astro.locals.starlightRoute.toc && <MobileTableOfContents />}
-</div>
-<div class="desktop-rail"><EvidenceRail entries={entries} /></div>
+{entries.length > 0 && <div class="desktop-rail"><EvidenceRail entries={entries} /></div>}

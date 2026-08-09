@@ -1,5 +1,5 @@
 ---
-title: codex field guide
+title: codex
 description: operating codex across cli, desktop, ide, cloud, worktrees, permissions, and durable configuration.
 products: [codex]
 lastVerified: 2026-08-07
@@ -22,10 +22,6 @@ evidenceRail:
     label: professional default
     section: professional-default
 ---
-
-evidence: hands-on through `codex-cli 0.146.0`; source-verified through 0.147.0
-
-last verified: 2026-08-07
 
 primary source: [official codex manual](https://developers.openai.com/codex/codex-manual.md)
 

@@ -19,10 +19,6 @@ evidenceRail:
     section: review-the-system-not-only-the-diff
 ---
 
-evidence: hands-on and cross-runtime inference
-
-last verified: 2026-08-07
-
 codex and claude code expose different native controls. the durable engineering principles underneath them are similar.
 
 ## begin with repository truth

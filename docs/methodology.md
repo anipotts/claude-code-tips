@@ -13,15 +13,7 @@ evidenceRail:
   - kind: source-verified
     label: primary-source policy
     section: source-order
-  - kind: inference
-    label: editorial judgment
-    section: editorial-standard
-  - kind: unknown
-    label: missing evidence stays visible
-    section: evidence-labels
 ---
-
-last verified: 2026-08-07
 
 ## evidence labels
 
@@ -87,3 +79,5 @@ the guide is opinionated, but the reasoning must remain inspectable.
 - unknowns stay visible.
 - products are compared at the same layer.
 - personal taste is stated directly instead of being disguised as consensus.
+- labels do not restate a title, route, or surrounding section unless the repetition improves understanding.
+- mid-dot dividers do not appear in public copy or interface labels.

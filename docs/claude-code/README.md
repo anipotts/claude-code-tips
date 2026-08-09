@@ -1,5 +1,5 @@
 ---
-title: claude code field guide
+title: claude code
 description: source-verified guidance for claude code terminal, desktop, ide, agents, hooks, and permissions.
 products: [claude-code]
 lastVerified: 2026-08-07
@@ -23,10 +23,6 @@ evidenceRail:
     label: current hands-on rerun pending
     section: professional-default
 ---
-
-evidence: historical hands-on use; current capabilities are source-verified through 2.1.224
-
-last verified: 2026-08-07
 
 primary source: [official claude code documentation](https://code.claude.com/docs/en)
 

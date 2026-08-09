@@ -15,7 +15,7 @@ evidenceRail:
     section: choosing-a-stack
 ---
 
-the field guide is organized by decision rather than feature count.
+the guides are organized by decision rather than feature count.
 
 ## primary guides
 

@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { repository } from '../repository';
 
 interface Props {
   compact?: boolean;
@@ -26,7 +27,13 @@ const links = [
       ))
     }
   </nav>
-  <a class="github-link" href="https://github.com/anipotts/coding-agent-tips" aria-label="coding agent tips on GitHub">
+  <a
+    class="github-link"
+    href={repository.url}
+    aria-label={`coding agent tips on GitHub, ${repository.stars} stars`}
+    title={`${repository.stars} GitHub stars, checked ${repository.starsVerifiedAt}`}
+  >
     <Icon name="ph:github-logo" aria-hidden="true" />
+    <span class="github-stars" aria-hidden="true">{repository.stars}</span>
   </a>
 </header>

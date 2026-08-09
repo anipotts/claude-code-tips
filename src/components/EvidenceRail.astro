@@ -22,33 +22,37 @@ const labels: Record<EvidenceKind, string> = {
   inference: 'inference',
   unknown: 'unknown',
 };
+const items = entries.map((entry) => ({ ...entry, source: entry.sourceId ? sources.get(entry.sourceId) : undefined }));
 ---
 
-<aside class:list={['evidence-rail', { mobile }]} aria-labelledby={mobile ? 'mobile-evidence-title' : 'evidence-title'}>
-  <p class="rail-title" id={mobile ? 'mobile-evidence-title' : 'evidence-title'}>evidence</p>
-  <ol>
-    {
-      entries.map((entry) => {
-        const source = entry.sourceId ? sources.get(entry.sourceId) : undefined;
-        const label = (
-          <>
-            <span class:list={['evidence-kind', entry.kind]}>{labels[entry.kind]}</span>
-            <span class="evidence-label">{entry.label}</span>
-          </>
-        );
-
-        return (
+{
+  mobile ? (
+    <details class="evidence-rail mobile">
+      <summary><span>evidence for this page</span><span>{items.length}</span></summary>
+      <ol>
+        {items.map((entry) => (
           <li>
-            {source ? (
-              <a href={source.url} aria-label={`${entry.label}, ${labels[entry.kind]}, source`}>
-                {label}
-              </a>
-            ) : (
-              <a href={`#${entry.section}`}>{label}</a>
-            )}
+            <a href={entry.source?.url ?? `#${entry.section}`} aria-label={`${entry.label}, ${labels[entry.kind]}${entry.source ? ', source' : ''}`}>
+              <span class="evidence-label">{entry.label}</span>
+              <span class:list={['evidence-kind', entry.kind]}>{labels[entry.kind]}</span>
+            </a>
           </li>
-        );
-      })
-    }
-  </ol>
-</aside>
+        ))}
+      </ol>
+    </details>
+  ) : (
+    <aside class="evidence-rail" aria-labelledby="evidence-title">
+      <p class="rail-title" id="evidence-title">evidence</p>
+      <ol>
+        {items.map((entry) => (
+          <li>
+            <a href={entry.source?.url ?? `#${entry.section}`} aria-label={`${entry.label}, ${labels[entry.kind]}${entry.source ? ', source' : ''}`}>
+              <span class="evidence-label">{entry.label}</span>
+              <span class:list={['evidence-kind', entry.kind]}>{labels[entry.kind]}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  )
+}

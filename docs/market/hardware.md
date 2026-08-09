@@ -19,10 +19,6 @@ evidenceRail:
     section: memory-planning-bands
 ---
 
-evidence: hands-on for macos agent workflows; capacity bands are inference, not benchmarks
-
-last verified: 2026-08-07
-
 coding-agent hardware cost depends on where inference runs and how much development work happens in parallel.
 
 ## four execution patterns

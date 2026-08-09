@@ -21,10 +21,6 @@ evidenceRail:
     section: contender-map
 ---
 
-evidence: codex is current hands-on; claude code combines historical use with current source verification; other products are source-verified
-
-last verified: 2026-08-07
-
 this appendix helps experienced builders choose an operating environment. it does not rank model benchmark scores.
 
 ## choose the layer first

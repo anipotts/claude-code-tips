@@ -2,11 +2,14 @@
 title: latest changes
 description: material changes to the guide, its evidence, and its recommendations.
 products: [cross-runtime]
-lastVerified: 2026-08-07
+lastVerified: 2026-08-09
 status: current
 evidence: [hands-on, source-verified]
 sources: [openai-codex-manual, anthropic-claude-overview]
 evidenceRail:
+  - kind: hands-on
+    label: publication shell review
+    section: '2026-08-09'
   - kind: source-verified
     label: codex manual review
     section: '2026-08-07'
@@ -16,13 +19,24 @@ evidenceRail:
     section: '2026-08-07'
     sourceId: anthropic-claude-overview
   - kind: hands-on
-    label: field guide v4 reset
+    label: v4 publication reset
     section: '2026-08-07'
 ---
 
+## 2026-08-09
+
+### publication shell
+
+- unified the homepage and guide headers at 64 pixels.
+- aligned the homepage and guide content columns on desktop.
+- removed the decorative homepage evidence rail and unused mobile navigation spacer.
+- made article evidence a full-height desktop rail and a closed mobile disclosure.
+- added the github icon with a 27-star count verified on 2026-08-09.
+- removed redundant page labels and prohibited mid-dot dividers in public copy.
+
 ## 2026-08-07
 
-### field guide v4 reset
+### v4 publication reset
 
 - reframed the repository around codex and claude code as co-equal primary guides.
 - added the surface, harness, model, and orchestration taxonomy.

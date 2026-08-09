@@ -10,25 +10,25 @@ const layers = [
     icon: 'ph:app-window',
     name: 'surface',
     description: 'where you steer and review',
-    examples: 'terminal · desktop app · ide · web',
+    examples: 'terminal, desktop app, ide, web',
   },
   {
     icon: 'ph:terminal-window',
     name: 'harness',
     description: 'the coding-agent runtime',
-    examples: 'codex · claude code · qwen code',
+    examples: 'codex, claude code, qwen code',
   },
   {
     icon: 'ph:brain',
     name: 'model',
     description: 'the inference layer',
-    examples: 'hosted · open-weight · local',
+    examples: 'hosted, open-weight, local',
   },
   {
     icon: 'ph:git-branch',
     name: 'orchestration',
     description: 'how parallel work is coordinated',
-    examples: 'worktrees · agents · control planes',
+    examples: 'worktrees, agents, control planes',
   },
 ];
 
@@ -41,7 +41,7 @@ const models = [
 
 const guides = [
   ['codex', 'hands-on + source-verified', 'cli, desktop, ide, cloud, worktrees, permissions', '/guides/codex/'],
-  ['claude code', 'source-verified · run pending', 'terminal, desktop, ide, agents, hooks, permissions', '/guides/claude-code/'],
+  ['claude code', 'source-verified, run pending', 'terminal, desktop, ide, agents, hooks, permissions', '/guides/claude-code/'],
   ['shared operating system', 'hands-on + inference', 'authority, worktrees, verification, handoffs', '/guides/operating-system/'],
 ];
 ---
@@ -49,15 +49,7 @@ const guides = [
 <BaseLayout title={title} description={description}>
   <main id="main">
     <section class="home-hero">
-      <aside class="home-evidence" aria-label="homepage evidence">
-        <p>evidence</p>
-        <a href="/field-lab/"><span class="dot hands-on"></span>hands-on</a>
-        <a href="/method/"><span class="dot source"></span>source-verified</a>
-        <a href="/method/"><span class="dot inference"></span>inference</a>
-        <p class="verified">verified<br />2026-08-07</p>
-      </aside>
       <div class="hero-copy">
-        <p class="eyebrow">field guide · production engineering</p>
         <h1>a guide to coding agents in production software (projects, startups &amp; big tech)</h1>
         <p class="dek">
           practical guidance for choosing, operating, and reviewing coding-agent systems when the work has real users, real constraints, and consequences.

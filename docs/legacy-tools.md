@@ -16,8 +16,6 @@ evidenceRail:
     section: migration
 ---
 
-status: retired from active development
-
 compatibility window: 2026-08-07 through 2026-11-05
 
 ## what remains available

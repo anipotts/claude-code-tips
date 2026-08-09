@@ -45,6 +45,12 @@ for (const route of requiredRoutes) {
   if (!html.includes('<meta property="og:title"')) {
     failures.push(`${route}: open graph title is missing`);
   }
+  if (html.includes('·')) {
+    failures.push(`${route}: mid-dot divider appears in public output`);
+  }
+  if (!/coding agent tips on GitHub, \d+ stars/.test(html)) {
+    failures.push(`${route}: GitHub star count is missing from the site header`);
+  }
 
   const links = [...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
   for (const href of links) {
