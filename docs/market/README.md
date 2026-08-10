@@ -21,7 +21,7 @@ evidenceRail:
     section: contender-map
 ---
 
-this appendix helps experienced builders choose an operating environment. it does not rank model benchmark scores.
+this appendix helps experienced builders choose an operating environment through workflow and operating-model evidence.
 
 ## choose the layer first
 
@@ -86,17 +86,17 @@ default: evaluate opencode before building a custom harness. evaluate kimi code,
 | [kimi code](https://www.kimi.com/code/docs/) | terminal and ide harness optimized for kimi models | source-verified watchlist | separate from the Kimi K3 model family |
 | [qwen code](https://github.com/QwenLM/qwen-code) | open-source terminal and ide-friendly harness | source-verified watchlist | separate from Qwen model releases |
 | [grok build](https://docs.x.ai/build/overview) | open-source terminal harness with dashboard and acp support | source-verified watchlist | xai's coding harness; separate from Grok 4.5 |
-| [Kimi K3](https://github.com/MoonshotAI/Kimi-K3) | hosted and open-weight model family | source-verified watchlist | model layer, not an ide |
+| [Kimi K3](https://github.com/MoonshotAI/Kimi-K3) | hosted and open-weight model family | source-verified watchlist | model layer |
 | [Qwen models](https://github.com/QwenLM) | hosted and open-weight model family | source-verified watchlist | model layer, commonly used through Qwen Code or compatible harnesses |
 | [Grok 4.5](https://docs.x.ai/developers/grok-4-5) | hosted xai model | source-verified watchlist | model layer; available through Grok Build, api, and Cursor |
 
-cline and continue are intentionally outside this edition. absence does not imply a negative recommendation.
+cline and continue are outside this edition and remain unevaluated here.
 
 ## xai naming
 
 xai's first-party coding product is [Grok Build](https://docs.x.ai/build/overview), a terminal agent that can also run headlessly or through the Agent Client Protocol. [Grok 4.5](https://docs.x.ai/developers/grok-4-5) is the model used by that harness and is also offered in Cursor.
 
-current primary sources do not establish a separate xai-built Cursor-style editor. describe the harness and model separately until such a product is documented.
+current primary sources establish xai's model and harness layers. evaluate them separately while evidence for an xai-built Cursor-style editor remains absent.
 
 ## costs that pricing pages miss
 

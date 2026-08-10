@@ -16,7 +16,7 @@ evidenceRail:
     section: use-evidence-to-resolve-uncertainty
   - kind: inference
     label: cross-runtime principles
-    section: review-the-system-not-only-the-diff
+    section: review-the-whole-system
 ---
 
 codex and claude code expose different native controls. the durable engineering principles underneath them are similar.
@@ -57,7 +57,7 @@ plans should name these checks. otherwise a detailed plan can still be speculati
 
 use one branch or worktree per independently reviewable change. parallel agents need explicit ownership of files, subsystems, or responsibilities.
 
-git isolation does not isolate runtime resources. check ports, databases, local services, browser profiles, caches, generated files, and external accounts before running several implementations at once.
+git isolation covers tracked files and branches. runtime resources remain shared, so check ports, databases, local services, browser profiles, caches, generated files, and external accounts before running several implementations at once.
 
 ## keep the main thread clean
 
@@ -82,7 +82,7 @@ a credible completion report states:
 
 - what changed.
 - what was tested.
-- what was not tested.
+- untested scope.
 - what remains gated or uncertain.
 
 avoid using a generated file, passing unit test, green deployment job, or visible preview as proof of a different layer. each claim needs evidence from the layer it describes.
@@ -93,7 +93,7 @@ chat memory is convenient and private to a runtime. another engineer should be a
 
 a useful handoff records the goal, changed files or commits, verification, unresolved decisions, and the next safe action. avoid copying full transcripts into a public repository.
 
-## review the system, not only the diff
+## review the whole system
 
 agent-generated code should be reviewed for:
 
@@ -104,4 +104,4 @@ agent-generated code should be reviewed for:
 - whether the verification actually proves the claim.
 - whether the change is easier to understand than the system it replaces.
 
-the same standard applies to agent infrastructure. a large control plane is not automatically more capable than a small, well-understood workflow.
+the same standard applies to agent infrastructure. a small, well-understood workflow can outperform a large control plane.

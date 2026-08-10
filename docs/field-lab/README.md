@@ -20,7 +20,7 @@ evidenceRail:
 
 the field lab evaluates coding-agent systems through repeatable engineering work.
 it measures what the operator must understand, supervise, recover, and verify.
-it does not produce a single winner score.
+its output is comparable run evidence rather than a single winner score.
 
 ## protocol
 
@@ -57,20 +57,20 @@ run records conform to the repository [run schema](https://github.com/anipotts/c
 include commits, pull requests, test logs, screenshots, and concise design-review
 notes.
 
-the following never belongs in a public run:
+exclude these from every public run:
 
 - raw chat or agent transcripts.
 - credentials, environment values, or account identifiers.
 - private repository names or private absolute paths.
 - personal data unrelated to the engineering result.
-- inferred token cost when the product did not expose it.
+- inferred token cost when the product leaves it unavailable.
 - a success claim without evidence from the layer it describes.
 
 ## interpretation
 
 elapsed time is useful only with operator interventions and review time beside it.
-tool-call count can describe a run, but it does not establish quality. resource
+tool-call count can describe a run. quality requires review evidence from the resulting work. resource
 measurements must identify what ran locally and what remained provider-hosted.
 
 comparative conclusions require comparable runs. a missing run remains visible as
-`pending`; it is not filled from documentation or remembered product behavior.
+`pending` until comparable hands-on evidence exists.

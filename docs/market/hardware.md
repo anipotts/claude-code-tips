@@ -15,7 +15,7 @@ evidenceRail:
     section: ssd-pressure
     sourceId: git-worktrees
   - kind: inference
-    label: planning bands, not benchmarks
+    label: practical planning bands
     section: memory-planning-bands
 ---
 
@@ -30,11 +30,11 @@ coding-agent hardware cost depends on where inference runs and how much developm
 | local model, local agent | your machine | your machine | model weights, key-value cache, runtime memory, builds, and thermal load |
 | hosted model, many local agents | provider | your machine | duplicated workspaces and simultaneous development processes |
 
-using a hosted model does not make the workflow resource-free. it removes model inference from the mac while leaving the repository workload local.
+hosted inference moves model compute away from the mac while repository work remains local.
 
 ## memory planning bands
 
-these are practical planning bands for a modern mac, not universal requirements:
+use these practical planning bands as a starting point for a modern mac, then measure the actual development stack:
 
 | unified memory | reasonable expectation |
 |---|---|
@@ -55,7 +55,7 @@ a useful estimate is:
 workspace storage = base repository + worktrees × (dependencies + build output + local state)
 ```
 
-shared package caches reduce downloads but do not guarantee shared installed dependencies. measure one prepared worktree before assuming that ten parallel tasks will fit.
+shared package caches reduce downloads while installed dependencies may still duplicate. measure one prepared worktree before assuming that ten parallel tasks will fit.
 
 local model storage starts with model weights:
 
@@ -110,4 +110,4 @@ the wrong surface can increase cognitive load even when it saves clicks. evaluat
 
 for hosted codex or claude code use, prioritize enough memory for the development stack and enough ssd for several prepared worktrees. move beyond that baseline when measurements show sustained memory pressure, swap, thermal throttling, or storage churn.
 
-for local inference, choose the target model sizes and context requirements first. calculate weight and cache needs, then select hardware. a large memory specification without adequate bandwidth, cooling, or supported runtimes does not guarantee a useful coding-agent experience.
+for local inference, choose the target model sizes and context requirements first. calculate weight and cache needs, then select hardware. a useful coding-agent experience also depends on bandwidth, cooling, and supported runtimes.

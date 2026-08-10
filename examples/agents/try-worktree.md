@@ -79,4 +79,4 @@ drop in `.claude/agents/try-worktree.md` then:
 
 **pattern**: worktree isolation: your working tree stays completely clean. if the experiment is a disaster, nothing happened. if it works, you have a branch to merge.
 
-sonnet bc comparing approaches requires judgment, not just execution.
+sonnet bc comparing approaches requires judgment alongside execution.

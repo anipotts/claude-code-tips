@@ -88,12 +88,10 @@ slash commands only run in interactive Claude Code.
 - `peer.callAction()` returns both parsed result AND round-trip ms.
   scenarios should record the ms via `h.recordSample(label, ms)` so it
   surfaces in the bench-mode distribution.
-- `h.waitFor(label, predicate)` returns the actual converge time, not
-  a deadline. scenarios assert against the recorded ms, not against
-  the predicate alone.
+- `h.waitFor(label, predicate)` returns the actual converge time. scenarios
+  assert against the recorded milliseconds and the predicate result.
 - `--bench N` runs each scenario N times in fresh dirs. samples
-  accumulate; percentiles come from real data, not single-sample
-  illusions.
+  accumulate into measured percentile distributions.
 
 ## known limitations
 

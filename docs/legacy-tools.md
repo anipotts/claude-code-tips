@@ -12,7 +12,7 @@ evidenceRail:
     section: why-the-tools-are-retiring
     sourceId: anthropic-features-overview
   - kind: unknown
-    label: no automatic migration parity
+    label: manual migration review
     section: migration
 ---
 
@@ -51,7 +51,7 @@ the useful ideas have moved into first-party products or are better expressed as
 - transcript analytics require careful retention, privacy, and schema ownership.
 - resource estimates derived from undocumented client state are fragile.
 
-the plugin code remains useful as an implementation record. it is no longer the public center of the repository.
+the plugin code remains useful as an implementation record. the active guide carries the repository's current direction.
 
 ## migration
 
@@ -62,7 +62,7 @@ the plugin code remains useful as an implementation record. it is no longer the 
 | `time` meters | provider usage surfaces and smaller, reviewable task boundaries |
 | safety hooks | current native hooks, sandboxing, permission rules, and managed policy |
 
-there is no automatic migration that preserves every behavior. export any data you want to keep and review it for sensitive content before moving or sharing it.
+migration requires behavior-by-behavior review. export any data you want to keep and review it for sensitive content before moving or sharing it.
 
 ## end of window
 

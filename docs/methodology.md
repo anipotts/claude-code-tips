@@ -37,7 +37,7 @@ use sources in this order:
 3. reproducible local observation.
 4. third-party reporting for context, clearly identified.
 
-product pricing and availability can change quickly. link to the live official page instead of copying a large table when a static value is not essential to the decision.
+product pricing and availability can change quickly. reserve copied static values for decisions that require them; otherwise link to the live official page.
 
 ## freshness
 
@@ -52,7 +52,7 @@ the source registry uses these review windows:
 
 an upstream version change triggers review even when a page remains inside its time window.
 
-the freshness workflow is intentionally read-only. it reports drift by failing with a concise summary. it cannot commit content, update state, open issues, or merge changes.
+the freshness workflow has read-only permissions and reports drift through a concise failed check. publication remains a human-reviewed workflow.
 
 ## hands-on protocol
 
@@ -67,7 +67,7 @@ the same disposable repository should be used to evaluate a primary coding harne
 7. exercise permission denial, interruption, and a failed command.
 8. review the final diff and completion evidence from the product surface.
 
-record the product version, model, reasoning setting, machine, surface, repository state, elapsed time, and failures. one successful demo is not enough to make a reliability claim.
+record the product version, model, reasoning setting, machine, surface, repository state, elapsed time, and failures. reliability claims require repeated, comparable evidence.
 
 ## editorial standard
 
@@ -79,5 +79,6 @@ the guide is opinionated, but the reasoning must remain inspectable.
 - unknowns stay visible.
 - products are compared at the same layer.
 - personal taste is stated directly instead of being disguised as consensus.
-- labels do not restate a title, route, or surrounding section unless the repetition improves understanding.
-- mid-dot dividers do not appear in public copy or interface labels.
+- repeat a title, route, or surrounding label only when the repetition improves understanding.
+- omit mid-dot dividers from public copy and interface labels.
+- state claims directly and omit litotes or negative comparison frames.
