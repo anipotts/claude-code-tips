@@ -26,7 +26,7 @@ evidenceRail:
 
 primary source: [official claude code documentation](https://code.claude.com/docs/en)
 
-local note: 2.1.220 is installed, but the current hands-on protocol in [methodology](/method/) has not been rerun for this reset. recommendations below that depend on current product behavior are therefore source-verified rather than presented as fresh comparative testing.
+local note: 2.1.220 is installed. the current hands-on protocol in [methodology](/method/) remains pending for this reset, so recommendations that depend on current product behavior use source-verified evidence.
 
 ## current shape
 
@@ -85,7 +85,7 @@ third-party plugins run with meaningful local access. review their hooks, comman
 
 claude code desktop combines chats, diffs, previews, files, plans, tasks, terminals, and subagent views. this can reduce the attention cost of moving among a terminal, browser, editor, and pull-request page.
 
-the benefit is supervision, not lower compute use. several local sessions can still duplicate worktrees, dependencies, build processes, file watchers, browser instances, and model requests.
+the desktop benefit is supervision. compute use can still grow as local sessions duplicate worktrees, dependencies, build processes, file watchers, browser instances, and model requests.
 
 ## permissions and safety
 
@@ -97,7 +97,7 @@ permission mode, sandboxing, hooks, managed policy, and operating-system access 
 - inspect plugin and mcp provenance before granting access.
 - preserve user approval for destructive or difficult-to-reverse actions.
 
-hooks are useful enforcement, but a hook only covers events and payloads it actually receives. do not describe a hook as a complete security boundary without testing bypasses and failure behavior.
+treat each hook as enforcement for the events and payloads it receives. test bypasses and failure behavior before assigning it responsibility for a security boundary.
 
 ## memory and session continuity
 

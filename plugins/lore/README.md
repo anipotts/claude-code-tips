@@ -92,7 +92,7 @@ You can also set it per-project in `.claude/settings.json` (project) or `.claude
 
 ### environment variables
 
-`cleanupPeriodDays` is a settings.json field, not an environment variable. CC does not currently expose an env-var override for it. If a future CC release adds one (e.g., `CLAUDE_CODE_CLEANUP_PERIOD_DAYS`), this README will be updated to mention it.
+`cleanupPeriodDays` currently loads from `settings.json`. If a future CC release adds an environment-variable override (for example, `CLAUDE_CODE_CLEANUP_PERIOD_DAYS`), this README will document it.
 
 ### verify your setting
 

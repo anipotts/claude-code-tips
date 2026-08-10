@@ -52,7 +52,7 @@ use the smallest durable surface that matches the rule:
 | mechanical lifecycle enforcement | hook |
 | recurring background work | scheduled task in the desktop or web surface |
 
-keep required team rules in version control. memory is useful recall, not the only copy of a constraint that must always apply.
+keep required team rules in version control. use memory for recall and checked-in files for constraints that must always apply.
 
 ## the working loop
 
@@ -69,7 +69,7 @@ codex responds well to an explicit terminal condition: what must be true, what p
 
 the desktop app can create codex-managed worktrees for parallel chats. this is usually the cleanest local default when two tasks should produce independent diffs.
 
-worktrees isolate tracked files and branches. they do not eliminate shared resources. package caches, local databases, ports, browser profiles, running services, and external accounts can still collide.
+worktrees isolate tracked files and branches. package caches, local databases, ports, browser profiles, running services, and external accounts remain shared and can still collide.
 
 use subagents for read-heavy parallel work such as repository exploration, test triage, source research, or independent review. use separate worktrees when agents need to edit independently or run conflicting application instances.
 
@@ -84,7 +84,7 @@ choose the surface by the next review action:
 - use the ide extension when selection context, debugging, and inline diffs dominate.
 - use cloud work when the task benefits from isolation or should continue without the local machine.
 
-changing surfaces can preserve the same project context, but it does not guarantee identical tools or permissions. verify the effective environment after a handoff.
+changing surfaces can preserve project context while tools and permissions vary. verify the effective environment after a handoff.
 
 ## permissions and automation
 
@@ -104,7 +104,7 @@ local codex memories can summarize useful context from eligible prior chats. the
 
 use memory for preferences, recurring context, and useful recall. use `AGENTS.md`, checked-in docs, config, or a skill for requirements another engineer must be able to inspect and reproduce.
 
-review generated memory before sharing codex state. secret redaction reduces risk but does not make the entire state directory appropriate for publication.
+review generated memory before sharing codex state. publish purpose-selected excerpts after redaction because the state directory can contain private context beyond secrets.
 
 ## where older comparisons went wrong
 

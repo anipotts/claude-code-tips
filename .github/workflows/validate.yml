@@ -123,6 +123,11 @@ jobs:
             exit 1
           fi
 
+          if git grep -n -iE '\bnot (only|just|merely|simply|uncommon|insignificant|impossible|bad|wrong|unreasonable|unlikely|automatically|enough)\b|\bno (small|minor|mean|little)\b' -- '*.md' ':(exclude)CHANGELOG.md' ':(exclude)plugins/**/CHANGELOG.md'; then
+            echo "litotes or negative comparison framing found"
+            exit 1
+          fi
+
   markdown:
     runs-on: ubuntu-latest
     timeout-minutes: 10

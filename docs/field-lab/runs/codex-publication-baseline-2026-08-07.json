@@ -67,7 +67,7 @@
       "evidence": [
         "https://github.com/anipotts/coding-agent-tips/tree/main/docs/decisions"
       ],
-      "notes": "decisions were persisted in signed commits and repository documents; a separate resumed-session recovery was not run"
+      "notes": "decisions were persisted in signed commits and repository documents; resumed-session recovery remains pending"
     },
     {
       "id": "delegated-analysis",
@@ -83,7 +83,7 @@
       "result": "not-run",
       "elapsedSeconds": null,
       "evidence": [],
-      "notes": "the implementation used the existing dedicated branch and checkout; a second worktree was not provisioned"
+      "notes": "the implementation used the existing dedicated branch and checkout; the second-worktree scenario remains pending"
     },
     {
       "id": "final-review",
@@ -145,10 +145,10 @@
     "machine name and account identifiers"
   ],
   "limitations": [
-    "the public run surface did not expose a model identifier",
-    "start time, scenario durations, memory capacity, and review time were not captured and remain null",
-    "token use and cost were not exposed and are not estimated",
-    "delegated analysis and a separate isolated-worktree scenario were not run",
+    "the model identifier was unavailable on the public run surface",
+    "available measurements exclude start time, scenario durations, memory capacity, and review time",
+    "available evidence excludes token use and cost estimates",
+    "delegated analysis and a separate isolated-worktree scenario remain pending",
     "the paired current claude code run remains pending",
     "production hosting, custom-domain behavior, and github metadata are outside this local baseline"
   ]

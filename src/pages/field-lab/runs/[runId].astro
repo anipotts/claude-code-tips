@@ -37,9 +37,9 @@ export function getStaticPaths() {
 }
 
 const { run } = Astro.props as { run: FieldRun };
-const display = (value: string | number | null) => value ?? 'not recorded';
+const display = (value: string | number | null) => value ?? 'unavailable';
 const statusLabel = { complete: 'complete', partial: 'partially complete', pending: 'planned' }[run.status];
-const resultLabel = { pass: 'passed', fail: 'needs work', partial: 'partial', 'not-run': 'not run' };
+const resultLabel = { pass: 'passed', fail: 'needs work', partial: 'partial', 'not-run': 'pending' };
 const completedDate = run.completedAt ? run.completedAt.slice(0, 10) : null;
 const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
 ---
@@ -82,7 +82,7 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
 
     <section class="run-grid">
       <div><div class="run-section-heading"><p>03 / machine</p><h2>the machine behind the run</h2></div><dl class="compact-data"><div><dt>platform</dt><dd>{run.machineProfile.platform}</dd></div><div><dt>architecture</dt><dd>{run.machineProfile.architecture}</dd></div><div><dt>memory</dt><dd>{display(run.machineProfile.memoryGb)}</dd></div><div><dt>notes</dt><dd>{run.machineProfile.notes}</dd></div></dl></div>
-      <div><div class="run-section-heading"><p>04 / limits</p><h2>what this run couldn't prove</h2></div><ul>{run.limitations.map((limitation) => <li>{limitation}</li>)}</ul></div>
+      <div><div class="run-section-heading"><p>04 / limits</p><h2>open questions from this run</h2></div><ul>{run.limitations.map((limitation) => <li>{limitation}</li>)}</ul></div>
     </section>
 
     <section aria-labelledby="redaction-title">

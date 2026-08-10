@@ -9,6 +9,9 @@ this repository is an opinionated, source-backed handbook for experienced coding
 - prefer primary sources and record them in `docs/sources.json`.
 - do not use generated activity, commit frequency, or vendor benchmarks as evidence of quality.
 - keep the voice direct, lowercase, and professional. avoid hype, fan language, and unsupported authority claims.
+- do not use mid-dot dividers in public copy or interface labels.
+- never use litotes or negative comparison frames in public copy. state the intended claim directly.
+- repeat context only when it changes understanding or supports a deliberate editorial rhythm. remove labels that restate the title, route, or surrounding section.
 - preserve compatibility paths through 2026-11-05. legacy changes are limited to security, data-loss, and installation blockers.
 
 ## verification

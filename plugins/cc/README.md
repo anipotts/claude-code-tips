@@ -38,8 +38,8 @@ cc({ action: "check" })
 
 ## how awareness works (the gmail-cc metaphor)
 
-cc is the email cc line for claude code sessions. you're *informed*, not
-*obligated*. when another session does something relevant, you see it in
+cc is the email cc line for claude code sessions. it keeps you informed while
+you retain control. when another session does something relevant, you see it in
 context when you start your next turn. you decide whether to act.
 
 when you call `cc(action='check')`, cc returns an awareness digest: direct
