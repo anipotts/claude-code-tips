@@ -39,6 +39,27 @@ jobs:
       - name: verify generated publication
         run: bun run test:site
 
+      - name: check documentation links
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
+        with:
+          args: >-
+            --config .github/lychee.toml
+            --root-dir "$(pwd)/dist"
+            --no-progress
+            "README*.md"
+            "AGENTS.md"
+            "CLAUDE.md"
+            "CONTRIBUTING.md"
+            "SECURITY.md"
+            "design-qa.md"
+            "docs/**/*.md"
+            "hooks/README.md"
+            "plugins/README.md"
+            "plugins/cc/README.md"
+            "plugins/lore/README.md"
+            "examples/README.md"
+          fail: true
+
       - name: install accessibility browser
         run: bunx playwright install --with-deps chromium
 
@@ -124,23 +145,3 @@ jobs:
             plugins/cc/README.md
             plugins/lore/README.md
             examples/README.md
-
-      - name: check links
-        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
-        with:
-          args: >-
-            --config .github/lychee.toml
-            --no-progress
-            "README*.md"
-            "AGENTS.md"
-            "CLAUDE.md"
-            "CONTRIBUTING.md"
-            "SECURITY.md"
-            "design-qa.md"
-            "docs/**/*.md"
-            "hooks/README.md"
-            "plugins/README.md"
-            "plugins/cc/README.md"
-            "plugins/lore/README.md"
-            "examples/README.md"
-          fail: true

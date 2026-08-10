@@ -16,6 +16,7 @@ date: 2026-08-09
 | mobile evidence summary | pass | closed disclosure beneath guide metadata at 375 pixels |
 | mobile primary navigation | pass | homepage and field-run routes expose the same four destinations as the desktop header |
 | active internal markdown links | pass | active guide links use public routes rather than source filenames |
+| documentation links | pass | pinned lychee 0.24.2 resolved root-relative routes against the built site and checked 55 reachable links with no errors |
 | editorial separators | pass | public routes contain no mid-dot dividers |
 | github repository signal | pass | github icon and 27-star count appear in the shared header |
 | production dependency audit | pass | `bun audit --production`: no vulnerabilities found |
@@ -27,8 +28,8 @@ date: 2026-08-09
 - direct 200 percent browser zoom could not be exercised through the in-app
   browser permission boundary. the 375 through 1440 responsive reflow checks do
   not substitute for that final manual check.
-- external links remain subject to the repository's lychee check in github
-  actions. internal generated-route links passed locally.
+- twelve links to the future custom domain and renamed repository are explicit
+  prelaunch exclusions. remove the exclusions and rerun the check after cutover.
 
 ## recovery notes
 
@@ -40,3 +41,9 @@ assets.
 
 these were recoverable implementation failures. raw tool output is omitted
 because the public evidence contract excludes transcripts and private paths.
+
+the first pull-request link check also exposed a rollout-order problem: it tried
+to verify root-relative routes without the built site and treated the future
+repository and custom domain as already live. the link check now runs beside the
+production build, resolves internal routes against that output, and excludes
+only the two named cutover targets until deployment.
