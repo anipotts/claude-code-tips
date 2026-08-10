@@ -1,286 +1,147 @@
-name: Validate
+name: validate
 
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - '.github/state/**'
-      - 'content/**'
-      - 'data/**'
-      - 'handoffs/**'
   pull_request:
     branches: [main]
-    paths-ignore:
-      - '.github/state/**'
-      - 'content/**'
-      - 'data/**'
-      - 'handoffs/**'
   merge_group:
 
 permissions:
   contents: read
 
 concurrency:
-  group: "validate-${{ github.event.pull_request.number || github.sha }}"
+  group: validate-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 jobs:
-  # ---------------------------------------------------------------------------
-  # markdown lint -- catches formatting issues, broken structure
-  # ---------------------------------------------------------------------------
-  markdown-lint:
+  site:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Run markdownlint
-        uses: DavidAnson/markdownlint-cli2-action@v24.1.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
-          globs: |
-            **/*.md
-            !content/**
-            !data/**
-            !node_modules/**
-            !.github/**
+          bun-version: "1.3.4"
 
-  # ---------------------------------------------------------------------------
-  # link check -- verify URLs in docs aren't broken
-  # ---------------------------------------------------------------------------
-  link-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
+      - name: install pinned dependencies
+        run: bun install --frozen-lockfile
 
-      - name: Check links with lychee
-        uses: lycheeverse/lychee-action@v2
+      - name: validate field runs
+        run: bun run check:field-runs
+
+      - name: type check and build
+        run: |
+          bun run check
+          bun run build
+
+      - name: verify generated publication
+        run: bun run test:site
+
+      - name: check documentation links
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
           args: >-
             --config .github/lychee.toml
+            --root-dir "$(pwd)/dist"
             --no-progress
-            "**/*.md"
+            "README*.md"
+            "AGENTS.md"
+            "CLAUDE.md"
+            "CONTRIBUTING.md"
+            "SECURITY.md"
+            "design-qa.md"
+            "docs/**/*.md"
+            "hooks/README.md"
+            "plugins/README.md"
+            "plugins/cc/README.md"
+            "plugins/lore/README.md"
+            "examples/README.md"
           fail: true
 
-  # ---------------------------------------------------------------------------
-  # hook syntax -- validate all shell scripts
-  # ---------------------------------------------------------------------------
-  hook-syntax:
+      - name: install accessibility browser
+        run: bunx playwright install --with-deps chromium
+
+      - name: scan mobile and desktop accessibility
+        run: bun run test:a11y
+
+  handbook:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Validate shell scripts
-        run: |
-          errors=0
-
-          # collect all .sh files tracked by git (excludes gitignored dirs)
-          mapfile -t scripts < <(git ls-files '*.sh')
-
-          if [ ${#scripts[@]} -eq 0 ]; then
-            echo "No .sh files found"
-            exit 0
-          fi
-
-          echo "Found ${#scripts[@]} shell scripts"
-          echo "---"
-
-          for script in "${scripts[@]}"; do
-            echo "Checking: $script"
-
-            # --- shebang check ---
-            shebang=$(head -1 "$script")
-            if [[ "$shebang" == "#!/usr/bin/env bash" ]]; then
-              echo "  shebang: ok (#!/usr/bin/env bash)"
-            elif [[ "$shebang" == "#!/bin/bash" ]]; then
-              # accept but warn -- convention prefers #!/usr/bin/env bash
-              echo "  shebang: warn -- uses #!/bin/bash (prefer #!/usr/bin/env bash)"
-            else
-              echo "  shebang: FAIL -- expected bash shebang, got: $shebang"
-              errors=$((errors + 1))
-            fi
-
-            # --- set -euo pipefail check ---
-            # check first 10 lines (allows for comment headers)
-            if head -10 "$script" | grep -q 'set -euo pipefail'; then
-              echo "  strict mode: ok"
-            else
-              echo "  strict mode: warn -- missing 'set -euo pipefail' in first 10 lines"
-              # warn only, not an error -- some scripts may have reasons to omit
-            fi
-
-            # --- bash -n syntax check ---
-            if bash -n "$script" 2>&1; then
-              echo "  syntax: ok"
-            else
-              echo "  syntax: FAIL"
-              errors=$((errors + 1))
-            fi
-
-            # --- executable permission check ---
-            if [ -x "$script" ]; then
-              echo "  executable: ok"
-            else
-              echo "  executable: FAIL -- missing +x permission"
-              errors=$((errors + 1))
-            fi
-
-            echo ""
-          done
-
-          echo "---"
-          if [ $errors -gt 0 ]; then
-            echo "FAILED: $errors error(s) found"
-            exit 1
-          else
-            echo "All shell script checks passed"
-          fi
-
-  # ---------------------------------------------------------------------------
-  # json validation -- ensure plugin manifests and other JSON are well-formed
-  # ---------------------------------------------------------------------------
-  json-validation:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Validate JSON files
-        run: |
-          errors=0
-
-          # collect JSON files tracked by git (excludes gitignored dirs)
-          mapfile -t json_files < <(git ls-files '*.json')
-
-          if [ ${#json_files[@]} -eq 0 ]; then
-            echo "No JSON files found"
-            exit 0
-          fi
-
-          echo "Found ${#json_files[@]} JSON files"
-          echo "---"
-
-          for f in "${json_files[@]}"; do
-            if python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$f" 2>&1; then
-              echo "ok: $f"
-            else
-              echo "FAIL: $f"
-              errors=$((errors + 1))
-            fi
-          done
-
-          echo "---"
-          if [ $errors -gt 0 ]; then
-            echo "FAILED: $errors invalid JSON file(s)"
-            exit 1
-          else
-            echo "All JSON files valid"
-          fi
-
-  # ---------------------------------------------------------------------------
-  # version stamps -- aspirational check for "tested with" annotations
-  # this is a soft gate -- failures don't block merge
-  # ---------------------------------------------------------------------------
-  version-stamps:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Check for version stamps
-        run: |
-          missing=0
-          checked=0
-          dirs="docs hooks plugins examples/agents examples/commands skills"
-
-          echo "Checking for 'tested with' stamps..."
-          echo "---"
-
-          for dir in $dirs; do
-            if [ ! -d "$dir" ]; then
-              continue
-            fi
-
-            # check tracked files. skip:
-            # - *.json (no comment syntax)
-            # - *.jsonl (data fixtures)
-            # - *.lock (autogenerated lockfiles)
-            # - *.sql (data schema)
-            # - *.toml (config, no stable comment convention here)
-            # - */.gitignore, */.gitleaks.toml (tooling config)
-            # - */tests/** (test infrastructure, not user-facing)
-            # - */__init__.py (empty package markers)
-            # - docs/rfcs/** (draft design docs, version-independent)
-            while IFS= read -r file; do
-              case "$file" in
-                *.json) continue ;;
-                *.jsonl) continue ;;
-                *.lock) continue ;;
-                *.sql) continue ;;
-                *.toml) continue ;;
-                */.gitignore) continue ;;
-                */tests/*) continue ;;
-                */__init__.py) continue ;;
-                docs/rfcs/*) continue ;;
-              esac
-              checked=$((checked + 1))
-              if grep -qiE 'tested.with|compatible.with|works.with|verified.with' "$file" 2>/dev/null; then
-                echo "ok: $file"
-              else
-                echo "missing: $file"
-                missing=$((missing + 1))
-              fi
-            done < <(git ls-files "$dir")
-          done
-
-          echo "---"
-          echo "Checked $checked files, $missing missing version stamps"
-
-          if [ $missing -gt 0 ]; then
-            echo ""
-            echo "hint: add a line like '<!-- tested with: claude code v1.0.x -->' to each file"
-            exit 1
-          fi
-
-  # ---------------------------------------------------------------------------
-  # python syntax -- compile-check all .py files in .github/scripts/ and scripts/
-  # ---------------------------------------------------------------------------
-  python-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
 
-      - name: Check Python syntax
+      - name: validate source registry and frontmatter
+        run: python3 .github/scripts/check_sources.py
+
+      - name: validate json and python
         run: |
-          errors=0
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import py_compile
+          import subprocess
 
-          # check .github/scripts/ and scripts/
-          mapfile -t py_files < <(git ls-files '.github/scripts/*.py' 'scripts/*.py' 'tests/*.py')
+          tracked = subprocess.check_output(["git", "ls-files"], text=True).splitlines()
+          for raw in tracked:
+              path = pathlib.Path(raw)
+              if path.suffix == ".json":
+                  with path.open(encoding="utf-8") as handle:
+                      json.load(handle)
+              elif path.suffix == ".py":
+                  py_compile.compile(str(path), doraise=True)
+          PY
 
-          if [ ${#py_files[@]} -eq 0 ]; then
-            echo "No Python files found in target directories"
-            exit 0
-          fi
-
-          echo "Found ${#py_files[@]} Python files"
-          echo "---"
-
-          for f in "${py_files[@]}"; do
-            if python3 -m py_compile "$f" 2>&1; then
-              echo "ok: $f"
-            else
-              echo "FAIL: $f"
-              errors=$((errors + 1))
-            fi
+      - name: validate shell scripts
+        shell: bash
+        run: |
+          mapfile -t scripts < <(git ls-files '*.sh')
+          for script in "${scripts[@]}"; do
+            bash -n "$script"
           done
 
-          echo "---"
-          if [ $errors -gt 0 ]; then
-            echo "FAILED: $errors file(s) with syntax errors"
+      - name: reject private artifacts and misleading prose
+        shell: bash
+        run: |
+          if git ls-files content data handoffs | grep -q .; then
+            echo "private artifact directories must not contain tracked files"
             exit 1
-          else
-            echo "All Python files compile cleanly"
           fi
 
-  # tests run via plugin-smoke-test workflow
+          if git grep -n $'\u2014' -- README.md README.*.md AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md 'docs/**' '.claude-plugin/*.json'; then
+            echo "em dashes are outside the repository style"
+            exit 1
+          fi
+
+          if git grep -n -iE 'maintained by someone who uses claude code as their job|where (claude code|codex) wins|no FUD|last-commit' -- '*.md' ':(exclude)CHANGELOG.md'; then
+            echo "stale authority or winner framing found"
+            exit 1
+          fi
+
+  markdown:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: lint markdown
+        uses: DavidAnson/markdownlint-cli2-action@3b11e4c3e2eac5207914843511bd517908954018 # v24.1.0
+        with:
+          globs: |
+            README*.md
+            AGENTS.md
+            CLAUDE.md
+            CONTRIBUTING.md
+            SECURITY.md
+            design-qa.md
+            docs/**/*.md
+            hooks/README.md
+            plugins/README.md
+            plugins/cc/README.md
+            plugins/lore/README.md
+            examples/README.md

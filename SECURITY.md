@@ -1,32 +1,22 @@
 # security
 
-## reporting a vulnerability
+## reporting
 
-if you find a security issue in this repo (hook that can be abused, plugin that leaks data, code-execution path, credential handling bug), please report privately before opening a public issue.
+report vulnerabilities through [github security advisories](https://github.com/anipotts/coding-agent-tips/security/advisories/new) or email `hello@anipotts.com`.
 
-- GitHub Security Advisories: https://github.com/anipotts/claude-code-tips/security/advisories/new
-- or email: `ap7564` at `nyu.edu`
-
-expected response: within 72 hours for triage.
+please do not open a public issue for a vulnerability that could expose local files, credentials, transcripts, or command execution.
 
 ## scope
 
-in scope:
-- hooks in `hooks/` and `plugins/*/hooks/`
-- MCP server code in `plugins/cc/server.ts`
-- skill/command prompts that invoke shell via `Bash`
-- CI workflows that run untrusted input
+the active handbook contains documentation and validation automation. the legacy compatibility surface also includes:
 
-out of scope:
-- upstream Claude Code CLI vulnerabilities (report to Anthropic)
-- dependencies with upstream fixes available (open a PR instead)
-- issues that require already-compromised local access (this is a personal config repo; local access trust is assumed)
+- shell and python hooks under `hooks/` and `plugins/*/hooks/`.
+- the `cc` mcp server.
+- plugin commands and skills that can invoke local tools.
+- github workflows that process repository content.
 
-## known accepted risks
+## legacy-tool risk
 
-- `cleanupPeriodDays: 999999` retains transcripts indefinitely in the user's local `~/.claude/projects/`. transcripts are unencrypted plaintext. mitigations: FileVault disk encryption, `~/.claude/rules/no-personal-files.md` blocks accidental commits. users who run this plugin set should understand the retention implication.
-- `mine.db` stores session metadata locally. it is not shared, transmitted, or uploaded by default.
+the legacy tools process local claude code state. session databases and transcripts may contain sensitive material and are not encrypted by these plugins. review retention settings, filesystem permissions, and backup behavior before installation.
 
-## supply chain
-
-dependencies are pinned and monitored via Dependabot. security alerts are triaged weekly.
+legacy fixes are accepted through 2026-11-05 when they address a security issue, data-loss risk, or installation blocker.

@@ -1,14 +1,38 @@
 version: 2
 updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "10:30"
+      timezone: America/New_York
+    open-pull-requests-limit: 2
+    groups:
+      publication-runtime:
+        patterns:
+          - astro
+          - astro-icon
+          - "@astrojs/*"
+          - "@fontsource/*"
+          - "@iconify-json/*"
+      publication-tooling:
+        patterns:
+          - "@playwright/*"
+          - "@axe-core/*"
+          - ajv
+          - ajv-formats
+          - typescript
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
-    labels:
-      - dependencies
-      - auto-merge
+      time: "10:45"
+      timezone: America/New_York
+    open-pull-requests-limit: 1
     groups:
-      actions:
+      workflow-actions:
         patterns:
           - "*"

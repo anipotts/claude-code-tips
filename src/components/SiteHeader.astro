@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+import { repository } from '../repository';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const current = Astro.url.pathname;
+const links = [
+  { href: '/guides/', label: 'guides' },
+  { href: '/market/', label: 'market' },
+  { href: '/field-lab/', label: 'field lab' },
+  { href: '/method/', label: 'method' },
+];
+---
+
+<header class:list={['site-header', { compact }]}>
+  <a class="site-name" href="/" aria-label="coding agent tips home">
+    <span>coding agent tips</span>
+  </a>
+  <nav aria-label="primary">
+    {
+      links.map(({ href, label }) => (
+        <a href={href} aria-current={current.startsWith(href) ? 'page' : undefined}>{label}</a>
+      ))
+    }
+  </nav>
+  <div class="header-actions">
+    <a
+      class="github-link"
+      href={repository.url}
+      aria-label={`coding agent tips on GitHub, ${repository.stars} stars`}
+      title={`${repository.stars} GitHub stars, checked ${repository.starsVerifiedAt}`}
+    >
+      <Icon name="ph:github-logo" aria-hidden="true" />
+      <span class="github-stars" aria-hidden="true">{repository.stars}</span>
+    </a>
+    {
+      !compact && (
+        <details class="mobile-site-menu">
+          <summary role="button" aria-label="Menu" aria-controls="mobile-primary-menu"><Icon name="ph:list" aria-hidden="true" /></summary>
+          <nav id="mobile-primary-menu" aria-label="mobile primary">
+            {links.map((link) => (
+              <a href={link.href} aria-current={current.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>
+            ))}
+          </nav>
+        </details>
+      )
+    }
+  </div>
+</header>

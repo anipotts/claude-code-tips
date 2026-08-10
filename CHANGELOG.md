@@ -1,5 +1,15 @@
 # changelog
 
+## 2026-08-07
+
+### field guide v4 reset
+
+- reframed the project around separate codex and claude code guides plus shared operating principles.
+- replaced direct competitor rankings with a layered market map covering surfaces, harnesses, models, and orchestration.
+- added explicit evidence labels, verification dates, and a machine-readable primary-source registry.
+- removed generated translations, automated prose, bot issue churn, state-only commits, and direct-to-main automation.
+- froze the legacy `cc`, `lore`, and `time` plugins through 2026-11-05. compatibility fixes remain limited to security, data-loss, and installation blockers.
+
 ## 2026-04-28c
 
 ### docs: correct install syntax to use `@anipotts` (github owner) not `@claude-code-tips`
@@ -85,8 +95,8 @@
 
 ### review automation
 - replaces CodeRabbit with an ai-review-team: `anthropics/claude-code-action` (prose, voice, contract shape) plus a codex reviewer (openai responses api, o3-mini) for bugs, security, shell/python correctness
-- canonical rubric at [`.github/AI_REVIEW_RUBRIC.md`](./.github/AI_REVIEW_RUBRIC.md) both reviewers follow: fixed output format (blocking / apply / discuss / dismissed), lane split, and auto-dismiss list for voice-conflicting style nits
-- workflow at [`.github/workflows/ai-review.yml`](./.github/workflows/ai-review.yml) runs on pull_request + issues + workflow_dispatch; concurrency-gated, draft-skipped
+- historical rubric at `.github/AI_REVIEW_RUBRIC.md` gave both reviewers a fixed output format, lane split, and auto-dismiss list for voice-conflicting style nits
+- historical workflow at `.github/workflows/ai-review.yml` ran on pull requests, issues, and manual dispatch; it was concurrency-gated and skipped drafts
 - `.coderabbit.yaml` disables CodeRabbit auto-reviews; full uninstall is a one-click action in repo settings.
 
 ## 2026-03-15

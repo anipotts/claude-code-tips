@@ -1,11 +1,11 @@
 {
   "name": "claude-code-tips",
   "version": "3.1.0",
-  "description": "Claude Code toolkit: cc session mesh, lore knowledge graph, time awareness, hooks, agents, and docs. Install: /plugin marketplace add anipotts/claude-code-tips then /plugin install cc@anipotts lore@anipotts time@anipotts",
+  "description": "Legacy Claude Code plugins preserved for compatibility through 2026-11-05. See docs/legacy-tools.md before installing.",
   "author": {
     "name": "Ani Potts",
     "url": "https://github.com/anipotts"
   },
-  "repository": "https://github.com/anipotts/claude-code-tips",
+  "repository": "https://github.com/anipotts/coding-agent-tips",
   "license": "MIT"
 }

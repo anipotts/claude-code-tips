@@ -1,7 +1,6 @@
 assets/
 content/
-data/*
-!data/stats.json
+data/
 handoffs/
 AUDIT.md
 .phase-a-audit.md
@@ -10,6 +9,10 @@ docs/upstream-watcher-design.md
 !.claude/commands/
 !.claude/rules/
 node_modules/
+.astro/
+dist/
+playwright-report/
+test-results/
 .DS_Store
 *.pyc
 __pycache__/
