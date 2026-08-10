@@ -109,6 +109,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .guide-row:hover h3 { color: var(--cobalt); }
 
 .field-band { padding: 5.5rem clamp(1.25rem, 7vw, 8rem); background: var(--ink); color: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; }
+.field-band .eyebrow { color: var(--white); }
 .field-band p:not(.eyebrow) { max-width: 34rem; margin: .25rem 0 2rem; color: #bec3ca; font-size: 1.15rem; line-height: 1.55; }
 .field-band a { color: var(--white); text-underline-offset: .35rem; }
 .changes-band { background: var(--white); }
@@ -157,7 +158,7 @@ header.header { height: var(--site-header-height); padding: 0 var(--site-gutter)
 .evidence-rail a { display: block; text-decoration: none; }
 .evidence-kind { display: block; width: max-content; margin-top: .35rem; color: var(--cobalt); font-size: .56rem; text-transform: uppercase; letter-spacing: .06em; }
 .evidence-kind.inference { color: var(--slate); }
-.evidence-kind.unknown { color: var(--warning); }
+.evidence-kind.unknown { padding-left: .35rem; border-left: .2rem solid var(--warning); color: var(--ink); }
 .evidence-label { display: block; color: var(--ink); font-size: .68rem; line-height: 1.4; }
 .evidence-rail a:hover .evidence-label { color: var(--cobalt); }
 .evidence-rail.mobile { min-block-size: 0; }

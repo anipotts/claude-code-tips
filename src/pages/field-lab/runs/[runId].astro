@@ -110,7 +110,7 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
   .scenario-table a, .artifact-list a { color: var(--cobalt); }
   .result { font: .58rem var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
   .result.pass { color: var(--cobalt); }
-  .result.fail, .result.not-run { color: var(--warning); }
+  .result.fail, .result.not-run { padding-left: .4rem; border-left: .2rem solid var(--warning); color: var(--ink); }
   .result.partial { color: var(--slate); }
   .artifact-list { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
   .artifact-list li { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; padding: 1.2rem 0; border-bottom: 1px solid var(--rule); }

@@ -55,8 +55,9 @@ try {
       const report = await new AxeBuilder({ page }).analyze();
       for (const violation of report.violations) {
         if (violation.impact === 'serious' || violation.impact === 'critical') {
+          const targets = violation.nodes.flatMap((node) => node.target).join(', ');
           failures.push(
-            `${viewport.name} ${route}: ${violation.impact} ${violation.id} on ${violation.nodes.length} node(s)`,
+            `${viewport.name} ${route}: ${violation.impact} ${violation.id} on ${violation.nodes.length} node(s) at ${targets}`,
           );
         }
       }
