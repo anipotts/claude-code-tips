@@ -6,6 +6,15 @@ const root = process.cwd();
 const dist = path.join(root, 'dist');
 const origin = 'https://agents.anipotts.com';
 const canonicalH1 = 'a guide to coding agents in production software (projects, startups & big tech)';
+const requiredHomepageCopy = [
+  'understand the layers of every agentic system',
+  "it's important to know which layer holds the solution space to your bottlenecks",
+  'cli, ide & app tradeoffs',
+  'tools, runtime & memory',
+  'valuing inference',
+  'how parallel work is planned & coordinated',
+  'compare setups most commonly used',
+];
 const requiredRoutes = [
   '/',
   '/guides/',
@@ -68,11 +77,19 @@ for (const route of requiredRoutes) {
 }
 
 const home = await readFile(routeFile('/'), 'utf8');
+const homeText = home
+  .replace(/<[^>]+>/g, ' ')
+  .replaceAll('&amp;', '&')
+  .replace(/\s+/g, ' ')
+  .trim();
 const h1Values = [...home.matchAll(/<h1\b[^>]*>(.*?)<\/h1>/gs)].map((match) =>
   match[1].replace(/<[^>]+>/g, '').replaceAll('&amp;', '&').trim(),
 );
 if (h1Values.length !== 1 || h1Values[0] !== canonicalH1) {
   failures.push(`/: expected one exact canonical h1, received ${JSON.stringify(h1Values)}`);
+}
+for (const copy of requiredHomepageCopy) {
+  if (!homeText.includes(copy)) failures.push(`/: annotated homepage copy is missing: ${copy}`);
 }
 
 for (const route of ['/', '/field-lab/runs/codex-publication-baseline-2026-08-07/']) {

@@ -9,25 +9,25 @@ const layers = [
   {
     icon: 'ph:app-window',
     name: 'surface',
-    description: 'where you steer and review',
+    description: 'cli, ide & app tradeoffs',
     examples: 'terminal, desktop app, ide, web',
   },
   {
     icon: 'ph:terminal-window',
     name: 'harness',
-    description: 'the coding-agent runtime',
+    description: 'tools, runtime & memory',
     examples: 'codex, claude code, qwen code',
   },
   {
     icon: 'ph:brain',
     name: 'model',
-    description: 'the inference layer',
+    description: 'valuing inference',
     examples: 'hosted, open-weight, local',
   },
   {
     icon: 'ph:git-branch',
     name: 'orchestration',
-    description: 'how parallel work is coordinated',
+    description: 'how parallel work is planned & coordinated',
     examples: 'worktrees, agents, control planes',
   },
 ];
@@ -64,8 +64,8 @@ const guides = [
     <section class="taxonomy page-band" aria-labelledby="taxonomy-title">
       <header class="section-heading">
         <p>01 / taxonomy</p>
-        <h2 id="taxonomy-title">name the layer before comparing the tool</h2>
-        <p>a surface, harness, model, and orchestration layer solve different parts of the system.</p>
+        <h2 id="taxonomy-title">understand the layers of every agentic system</h2>
+        <p>it's important to know which layer holds the solution space to your bottlenecks</p>
       </header>
       <div class="layer-grid">
         {
@@ -85,7 +85,7 @@ const guides = [
     <section class="page-band models" aria-labelledby="model-title">
       <header class="section-heading">
         <p>02 / operating models</p>
-        <h2 id="model-title">choose for the review loop you actually run</h2>
+        <h2 id="model-title">compare setups most commonly used</h2>
       </header>
       <div class="model-table">
         <div class="model-head" aria-hidden="true"><span>system</span><span>advantage</span><span>cost</span><span></span></div>
