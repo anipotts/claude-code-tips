@@ -2,7 +2,7 @@
 title: claude code
 description: source-verified guidance for claude code terminal, desktop, ide, agents, hooks, and permissions.
 products: [claude-code]
-lastVerified: 2026-08-10
+lastVerified: 2026-08-11
 status: pending
 evidence: [source-verified, unknown]
 sources: [anthropic-claude-overview, anthropic-changelog, anthropic-features-overview, anthropic-desktop, anthropic-permissions, anthropic-memory, anthropic-remote-control]
@@ -12,7 +12,7 @@ evidenceRail:
     section: current-shape
     sourceId: anthropic-claude-overview
   - kind: source-verified
-    label: claude code 2.1.226 source refresh
+    label: claude code 2.1.227 source refresh
     section: current-shape
     sourceId: anthropic-changelog
   - kind: source-verified
@@ -38,7 +38,7 @@ evidenceRail:
 
 source review: [official claude code documentation](https://code.claude.com/docs/en) and the [2.1.225 release notes](https://code.claude.com/docs/en/changelog#2-1-225). section citations point to the exact references.
 
-the source review tracks package 2.1.226. the current hands-on protocol in [methodology](/method/) remains pending for this reset, so recommendations that depend on current product behavior use source-verified evidence.
+the source review tracks package 2.1.227. the current hands-on protocol in [methodology](/method/) remains pending for this reset, so recommendations that depend on current product behavior use source-verified evidence.
 
 ## current shape
 
