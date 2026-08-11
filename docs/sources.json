@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "checked_on": "2026-08-07",
+  "checked_on": "2026-08-11",
   "product_versions": {
     "codex": "0.147.0",
-    "claude_code": "2.1.224"
+    "claude_code": "2.1.227"
   },
   "sources": [
     {
@@ -25,11 +25,28 @@
       "layer": "harness",
       "status": "core",
       "url": "https://code.claude.com/docs/en",
-      "last_checked": "2026-08-07",
+      "last_checked": "2026-08-11",
       "evidence": "source-verified",
       "watch": {
         "kind": "terms",
         "terms": ["Claude Code", "terminal", "IDE"]
+      }
+    },
+    {
+      "id": "anthropic-changelog",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "core",
+      "url": "https://code.claude.com/docs/en/changelog#2-1-225",
+      "last_checked": "2026-08-11",
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "workspace trust prompt",
+          "SendMessage",
+          "Remote Control"
+        ]
       }
     },
     {
@@ -38,7 +55,7 @@
       "layer": "harness",
       "status": "core",
       "url": "https://code.claude.com/docs/en/features-overview",
-      "last_checked": "2026-08-07",
+      "last_checked": "2026-08-11",
       "evidence": "source-verified",
       "watch": {
         "kind": "terms",
@@ -51,11 +68,62 @@
       "layer": "surface",
       "status": "core",
       "url": "https://code.claude.com/docs/en/desktop",
-      "last_checked": "2026-08-07",
+      "last_checked": "2026-08-11",
       "evidence": "source-verified",
       "watch": {
         "kind": "terms",
         "terms": ["Claude Code on desktop", "worktree", "diff"]
+      }
+    },
+    {
+      "id": "anthropic-permissions",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "core",
+      "url": "https://code.claude.com/docs/en/permissions",
+      "last_checked": "2026-08-11",
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "fine-grained permissions",
+          "permission modes",
+          ".claude/settings.local.json"
+        ]
+      }
+    },
+    {
+      "id": "anthropic-memory",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "core",
+      "url": "https://code.claude.com/docs/en/memory",
+      "last_checked": "2026-08-11",
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "CLAUDE.md",
+          "Auto memory",
+          ".claude/rules/"
+        ]
+      }
+    },
+    {
+      "id": "anthropic-remote-control",
+      "product": "claude-code",
+      "layer": "surface",
+      "status": "core",
+      "url": "https://code.claude.com/docs/en/remote-control",
+      "last_checked": "2026-08-11",
+      "evidence": "source-verified",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "Remote Control",
+          "research preview",
+          "running locally"
+        ]
       }
     },
     {

@@ -2,11 +2,15 @@
 title: latest changes
 description: material changes to the guide, its evidence, and its recommendations.
 products: [cross-runtime]
-lastVerified: 2026-08-09
+lastVerified: 2026-08-11
 status: current
 evidence: [hands-on, source-verified]
-sources: [openai-codex-manual, anthropic-claude-overview]
+sources: [openai-codex-manual, anthropic-claude-overview, anthropic-changelog]
 evidenceRail:
+  - kind: source-verified
+    label: claude code 2.1.227 review
+    section: '2026-08-11'
+    sourceId: anthropic-changelog
   - kind: hands-on
     label: publication shell review
     section: '2026-08-09'
@@ -22,6 +26,19 @@ evidenceRail:
     label: v4 publication reset
     section: '2026-08-07'
 ---
+
+## 2026-08-11
+
+### claude code source refresh
+
+- verified package 2.1.227 against the current official changelog.
+- recorded the 2.1.225 workspace trust prompt for `claude agents`.
+- documented named remote control session messaging across machines.
+- kept the hands-on claude code field run visibly pending.
+
+### repository signal
+
+- confirmed the published 27-star count against the renamed github repository.
 
 ## 2026-08-09
 
