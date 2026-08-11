@@ -49,6 +49,7 @@ jobs:
             "README*.md"
             "AGENTS.md"
             "CLAUDE.md"
+            "CODE_OF_CONDUCT.md"
             "CONTRIBUTING.md"
             "SECURITY.md"
             "design-qa.md"
@@ -113,7 +114,12 @@ jobs:
             exit 1
           fi
 
-          if git grep -n $'\u2014' -- README.md README.*.md AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md 'docs/**' '.claude-plugin/*.json'; then
+          if [[ "$(head -n 1 CLAUDE.md)" != "@AGENTS.md" ]]; then
+            echo "CLAUDE.md must import the canonical AGENTS.md policy first"
+            exit 1
+          fi
+
+          if git grep -n $'\u2014' -- README.md README.*.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md 'docs/**' '.claude-plugin/*.json'; then
             echo "em dashes are outside the repository style"
             exit 1
           fi
@@ -141,6 +147,7 @@ jobs:
             README*.md
             AGENTS.md
             CLAUDE.md
+            CODE_OF_CONDUCT.md
             CONTRIBUTING.md
             SECURITY.md
             design-qa.md
