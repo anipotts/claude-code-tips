@@ -2,20 +2,23 @@
 title: field lab
 description: reproducible scenarios, sanitized run records, public artifacts, and explicit limitations.
 products: [codex, claude-code]
-lastVerified: 2026-08-07
+lastVerified: 2026-08-11
 status: current
 evidence: [hands-on, inference, unknown]
 sources: []
 evidenceRail:
   - kind: hands-on
-    label: codex launch baseline
-    section: launch-baseline
+    label: site launch with codex
+    section: published-runs
+  - kind: hands-on
+    label: dependency maintenance with codex
+    section: published-runs
   - kind: inference
     label: operator-centered protocol
     section: interpretation
   - kind: unknown
     label: claude code rerun pending
-    section: launch-baseline
+    section: published-runs
 ---
 
 the field lab evaluates coding-agent systems through repeatable engineering work.
@@ -39,7 +42,7 @@ specification. a run should exercise:
 the task specification defines pass conditions before the agent begins. a run
 records failed scenarios and operator interventions rather than editing them out.
 
-## launch baseline
+## published runs
 
 the first baseline records codex implementing the v4 publication from commit
 `60aa685`. the public task specification is this repository's accepted launch plan.
@@ -47,9 +50,14 @@ the [codex publication baseline](/field-lab/runs/codex-publication-baseline-2026
 publishes completed scenarios, skipped scenarios, artifacts, redactions, and
 limitations together.
 
-the equivalent current claude code run is pending. current claude code guidance
-remains source-verified until that run is performed from the same base commit and
-task specification.
+the [dependency maintenance run](/field-lab/runs/codex-dependency-maintenance-2026-08-11/)
+starts from a public task specification, updates the compatible astro and
+accessibility packages, and records why typescript 7 remains deferred. it also
+records skipped protocol scenarios and measurements that were unavailable.
+
+the paired claude code launch run is pending. current claude code guidance
+remains source-verified until that run is performed from the launch baseline's
+base commit and task specification.
 
 ## published data
 
