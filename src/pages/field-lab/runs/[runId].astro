@@ -13,6 +13,7 @@ type Scenario = {
 type FieldRun = {
   runId: string;
   title: string;
+  label: string;
   status: 'complete' | 'partial' | 'pending';
   product: string;
   productVersion: string | null;
@@ -47,7 +48,7 @@ const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
 <BaseLayout title={`${run.title} | coding agent tips`} description={`an inspectable ${run.product} field run with scenarios, artifacts, redactions, and limitations.`}>
   <main id="main" class="run-page">
     <header class="run-header">
-      <p>field lab / site launch</p>
+      <p>field lab / {run.label}</p>
       <h1>{run.title}</h1>
       <dl>
         <div><dt>status</dt><dd>{statusLabel}</dd></div>

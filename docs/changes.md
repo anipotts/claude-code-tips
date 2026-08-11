@@ -12,6 +12,9 @@ evidenceRail:
     section: '2026-08-11'
     sourceId: anthropic-changelog
   - kind: hands-on
+    label: codex dependency maintenance run
+    section: '2026-08-11'
+  - kind: hands-on
     label: publication shell review
     section: '2026-08-09'
   - kind: source-verified
@@ -28,6 +31,14 @@ evidenceRail:
 ---
 
 ## 2026-08-11
+
+### dependency maintenance
+
+- updated astro to 7.2.1 and `@axe-core/playwright` to 4.13.0.
+- kept typescript at 6.0.3 within the current astro checker peer range.
+- added a [codex maintenance run](/field-lab/runs/codex-dependency-maintenance-2026-08-11/)
+  with the task boundary, skipped scenarios, evidence, and limitations.
+- made the route regression suite discover every field-run page from its data file.
 
 ### claude code source refresh
 

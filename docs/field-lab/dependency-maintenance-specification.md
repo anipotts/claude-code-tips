@@ -11,16 +11,16 @@ then prove that the reader experience and legacy compatibility remain stable.
 
 ## planned changes
 
-- update Astro from 7.2.0 to 7.2.1.
+- update astro from 7.2.0 to 7.2.1.
 - update `@axe-core/playwright` from 4.12.1 to 4.13.0.
-- keep TypeScript at 6.0.3 because `@astrojs/check` 0.9.10 supports
-  TypeScript 5 and 6.
+- keep typescript at 6.0.3 because `@astrojs/check` 0.9.10 supports
+  typescript 5 and 6.
 - limit generated dependency changes to `bun.lock`.
 
 ## pass conditions
 
 - a frozen Bun install resolves the pinned dependency set.
-- Astro diagnostics and the production build pass.
+- astro diagnostics and the production build pass.
 - every published route, internal link, canonical URL, sitemap entry, and the
   exact homepage h1 pass the site regression suite.
 - the field-run schema and source registry pass validation.
@@ -32,7 +32,7 @@ then prove that the reader experience and legacy compatibility remain stable.
 
 ## evidence boundaries
 
-- use the Astro 7.2.1 and axe-core npm 4.13.0 release records as dependency
+- use the astro 7.2.1 and axe-core npm 4.13.0 release records as dependency
   evidence.
 - record unavailable model, timing, and review measurements as `null` with a
   reason.

@@ -15,6 +15,12 @@ const requiredHomepageCopy = [
   'how parallel work is planned & coordinated',
   'compare setups most commonly used',
 ];
+const fieldRunFiles = (await readdir(path.join(root, 'docs', 'field-lab', 'runs')))
+  .filter((file) => file.endsWith('.json'))
+  .sort();
+const fieldRunRoutes = fieldRunFiles.map(
+  (file) => `/field-lab/runs/${file.replace(/\.json$/, '')}/`,
+);
 const requiredRoutes = [
   '/',
   '/guides/',
@@ -24,7 +30,7 @@ const requiredRoutes = [
   '/market/',
   '/market/hardware/',
   '/field-lab/',
-  '/field-lab/runs/codex-publication-baseline-2026-08-07/',
+  ...fieldRunRoutes,
   '/method/',
   '/changes/',
   '/legacy/',
@@ -92,7 +98,7 @@ for (const copy of requiredHomepageCopy) {
   if (!homeText.includes(copy)) failures.push(`/: annotated homepage copy is missing: ${copy}`);
 }
 
-for (const route of ['/', '/field-lab/runs/codex-publication-baseline-2026-08-07/']) {
+for (const route of ['/', ...fieldRunRoutes]) {
   const html = await readFile(routeFile(route), 'utf8');
   const mobileNavigation = html.match(/<nav id="mobile-primary-menu"[^>]*>(.*?)<\/nav>/s)?.[1] ?? '';
   const mobileLinks = [...mobileNavigation.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
