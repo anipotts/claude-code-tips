@@ -42,6 +42,13 @@ const docs = defineCollection({
       status: z.enum(['current', 'pending', 'legacy']),
       evidence: z.array(evidenceKind),
       sources: z.array(z.string()),
+      latestChange: z
+        .object({
+          date: z.date(),
+          title: z.string(),
+          summary: z.string(),
+        })
+        .optional(),
       evidenceRail: z.array(
         z.object({
           kind: evidenceKind,

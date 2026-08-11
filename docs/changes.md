@@ -1,6 +1,10 @@
 ---
 title: latest changes
 description: material changes to the guide, its evidence, and its recommendations.
+latestChange:
+  date: 2026-08-11
+  title: "the evidence and toolchain stay current"
+  summary: "refreshed the claude code guide through 2.1.227 and updated the publication toolchain through an inspectable codex run."
 products: [cross-runtime]
 lastVerified: 2026-08-11
 status: current
@@ -39,6 +43,7 @@ evidenceRail:
 - added a [codex maintenance run](/field-lab/runs/codex-dependency-maintenance-2026-08-11/)
   with the task boundary, skipped scenarios, evidence, and limitations.
 - made the route regression suite discover every field-run page from its data file.
+- made the homepage latest-change section read from this changelog metadata.
 
 ### claude code source refresh
 
