@@ -41,6 +41,23 @@ const routeFile = (route) =>
     ? path.join(dist, 'index.html')
     : path.join(dist, route.replace(/^\//, ''), 'index.html');
 const failures = [];
+try {
+  await access(path.join(root, 'public', 'favicon.svg'));
+} catch {
+  failures.push('favicon source is missing');
+}
+const changesSource = await readFile(path.join(root, 'docs', 'changes.md'), 'utf8');
+const latestChangeBlock = changesSource.match(/^latestChange:\n((?:  .*\n)+)/m)?.[1] ?? '';
+const latestChange = Object.fromEntries(
+  [...latestChangeBlock.matchAll(/^  (date|title|summary):\s*(.+)$/gm)].map((match) => {
+    const value = match[2].trim();
+    const unquoted = /^(["'])(.*)\1$/.exec(value)?.[2] ?? value;
+    return [match[1], unquoted];
+  }),
+);
+for (const field of ['date', 'title', 'summary']) {
+  if (!latestChange[field]) failures.push(`changes frontmatter is missing latestChange.${field}`);
+}
 
 for (const route of requiredRoutes) {
   const file = routeFile(route);
@@ -59,6 +76,9 @@ for (const route of requiredRoutes) {
   }
   if (!html.includes('<meta property="og:title"')) {
     failures.push(`${route}: open graph title is missing`);
+  }
+  if (!/<link\s+rel="(?:shortcut )?icon"\s+href="\/favicon\.svg"\s+type="image\/svg\+xml"\s*\/?\s*>/.test(html)) {
+    failures.push(`${route}: favicon metadata is missing`);
   }
   if (html.includes('·')) {
     failures.push(`${route}: mid-dot divider appears in public output`);
@@ -96,6 +116,14 @@ if (h1Values.length !== 1 || h1Values[0] !== canonicalH1) {
 }
 for (const copy of requiredHomepageCopy) {
   if (!homeText.includes(copy)) failures.push(`/: annotated homepage copy is missing: ${copy}`);
+}
+if (latestChange.date && !home.includes(`<time datetime="${latestChange.date}">${latestChange.date}</time>`)) {
+  failures.push('/: latest material change date does not match changes frontmatter');
+}
+for (const field of ['title', 'summary']) {
+  if (latestChange[field] && !homeText.includes(latestChange[field])) {
+    failures.push(`/: latest material change ${field} does not match changes frontmatter`);
+  }
 }
 
 for (const route of ['/', ...fieldRunRoutes]) {

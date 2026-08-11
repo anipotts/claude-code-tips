@@ -1,10 +1,15 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const title = 'coding agent tips';
 const description =
   'evidence-backed guidance for coding agents in production software, from individual projects to startups and big tech.';
+const changesEntry = await getEntry('docs', 'changes');
+const latestChange = changesEntry?.data.latestChange;
+if (!latestChange) throw new Error('changes frontmatter requires latestChange metadata');
+const latestChangeDate = latestChange.date.toISOString().slice(0, 10);
 const layers = [
   {
     icon: 'ph:app-window',
@@ -125,8 +130,8 @@ const guides = [
     </section>
 
     <section class="page-band changes-band" aria-labelledby="changes-title">
-      <header class="section-heading"><p>05 / latest material change</p><h2 id="changes-title">the repository becomes the publication</h2></header>
-      <div class="change-entry"><time datetime="2026-08-07">2026-08-07</time><p>introduced the layered market model, evidence contract, field lab, and paired codex and claude code guides.</p><a href="/changes/">read changes <Icon name="ph:arrow-right" aria-hidden="true" /></a></div>
+      <header class="section-heading"><p>05 / latest material change</p><h2 id="changes-title">{latestChange.title}</h2></header>
+      <div class="change-entry"><time datetime={latestChangeDate}>{latestChangeDate}</time><p>{latestChange.summary}</p><a href="/changes/">read changes <Icon name="ph:arrow-right" aria-hidden="true" /></a></div>
     </section>
   </main>
   <footer class="site-footer">

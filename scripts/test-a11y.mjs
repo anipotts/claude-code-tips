@@ -1,14 +1,18 @@
 import { spawn } from 'node:child_process';
+import { readdir } from 'node:fs/promises';
 import process from 'node:process';
 import AxeBuilder from '@axe-core/playwright';
 import { chromium } from '@playwright/test';
 
 const origin = 'http://127.0.0.1:4173';
+const fieldRunFiles = (await readdir(new URL('../docs/field-lab/runs/', import.meta.url)))
+  .filter((file) => file.endsWith('.json'))
+  .sort();
 const routes = [
   '/',
   '/guides/codex/',
   '/guides/claude-code/',
-  '/field-lab/runs/codex-publication-baseline-2026-08-07/',
+  ...fieldRunFiles.map((file) => `/field-lab/runs/${file.replace(/\.json$/, '')}/`),
 ];
 const viewports = [
   { name: 'mobile', width: 375, height: 812 },
