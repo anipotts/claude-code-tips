@@ -17,7 +17,7 @@
     "notes": "apple silicon; dependency installation and site rendering ran locally while model inference remained provider-hosted"
   },
   "startedAt": "2026-08-11T18:13:35Z",
-  "completedAt": null,
+  "completedAt": "2026-08-11T18:25:10Z",
   "scenarios": [
     {
       "id": "architecture-inspection",
@@ -90,12 +90,15 @@
     {
       "id": "final-review",
       "title": "review the updated publication",
-      "result": "partial",
+      "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
-        "https://github.com/anipotts/coding-agent-tips/pull/279/checks"
+        "https://github.com/anipotts/coding-agent-tips/pull/279/checks",
+        "https://github.com/anipotts/coding-agent-tips/commit/c76d158616406d1e380fd2a3b744e3bfc30e1b67",
+        "https://github.com/anipotts/coding-agent-tips/actions/runs/31522505781",
+        "https://github.com/anipotts/coding-agent-tips/actions/runs/31522505644"
       ],
-      "notes": "local route, content, compatibility, and mobile checks passed; Linux accessibility and production deployment remain merge gates"
+      "notes": "branch and main validation passed with the linux accessibility scan; Pages deployed and the production mobile review found zero overflow or console warnings and errors"
     }
   ],
   "operatorInterventions": 0,
@@ -120,6 +123,26 @@
       "kind": "release-evidence",
       "url": "https://github.com/dequelabs/axe-core-npm/releases/tag/v4.13.0",
       "description": "official axe-core npm 4.13.0 release record"
+    },
+    {
+      "kind": "merge-commit",
+      "url": "https://github.com/anipotts/coding-agent-tips/commit/c76d158616406d1e380fd2a3b744e3bfc30e1b67",
+      "description": "GitHub-verified main commit for the reviewed maintenance change"
+    },
+    {
+      "kind": "production-validation",
+      "url": "https://github.com/anipotts/coding-agent-tips/actions/runs/31522505781",
+      "description": "main-branch build, route, link, handbook, markdown, and accessibility checks"
+    },
+    {
+      "kind": "pages-deployment",
+      "url": "https://github.com/anipotts/coding-agent-tips/actions/runs/31522505644",
+      "description": "successful custom-domain GitHub Pages deployment"
+    },
+    {
+      "kind": "production-page",
+      "url": "https://agents.anipotts.com/field-lab/runs/codex-dependency-maintenance-2026-08-11/",
+      "description": "live reader-facing run with the deployed field evidence"
     }
   ],
   "redactions": [
@@ -133,7 +156,6 @@
     "scenario durations and review time were not separately instrumented",
     "the typescript compatibility result reuses the recorded PR 274 failure boundary",
     "delegated analysis and a separate isolated-worktree scenario were outside this run",
-    "linux accessibility and production deployment were pending when this record was created",
     "the paired current claude code product run remains pending"
   ]
 }
