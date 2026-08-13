@@ -56,6 +56,7 @@ jobs:
             "docs/**/*.md"
             "hooks/README.md"
             "plugins/README.md"
+            "plugins/CHANGELOG.md"
             "plugins/cc/README.md"
             "plugins/lore/README.md"
             "examples/README.md"
@@ -162,6 +163,7 @@ jobs:
             docs/**/*.md
             hooks/README.md
             plugins/README.md
+            plugins/CHANGELOG.md
             plugins/cc/README.md
             plugins/lore/README.md
             examples/README.md
