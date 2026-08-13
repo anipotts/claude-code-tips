@@ -64,6 +64,10 @@ the plugin code remains useful as an implementation record. the active guide car
 
 migration requires behavior-by-behavior review. export any data you want to keep and review it for sensitive content before moving or sharing it.
 
+the [legacy tool changelog](https://github.com/anipotts/coding-agent-tips/blob/main/plugins/CHANGELOG.md)
+records historical marketplace renames, install corrections, and data-path
+migrations that remain relevant during this window.
+
 ## end of window
 
 after 2026-11-05, the final compatible state will be preserved in an immutable git tag. plugin, hook, and product-specific example code can then leave the default branch through a reviewed change. repository history and tagged source will remain available.
