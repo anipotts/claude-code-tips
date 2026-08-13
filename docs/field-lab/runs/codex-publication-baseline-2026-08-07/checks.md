@@ -1,4 +1,4 @@
-# codex launch check ledger
+# publication baseline checks
 
 date: 2026-08-09
 

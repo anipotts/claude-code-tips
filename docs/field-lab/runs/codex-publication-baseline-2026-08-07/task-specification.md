@@ -1,4 +1,4 @@
-# codex public launch baseline task specification
+# publication baseline task specification
 
 date: 2026-08-07
 

@@ -61,7 +61,9 @@ base commit and task specification.
 
 ## published data
 
-run records conform to the repository [run schema](https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/run.schema.json). public artifacts may
+run records conform to the repository [run schema](https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/run.schema.json).
+each record lives at `runs/<run-id>.json`; its task specification and compact
+supporting evidence live together under `runs/<run-id>/`. public artifacts may
 include commits, pull requests, test logs, screenshots, and concise design-review
 notes.
 

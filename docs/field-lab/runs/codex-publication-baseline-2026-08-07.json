@@ -9,7 +9,7 @@
   "model": null,
   "surface": "codex desktop",
   "baseCommit": "60aa685374688fbe34194478c49661ae1597032b",
-  "taskSpecification": "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/task-specification.md",
+  "taskSpecification": "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/task-specification.md",
   "machineProfile": {
     "platform": "macos, darwin 25.5.0",
     "architecture": "arm64",
@@ -35,7 +35,7 @@
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
-        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/task-specification.md"
+        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/task-specification.md"
       ],
       "notes": "pass conditions and public-action gates were explicit before publication work"
     },
@@ -56,7 +56,7 @@
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
-        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/artifacts/codex-launch-checks.md"
+        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/checks.md"
       ],
       "notes": "schema coercion, icon integration, and generated-route link failures were found and corrected during the build loop"
     },
@@ -92,8 +92,8 @@
       "result": "pass",
       "elapsedSeconds": null,
       "evidence": [
-        "https://github.com/anipotts/coding-agent-tips/blob/main/design-qa.md",
-        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/artifacts/codex-launch-checks.md",
+        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/design-review.md",
+        "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/checks.md",
         "https://github.com/anipotts/coding-agent-tips/commit/184632a",
         "https://github.com/anipotts/coding-agent-tips/commit/d6d58e5",
         "https://github.com/anipotts/coding-agent-tips/commit/18186e7"
@@ -131,12 +131,12 @@
     },
     {
       "kind": "verification",
-      "url": "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/artifacts/codex-launch-checks.md",
+      "url": "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/checks.md",
       "description": "sanitized command and browser check ledger"
     },
     {
       "kind": "design-review",
-      "url": "https://github.com/anipotts/coding-agent-tips/blob/main/design-qa.md",
+      "url": "https://github.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/codex-publication-baseline-2026-08-07/design-review.md",
       "description": "concept fidelity and responsive review ledger"
     }
   ],
