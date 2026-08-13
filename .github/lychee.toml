@@ -33,9 +33,9 @@ exclude = [
   "^https://img\\.shields\\.io/endpoint",
   # gist raw content (dynamic, may 404 before first push)
   "^https://gist\\.githubusercontent\\.com",
-  # field-run records target their post-merge main paths; the local field-run
-  # validator checks these files directly before branch publication
-  "^https://github\\.com/anipotts/coding-agent-tips/blob/main/docs/field-lab/runs/",
+  # same-repository main-branch links can target files introduced by the PR;
+  # the local validator resolves every matching Markdown and field-run target
+  "^https://github\\.com/anipotts/coding-agent-tips/blob/main/",
 ]
 
 # exclude paths that are gitignored or not actual documentation

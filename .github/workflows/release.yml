@@ -24,21 +24,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: verify tag
+      - name: verify tag and reviewed notes
+        id: release-input
         env:
           RELEASE_TAG: ${{ inputs.tag }}
         run: |
           git rev-parse "refs/tags/$RELEASE_TAG" >/dev/null
           test "$RELEASE_TAG" = "v4.0.0" || [[ "$RELEASE_TAG" == legacy-tools-final-* ]]
-          test -f ".github/releases/$RELEASE_TAG.md"
+          notes_file=".github/releases/$RELEASE_TAG.md"
+          if [[ ! -f "$notes_file" ]]; then
+            echo "unsupported release tag: reviewed notes are missing at $notes_file"
+            exit 1
+          fi
+          echo "notes-file=$notes_file" >> "$GITHUB_OUTPUT"
 
       - name: publish existing tag
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag }}
           PRERELEASE: ${{ inputs.prerelease }}
+          NOTES_FILE: ${{ steps.release-input.outputs.notes-file }}
         run: |
-          args=("$RELEASE_TAG" --verify-tag --notes-file ".github/releases/$RELEASE_TAG.md" --title "$RELEASE_TAG")
+          args=("$RELEASE_TAG" --verify-tag --notes-file "$NOTES_FILE" --title "$RELEASE_TAG")
           if [ "$PRERELEASE" = "true" ]; then
             args+=(--prerelease)
           fi
