@@ -30,7 +30,7 @@ jobs:
         run: |
           git rev-parse "refs/tags/$RELEASE_TAG" >/dev/null
           test "$RELEASE_TAG" = "v4.0.0" || [[ "$RELEASE_TAG" == legacy-tools-final-* ]]
-          test -f "docs/releases/$RELEASE_TAG.md"
+          test -f ".github/releases/$RELEASE_TAG.md"
 
       - name: publish existing tag
         env:
@@ -38,7 +38,7 @@ jobs:
           RELEASE_TAG: ${{ inputs.tag }}
           PRERELEASE: ${{ inputs.prerelease }}
         run: |
-          args=("$RELEASE_TAG" --verify-tag --notes-file "docs/releases/$RELEASE_TAG.md" --title "$RELEASE_TAG")
+          args=("$RELEASE_TAG" --verify-tag --notes-file ".github/releases/$RELEASE_TAG.md" --title "$RELEASE_TAG")
           if [ "$PRERELEASE" = "true" ]; then
             args+=(--prerelease)
           fi

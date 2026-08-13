@@ -85,5 +85,5 @@ evidenceRail:
 - claude code guidance was checked against official documentation and package 2.1.224.
 - current claude code hands-on comparison remains pending.
 
-changes below this point belong to the legacy tool era and remain available in
-the repository [changelog](https://github.com/anipotts/coding-agent-tips/blob/main/CHANGELOG.md).
+earlier tool releases remain available in git history, signed tags, and the
+versioned plugin changelogs retained during the compatibility window.
