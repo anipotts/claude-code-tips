@@ -62,6 +62,7 @@ for (const file of files) {
 
   if (!validate(run)) {
     runFailures.push(`${file}: ${ajv.errorsText(validate.errors, { separator: '; ' })}`);
+    continue;
   }
 
   if (`${run.runId}.json` !== file) {
