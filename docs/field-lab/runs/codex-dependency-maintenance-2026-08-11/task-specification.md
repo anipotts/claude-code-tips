@@ -1,4 +1,4 @@
-# codex dependency maintenance task specification
+# dependency maintenance task specification
 
 date: 2026-08-11
 

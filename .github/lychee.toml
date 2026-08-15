@@ -33,10 +33,9 @@ exclude = [
   "^https://img\\.shields\\.io/endpoint",
   # gist raw content (dynamic, may 404 before first push)
   "^https://gist\\.githubusercontent\\.com",
-  # public cutover targets do not exist until this launch is merged
-  # remove both exclusions after the repository rename and pages deployment
-  "^https://agents\\.anipotts\\.com",
-  "^https://github\\.com/anipotts/coding-agent-tips",
+  # same-repository main-branch links can target files introduced by the PR;
+  # the local validator resolves every matching Markdown and field-run target
+  "^https://github\\.com/anipotts/coding-agent-tips/blob/main/",
 ]
 
 # exclude paths that are gitignored or not actual documentation

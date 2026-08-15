@@ -1,14 +1,7 @@
-# changelog
+# legacy tool changelog
 
-## 2026-08-07
-
-### field guide v4 reset
-
-- reframed the project around separate codex and claude code guides plus shared operating principles.
-- replaced direct competitor rankings with a layered market map covering surfaces, harnesses, models, and orchestration.
-- added explicit evidence labels, verification dates, and a machine-readable primary-source registry.
-- removed generated translations, automated prose, bot issue churn, state-only commits, and direct-to-main automation.
-- froze the legacy `cc`, `lore`, and `time` plugins through 2026-11-05. compatibility fixes remain limited to security, data-loss, and installation blockers.
+this record preserves marketplace and migration history for the compatibility
+window. current publication changes live at [agents.anipotts.com/changes](https://agents.anipotts.com/changes/).
 
 ## 2026-04-28c
 
