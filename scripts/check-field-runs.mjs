@@ -5,6 +5,7 @@ import process from 'node:process';
 import { promisify } from 'node:util';
 import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
+import { parseRepositoryEvidenceUrl } from './repository-evidence-url.mjs';
 
 const root = process.cwd();
 const canonicalRoot = await realpath(root);
@@ -15,8 +16,6 @@ addFormats(ajv);
 const validate = ajv.compile(schema);
 const files = (await readdir(runsDirectory)).filter((file) => file.endsWith('.json')).sort();
 const repositoryBlobPrefix = 'https://github.com/anipotts/coding-agent-tips/blob/main/';
-const repositoryBlobUrl = new URL(repositoryBlobPrefix);
-const repositoryBlobPathPrefix = repositoryBlobUrl.pathname;
 const runFailures = [];
 const execFileAsync = promisify(execFile);
 
@@ -24,26 +23,23 @@ if (files.length === 0) {
   throw new Error('field lab requires at least one run record');
 }
 
-async function validateRepositoryTarget(url, context) {
-  let parsed;
-  try {
-    parsed = new URL(url);
-  } catch {
+async function validateRepositoryTarget(url, context, baseUrl = repositoryBlobPrefix) {
+  const parsed = parseRepositoryEvidenceUrl(url, { baseUrl, repositoryBlobPrefix });
+  if (parsed.external) return;
+  if (parsed.error === 'malformed-url') {
     runFailures.push(`${context}: malformed repository evidence URL: ${url}`);
     return;
   }
-
-  if (parsed.origin !== repositoryBlobUrl.origin || !parsed.pathname.startsWith(repositoryBlobPathPrefix)) {
-    return;
-  }
-
-  let repositoryPath;
-  try {
-    repositoryPath = decodeURIComponent(parsed.pathname.slice(repositoryBlobPathPrefix.length));
-  } catch {
+  if (parsed.error === 'malformed-path') {
     runFailures.push(`${context}: malformed repository evidence path: ${url}`);
     return;
   }
+  if (parsed.error === 'path-escape') {
+    runFailures.push(`${context}: repository evidence target escapes the repository: ${url}`);
+    return;
+  }
+
+  const { repositoryPath } = parsed;
 
   const resolvedPath = path.resolve(root, repositoryPath);
   let canonicalTarget;
@@ -82,9 +78,10 @@ for (const file of files) {
     ...run.scenarios.flatMap((scenario) => scenario.evidence),
     ...run.artifacts.map((artifact) => artifact.url),
   ];
+  const runEvidenceBase = `${repositoryBlobPrefix}docs/field-lab/runs/${run.runId}/`;
 
   for (const url of evidenceUrls) {
-    await validateRepositoryTarget(url, file);
+    await validateRepositoryTarget(url, file, runEvidenceBase);
   }
 
   if (/\/(?:Users|home)\//.test(text) || /(?:api[_-]?key|password|credential|private transcript)/i.test(text)) {

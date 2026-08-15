@@ -8,7 +8,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
-    "check:field-runs": "node scripts/check-field-runs.mjs",
+    "check:field-runs": "node --test scripts/repository-evidence-url.test.mjs && node scripts/check-field-runs.mjs",
     "test:site": "node scripts/test-site.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
     "preview": "astro preview"
