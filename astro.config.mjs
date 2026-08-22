@@ -17,6 +17,14 @@ export default defineConfig({
   output: 'static',
   redirects,
   integrations: [
+    {
+      name: 'local-copy-review',
+      hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+          if (command === 'dev') injectRoute({ pattern: '/__copy-review/', entrypoint: './src/pages-dev/copy-review.astro' });
+        },
+      },
+    },
     icon({
       include: {
         ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo', 'list'],
