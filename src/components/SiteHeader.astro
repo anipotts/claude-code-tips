@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { repository } from '../repository';
+import { getHandbookPages, routeForEntry } from '../content';
+import { site } from '../site';
 
 interface Props {
   compact?: boolean;
@@ -8,17 +9,15 @@ interface Props {
 
 const { compact = false } = Astro.props;
 const current = Astro.url.pathname;
-const links = [
-  { href: '/guides/', label: 'guides' },
-  { href: '/market/', label: 'market' },
-  { href: '/field-lab/', label: 'field lab' },
-  { href: '/method/', label: 'method' },
-];
+const links = (await getHandbookPages({ includeLegacy: false })).map((page) => ({
+  href: routeForEntry(page),
+  label: page.data.title,
+}));
 ---
 
 <header class:list={['site-header', { compact }]}>
-  <a class="site-name" href="/" aria-label="coding agent tips home">
-    <span>coding agent tips</span>
+  <a class="site-name" href="/" aria-label={site.interfaceCopy.home}>
+    <span>{site.name}</span>
   </a>
   <nav aria-label="primary">
     {
@@ -30,17 +29,17 @@ const links = [
   <div class="header-actions">
     <a
       class="github-link"
-      href={repository.url}
-      aria-label={`coding agent tips on GitHub, ${repository.stars} stars`}
-      title={`${repository.stars} GitHub stars, checked ${repository.starsVerifiedAt}`}
+      href={site.repository}
+      aria-label={`${site.interfaceCopy.github}, ${site.repositoryStars} stars`}
+      title={`${site.repositoryStars} GitHub stars, checked ${site.repositoryStarsVerified}`}
     >
       <Icon name="ph:github-logo" aria-hidden="true" />
-      <span class="github-stars" aria-hidden="true">{repository.stars}</span>
+      <span class="github-stars" aria-hidden="true">{site.repositoryStars}</span>
     </a>
     {
       !compact && (
         <details class="mobile-site-menu">
-          <summary role="button" aria-label="Menu" aria-controls="mobile-primary-menu"><Icon name="ph:list" aria-hidden="true" /></summary>
+          <summary role="button" aria-label={site.interfaceCopy.menu} aria-controls="mobile-primary-menu"><Icon name="ph:list" aria-hidden="true" /></summary>
           <nav id="mobile-primary-menu" aria-label="mobile primary">
             {links.map((link) => (
               <a href={link.href} aria-current={current.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>

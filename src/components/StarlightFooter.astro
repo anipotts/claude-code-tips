@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
+import AccessibleTables from './AccessibleTables.astro';
+
+const entry = Astro.locals.starlightRoute.entry;
+const runs = entry.id === 'method'
+  ? (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf())
+  : [];
+---
+
+{
+  runs.length > 0 && (
+    <section class="run-inventory" aria-labelledby="run-inventory-title">
+      <h2 id="run-inventory-title">published field runs</h2>
+      <ul>
+        {runs.map((run) => (
+          <li>
+            <a href={`/field-lab/runs/${run.id}/`}>{run.data.title}</a>
+            <span>{run.data.date.toISOString().slice(0, 10)}</span>
+            <span>{run.data.status}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+<AccessibleTables />
+<DefaultFooter />
+
+<style>
+  .run-inventory { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+  .run-inventory h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); }
+  .run-inventory ul { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
+  .run-inventory li { display: grid; grid-template-columns: minmax(16rem, 1fr) auto auto; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .run-inventory a { color: var(--cobalt); }
+  .run-inventory span { color: var(--slate); font: .66rem var(--font-mono); text-transform: uppercase; }
+  @media (max-width: 48rem) {
+    .run-inventory li { grid-template-columns: 1fr; gap: .35rem; }
+  }
+</style>

@@ -1,140 +1,51 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
+import { getHandbookPages, routeForEntry } from '../content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { evidenceLabels } from '../evidence';
+import { site } from '../site';
 
-const title = 'coding agent tips';
-const description =
-  'evidence-backed guidance for coding agents in production software, from individual projects to startups and big tech.';
-const changesEntry = await getEntry('docs', 'changes');
-const latestChange = changesEntry?.data.latestChange;
-if (!latestChange) throw new Error('changes frontmatter requires latestChange metadata');
-const latestChangeDate = latestChange.date.toISOString().slice(0, 10);
-const layers = [
-  {
-    icon: 'ph:app-window',
-    name: 'surface',
-    description: 'cli, ide & app tradeoffs',
-    examples: 'terminal, desktop app, ide, web',
-  },
-  {
-    icon: 'ph:terminal-window',
-    name: 'harness',
-    description: 'tools, runtime & memory',
-    examples: 'codex, claude code, qwen code',
-  },
-  {
-    icon: 'ph:brain',
-    name: 'model',
-    description: 'valuing inference',
-    examples: 'hosted, open-weight, local',
-  },
-  {
-    icon: 'ph:git-branch',
-    name: 'orchestration',
-    description: 'how parallel work is planned & coordinated',
-    examples: 'worktrees, agents, control planes',
-  },
-];
-
-const models = [
-  ['terminal + first-party app', 'deep local control with one supervision surface', 'extra app and execution-location complexity', '/guides/operating-system/'],
-  ['ide-integrated agent', 'selection context, diagnostics, inline review', 'editor coupling and local resource pressure', '/market/'],
-  ['terminal-only agent', 'low interface overhead and scriptability', 'more manual coordination across concurrent work', '/guides/operating-system/'],
-  ['local or open stack', 'model choice, privacy, and infrastructure control', 'hardware, serving, and evaluation ownership', '/market/hardware/'],
-];
-
-const guides = [
-  ['codex', 'hands-on + source-verified', 'cli, desktop, ide, cloud, worktrees, permissions', '/guides/codex/'],
-  ['claude code', 'source-verified, run pending', 'terminal, desktop, ide, agents, hooks, permissions', '/guides/claude-code/'],
-  ['shared operating system', 'hands-on + inference', 'authority, worktrees, verification, handoffs', '/guides/operating-system/'],
-];
+const home = await getEntry('home', 'home');
+if (!home) throw new Error('content/home.md is required');
+const { Content } = await render(home);
+const guides = await getHandbookPages({ includeLegacy: false });
+const verifiedDate = home.data.lastVerified.toISOString().slice(0, 10);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={home.data.title} description={home.data.description}>
   <main id="main">
-    <section class="home-hero">
-      <div class="hero-copy">
-        <h1>a guide to coding agents in production software (projects, startups &amp; big tech)</h1>
-        <p class="dek">
-          practical guidance for choosing, operating, and reviewing coding-agent systems when the work has real users, real constraints, and consequences.
-        </p>
-        <div class="hero-actions">
-          <a class="primary-action" href="/guides/">read the guides</a>
-          <a class="text-action" href="/field-lab/">inspect the field lab <Icon name="ph:arrow-right" aria-hidden="true" /></a>
-        </div>
-      </div>
-    </section>
+    <article class="home-content"><Content /></article>
 
-    <section class="taxonomy page-band" aria-labelledby="taxonomy-title">
-      <header class="section-heading">
-        <p>01 / taxonomy</p>
-        <h2 id="taxonomy-title">understand the layers of every agentic system</h2>
-        <p>it's important to know which layer holds the solution space to your bottlenecks</p>
+    <section class="home-guides" id="guides" aria-labelledby="guide-title">
+      <header>
+        <h2 id="guide-title">choose where to begin</h2>
       </header>
-      <div class="layer-grid">
+      <div class="home-guide-list">
         {
-          layers.map((layer, index) => (
-            <article>
-              <span class="layer-number">0{index + 1}</span>
-              <Icon name={layer.icon} aria-hidden="true" />
-              <h3>{layer.name}</h3>
-              <p>{layer.description}</p>
-              <small>{layer.examples}</small>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="page-band models" aria-labelledby="model-title">
-      <header class="section-heading">
-        <p>02 / operating models</p>
-        <h2 id="model-title">compare setups most commonly used</h2>
-      </header>
-      <div class="model-table">
-        <div class="model-head" aria-hidden="true"><span>system</span><span>advantage</span><span>cost</span><span></span></div>
-        {
-          models.map(([name, advantage, cost, href]) => (
-            <a class="model-row" href={href}>
-              <strong>{name}</strong><span>{advantage}</span><span>{cost}</span><Icon name="ph:arrow-up-right" aria-hidden="true" />
+          guides.map((guide) => (
+            <a href={routeForEntry(guide)}>
+              <h3>{guide.data.title}</h3>
+              <p>{guide.data.description}</p>
+              <span>{guide.data.evidence.map((kind) => evidenceLabels[kind].label).join(' / ')}</span>
+              <Icon name="ph:arrow-right" aria-hidden="true" />
             </a>
           ))
         }
       </div>
     </section>
 
-    <section class="page-band guide-list" aria-labelledby="guide-title">
-      <header class="section-heading split-heading">
-        <div><p>03 / current guides</p><h2 id="guide-title">field notes with visible limits</h2></div>
-        <a href="/method/">how evidence works <Icon name="ph:arrow-right" aria-hidden="true" /></a>
-      </header>
-      {
-        guides.map(([name, evidence, scope, href]) => (
-          <a class="guide-row" href={href}>
-            <h3>{name}</h3><span class="status-line">{evidence}</span><p>{scope}</p><Icon name="ph:arrow-right" aria-hidden="true" />
-          </a>
-        ))
-      }
-    </section>
-
-    <section class="field-band" aria-labelledby="field-title">
-      <div>
-        <p class="eyebrow">04 / reproducible field lab</p>
-        <h2 id="field-title">the claims should survive inspection</h2>
-      </div>
-      <div>
-        <p>the protocol records the task, base commit, runtime, interventions, checks, artifacts, redactions, and limitations. missing measurements stay missing.</p>
-        <a href="/field-lab/">inspect the protocol and runs <Icon name="ph:arrow-right" aria-hidden="true" /></a>
-      </div>
-    </section>
-
-    <section class="page-band changes-band" aria-labelledby="changes-title">
-      <header class="section-heading"><p>05 / latest material change</p><h2 id="changes-title">{latestChange.title}</h2></header>
-      <div class="change-entry"><time datetime={latestChangeDate}>{latestChangeDate}</time><p>{latestChange.summary}</p><a href="/changes/">read changes <Icon name="ph:arrow-right" aria-hidden="true" /></a></div>
-    </section>
+    <div class="home-meta" aria-label="page metadata">
+      <span>{site.interfaceCopy.verified} {verifiedDate}</span>
+      <span>{home.data.evidence.map((kind) => evidenceLabels[kind].label).join(' / ')}</span>
+    </div>
   </main>
   <footer class="site-footer">
-    <p>coding agent tips</p><p>evidence over feature counts</p><nav aria-label="footer"><a href="/legacy/">legacy policy</a><a class="footer-github" href="https://github.com/anipotts/coding-agent-tips" aria-label="coding agent tips on GitHub"><Icon name="ph:github-logo" aria-hidden="true" /></a></nav>
+    <p>{site.name}</p>
+    <nav aria-label="footer">
+      <a href="/legacy/">{site.interfaceCopy.legacyPolicy}</a>
+      <a href={site.releaseHistory}>{site.interfaceCopy.releases}</a>
+      <a class="footer-github" href={site.repository} aria-label={site.interfaceCopy.github}><Icon name="ph:github-logo" aria-hidden="true" /></a>
+    </nav>
   </footer>
 </BaseLayout>

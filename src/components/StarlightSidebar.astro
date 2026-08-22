@@ -1,0 +1,37 @@
+---
+import { getHandbookPages, routeForEntry } from '../content';
+import { navigationGroups } from '../site';
+
+const pages = await getHandbookPages();
+const current = Astro.url.pathname;
+---
+
+<nav class="handbook-sidebar" aria-label="handbook">
+  {
+    navigationGroups.map((group) => {
+      const groupPages = pages.filter((page) => page.data.navigation.group === group.id);
+      if (groupPages.length === 0) return null;
+      return (
+        <section>
+          <h2>{group.label}</h2>
+          <ul>
+            {groupPages.map((page) => {
+              const href = routeForEntry(page);
+              return <li><a href={href} aria-current={current === href ? 'page' : undefined}>{page.data.title}</a></li>;
+            })}
+          </ul>
+        </section>
+      );
+    })
+  }
+</nav>
+
+<style>
+  .handbook-sidebar { padding: 1rem; }
+  .handbook-sidebar section + section { margin-top: 1.5rem; }
+  .handbook-sidebar h2 { margin: 0 0 .45rem; font-size: .8rem; text-transform: lowercase; }
+  .handbook-sidebar ul { margin: 0; padding: 0 0 0 .75rem; border-left: 1px solid var(--rule); list-style: none; }
+  .handbook-sidebar a { display: block; padding: .4rem .55rem; color: var(--slate); text-decoration: none; line-height: 1.35; }
+  .handbook-sidebar a:hover { color: var(--cobalt); }
+  .handbook-sidebar a[aria-current='page'] { background: var(--cobalt); color: var(--white); font-weight: 650; }
+</style>
