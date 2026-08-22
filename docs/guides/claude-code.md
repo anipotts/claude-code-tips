@@ -13,7 +13,7 @@ navigation:
   order: 20
 ---
 
-source review: [official claude code documentation](https://code.claude.com/docs/en) and the [2.1.225 release notes](https://code.claude.com/docs/en/changelog#2-1-225). section citations point to the exact references.
+source review: [official claude code documentation](https://code.claude.com/docs/en) and the [official changelog](https://code.claude.com/docs/en/changelog). section citations point to the exact references.
 
 the source review is current through the date above. the current field run protocol in [how this guide is verified](/method/) remains pending for this reset, so recommendations that depend on current product behavior use official source evidence.
 
