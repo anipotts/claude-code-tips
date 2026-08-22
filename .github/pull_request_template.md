@@ -10,7 +10,7 @@ recommendation, and why?
 ## evidence
 
 - primary sources:
-- hands-on artifacts:
+- tested artifacts:
 - inferences or unknowns:
 - field-run impact:
 

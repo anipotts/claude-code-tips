@@ -3,8 +3,24 @@ name: legacy plugin smoke test
 on:
   pull_request:
     branches: [main]
+    paths:
+      - ".claude-plugin/**"
+      - "examples/**"
+      - "hooks/**"
+      - "plugins/**"
+      - "bun.lock"
+      - ".github/workflows/plugin-smoke-test.yml"
   push:
     branches: [main]
+    paths:
+      - ".claude-plugin/**"
+      - "examples/**"
+      - "hooks/**"
+      - "plugins/**"
+      - "bun.lock"
+      - ".github/workflows/plugin-smoke-test.yml"
+  schedule:
+    - cron: "23 7 * * 1"
   workflow_dispatch:
 
 permissions:

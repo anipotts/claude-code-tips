@@ -40,7 +40,6 @@ exclude = [
 
 # exclude paths that are gitignored or not actual documentation
 exclude_path = [
-  "content/",
   "data/",
   "node_modules/",
   ".git/",

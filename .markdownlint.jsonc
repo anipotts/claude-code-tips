@@ -18,6 +18,9 @@
   // first line heading -- files start with frontmatter or comments
   "MD041": false,
 
+  // homepage frontmatter owns metadata while its body owns the required public h1
+  "MD025": false,
+
   // bare URLs -- fine in a tips repo
   "MD034": false,
 
