@@ -53,6 +53,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .site-header { position: relative; z-index: 50; height: var(--site-header-height); min-height: var(--site-header-height); padding: 0 var(--site-gutter); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; background: var(--white); }
 .site-header.compact { height: 100%; min-height: 0; padding: 0; inline-size: 100%; border-bottom: 0; }
 .site-name { display: inline-flex; align-items: center; gap: .7rem; width: max-content; text-decoration: none; font-weight: 700; letter-spacing: -.015em; }
+.site-name img { inline-size: 1.5rem; block-size: 1.5rem; flex: none; border-radius: .24rem; }
 .site-header > nav { display: flex; gap: clamp(1.4rem, 3vw, 3rem); font-size: .88rem; }
 .site-header > nav a, .github-link { color: var(--slate); text-decoration: none; }
 .site-header > nav a:hover, .site-header > nav a[aria-current='page'], .github-link:hover { color: var(--cobalt); }
@@ -65,6 +66,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .home-content, .home-guides, .home-meta { width: min(100% - 2rem, 76rem); margin-inline: auto; }
 .home-content { padding: clamp(3.5rem, 8vw, 7rem) 0 5rem; }
 .home-content h1 { max-width: 68rem; margin: 0; font-size: clamp(3rem, 7vw, 6.8rem); font-weight: 560; letter-spacing: -.065em; line-height: .92; text-wrap: balance; }
+.home-content h1 .keyword-highlight { padding: .01em .1em .07em; border-radius: .1em; background: var(--cobalt); color: var(--white); box-decoration-break: clone; -webkit-box-decoration-break: clone; white-space: nowrap; }
 .home-content > p:first-of-type { max-width: 45rem; margin: 2rem 0 5rem; color: var(--slate); font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.55; }
 .home-content h2, .home-guides h2 { margin: 4rem 0 1rem; font-size: clamp(2rem, 4vw, 3.7rem); line-height: 1; letter-spacing: -.05em; }
 .home-content h2 + p { max-width: 44rem; color: var(--slate); font-size: 1.1rem; line-height: 1.55; }
@@ -134,6 +136,17 @@ header.header { height: var(--site-header-height); padding: 0 var(--site-gutter)
   .site-header > nav { display: none; }
   .site-header:not(.compact) { grid-template-columns: 1fr auto; }
   .site-header:not(.compact) .mobile-site-menu { display: block; }
+  .mobile-site-menu summary { display: grid; place-items: center; inline-size: 2.75rem; block-size: 2.75rem; border: 1px solid var(--rule); color: var(--ink); cursor: pointer; list-style: none; }
+  .mobile-site-menu summary::-webkit-details-marker { display: none; }
+  .mobile-site-menu summary svg { inline-size: 1.1rem; block-size: 1.1rem; }
+  .mobile-site-menu .menu-close-icon { display: none; }
+  .mobile-site-menu[open] .menu-open-icon { display: none; }
+  .mobile-site-menu[open] .menu-close-icon { display: block; }
+  .mobile-site-menu[open] summary { border-color: var(--cobalt); background: var(--cobalt); color: var(--white); }
+  .mobile-site-menu nav { position: absolute; inset: 100% 0 auto; display: grid; padding: .75rem var(--site-gutter) 1rem; border-bottom: 1px solid var(--rule); background: var(--white); box-shadow: 0 .75rem 1.5rem rgba(16, 17, 20, .08); }
+  .mobile-site-menu nav a { padding: .75rem; color: var(--ink); text-decoration: none; }
+  .mobile-site-menu nav a + a { border-top: 1px solid #e5e7ea; }
+  .mobile-site-menu nav a:hover, .mobile-site-menu nav a[aria-current='page'] { background: #e9efff; color: var(--cobalt); }
 }
 
 @media (max-width: 48rem) {
@@ -142,13 +155,6 @@ header.header { height: var(--site-header-height); padding: 0 var(--site-gutter)
   header.header { padding-inline-end: calc(var(--site-gutter) + 3rem) !important; }
   .site-name { font-size: .9rem; }
   .mobile-site-menu { display: block; }
-  .mobile-site-menu summary { display: grid; place-items: center; inline-size: 2.75rem; block-size: 2.75rem; border: 1px solid var(--rule); color: var(--ink); cursor: pointer; list-style: none; }
-  .mobile-site-menu summary::-webkit-details-marker { display: none; }
-  .mobile-site-menu summary svg { inline-size: 1.1rem; block-size: 1.1rem; }
-  .mobile-site-menu[open] summary { border-color: var(--cobalt); background: var(--cobalt); color: var(--white); }
-  .mobile-site-menu nav { position: absolute; inset: 100% 0 auto; display: grid; padding: .75rem var(--site-gutter) 1rem; border-bottom: 1px solid var(--rule); background: var(--white); box-shadow: 0 .75rem 1.5rem rgba(16, 17, 20, .08); }
-  .mobile-site-menu nav a { padding: .75rem; color: var(--ink); text-decoration: none; }
-  .mobile-site-menu nav a:hover, .mobile-site-menu nav a[aria-current='page'] { background: #e9efff; color: var(--cobalt); }
   .home-content { padding-top: 3.5rem; }
   .home-content h1 { font-size: clamp(2.75rem, 12vw, 4rem); }
   .home-content > p:first-of-type { margin-bottom: 3.5rem; }

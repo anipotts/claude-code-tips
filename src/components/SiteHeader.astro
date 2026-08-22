@@ -17,6 +17,7 @@ const links = (await getHandbookPages({ includeLegacy: false })).map((page) => (
 
 <header class:list={['site-header', { compact }]}>
   <a class="site-name" href="/" aria-label={site.interfaceCopy.home}>
+    <img src="/favicon.svg" alt="" width="24" height="24" />
     <span>{site.name}</span>
   </a>
   <nav aria-label="primary">
@@ -39,7 +40,10 @@ const links = (await getHandbookPages({ includeLegacy: false })).map((page) => (
     {
       !compact && (
         <details class="mobile-site-menu">
-          <summary role="button" aria-label={site.interfaceCopy.menu} aria-controls="mobile-primary-menu"><Icon name="ph:list" aria-hidden="true" /></summary>
+          <summary role="button" aria-label={site.interfaceCopy.menu} aria-controls="mobile-primary-menu">
+            <Icon class="menu-open-icon" name="ph:list" aria-hidden="true" />
+            <Icon class="menu-close-icon" name="ph:x" aria-hidden="true" />
+          </summary>
           <nav id="mobile-primary-menu" aria-label="mobile primary">
             {links.map((link) => (
               <a href={link.href} aria-current={current.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>

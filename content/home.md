@@ -14,7 +14,7 @@ navigation:
   hidden: true
 ---
 
-# a guide to coding agents in production software (projects, startups & big tech)
+# a guide to <mark class="keyword-highlight">coding agents</mark> in production software (projects, startups & big tech)
 
 practical guidance for choosing, operating, and reviewing coding agents when the
 work has real users, real constraints, and consequences.

@@ -27,7 +27,7 @@ export default defineConfig({
     },
     icon({
       include: {
-        ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo', 'list'],
+        ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo', 'list', 'x'],
       },
     }),
     sitemap({ filter: (page) => {
