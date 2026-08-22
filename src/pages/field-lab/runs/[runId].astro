@@ -1,132 +1,104 @@
 ---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { evidenceLabels } from '../../../evidence';
+import { site } from '../../../site';
 
-type Scenario = {
-  id: string;
-  title: string;
-  result: 'pass' | 'fail' | 'partial' | 'not-run';
-  elapsedSeconds: number | null;
-  evidence: string[];
-  notes: string | null;
-};
-
-type FieldRun = {
-  runId: string;
-  title: string;
-  label: string;
-  status: 'complete' | 'partial' | 'pending';
-  product: string;
-  productVersion: string | null;
-  model: string | null;
-  surface: string;
-  baseCommit: string;
-  taskSpecification: string;
-  machineProfile: { platform: string; architecture: string; memoryGb: number | null; notes: string | null };
-  startedAt: string | null;
-  completedAt: string | null;
-  scenarios: Scenario[];
-  operatorInterventions: number | null;
-  reviewMinutes: number | null;
-  artifacts: Array<{ kind: string; url: string; description: string }>;
-  redactions: string[];
-  limitations: string[];
-};
-
-export function getStaticPaths() {
-  const modules = import.meta.glob('../../../../docs/field-lab/runs/*.json', { eager: true, import: 'default' }) as Record<string, FieldRun>;
-  return Object.values(modules).map((run) => ({ params: { runId: run.runId }, props: { run } }));
+export async function getStaticPaths() {
+  const runs = await getCollection('runs');
+  return runs.map((run) => ({ params: { runId: run.id }, props: { run } }));
 }
 
-const { run } = Astro.props as { run: FieldRun };
+const { run } = Astro.props as { run: CollectionEntry<'runs'> };
+const { Content } = await render(run);
+const data = run.data;
 const display = (value: string | number | null) => value ?? 'unavailable';
-const statusLabel = { complete: 'complete', partial: 'partially complete', pending: 'planned' }[run.status];
-const resultLabel = { pass: 'passed', fail: 'needs work', partial: 'partial', 'not-run': 'pending' };
-const completedDate = run.completedAt ? run.completedAt.slice(0, 10) : null;
-const artifactLabel = (kind: string) => kind.replaceAll('-', ' ');
+const date = data.date.toISOString().slice(0, 10);
 ---
 
-<BaseLayout title={`${run.title} | coding agent tips`} description={`an inspectable ${run.product} field run with scenarios, artifacts, redactions, and limitations.`}>
+<BaseLayout title={`${data.title} | ${site.name}`} description={data.description}>
   <main id="main" class="run-page">
     <header class="run-header">
-      <p>field lab / {run.label}</p>
-      <h1>{run.title}</h1>
+      <p>field run</p>
+      <h1>{data.title}</h1>
+      <p class="run-description">{data.description}</p>
       <dl>
-        <div><dt>status</dt><dd>{statusLabel}</dd></div>
-        <div><dt>product</dt><dd>{run.product} {display(run.productVersion)}</dd></div>
-        <div><dt>surface</dt><dd>{run.surface}</dd></div>
-        <div><dt>model</dt><dd>{display(run.model)}</dd></div>
-        <div><dt>base commit</dt><dd><code>{run.baseCommit.slice(0, 12)}</code></dd></div>
-        <div><dt>completed</dt><dd>{display(completedDate)}</dd></div>
+        <div><dt>status</dt><dd>{data.status}</dd></div>
+        <div><dt>product</dt><dd>{data.product} {display(data.version)}</dd></div>
+        <div><dt>surface</dt><dd>{data.surface}</dd></div>
+        <div><dt>model</dt><dd>{display(data.model)}</dd></div>
+        <div><dt>base commit</dt><dd><code>{data.baseCommit.slice(0, 12)}</code></dd></div>
+        <div><dt>date</dt><dd>{date}</dd></div>
       </dl>
     </header>
 
-    <section aria-labelledby="scenario-title">
-      <div class="run-section-heading"><p>01 / scenarios</p><h2 id="scenario-title">what worked &amp; what didn't</h2></div>
-      <div class="scenario-table">
-        {run.scenarios.map((scenario) => (
-          <article>
-            <div><span class:list={['result', scenario.result]}>{resultLabel[scenario.result]}</span><h3>{scenario.title}</h3></div>
-            <p>{scenario.notes}</p>
-            <ul>{scenario.evidence.map((url) => <li><a href={url}>inspect evidence</a></li>)}</ul>
-          </article>
-        ))}
-      </div>
+    <section class="run-task" aria-labelledby="task-title">
+      <h2 id="task-title">task and pass condition</h2>
+      <dl>
+        <div><dt>task</dt><dd>{data.task}</dd></div>
+        <div><dt>pass condition</dt><dd>{data.passCondition}</dd></div>
+        <div><dt>human interventions</dt><dd>{display(data.humanInterventions)}</dd></div>
+        <div><dt>review minutes</dt><dd>{display(data.reviewMinutes)}</dd></div>
+      </dl>
     </section>
 
+    <article class="run-body"><Content /></article>
+
     <section aria-labelledby="artifact-title">
-      <div class="run-section-heading"><p>02 / evidence</p><h2 id="artifact-title">what you can inspect</h2></div>
-      <ul class="artifact-list">
-        <li><a href={run.taskSpecification}>task specification</a><span>the predeclared outcome and pass conditions</span></li>
-        {run.artifacts.map((artifact) => <li><a href={artifact.url}>{artifactLabel(artifact.kind)}</a><span>{artifact.description}</span></li>)}
-      </ul>
+      <h2 id="artifact-title">inspectable artifacts</h2>
+      <ul class="artifact-list">{data.artifacts.map((artifact) => <li><a href={artifact.url}>{artifact.kind}</a><span>{artifact.description}</span></li>)}</ul>
     </section>
 
     <section class="run-grid">
-      <div><div class="run-section-heading"><p>03 / machine</p><h2>the machine behind the run</h2></div><dl class="compact-data"><div><dt>platform</dt><dd>{run.machineProfile.platform}</dd></div><div><dt>architecture</dt><dd>{run.machineProfile.architecture}</dd></div><div><dt>memory</dt><dd>{display(run.machineProfile.memoryGb)}</dd></div><div><dt>notes</dt><dd>{run.machineProfile.notes}</dd></div></dl></div>
-      <div><div class="run-section-heading"><p>04 / limits</p><h2>open questions from this run</h2></div><ul>{run.limitations.map((limitation) => <li>{limitation}</li>)}</ul></div>
+      <div>
+        <h2>machine context</h2>
+        <dl class="compact-data">
+          <div><dt>platform</dt><dd>{data.machine.platform}</dd></div>
+          <div><dt>architecture</dt><dd>{data.machine.architecture}</dd></div>
+          <div><dt>memory</dt><dd>{display(data.machine.memoryGb)}</dd></div>
+          <div><dt>notes</dt><dd>{data.machine.notes}</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h2>limitations and open questions</h2>
+        <ul>{[...data.limitations, ...data.openQuestions].map((item) => <li>{item}</li>)}</ul>
+      </div>
     </section>
 
-    <section aria-labelledby="redaction-title">
-      <div class="run-section-heading"><p>05 / privacy</p><h2 id="redaction-title">what stayed private</h2></div>
-      <ul>{run.redactions.map((redaction) => <li>{redaction}</li>)}</ul>
+    <section aria-labelledby="privacy-title">
+      <h2 id="privacy-title">privacy and redactions</h2>
+      <ul>{data.privacy.map((item) => <li>{item}</li>)}</ul>
     </section>
+
+    <aside class="run-evidence" aria-label="evidence summary">
+      {data.evidence.map((kind) => <span>{evidenceLabels[kind].label}</span>)}
+    </aside>
   </main>
 </BaseLayout>
 
 <style>
-  .run-page { max-width: 92rem; margin: 0 auto; padding: 6rem clamp(1.25rem, 6vw, 6rem); }
-  .run-header > p, .run-section-heading > p { margin: 0 0 1rem; color: var(--cobalt); font: .66rem var(--font-mono); text-transform: uppercase; letter-spacing: .09em; }
-  .run-header h1 { max-width: 62rem; margin: 0; font-size: clamp(2.8rem, 6vw, 6rem); line-height: .94; letter-spacing: -.06em; overflow-wrap: anywhere; }
-  .run-header dl { display: grid; grid-template-columns: repeat(3, 1fr); margin: 3rem 0 6rem; border-top: 1px solid var(--ink); }
-  .run-header dl div, .compact-data div { padding: 1.2rem 0; border-bottom: 1px solid var(--rule); }
+  .run-page { max-width: 76rem; margin: 0 auto; padding: 5rem clamp(1.25rem, 6vw, 5rem); }
+  .run-header > p:first-child { margin: 0 0 1rem; color: var(--cobalt); font: .66rem var(--font-mono); text-transform: uppercase; letter-spacing: .09em; }
+  .run-header h1 { max-width: 58rem; margin: 0; font-size: clamp(2.6rem, 6vw, 5.4rem); line-height: .96; letter-spacing: -.055em; overflow-wrap: anywhere; }
+  .run-description { max-width: 46rem; color: var(--slate); font-size: 1.15rem; line-height: 1.5; }
+  .run-header dl, .run-task dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 3rem 0 5rem; border-top: 1px solid var(--ink); }
+  .run-header dl div, .run-task dl div, .compact-data div { padding: 1.1rem 1rem 1.1rem 0; border-bottom: 1px solid var(--rule); }
   dt { color: var(--slate); font: .61rem var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
-  dd { margin: .45rem 0 0; }
-  .run-section-heading { margin: 5rem 0 2rem; }
-  .run-section-heading h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.6rem); letter-spacing: -.05em; }
-  .scenario-table { border-top: 1px solid var(--ink); }
-  .scenario-table article { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 2rem; padding: 1.35rem 0; border-bottom: 1px solid var(--rule); }
-  .scenario-table h3 { margin: .5rem 0 0; font-size: 1.1rem; }
-  .scenario-table p { margin: 0; color: var(--slate); line-height: 1.55; }
-  .scenario-table ul { margin: 0; padding: 0; list-style: none; }
-  .scenario-table a, .artifact-list a { color: var(--cobalt); }
-  .result { font: .58rem var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
-  .result.pass { color: var(--cobalt); }
-  .result.fail, .result.not-run { padding-left: .4rem; border-left: .2rem solid var(--warning); color: var(--ink); }
-  .result.partial { color: var(--slate); }
+  dd { margin: .45rem 0 0; overflow-wrap: anywhere; }
+  .run-page h2 { margin-top: 4.5rem; font-size: clamp(1.8rem, 3.5vw, 3rem); letter-spacing: -.045em; }
+  .run-body :global(table) { width: 100%; }
   .artifact-list { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
-  .artifact-list li { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; padding: 1.2rem 0; border-bottom: 1px solid var(--rule); }
+  .artifact-list li { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr; gap: 2rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
+  .artifact-list a { color: var(--cobalt); }
   .artifact-list span { color: var(--slate); }
   .run-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; }
-  .run-grid ul, .run-page section:last-child ul { padding-left: 1.2rem; color: var(--slate); line-height: 1.6; }
+  .run-grid ul, .run-page section > ul { padding-left: 1.2rem; color: var(--slate); line-height: 1.6; }
   .compact-data { margin: 0; }
+  .run-evidence { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--ink); color: var(--cobalt); font: .65rem var(--font-mono); text-transform: uppercase; }
   @media (max-width: 48rem) {
     .run-page { padding-top: 3.5rem; }
-    .run-header h1 { font-size: clamp(2.55rem, 12vw, 3.25rem); line-height: .98; letter-spacing: -.055em; }
-    .run-header dl { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 2.5rem 0 4rem; }
-    .run-header dl div { min-width: 0; padding-right: .75rem; }
-    .run-header dd { overflow-wrap: anywhere; }
-    .scenario-table article { grid-template-columns: 1fr; gap: .8rem; }
-    .artifact-list li { grid-template-columns: 1fr; gap: .5rem; }
-    .run-grid { grid-template-columns: 1fr; }
+    .run-header h1 { font-size: clamp(2.4rem, 12vw, 3.2rem); }
+    .run-header dl, .run-task dl, .run-grid { grid-template-columns: 1fr; }
+    .artifact-list li { grid-template-columns: 1fr; gap: .4rem; }
   }
 </style>
