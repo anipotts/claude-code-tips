@@ -5,6 +5,24 @@
     "codex": "0.147.0",
     "claude_code": "2.1.227"
   },
+  "evidence_labels": {
+    "tested": {
+      "label": "tested",
+      "description": "reproduced by the author in a named environment and version"
+    },
+    "official-source": {
+      "label": "official source",
+      "description": "confirmed in current primary documentation or source code"
+    },
+    "analysis": {
+      "label": "analysis",
+      "description": "a judgment derived from stated evidence"
+    },
+    "open-question": {
+      "label": "open question",
+      "description": "current evidence is missing or incomplete"
+    }
+  },
   "sources": [
     {
       "id": "openai-codex-manual",
@@ -13,7 +31,7 @@
       "status": "core",
       "url": "https://developers.openai.com/codex/codex-manual.md",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["AGENTS.md", "config.toml", "Codex"]
@@ -26,7 +44,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["Claude Code", "terminal", "IDE"]
@@ -39,7 +57,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/changelog#2-1-225",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -56,7 +74,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/features-overview",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["skills", "hooks", "subagents"]
@@ -69,7 +87,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/desktop",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["Claude Code on desktop", "worktree", "diff"]
@@ -82,7 +100,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/permissions",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -99,7 +117,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/memory",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -116,7 +134,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/remote-control",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -133,7 +151,7 @@
       "status": "watchlist",
       "url": "https://code.visualstudio.com/docs/agents/concepts/agent-host",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "vscode-third-party-agents",
@@ -142,7 +160,7 @@
       "status": "watchlist",
       "url": "https://code.visualstudio.com/docs/agents/agent-types/third-party-agents",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "cursor-pricing",
@@ -151,7 +169,7 @@
       "status": "pricing",
       "url": "https://cursor.com/pricing",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "cursor-docs",
@@ -160,7 +178,7 @@
       "status": "watchlist",
       "url": "https://cursor.com/docs",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "conductor-harnesses",
@@ -169,7 +187,7 @@
       "status": "watchlist",
       "url": "https://www.conductor.build/docs/reference/harnesses",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "t3-code",
@@ -178,7 +196,7 @@
       "status": "watchlist",
       "url": "https://t3.codes/",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "opencode",
@@ -187,7 +205,7 @@
       "status": "watchlist",
       "url": "https://github.com/anomalyco/opencode",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "kimi-code",
@@ -196,7 +214,7 @@
       "status": "watchlist",
       "url": "https://www.kimi.com/code/docs/",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "kimi-k3",
@@ -205,7 +223,7 @@
       "status": "watchlist",
       "url": "https://github.com/MoonshotAI/Kimi-K3",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "qwen-code",
@@ -214,7 +232,7 @@
       "status": "watchlist",
       "url": "https://github.com/QwenLM/qwen-code",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "qwen-models",
@@ -223,7 +241,7 @@
       "status": "watchlist",
       "url": "https://github.com/QwenLM",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "grok-build",
@@ -232,7 +250,7 @@
       "status": "watchlist",
       "url": "https://docs.x.ai/build/overview",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "grok-4-5",
@@ -241,7 +259,7 @@
       "status": "watchlist",
       "url": "https://docs.x.ai/developers/grok-4-5",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "git-worktrees",
@@ -250,7 +268,7 @@
       "status": "stable",
       "url": "https://git-scm.com/docs/git-worktree",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["git worktree", "add", "prune"]

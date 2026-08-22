@@ -5,7 +5,7 @@ contributions should make the field guide more accurate, more useful in practice
 ## useful contributions
 
 - corrections backed by a primary source.
-- hands-on results with a reproducible environment and date.
+- tested results with a reproducible environment and date.
 - clearer distinctions between a surface, harness, model, and orchestration layer.
 - security or installation fixes for legacy tools during the compatibility window.
 
@@ -20,7 +20,7 @@ contributions should make the field guide more accurate, more useful in practice
 
 1. explain the user decision the change improves.
 2. link every new product fact to an official source and add it to `docs/sources.json`.
-3. label hands-on observations, source-verified facts, and inference correctly.
+3. label tested observations, official source facts, analysis, and open questions correctly.
 4. run the publication checks and any relevant legacy compatibility tests.
 5. keep one logical change per commit and explain why it belongs in the repository.
 

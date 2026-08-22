@@ -1,22 +1,16 @@
 ---
-title: a shared operating system for coding agents
-description: durable instructions, evidence, isolation, approvals, verification, and handoffs across coding-agent runtimes.
+title: working with coding agents
+description: durable instructions, evidence, isolation, approvals, verification, and handoffs across coding agent runtimes.
 products: [codex, claude-code]
 lastVerified: 2026-08-07
 status: current
-evidence: [hands-on, source-verified, inference]
+evidence: [tested, official-source, analysis]
 sources: [openai-codex-manual, anthropic-features-overview, git-worktrees]
-evidenceRail:
-  - kind: source-verified
-    label: native runtime controls
-    section: begin-with-repository-truth
-    sourceId: openai-codex-manual
-  - kind: hands-on
-    label: repository operating practice
-    section: use-evidence-to-resolve-uncertainty
-  - kind: inference
-    label: cross-runtime principles
-    section: review-the-whole-system
+redirects: []
+voice: evidence
+navigation:
+  group: practice
+  order: 30
 ---
 
 codex and claude code expose different native controls. the durable engineering principles underneath them are similar.
@@ -31,11 +25,11 @@ an agent should know:
 - which operations require approval.
 - what evidence is sufficient before claiming completion.
 
-keep these facts in `AGENTS.md`, `CLAUDE.md`, or checked-in project documentation. duplicate only the small amount required for native discovery. when possible, make one file reference or mirror the other so the two runtimes cannot drift silently.
+keep these facts in `AGENTS.md`, `CLAUDE.md`, or checked in project documentation. duplicate only the small amount required for native discovery. when possible, make one file reference or mirror the other so the two runtimes cannot drift silently.
 
 ## separate guidance from enforcement
 
-instructions shape judgment. config constrains the runtime. hooks intercept lifecycle events. operating-system and provider policy set harder boundaries.
+instructions shape judgment. config constrains the runtime. hooks intercept lifecycle events. operating system and provider policy set harder boundaries.
 
 use prose for decisions that need context. use mechanical controls for invariants that can be evaluated deterministically. a command blocklist cannot replace review of a deployment, and a paragraph cannot guarantee that a destructive command is rejected.
 
@@ -95,7 +89,7 @@ a useful handoff records the goal, changed files or commits, verification, unres
 
 ## review the whole system
 
-agent-generated code should be reviewed for:
+agent generated code should be reviewed for:
 
 - correctness and failure behavior.
 - security and authority boundaries.
@@ -104,4 +98,4 @@ agent-generated code should be reviewed for:
 - whether the verification actually proves the claim.
 - whether the change is easier to understand than the system it replaces.
 
-the same standard applies to agent infrastructure. a small, well-understood workflow can outperform a large control plane.
+the same standard applies to agent infrastructure. a small, well understood workflow can outperform a large control plane.

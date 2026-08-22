@@ -4,16 +4,13 @@ description: compatibility and retirement policy for the historical cc, lore, ti
 products: [cc, lore, time]
 lastVerified: 2026-08-07
 status: legacy
-evidence: [source-verified]
+evidence: [official-source, open-question]
 sources: [anthropic-features-overview]
-evidenceRail:
-  - kind: source-verified
-    label: current native features
-    section: why-the-tools-are-retiring
-    sourceId: anthropic-features-overview
-  - kind: unknown
-    label: manual migration review
-    section: migration
+redirects: []
+voice: frozen
+navigation:
+  group: legacy
+  order: 90
 ---
 
 compatibility window: 2026-08-07 through 2026-11-05
