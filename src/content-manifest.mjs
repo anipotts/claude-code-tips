@@ -18,7 +18,7 @@ function handbookFiles() {
   const guideDirectory = resolve(root, 'docs/guides');
   return [
     ...readdirSync(guideDirectory).filter((file) => file.endsWith('.md')).map((file) => resolve(guideDirectory, file)),
-    ...['market.md', 'method.md', 'legacy.md'].map((file) => resolve(root, 'docs', file)),
+    ...['history.md', 'market.md', 'method.md', 'legacy.md'].map((file) => resolve(root, 'docs', file)),
   ];
 }
 

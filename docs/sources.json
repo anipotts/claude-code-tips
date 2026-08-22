@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_on": "2026-08-11",
+  "checked_on": "2026-08-22",
   "product_versions": {
     "codex": "0.147.0",
     "claude_code": "2.1.227"
@@ -55,7 +55,7 @@
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
-      "url": "https://code.claude.com/docs/en/changelog#2-1-225",
+      "url": "https://code.claude.com/docs/en/changelog",
       "last_checked": "2026-08-11",
       "evidence": "official-source",
       "watch": {
@@ -133,13 +133,13 @@
       "layer": "surface",
       "status": "core",
       "url": "https://code.claude.com/docs/en/remote-control",
-      "last_checked": "2026-08-11",
+      "last_checked": "2026-08-22",
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
           "Remote Control",
-          "research preview",
+          "available on all plans",
           "running locally"
         ]
       }
@@ -168,7 +168,7 @@
       "layer": "surface",
       "status": "pricing",
       "url": "https://cursor.com/pricing",
-      "last_checked": "2026-08-07",
+      "last_checked": "2026-08-22",
       "evidence": "official-source"
     },
     {
@@ -259,6 +259,206 @@
       "status": "watchlist",
       "url": "https://docs.x.ai/developers/grok-4-5",
       "last_checked": "2026-08-07",
+      "evidence": "official-source"
+    },
+    {
+      "id": "aider-docs",
+      "product": "aider",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://aider.chat/docs/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["AI pair programming in your terminal", "git repo"]
+      }
+    },
+    {
+      "id": "cursor-2023-problems",
+      "product": "cursor",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://www.cursor.com/blog/problems-2023",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Better context", "Constrained, in-flow agents"]
+      }
+    },
+    {
+      "id": "github-copilot-workspace",
+      "product": "github-copilot",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://github.blog/news-insights/product-news/github-copilot-workspace/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["GitHub Copilot Workspace", "technical preview"]
+      }
+    },
+    {
+      "id": "cursor-3",
+      "product": "cursor",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://cursor.com/blog/cursor-3",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Meet the new Cursor", "Run many agents in parallel"]
+      }
+    },
+    {
+      "id": "transformer-paper",
+      "product": "transformer",
+      "layer": "model",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Attention Is All You Need", "Transformer"]
+      }
+    },
+    {
+      "id": "openai-gpt3",
+      "product": "gpt-3",
+      "layer": "model",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2005.14165",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Language Models are Few-Shot Learners", "175 billion parameters"]
+      }
+    },
+    {
+      "id": "openai-codex-paper",
+      "product": "codex",
+      "layer": "model",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2107.03374",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Evaluating Large Language Models Trained on Code", "HumanEval"]
+      }
+    },
+    {
+      "id": "github-copilot-preview",
+      "product": "github-copilot",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://github.blog/news-insights/product-news/introducing-github-copilot-ai-pair-programmer/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Introducing GitHub Copilot", "OpenAI Codex"]
+      }
+    },
+    {
+      "id": "react-paper",
+      "product": "react",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2210.03629",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["ReAct", "reasoning and acting"]
+      }
+    },
+    {
+      "id": "swe-bench-paper",
+      "product": "swe-bench",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2310.06770",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["SWE-bench", "2,294"]
+      }
+    },
+    {
+      "id": "swe-agent-paper",
+      "product": "swe-agent",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2405.15793",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["SWE-agent", "Agent-Computer Interfaces"]
+      }
+    },
+    {
+      "id": "anthropic-mcp-launch",
+      "product": "mcp",
+      "layer": "orchestration",
+      "status": "stable",
+      "url": "https://www.anthropic.com/news/model-context-protocol",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Introducing the Model Context Protocol", "open standard"]
+      }
+    },
+    {
+      "id": "github-copilot-agent-mode",
+      "product": "github-copilot",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://github.blog/news-insights/product-news/github-copilot-the-agent-awakens/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["GitHub Copilot", "agent mode"]
+      }
+    },
+    {
+      "id": "anthropic-claude-code-preview",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://www.anthropic.com/news/claude-3-7-sonnet",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Claude Code", "research preview"]
+      }
+    },
+    {
+      "id": "openai-codex-launch",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://openai.com/index/introducing-codex/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-app",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://openai.com/index/introducing-the-codex-app/",
+      "last_checked": "2026-08-22",
       "evidence": "official-source"
     },
     {

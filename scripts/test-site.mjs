@@ -33,7 +33,7 @@ for (const [route, source] of contentFiles) {
   if (!html.includes('<meta property="og:title"')) failures.push(`${route}: open graph title is missing`);
   if (!html.includes(`content="${description.replaceAll('&', '&amp;')}"`) && !text(html).includes(description)) failures.push(`${route}: canonical description is absent from rendered metadata`);
   if (!text(html).includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
-  if (route.startsWith('/guides/') || route === '/market/' || route === '/method/' || route === '/legacy/') {
+  if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/legacy/') {
     for (const kind of inlineList(markdown, 'evidence')) {
       const definition = registry?.evidence_labels?.[kind];
       if (!definition || !text(html).includes(definition.label) || !text(html).includes(definition.description)) failures.push(`${route}: evidence summary does not derive ${kind} from the source registry`);

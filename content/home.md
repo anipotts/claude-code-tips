@@ -2,7 +2,7 @@
 title: coding agent tips
 description: practical guidance for choosing, operating, and reviewing coding agents when the work has real users, real constraints, and consequences.
 products: [cross runtime]
-lastVerified: 2026-08-11
+lastVerified: 2026-08-22
 status: current
 evidence: [tested, official-source, analysis]
 sources: []
@@ -18,6 +18,24 @@ navigation:
 
 practical guidance for choosing, operating, and reviewing coding agents when the
 work has real users, real constraints, and consequences.
+
+## why i keep this guide
+
+i spend an unreasonable amount of time using coding agents, figuring out where
+they actually help, recovering when they get something wrong, and documenting
+the patterns that survive more than one task.
+
+agents already handle meaningful parts of my work. they also lose context,
+misunderstand scope, produce plausible mistakes, and need supervision when the
+stakes rise. nobody knows the date or slope of the next capability jump. that
+uncertainty makes it worth understanding which parts of your work or life benefit
+now, where your judgment carries the load, how permissions change the risk, and
+which workflows remain reliable.
+
+the credibility here comes from the work itself. i link the [repository](https://github.com/anipotts/coding-agent-tips),
+[field runs](/method/#field-runs), [recorded failures](/field-lab/runs/codex-dependency-maintenance-2026-08-11/),
+code, and other artifacts behind the tips. you can inspect the receipts and
+decide what transfers to your own work.
 
 ## understand the layers of every agentic system
 

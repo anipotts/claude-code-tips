@@ -1,8 +1,8 @@
 ---
 title: how this guide is verified
-description: evidence labels, source policy, freshness windows, reproducible field runs, and explicit limitations.
+description: the sources, examples, field runs, and open questions behind the recommendations in this guide.
 products: [cross runtime]
-lastVerified: 2026-08-11
+lastVerified: 2026-08-22
 status: current
 evidence: [tested, official-source, analysis, open-question]
 sources: []
@@ -13,7 +13,16 @@ navigation:
   order: 50
 ---
 
-vendor benchmark results remain vendor claims unless independently reproduced. they can describe a model release, but they do not establish the best workflow for a reader.
+evidence here means the example behind a recommendation: a source, repository,
+field run, screenshot, code sample, failure, or other inspectable artifact. it
+shows what shaped the tip so you can decide whether it transfers to your work.
+
+this guide comes from my own use. the receipts keep that perspective grounded
+and make its limits visible.
+
+vendor benchmark results remain vendor claims unless independently reproduced.
+they can describe a model release, but they do not establish the best workflow
+for a reader.
 
 ## source order
 

@@ -1,14 +1,14 @@
 export const site = {
   name: 'coding agent tips',
   repository: 'https://github.com/anipotts/coding-agent-tips',
-  repositoryStars: 27,
-  repositoryStarsVerified: '2026-08-11',
+  repositoryStars: 28,
+  repositoryStarsVerified: '2026-08-22',
   releaseHistory: 'https://github.com/anipotts/coding-agent-tips/releases',
   interfaceCopy: {
     menu: 'menu',
     search: 'search',
     sources: 'sources',
-    evidence: 'evidence',
+    evidence: 'examples and sources',
     github: 'coding agent tips on GitHub',
     home: 'coding agent tips home',
     legacyPolicy: 'legacy policy',

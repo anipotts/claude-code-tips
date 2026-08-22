@@ -18,6 +18,7 @@ function replaceBlock(markdown: string, name: string, body: string) {
 
 const guideFiles = [
   ...readdirSync(resolve(root, 'docs/guides')).filter((file) => file.endsWith('.md')).map((file) => resolve(root, 'docs/guides', file)),
+  resolve(root, 'docs/history.md'),
   resolve(root, 'docs/market.md'),
   resolve(root, 'docs/method.md'),
 ];

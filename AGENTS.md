@@ -17,7 +17,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 ## canonical ownership
 
 - `content/home.md` owns the homepage.
-- `docs/guides/*.md`, `docs/market.md`, and `docs/method.md` own the principal handbook destinations.
+- `docs/guides/*.md`, `docs/history.md`, `docs/market.md`, and `docs/method.md` own the principal handbook destinations.
 - `content/runs/*.md` owns field run metadata and prose.
 - `docs/sources.json` owns source metadata, current product versions, and evidence definitions.
 - `src/site.ts` owns shared navigation and interface copy.

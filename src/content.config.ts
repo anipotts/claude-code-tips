@@ -26,7 +26,7 @@ const common = {
 };
 
 const docs = defineCollection({
-  loader: glob({ base: './docs', pattern: ['guides/*.md', 'market.md', 'method.md', 'legacy.md'] }),
+  loader: glob({ base: './docs', pattern: ['guides/*.md', 'history.md', 'market.md', 'method.md', 'legacy.md'] }),
   schema: docsSchema({ extend: z.object(common) }),
 });
 
