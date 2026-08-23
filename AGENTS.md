@@ -1,6 +1,6 @@
 # coding agent tips
 
-this repository is an opinionated, source backed handbook for experienced coding agent users. codex and claude code are coequal primary guides. legacy claude code plugins remain available only for the compatibility window documented in `docs/legacy.md`.
+this repository is an opinionated, source backed handbook for experienced coding agent users. codex and claude code are coequal primary guides. archived claude code plugins remain available only for the compatibility window documented in `docs/archive.md`.
 
 ## public standard
 
@@ -12,7 +12,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 - do not use mid-dot dividers in public copy or interface labels.
 - never use litotes or negative comparison frames in public copy. state the intended claim directly.
 - repeat context only when it changes understanding or supports a deliberate editorial rhythm. remove labels that restate the title, route, or surrounding section.
-- preserve compatibility paths through 2026-11-05. legacy changes are limited to security, data-loss, and installation blockers.
+- preserve compatibility paths through 2026-11-05. archive changes are limited to security, data loss, and installation blockers.
 
 ## canonical ownership
 
@@ -28,7 +28,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 
 ## verification
 
-run the source, field run, Astro, generated route, Markdown, and shell checks before publishing a broad change. run `bun test plugins/cc/tests` and `pytest plugins/lore/tests` when legacy files or shared runtime dependencies change, and during the scheduled full verification.
+run the source, field run, Astro, generated route, Markdown, and shell checks before publishing a broad change. run `bun test plugins/cc/tests` and `pytest plugins/lore/tests` when archive files or shared runtime dependencies change, and during the scheduled full verification.
 
 ## review
 

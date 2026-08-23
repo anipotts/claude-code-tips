@@ -7,7 +7,7 @@ contributions should make the field guide more accurate, more useful in practice
 - corrections backed by a primary source.
 - tested results with a reproducible environment and date.
 - clearer distinctions between a surface, harness, model, and orchestration layer.
-- security or installation fixes for legacy tools during the compatibility window.
+- security or installation fixes for archived tools during the compatibility window.
 
 ## out of scope
 
@@ -21,7 +21,7 @@ contributions should make the field guide more accurate, more useful in practice
 1. explain the user decision the change improves.
 2. link every new product fact to an official source and add it to `docs/sources.json`.
 3. label tested observations, official source facts, analysis, and open questions correctly.
-4. run the publication checks and any relevant legacy compatibility tests.
+4. run the publication checks and any relevant archive compatibility tests.
 5. keep one logical change per commit and explain why it belongs in the repository.
 
 security reports should follow [SECURITY.md](./SECURITY.md).
