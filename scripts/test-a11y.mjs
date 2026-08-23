@@ -9,7 +9,9 @@ const routes = canonicalContentFiles().map((entry) => entry.route);
 const viewports = [
   { name: 'mobile small', width: 375, height: 812 },
   { name: 'mobile wide', width: 768, height: 1024 },
+  { name: 'tablet square', width: 942, height: 942 },
   { name: 'desktop compact', width: 1024, height: 900 },
+  { name: 'desktop annotated', width: 1191, height: 942 },
   { name: 'desktop wide', width: 1440, height: 1024 },
 ];
 spawnSync('bun', ['x', 'astro', 'preview', 'stop'], { stdio: 'ignore' });
@@ -42,4 +44,4 @@ try {
 }
 
 if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
-console.log(`axe found no serious or critical issues across ${routes.length} routes at four required widths`);
+console.log(`axe found no serious or critical issues across ${routes.length} routes at ${viewports.length} required widths`);

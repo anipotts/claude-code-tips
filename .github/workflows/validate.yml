@@ -56,7 +56,8 @@ jobs:
             "SECURITY.md"
             ".github/**/*.md"
             "content/**/*.md"
-            "docs/guides/*.md"
+            "docs/guides/**/*.md"
+            "docs/archive.md"
             "docs/history.md"
             "docs/market.md"
             "docs/method.md"
@@ -129,7 +130,7 @@ jobs:
             exit 1
           fi
 
-          if git grep -n $'\u2014' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md '.github/**/*.md' 'content/**/*.md' 'docs/guides/*.md' docs/history.md docs/market.md docs/method.md '.claude-plugin/*.json'; then
+          if git grep -n $'\u2014' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md '.github/**/*.md' 'content/**/*.md' 'docs/guides/**/*.md' docs/history.md docs/market.md docs/method.md docs/archive.md '.claude-plugin/*.json'; then
             echo "em dashes are outside the repository style"
             exit 1
           fi
@@ -139,7 +140,7 @@ jobs:
             exit 1
           fi
 
-          if git grep -n -iE '\bnot (only|just|merely|simply|uncommon|insignificant|impossible|bad|wrong|unreasonable|unlikely|automatically|enough)\b|\bno (small|minor|mean|little)\b' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md 'content/**/*.md' 'docs/guides/*.md' docs/history.md docs/market.md docs/method.md; then
+          if git grep -n -iE '\bnot (only|just|merely|simply|uncommon|insignificant|impossible|bad|wrong|unreasonable|unlikely|automatically|enough)\b|\bno (small|minor|mean|little)\b' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md 'content/**/*.md' 'docs/guides/**/*.md' docs/history.md docs/market.md docs/method.md docs/archive.md; then
             echo "litotes or negative comparison framing found"
             exit 1
           fi
@@ -162,7 +163,8 @@ jobs:
             SECURITY.md
             .github/**/*.md
             content/**/*.md
-            docs/guides/*.md
+            docs/guides/**/*.md
+            docs/archive.md
             docs/history.md
             docs/market.md
             docs/method.md

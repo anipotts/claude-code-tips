@@ -1,0 +1,98 @@
+name: draft product freshness update
+
+on:
+  schedule:
+    - cron: "20 10 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: product-freshness-draft
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: true
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: "1.3.4"
+
+      - name: detect product version changes
+        id: drift
+        shell: bash
+        run: |
+          current_codex="$(jq -r '.product_versions.codex' docs/sources.json)"
+          current_claude="$(jq -r '.product_versions.claude_code' docs/sources.json)"
+          latest_codex="$(npm view @openai/codex version)"
+          latest_claude="$(npm view @anthropic-ai/claude-code version)"
+          printf 'codex=%s\nclaude=%s\n' "$latest_codex" "$latest_claude" >> "$GITHUB_OUTPUT"
+          if [[ "$current_codex" != "$latest_codex" || "$current_claude" != "$latest_claude" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: collect official update context
+        if: steps.drift.outputs.changed == 'true' && env.OPENAI_API_KEY != ''
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        shell: bash
+        run: |
+          mkdir -p .freshness
+          curl --fail --location --silent --show-error https://developers.openai.com/codex/changelog > .freshness/codex-changelog.html
+          curl --fail --location --silent --show-error https://code.claude.com/docs/en/changelog > .freshness/claude-code-changelog.html
+
+      - name: draft dated handbook changes
+        if: steps.drift.outputs.changed == 'true' && env.OPENAI_API_KEY != ''
+        uses: openai/codex-action@f367b1e9572fd064ea71ef925ca24ee0f01080af # v1
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LATEST_CODEX: ${{ steps.drift.outputs.codex }}
+          LATEST_CLAUDE_CODE: ${{ steps.drift.outputs.claude }}
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          permission-profile: ":workspace"
+          codex-version: ${{ steps.drift.outputs.codex }}
+          prompt: |
+            Update this handbook for the detected Codex or Claude Code version change.
+            Read AGENTS.md, docs/sources.json, and the official snapshots under .freshness/.
+            Update the version registry and only public claims directly supported by those official snapshots.
+            Phrase date sensitive claims as "as of <month day, year>" in the existing lowercase voice.
+            Preserve citations, limitations, and the distinction between official source and hands on evidence.
+            Do not invent a field run, benchmark, recommendation, or product capability.
+            Remove .freshness before finishing. Run bun install --frozen-lockfile, bun run check, bun run build, and bun run test:site.
+
+      - name: open a draft pull request
+        if: steps.drift.outputs.changed == 'true' && env.OPENAI_API_KEY != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BRANCH: codex/freshness-${{ github.run_id }}
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "the official update produced no supported handbook change" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name "coding agent tips freshness"
+          git config user.email "codex@anipotts.com"
+          git switch -c "$BRANCH"
+          git add docs content README.md
+          git commit -m "docs: draft dated product updates"
+          git push --set-upstream origin "$BRANCH"
+          gh pr create --draft --base main --head "$BRANCH" --title "docs: draft dated product updates" --body "Automated draft from official product changelogs. Review every claim, citation, and wording choice before merge."
+
+      - name: explain skipped drafts
+        if: steps.drift.outputs.changed == 'true' && env.OPENAI_API_KEY == ''
+        run: echo "product drift detected, but OPENAI_API_KEY is unavailable; no draft was created" >> "$GITHUB_STEP_SUMMARY"

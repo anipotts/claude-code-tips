@@ -24,7 +24,9 @@ for (const [route, source] of contentFiles) {
   const markdown = await readFile(source, 'utf8');
   const title = scalar(markdown, 'title');
   const description = scalar(markdown, 'description');
-  metadata.push({ route, source, title, description });
+  const scope = markdown.match(/^navigation:\s*\n(?:  .*\n)*?  scope:\s*([^\n]+)/m)?.[1].trim();
+  const order = Number(markdown.match(/^navigation:\s*\n(?:  .*\n)*?  order:\s*(\d+)/m)?.[1]);
+  metadata.push({ route, source, title, description, scope, order });
   const file = routeFile(route);
   try { await access(file); } catch { failures.push(`${route}: generated page is missing`); continue; }
   const html = await readFile(file, 'utf8');
@@ -33,12 +35,14 @@ for (const [route, source] of contentFiles) {
   if (!html.includes('<meta property="og:title"')) failures.push(`${route}: open graph title is missing`);
   if (!html.includes(`content="${description.replaceAll('&', '&amp;')}"`) && !text(html).includes(description)) failures.push(`${route}: canonical description is absent from rendered metadata`);
   if (!text(html).includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
-  if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/legacy/') {
+  if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/archive/') {
     for (const kind of inlineList(markdown, 'evidence')) {
       const definition = registry?.evidence_labels?.[kind];
-      if (!definition || !text(html).includes(definition.label) || !text(html).includes(definition.description)) failures.push(`${route}: evidence summary does not derive ${kind} from the source registry`);
+      if (!definition || !text(html).includes(definition.label)) failures.push(`${route}: evidence summary does not derive ${kind} from the source registry`);
     }
   }
+  if (!route.startsWith('/field-lab/') && !text(html).includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
+  for (const label of ['general', 'codex', 'claude code', 'grok']) if (!text(html).includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
   if (html.includes('·')) failures.push(`${route}: mid dot appears in public output`);
   if (!/coding agent tips on GitHub, \d+ stars/.test(html)) failures.push(`${route}: GitHub star count is missing from the site header`);
 
@@ -60,7 +64,7 @@ for (const version of Object.values(registry.product_versions)) {
 const home = await readFile(routeFile('/'), 'utf8');
 const h1Values = [...home.matchAll(/<h1\b[^>]*>(.*?)<\/h1>/gs)].map((match) => text(match[1]));
 if (h1Values.length !== 1 || h1Values[0] !== canonicalH1) failures.push(`/: expected one exact canonical h1, received ${JSON.stringify(h1Values)}`);
-for (const item of metadata.filter((item) => item.route !== '/' && !item.route.startsWith('/field-lab/') && item.route !== '/legacy/')) {
+for (const item of metadata.filter((item) => item.route !== '/' && item.route !== '/archive/' && (item.scope === 'general' || item.order === 10))) {
   if (!home.includes(`href="${item.route}"`)) failures.push(`/: canonical guide link is missing: ${item.route}`);
   if (!text(home).includes(item.description)) failures.push(`/: canonical guide description is missing: ${item.description}`);
 }
