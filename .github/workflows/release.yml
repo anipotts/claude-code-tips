@@ -4,49 +4,58 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: existing git tag to publish
+        description: existing signed tag with a reviewed draft release
         required: true
         type: string
-      prerelease:
-        description: mark as a prerelease
-        required: true
-        default: false
-        type: boolean
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  release:
+  verify:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: verify tag and reviewed notes
-        id: release-input
-        env:
-          RELEASE_TAG: ${{ inputs.tag }}
-        run: |
-          git rev-parse "refs/tags/$RELEASE_TAG" >/dev/null
-          test "$RELEASE_TAG" = "v4.0.0" || [[ "$RELEASE_TAG" == legacy-tools-final-* ]]
-          notes_file=".github/releases/$RELEASE_TAG.md"
-          if [[ ! -f "$notes_file" ]]; then
-            echo "unsupported release tag: reviewed notes are missing at $notes_file"
-            exit 1
-          fi
-          echo "notes-file=$notes_file" >> "$GITHUB_OUTPUT"
-
-      - name: publish existing tag
+      - name: verify signed tag and reviewed draft
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag }}
-          PRERELEASE: ${{ inputs.prerelease }}
-          NOTES_FILE: ${{ steps.release-input.outputs.notes-file }}
+        shell: bash
         run: |
-          args=("$RELEASE_TAG" --verify-tag --notes-file "$NOTES_FILE" --title "$RELEASE_TAG")
-          if [ "$PRERELEASE" = "true" ]; then
-            args+=(--prerelease)
+          git rev-parse "refs/tags/$RELEASE_TAG" >/dev/null
+          if [[ ! "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]] && \
+             [[ "$RELEASE_TAG" != "legacy-tools-final-2026-11-05" ]]; then
+            echo "release tag must be semantic or the exact final archive tag"
+            exit 1
           fi
-          gh release create "${args[@]}"
+          test "$(git cat-file -t "refs/tags/$RELEASE_TAG")" = "tag"
+          tag_object_sha="$(git rev-parse "refs/tags/$RELEASE_TAG")"
+          tag_verification="$(gh api \
+            "repos/$GITHUB_REPOSITORY/git/tags/$tag_object_sha" \
+            --jq '.verification')"
+          test "$(jq -r '.verified' <<< "$tag_verification")" = "true"
+          test "$(jq -r '.reason' <<< "$tag_verification")" = "valid"
+          release_json="$(gh release view "$RELEASE_TAG" --json isDraft,tagName)"
+          test "$(jq -r '.tagName' <<< "$release_json")" = "$RELEASE_TAG"
+          test "$(jq -r '.isDraft' <<< "$release_json")" = "true"
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: publish reviewed draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          test "$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft')" = "true"
+          gh release edit "$RELEASE_TAG" --draft=false
+          echo "published the existing reviewed draft for $RELEASE_TAG" >> "$GITHUB_STEP_SUMMARY"

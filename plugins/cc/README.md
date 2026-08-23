@@ -1,4 +1,4 @@
-> legacy compatibility notice: `cc` is frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. see [legacy tools](../../docs/legacy-tools.md).
+> archive compatibility notice: `cc` is frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. see [archived tools](../../docs/archive.md).
 
 <!-- tested with: claude code v2.1.220 -->
 
