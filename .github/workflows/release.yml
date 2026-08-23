@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    outputs:
+      release-id: ${{ steps.release-input.outputs.release-id }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -23,6 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: verify signed tag and reviewed draft
+        id: release-input
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag }}
@@ -41,9 +44,16 @@ jobs:
             --jq '.verification')"
           test "$(jq -r '.verified' <<< "$tag_verification")" = "true"
           test "$(jq -r '.reason' <<< "$tag_verification")" = "valid"
-          release_json="$(gh release view "$RELEASE_TAG" --json isDraft,tagName)"
-          test "$(jq -r '.tagName' <<< "$release_json")" = "$RELEASE_TAG"
-          test "$(jq -r '.isDraft' <<< "$release_json")" = "true"
+          release_json="$(gh api --paginate \
+            "repos/$GITHUB_REPOSITORY/releases?per_page=100" | \
+            jq -s --arg tag "$RELEASE_TAG" \
+              '[.[][] | select(.tag_name == $tag)] |
+               if length == 1 then .[0]
+               else error("expected exactly one release for tag " + $tag)
+               end')"
+          test "$(jq -r '.tag_name' <<< "$release_json")" = "$RELEASE_TAG"
+          test "$(jq -r '.draft' <<< "$release_json")" = "true"
+          echo "release-id=$(jq -r '.id' <<< "$release_json")" >> "$GITHUB_OUTPUT"
 
   publish:
     needs: verify
@@ -55,7 +65,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_ID: ${{ needs.verify.outputs.release-id }}
         run: |
-          test "$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft')" = "true"
-          gh release edit "$RELEASE_TAG" --draft=false
+          release_json="$(gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID")"
+          test "$(jq -r '.tag_name' <<< "$release_json")" = "$RELEASE_TAG"
+          test "$(jq -r '.draft' <<< "$release_json")" = "true"
+          gh api --method PATCH \
+            "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" \
+            -F draft=false >/dev/null
           echo "published the existing reviewed draft for $RELEASE_TAG" >> "$GITHUB_STEP_SUMMARY"
