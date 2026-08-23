@@ -37,21 +37,27 @@ def allowed(path: str) -> bool:
     )
 
 
-def main() -> int:
-    base = parse_args().base
-    changed = set(git_lines("diff", "--name-only", base))
-    changed.update(git_lines("ls-files", "--others", "--exclude-standard"))
-    deleted = set(git_lines("diff", "--name-only", "--diff-filter=D", base))
-
+def validation_errors(changed: set[str], deleted: set[str]) -> list[str]:
     errors: list[str] = []
     for path in sorted(changed):
         if not allowed(path):
             errors.append(f"unsupported changed path: {path}")
+        if Path(path).name == "recommendations.md":
+            errors.append(f"freshness drafts cannot change recommendations: {path}")
         candidate = ROOT / path
         if candidate.is_symlink():
             errors.append(f"symlinks are unsupported in freshness drafts: {path}")
     for path in sorted(deleted):
         errors.append(f"freshness drafts cannot delete files: {path}")
+    return errors
+
+
+def main() -> int:
+    base = parse_args().base
+    changed = set(git_lines("diff", "--name-only", base))
+    changed.update(git_lines("ls-files", "--others", "--exclude-standard"))
+    deleted = set(git_lines("diff", "--name-only", "--diff-filter=D", base))
+    errors = validation_errors(changed, deleted)
 
     if errors:
         for error in errors:

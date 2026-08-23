@@ -138,6 +138,7 @@ jobs:
             Phrase date sensitive claims as "as of <month day, year>" in the existing lowercase voice.
             Preserve citations, limitations, and the distinction between official source and hands on evidence.
             Do not invent a field run, benchmark, recommendation, or product capability.
+            Do not change any recommendations.md file.
             Remove .freshness before finishing. Run bun install --frozen-lockfile, bun run check, bun run build, and bun run test:site.
 
       - name: validate and package draft
@@ -195,21 +196,77 @@ jobs:
         run: |
           git apply --index "$RUNNER_TEMP/freshness.patch"
           python3 .github/scripts/check_freshness_diff.py --base HEAD
+          python3 .github/scripts/check_sources.py
           bun install --frozen-lockfile
+          bun run check:field-runs
           bun run check:readme
           bun run check
           bun run build
           bun run test:site
 
-      - name: open draft pull request
+      - name: create verified commit and draft pull request
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: codex/freshness-${{ github.run_id }}
+          BRANCH: codex/freshness-${{ github.run_id }}-${{ github.run_attempt }}
         shell: bash
         run: |
-          git config user.name "coding agent tips freshness"
-          git config user.email "codex@anipotts.com"
-          git switch -c "$BRANCH"
-          git commit -m "docs: draft dated product updates"
-          git push --set-upstream origin "$BRANCH"
+          base_sha="$(git rev-parse HEAD)"
+          additions="$RUNNER_TEMP/freshness-additions.jsonl"
+          : > "$additions"
+          while IFS= read -r path; do
+            jq -n \
+              --arg path "$path" \
+              --arg contents "$(base64 -w 0 "$path")" \
+              '{path: $path, contents: $contents}' >> "$additions"
+          done < <(git diff --cached --name-only --diff-filter=AM)
+          jq -s . "$additions" > "$RUNNER_TEMP/freshness-additions.json"
+
+          gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f ref="refs/heads/$BRANCH" \
+            -f sha="$base_sha"
+
+          mutation='mutation($input: CreateCommitOnBranchInput!) {
+            createCommitOnBranch(input: $input) { commit { oid } }
+          }'
+          jq -n \
+            --arg query "$mutation" \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg branch "$BRANCH" \
+            --arg head "$base_sha" \
+            --slurpfile additions "$RUNNER_TEMP/freshness-additions.json" \
+            '{
+              query: $query,
+              variables: {
+                input: {
+                  branch: {
+                    repositoryNameWithOwner: $repository,
+                    branchName: $branch
+                  },
+                  expectedHeadOid: $head,
+                  message: {headline: "docs: draft dated product updates"},
+                  fileChanges: {additions: $additions[0]}
+                }
+              }
+            }' > "$RUNNER_TEMP/freshness-commit.json"
+          commit_sha="$(gh api graphql \
+            --input "$RUNNER_TEMP/freshness-commit.json" \
+            --jq '.data.createCommitOnBranch.commit.oid')"
+          commit_verification='{}'
+          for attempt in 1 2 3 4 5; do
+            commit_verification="$(gh api \
+              "repos/$GITHUB_REPOSITORY/commits/$commit_sha" \
+              --jq '.commit.verification')"
+            if [[ "$(jq -r '.verified' <<< "$commit_verification")" == "true" && \
+                  "$(jq -r '.reason' <<< "$commit_verification")" == "valid" ]]; then
+              break
+            fi
+            sleep "$((attempt * 2))"
+          done
+          if [[ "$(jq -r '.verified' <<< "$commit_verification")" != "true" || \
+                "$(jq -r '.reason' <<< "$commit_verification")" != "valid" ]]; then
+            gh api --method DELETE \
+              "repos/$GITHUB_REPOSITORY/git/refs/heads/$BRANCH"
+            echo "github did not verify the freshness commit; removed its branch" >&2
+            exit 1
+          fi
           gh pr create --draft --base main --head "$BRANCH" --title "docs: draft dated product updates" --body "Automated draft from official product changelogs. Review every claim, citation, and wording choice before merge."

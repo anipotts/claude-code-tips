@@ -35,7 +35,12 @@ jobs:
             exit 1
           fi
           test "$(git cat-file -t "refs/tags/$RELEASE_TAG")" = "tag"
-          git tag -v "$RELEASE_TAG"
+          tag_object_sha="$(git rev-parse "refs/tags/$RELEASE_TAG")"
+          tag_verification="$(gh api \
+            "repos/$GITHUB_REPOSITORY/git/tags/$tag_object_sha" \
+            --jq '.verification')"
+          test "$(jq -r '.verified' <<< "$tag_verification")" = "true"
+          test "$(jq -r '.reason' <<< "$tag_verification")" = "valid"
           release_json="$(gh release view "$RELEASE_TAG" --json isDraft,tagName)"
           test "$(jq -r '.tagName' <<< "$release_json")" = "$RELEASE_TAG"
           test "$(jq -r '.isDraft' <<< "$release_json")" = "true"
