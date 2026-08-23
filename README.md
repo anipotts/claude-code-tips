@@ -5,8 +5,8 @@ this is my evidence backed guide to working with coding agents, whether you are 
 [read the handbook](https://agents.anipotts.com) or go directly to a principal guide:
 
 <!-- generated:guides:start -->
-- [claude code](https://agents.anipotts.com/guides/claude-code/)
 - [codex](https://agents.anipotts.com/guides/codex/)
+- [claude code](https://agents.anipotts.com/guides/claude-code/)
 - [grok](https://agents.anipotts.com/guides/grok/)
 - [working with coding agents](https://agents.anipotts.com/guides/operating-system/)
 - [how coding agents got here](https://agents.anipotts.com/history/)

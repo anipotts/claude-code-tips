@@ -31,9 +31,9 @@ keeps shared repository configuration narrower than personal account settings.
 ## permissions are two different questions
 
 filesystem and network access describe what a command can reach. approval
-policy describes when Codex needs your decision before running it. broad access
-does not automatically grant final authority to merge, publish, send, pay, or
-delete.
+policy describes when Codex needs your decision before running it. final
+authority to merge, publish, send, pay, or delete remains a separate human
+decision.
 
 current Codex releases expose the established `sandbox_mode` and
 `approval_policy` settings alongside newer permission profiles. inspect the
