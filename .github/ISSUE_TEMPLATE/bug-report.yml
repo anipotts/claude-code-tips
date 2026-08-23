@@ -1,12 +1,12 @@
 name: correction or compatibility bug
-description: report a factual error, broken guide path, or legacy compatibility problem
+description: report a factual error, broken guide path, or archive compatibility problem
 labels: [bug]
 body:
   - type: input
     id: component
     attributes:
       label: affected page or component
-      placeholder: docs/codex/README.md or plugins/cc
+      placeholder: docs/guides/codex.md or plugins/cc
     validations:
       required: true
   - type: textarea
@@ -23,9 +23,3 @@ body:
       description: link an official source or provide a minimal reproduction
     validations:
       required: true
-  - type: checkboxes
-    id: legacy-policy
-    attributes:
-      label: legacy scope
-      options:
-        - label: if this concerns a legacy tool, it is a security issue, data-loss risk, current compatibility break, or installation blocker

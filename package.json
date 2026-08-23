@@ -1,6 +1,5 @@
 {
   "name": "coding-agent-tips",
-  "version": "4.0.0",
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.4",
