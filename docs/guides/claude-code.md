@@ -1,103 +1,44 @@
 ---
 title: claude code
-description: official source guidance for claude code terminal, desktop, ide, agents, hooks, and permissions.
+description: a practical map of claude code across terminal, desktop, editor, web, and remote workflows.
 products: [claude-code]
-lastVerified: 2026-08-11
+updatedAt: "2026-08-22T19:55:02-04:00"
 status: pending
 evidence: [official-source, open-question]
-sources: [anthropic-claude-overview, anthropic-changelog, anthropic-features-overview, anthropic-desktop, anthropic-permissions, anthropic-memory, anthropic-remote-control]
+sources: [anthropic-claude-overview, anthropic-changelog, anthropic-desktop, anthropic-remote-control, anthropic-cowork]
 redirects: []
 voice: evidence
 navigation:
-  group: guides
-  order: 20
+  scope: claude-code
+  order: 10
 ---
 
-source review: [official claude code documentation](https://code.claude.com/docs/en) and the [official changelog](https://code.claude.com/docs/en/changelog). section citations point to the exact references.
+## this is claude code
 
-the source review is current through the date above. the current field run protocol in [how this guide is verified](/method/) remains pending for this reset, so recommendations that depend on current product behavior use official source evidence.
+Claude Code is Anthropic’s software engineering agent. it runs in the terminal,
+desktop app, supported editors, web, and remote control surfaces while keeping
+repository instructions and tool configuration close to the code.
+[official overview](https://code.claude.com/docs/en/overview)
 
-## current shape
+<div class="surface-bento">
+  <figure><a href="https://code.claude.com/docs/en/overview"><img src="https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/699e1b736d83c9fb55a56d2a_698be3342261cf694fdae301_698bdd78a6031117e6bb41d6_Screenshot%2525202026-02-09%252520at%25252012.52.07%2525E2%252580%2525AFPM.png" alt="Claude Code working in its coding interface" loading="lazy" width="1600" height="900" /><figcaption>code and repository work</figcaption></a></figure>
+  <figure><a href="https://claude.com/resources/tutorials/navigating-the-claude-desktop-app"><img src="https://academy.claude.com/assets/media/6fcef3fffebbdcc24dfe51c43e57196dcec0402c986c32bb803a2bd6a6fcdffc.png" alt="the Claude desktop chat interface" loading="lazy" width="1600" height="900" /><figcaption>desktop and chat context</figcaption></a></figure>
+  <figure><a href="https://code.claude.com/docs/en/desktop"><img src="https://academy.claude.com/assets/media/782ff424a16217adc2bf15d89f81250e2d2c9c4f112ddad39a28942c6ae43386.png" alt="the Claude Cowork task interface" loading="lazy" width="1600" height="900" /><figcaption>desktop tasks and visual review</figcaption></a></figure>
+  <figure><a href="https://code.claude.com/docs/en/remote-control"><img src="https://academy.claude.com/assets/media/6fcef3fffebbdcc24dfe51c43e57196dcec0402c986c32bb803a2bd6a6fcdffc.png" alt="Claude available through a remote conversation surface" loading="lazy" width="1600" height="900" /><figcaption>web and remote control</figcaption></a></figure>
+</div>
 
-claude code is a coding agent system available through terminal, desktop, ide, web, and remote workflows. remote control keeps execution on the host machine while exposing the running session through supported web and mobile surfaces. [official overview](https://code.claude.com/docs/en/overview) and [remote control](https://code.claude.com/docs/en/remote-control)
+as of august 22, 2026, Claude Code documents terminal, desktop, IDE, web, and
+remote workflows plus skills, hooks, subagents, plugins, MCP, memory, and scoped
+permissions. this guide treats those as current official capabilities. a paired
+hands on field run remains open.
 
-| surface | best fit | main tradeoff |
-|---|---|---|
-| terminal | direct local work, fast steering, and shell heavy repositories | less visual control over many simultaneous sessions |
-| desktop | parallel sessions, git isolation, diffs, previews, terminals, side chats, computer use, and pull request monitoring | another application and another workspace model to understand |
-| ide | editor context, diagnostics, diffs, and familiar navigation | the session becomes coupled to the editor surface |
-| web and remote control | continuing or supervising work away from the original terminal | remote state and permission boundaries need deliberate review |
+## where the wider Claude ecosystem fits
 
-## durable configuration
+Claude Code is the engineering surface. Cowork handles broader tasks and
+deliverables through cloud or desktop execution. Claude’s other domain
+experiences should be evaluated by the artifact they produce and the systems
+they can safely reach, rather than folded into coding guidance.
+[Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)
 
-choose an extension point by how it should load. [features overview](https://code.claude.com/docs/en/features-overview) and [memory reference](https://code.claude.com/docs/en/memory)
-
-| need | claude code surface |
-|---|---|
-| repository conventions that load every session | `CLAUDE.md` |
-| modular project rules | `.claude/rules/` |
-| reusable knowledge or workflow loaded on demand | skill |
-| isolated specialist that returns a result | subagent |
-| coordinated independent sessions | agent team |
-| external data or actions | mcp server |
-| deterministic lifecycle behavior | hook |
-| packaged distribution | plugin and marketplace |
-
-keep `CLAUDE.md` short enough to remain legible. large reference material belongs in skills, checked in documents, or scoped rules.
-
-## the working loop
-
-1. state the outcome, constraints, and acceptable proof.
-2. use plan mode when the task needs a decision before edits begin.
-3. steer during execution when new evidence changes the approach.
-4. use checkpoints or git commits before risky transformations.
-5. delegate independent research or review to subagents.
-6. use worktree isolated sessions when independent edits should remain separately reviewable.
-
-claude code is strongest when the user treats it as an operating environment with inspectable rules and tools, rather than relying on a single large prompt.
-
-## skills, hooks, plugins, and agents
-
-these features solve different problems:
-
-- a skill carries reusable instructions and reference material.
-- a subagent gets isolated context for bounded work.
-- a hook runs on a lifecycle event and can enforce or automate a mechanical rule.
-- a plugin packages skills, hooks, subagents, mcp servers, and related configuration.
-- an agent team coordinates separate sessions that need shared tasks or peer communication.
-
-agent teams are experimental and disabled by default in current official guidance. use them when peers need to coordinate with each other. prefer a subagent when the main session only needs a focused result. [features overview](https://code.claude.com/docs/en/features-overview)
-
-third party plugins run with meaningful local access. review their hooks, commands, mcp servers, storage, and update path before installation.
-
-## desktop and context switch cost
-
-claude code desktop combines chats, diffs, previews, files, plans, tasks, terminals, and subagent views. this can reduce the attention cost of moving among a terminal, browser, editor, and pull request page. [desktop documentation](https://code.claude.com/docs/en/desktop)
-
-the desktop benefit is supervision. compute use can still grow as local sessions duplicate worktrees, dependencies, build processes, file watchers, browser instances, and model requests.
-
-## permissions and safety
-
-permission mode, sandboxing, hooks, managed policy, and operating system access are separate layers. [permissions reference](https://code.claude.com/docs/en/permissions)
-
-claude code 2.1.225 added a workspace trust prompt when `claude agents` starts in an untrusted directory. workspace trust controls whether the project can load; permission and sandbox policy still control what a running session may do. [2.1.225 release notes](https://code.claude.com/docs/en/changelog#2-1-225)
-
-- use narrow allow rules for routine commands.
-- keep bypass modes inside disposable or strongly isolated environments.
-- distinguish a local write from an outbound action such as publishing, deploying, or messaging.
-- inspect plugin and mcp provenance before granting access.
-- preserve user approval for destructive or difficult to reverse actions.
-
-treat each hook as enforcement for the events and payloads it receives. test bypasses and failure behavior before assigning it responsibility for a security boundary.
-
-## memory and session continuity
-
-claude code supports `CLAUDE.md`, auto memory, session resume, remote control, and desktop managed sessions. these are complementary. [memory reference](https://code.claude.com/docs/en/memory) and [remote control](https://code.claude.com/docs/en/remote-control)
-
-as of 2.1.225, `SendMessage` can start a conversation with a named remote control session on another machine. use that for live routing between active sessions; keep durable project state in files, commits, and explicit handoffs. [2.1.225 release notes](https://code.claude.com/docs/en/changelog#2-1-225)
-
-use checked in instructions for rules the team must share. use auto memory for learned local context. use session resume when the original conversation remains the right unit of work. use a written handoff when another person or runtime must continue without depending on hidden chat state.
-
-## professional default
-
-for an engineer who prefers direct terminal steering, start with claude code terminal plus a concise `CLAUDE.md`. add desktop when parallel sessions and visual review become frequent. introduce custom hooks, plugins, or agent teams only after a repeated workflow proves the maintenance cost is justified.
+continue with [configuration](/guides/claude-code/configuration/) or
+[recommendations](/guides/claude-code/recommendations/).

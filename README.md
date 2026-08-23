@@ -5,12 +5,13 @@ this is my evidence backed guide to working with coding agents, whether you are 
 [read the handbook](https://agents.anipotts.com) or go directly to a principal guide:
 
 <!-- generated:guides:start -->
-- [codex](https://agents.anipotts.com/guides/codex/)
 - [claude code](https://agents.anipotts.com/guides/claude-code/)
+- [codex](https://agents.anipotts.com/guides/codex/)
+- [grok](https://agents.anipotts.com/guides/grok/)
 - [working with coding agents](https://agents.anipotts.com/guides/operating-system/)
 - [how coding agents got here](https://agents.anipotts.com/history/)
 - [choosing a coding agent setup](https://agents.anipotts.com/market/)
-- [how this guide is verified](https://agents.anipotts.com/method/)
+- [where this comes from](https://agents.anipotts.com/method/)
 <!-- generated:guides:end -->
 
 ## what this helps you decide

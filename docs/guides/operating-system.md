@@ -2,20 +2,20 @@
 title: working with coding agents
 description: durable instructions, evidence, isolation, approvals, verification, and handoffs across coding agent runtimes.
 products: [codex, claude-code]
-lastVerified: 2026-08-07
+updatedAt: "2026-08-22T19:55:02-04:00"
 status: current
 evidence: [tested, official-source, analysis]
 sources: [openai-codex-manual, anthropic-features-overview, git-worktrees]
 redirects: []
 voice: evidence
 navigation:
-  group: practice
+  scope: general
   order: 30
 ---
 
 codex and claude code expose different native controls. the durable engineering principles underneath them are similar.
 
-## begin with repository truth
+## start with a github repository
 
 an agent should know:
 

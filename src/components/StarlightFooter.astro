@@ -1,9 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
+import registry from '../../docs/sources.json';
 import AccessibleTables from './AccessibleTables.astro';
+import { evidenceLabels } from '../evidence';
 
 const entry = Astro.locals.starlightRoute.entry;
+const showSources = Array.isArray(entry.data.sources);
+const sourceById = new Map(registry.sources.map((source) => [source.id, source]));
+const pageSources = (entry.data.sources ?? []).map((id) => sourceById.get(id)).filter((source) => source !== undefined);
 const runs = entry.id === 'method'
   ? (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf())
   : [];
@@ -11,8 +16,8 @@ const runs = entry.id === 'method'
 
 {
   runs.length > 0 && (
-    <section class="run-inventory" aria-labelledby="run-inventory-title">
-      <h2 id="run-inventory-title">published field runs</h2>
+    <section class="run-inventory" aria-labelledby="field-runs">
+      <h2 id="field-runs">field runs</h2>
       <ul>
         {runs.map((run) => (
           <li>
@@ -25,16 +30,55 @@ const runs = entry.id === 'method'
     </section>
   )
 }
+{showSources && <section class="page-sources" aria-labelledby="page-sources-title">
+  <h2 id="page-sources-title">sources</h2>
+  {entry.data.evidence && <p class="source-kinds">{entry.data.evidence.map((kind) => evidenceLabels[kind].label).join(' / ')}</p>}
+  {
+    pageSources.length > 0 ? (
+      <ul>
+        {pageSources.map((source) => <li><a href={source.url}>{source.id.replaceAll('-', ' ')}</a></li>)}
+      </ul>
+    ) : (
+      <p>this page is based on the author’s own working notes and linked examples.</p>
+    )
+  }
+</section>}
 <AccessibleTables />
 <DefaultFooter />
+<script is:inline>
+  (() => {
+    const links = [...document.querySelectorAll('.right-sidebar a[href^="#"]')];
+    const headings = links
+      .map((link) => ({ link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) }))
+      .filter((item) => item.heading);
+    if (headings.length === 0) return;
+    let frame;
+    const update = () => {
+      frame = undefined;
+      const header = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
+      const threshold = header + 40;
+      let active = headings[0].heading.id;
+      for (const item of headings) {
+        if (item.heading.getBoundingClientRect().top <= threshold) active = item.heading.id;
+      }
+      for (const item of headings) item.link.setAttribute('aria-current', item.heading.id === active ? 'true' : 'false');
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    addEventListener('scroll', schedule, { passive: true });
+    addEventListener('hashchange', schedule);
+    requestAnimationFrame(update);
+  })();
+</script>
 
 <style>
-  .run-inventory { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
-  .run-inventory h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); }
-  .run-inventory ul { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
+  .run-inventory, .page-sources { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+  .run-inventory h2, .page-sources h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); }
+  .run-inventory ul, .page-sources ul { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
   .run-inventory li { display: grid; grid-template-columns: minmax(16rem, 1fr) auto auto; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
-  .run-inventory a { color: var(--cobalt); }
-  .run-inventory span { color: var(--slate); font: .66rem var(--font-mono); text-transform: uppercase; }
+  .page-sources li { padding: .8rem 0; border-bottom: 1px solid var(--rule); }
+  .run-inventory a, .page-sources a { color: var(--cobalt); }
+  .run-inventory span, .source-kinds { color: var(--slate); font: .66rem var(--font-mono); text-transform: uppercase; }
+  .page-sources > p:last-child { color: var(--slate); }
   @media (max-width: 48rem) {
     .run-inventory li { grid-template-columns: 1fr; gap: .35rem; }
   }

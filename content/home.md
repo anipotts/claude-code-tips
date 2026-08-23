@@ -2,14 +2,14 @@
 title: coding agent tips
 description: practical guidance for choosing, operating, and reviewing coding agents when the work has real users, real constraints, and consequences.
 products: [cross runtime]
-lastVerified: 2026-08-22
+updatedAt: "2026-08-22T19:55:02-04:00"
 status: current
 evidence: [tested, official-source, analysis]
 sources: []
 redirects: [/guides/]
 voice: personal
 navigation:
-  group: practice
+  scope: general
   order: 0
   hidden: true
 ---

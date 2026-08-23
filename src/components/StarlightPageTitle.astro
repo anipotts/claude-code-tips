@@ -1,30 +1,11 @@
 ---
-import registry from '../../docs/sources.json';
-import { evidenceLabels } from '../evidence';
+import { formatUpdatedAt } from '../date';
 import { site } from '../site';
 
-const { title, lastVerified, status, evidence, sources } = Astro.locals.starlightRoute.entry.data;
-const verifiedDate = lastVerified.toISOString().slice(0, 10);
-const sourceById = new Map(registry.sources.map((source) => [source.id, source]));
-const pageSources = sources.map((id) => sourceById.get(id)).filter((source) => source !== undefined);
+const { title, updatedAt } = Astro.locals.starlightRoute.entry.data;
 ---
 
 <h1 id="_top">{title}</h1>
-<div class="page-meta" aria-label="page metadata">
-  <span>{site.interfaceCopy.verified} {verifiedDate}</span>
-  <span>{status}</span>
-</div>
-<details class="page-evidence">
-  <summary>{site.interfaceCopy.evidence}</summary>
-  <ul class="evidence-summary">
-    {evidence.map((kind) => <li><strong>{evidenceLabels[kind].label}</strong><span>{evidenceLabels[kind].description}</span></li>)}
-  </ul>
-  {
-    pageSources.length > 0 && (
-      <div class="source-summary">
-        <h2>{site.interfaceCopy.sources}</h2>
-        <ul>{pageSources.map((source) => <li><a href={source.url}>{source.id.replaceAll('-', ' ')}</a></li>)}</ul>
-      </div>
-    )
-  }
-</details>
+{updatedAt && <p class="page-meta" aria-label="page metadata">
+  {site.interfaceCopy.lastUpdated} <time datetime={updatedAt}>{formatUpdatedAt(updatedAt)}</time>
+</p>}

@@ -16,8 +16,16 @@ function replaceBlock(markdown: string, name: string, body: string) {
   return markdown.replace(new RegExp(`${start}[\\s\\S]*?${end}`), `${start}\n${body}\n${end}`);
 }
 
+function markdownFiles(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = resolve(directory, entry.name);
+    if (entry.isDirectory()) return markdownFiles(path);
+    return entry.isFile() && entry.name.endsWith('.md') ? [path] : [];
+  });
+}
+
 const guideFiles = [
-  ...readdirSync(resolve(root, 'docs/guides')).filter((file) => file.endsWith('.md')).map((file) => resolve(root, 'docs/guides', file)),
+  ...markdownFiles(resolve(root, 'docs/guides')),
   resolve(root, 'docs/history.md'),
   resolve(root, 'docs/market.md'),
   resolve(root, 'docs/method.md'),
@@ -26,8 +34,9 @@ const guides = guideFiles
   .map((file) => {
     const markdown = readFileSync(file, 'utf8');
     const path = relative(resolve(root, 'docs'), file).replace(/\.md$/, '');
-    return { title: scalar(markdown, 'title'), order: Number(scalar(markdown, 'order')), route: `/${path}/` };
+    return { title: scalar(markdown, 'title'), scope: scalar(markdown, 'scope'), order: Number(scalar(markdown, 'order')), route: `/${path}/` };
   })
+  .filter((guide) => guide.scope === 'general' || guide.order === 10)
   .sort((left, right) => left.order - right.order);
 const guideBlock = guides.map((guide) => `- [${guide.title}](${origin}${guide.route})`).join('\n');
 const evidenceBlock = Object.values(evidenceLabels).map((item) => `- \`${item.label}\`: ${item.description}`).join('\n');

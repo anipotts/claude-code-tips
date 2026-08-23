@@ -1,16 +1,15 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { getEntry, render } from 'astro:content';
-import { getHandbookPages, routeForEntry } from '../content';
+import { getHomepagePages, routeForEntry } from '../content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { evidenceLabels } from '../evidence';
+import { formatUpdatedAt } from '../date';
 import { site } from '../site';
 
 const home = await getEntry('home', 'home');
 if (!home) throw new Error('content/home.md is required');
 const { Content } = await render(home);
-const guides = await getHandbookPages({ includeLegacy: false });
-const verifiedDate = home.data.lastVerified.toISOString().slice(0, 10);
+const guides = await getHomepagePages();
 ---
 
 <BaseLayout title={home.data.title} description={home.data.description}>
@@ -27,7 +26,7 @@ const verifiedDate = home.data.lastVerified.toISOString().slice(0, 10);
             <a href={routeForEntry(guide)}>
               <h3>{guide.data.title}</h3>
               <p>{guide.data.description}</p>
-              <span>{guide.data.evidence.map((kind) => evidenceLabels[kind].label).join(' / ')}</span>
+              <span>{guide.data.navigation.scope}</span>
               <Icon name="ph:arrow-right" aria-hidden="true" />
             </a>
           ))
@@ -36,14 +35,13 @@ const verifiedDate = home.data.lastVerified.toISOString().slice(0, 10);
     </section>
 
     <div class="home-meta" aria-label="page metadata">
-      <span>{site.interfaceCopy.verified} {verifiedDate}</span>
-      <span>{home.data.evidence.map((kind) => evidenceLabels[kind].label).join(' / ')}</span>
+      <span>{site.interfaceCopy.lastUpdated} {formatUpdatedAt(home.data.updatedAt)}</span>
     </div>
   </main>
   <footer class="site-footer">
     <p>{site.name}</p>
     <nav aria-label="footer">
-      <a href="/legacy/">{site.interfaceCopy.legacyPolicy}</a>
+      <a href="/archive/">{site.interfaceCopy.archive}</a>
       <a href={site.releaseHistory}>{site.interfaceCopy.releases}</a>
       <a class="footer-github" href={site.repository} aria-label={site.interfaceCopy.github}><Icon name="ph:github-logo" aria-hidden="true" /></a>
     </nav>

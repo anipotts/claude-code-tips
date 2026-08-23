@@ -1,107 +1,50 @@
 ---
 title: codex
-description: how codex works across the terminal, desktop app, editor, cloud, worktrees, permissions, and durable configuration.
+description: a practical map of the codex terminal, app, editor, cloud, and mobile surfaces.
 products: [codex]
-lastVerified: 2026-08-07
+updatedAt: "2026-08-22T19:55:02-04:00"
 status: current
 evidence: [tested, official-source, analysis]
-sources: [openai-codex-manual, git-worktrees]
+sources: [openai-codex-manual, openai-codex-app, openai-codex-mobile, openai-work-and-codex]
 redirects: []
 voice: evidence
 navigation:
-  group: guides
+  scope: codex
   order: 10
 ---
 
-primary source: [official codex manual](https://developers.openai.com/codex/codex-manual.md)
+## this is codex
 
-## current shape
+codex is OpenAI’s agent for software development and technical work. the same
+account reaches a terminal interface, editor extension, desktop app, cloud
+tasks, and mobile review. each surface changes how you steer and inspect the
+work more than it changes the underlying job. [OpenAI’s Codex overview](https://openai.com/codex/)
 
-codex is a coding agent system with several surfaces that share a runtime and configuration model:
+<div class="surface-bento">
+  <figure><a href="https://github.com/openai/codex"><img src="https://raw.githubusercontent.com/openai/codex/main/.github/codex-cli-splash.png" alt="the Codex command line interface" loading="lazy" width="1600" height="900" /><figcaption>terminal and scripts</figcaption></a></figure>
+  <figure><a href="https://openai.com/index/introducing-the-codex-app/"><img src="https://images.ctfassets.net/kftzwdyauwt9/7eyalGUXstkzzzJ3Pb008m/9f71260a3f127dc142cc8c479d0cf68f/Installer4.png?fm=webp&q=90&w=1600" alt="the Codex desktop app showing agent work" loading="lazy" width="1600" height="900" /><figcaption>desktop app and parallel work</figcaption></a></figure>
+  <figure><a href="https://openai.com/codex/"><img src="https://images.ctfassets.net/kftzwdyauwt9/7eyalGUXstkzzzJ3Pb008m/9f71260a3f127dc142cc8c479d0cf68f/Installer4.png?fm=webp&q=90&w=1600" alt="Codex changes and review inside its visual workspace" loading="lazy" width="1600" height="900" /><figcaption>editor context and visual review</figcaption></a></figure>
+  <figure><a href="https://openai.com/index/work-with-codex-from-anywhere/"><img src="https://images.ctfassets.net/kftzwdyauwt9/4i08f39LTE7HOZ0R3EKaKA/74f6008bbde015cfef96a14209f7673b/16_9.png" alt="Codex running through the ChatGPT mobile app" loading="lazy" width="1600" height="900" /><figcaption>mobile steering and approvals</figcaption></a></figure>
+</div>
 
-| surface | best fit | main tradeoff |
+as of august 22, 2026, Codex supports skills, plugins, hooks, MCP, subagents,
+memory, worktrees, browser and computer use, scheduled tasks, and remote access
+across its supported surfaces. the useful question is which controls belong in
+your daily loop. [official Codex documentation](https://learn.chatgpt.com/docs/codex)
+
+## where each surface fits
+
+| surface | use it when | watch for |
 |---|---|---|
-| cli | terminal first local work and scripting | less visual coordination across many threads |
-| chatgpt desktop app | planning, review, worktrees, browser use, scheduled work, and handoffs | another application beside the editor |
-| ide extension | editor attached work with selections, diagnostics, and inline review | the editor becomes the primary session shell |
-| cloud | isolated or offloaded tasks that should continue away from the local machine | environment parity and remote state review |
+| terminal | commands and output are the main evidence | parallel sessions need manual coordination |
+| desktop app | several tasks, previews, browsers, or worktrees need one review surface | more state lives outside the editor |
+| editor | selection context, diagnostics, and inline review dominate | the editor becomes the session shell |
+| cloud or mobile | work should continue away from your primary machine | environment parity and remote state need review |
 
-the desktop app changes the operating model more than a visual wrapper would. it gives threads, terminals, diffs, worktrees, previews, browser and computer use tools, memories, and scheduled work a common review surface.
+ChatGPT Work sits next to Codex and handles longer knowledge work and finished
+deliverables. Codex remains the software development surface. that boundary is
+useful because both can use tools while asking you to review very different
+kinds of output. [ChatGPT Work and Codex](https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex)
 
-## durable configuration
-
-use the smallest durable surface that matches the rule:
-
-| need | codex surface |
-|---|---|
-| repository conventions and verification commands | `AGENTS.md` |
-| trusted project settings, mcp, hooks, sandbox, or model defaults | `.codex/config.toml` and related project config |
-| reusable workflow or reference material | skill |
-| distributable skills, mcp, hooks, assets, or apps | plugin |
-| external tools and live data | mcp server or app connector |
-| mechanical lifecycle enforcement | hook |
-| recurring background work | scheduled task in the desktop or web surface |
-
-keep required team rules in version control. use memory for recall and checked in files for constraints that must always apply.
-
-## the working loop
-
-1. start with a concrete outcome, relevant constraints, and a verification target.
-2. use plan mode when the work contains a consequential choice, a migration, or broad edits.
-3. let codex inspect before it writes. good plans name the evidence that will resolve uncertainty.
-4. keep implementation and verification in the same thread when the feedback is directly useful.
-5. move noisy exploration, log reading, or independent review into subagents.
-6. inspect the final diff and verification output before accepting a completion claim.
-
-codex responds well to an explicit terminal condition: what must be true, what proof is required, and which actions still need approval.
-
-## worktrees and parallelism
-
-the desktop app can create codex managed worktrees for parallel chats. this is usually the cleanest local default when two tasks should produce independent diffs.
-
-worktrees isolate tracked files and branches. package caches, local databases, ports, browser profiles, running services, and external accounts remain shared and can still collide.
-
-use subagents for read heavy parallel work such as repository exploration, test triage, source research, or independent review. use separate worktrees when agents need to edit independently or run conflicting application instances.
-
-parallel write heavy work has a coordination cost. assign file or subsystem ownership and require each worker to report its verification.
-
-## app, terminal, and ide handoff
-
-choose the surface by the next review action:
-
-- stay in the cli when commands and output are the main evidence.
-- move to the app when several threads, a browser, previews, or worktrees need one attention surface.
-- use the ide extension when selection context, debugging, and inline diffs dominate.
-- use cloud work when the task benefits from isolation or should continue without the local machine.
-
-changing surfaces can preserve project context while tools and permissions vary. verify the effective environment after a handoff.
-
-## permissions and automation
-
-codex separates sandbox access, approval behavior, command rules, hook trust, and managed requirements. treat them as different controls.
-
-- start with workspace scoped write access for normal local development.
-- grant network or broader filesystem access only for the task that needs it.
-- review project hooks before trusting them.
-- run unattended scheduled tasks in isolated worktrees when they can edit code.
-- keep destructive, account level, deployment, and secret bearing actions behind explicit authority.
-
-scheduled tasks use unattended approval behavior when policy permits it. test the prompt manually and review early runs before relying on the schedule.
-
-## memories
-
-local codex memories can summarize useful context from eligible prior chats. they are off by default and live under the codex home directory.
-
-use memory for preferences, recurring context, and useful recall. use `AGENTS.md`, checked in docs, config, or a skill for requirements another engineer must be able to inspect and reproduce.
-
-review generated memory before sharing codex state. publish purpose selected excerpts after redaction because the state directory can contain private context beyond secrets.
-
-## where older comparisons went wrong
-
-codex now supports skills, plugins, hooks, mcp, subagents, memories, worktrees, browser and computer use, noninteractive operation, and scheduled tasks across its supported surfaces. descriptions that reduce it to a terminal agent with limited extension points are obsolete.
-
-the stronger comparison is operational: codex combines a local terminal runtime with a broad first party desktop surface. that can reduce context switching, while the additional surfaces require clearer thinking about where state, permissions, and execution actually live.
-
-## professional default
-
-for a mac based engineer who already works comfortably in the terminal, start with the codex cli and desktop app as one system. add the ide extension when editor context improves a real workflow. add an external orchestration layer only when the first party thread and worktree model is the demonstrated bottleneck.
+continue with [configuration](/guides/codex/configuration/) or
+[recommendations](/guides/codex/recommendations/).

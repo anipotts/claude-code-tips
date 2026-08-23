@@ -16,9 +16,12 @@ function routeForFile(file) {
 
 function handbookFiles() {
   const guideDirectory = resolve(root, 'docs/guides');
+  const guides = readdirSync(guideDirectory, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .map((entry) => resolve(entry.parentPath, entry.name));
   return [
-    ...readdirSync(guideDirectory).filter((file) => file.endsWith('.md')).map((file) => resolve(guideDirectory, file)),
-    ...['history.md', 'market.md', 'method.md', 'legacy.md'].map((file) => resolve(root, 'docs', file)),
+    ...guides,
+    ...['history.md', 'market.md', 'method.md', 'archive.md'].map((file) => resolve(root, 'docs', file)),
   ];
 }
 
@@ -26,7 +29,7 @@ export function canonicalContentFiles() {
   const runs = readdirSync(resolve(root, 'content/runs')).filter((file) => file.endsWith('.md'));
   return [
     { route: '/', file: resolve(root, 'content/home.md'), kind: 'home' },
-    ...handbookFiles().map((file) => ({ route: routeForFile(file), file, kind: file.endsWith('legacy.md') ? 'legacy' : 'guide' })),
+    ...handbookFiles().map((file) => ({ route: routeForFile(file), file, kind: file.endsWith('archive.md') ? 'archive' : 'guide' })),
     ...runs.map((file) => ({ route: `/field-lab/runs/${file.replace(/\.md$/, '')}/`, file: resolve(root, 'content/runs', file), kind: 'run' })),
   ];
 }

@@ -2,11 +2,11 @@
 import { getCollection, getEntry } from 'astro:content';
 import { getHandbookPages, routeForEntry } from '../content';
 import { evidenceLabels } from '../evidence';
-import { navigationGroups, site } from '../site';
+import { navigationScopes, site } from '../site';
 
 const home = await getEntry('home', 'home');
 if (!home) throw new Error('content/home.md is required');
-const pages = await getHandbookPages({ includeLegacy: true });
+const pages = await getHandbookPages({ includeArchive: true });
 const runs = (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf());
 const surfaces = [
   { route: '/', owner: 'content/home.md', title: home.data.title, description: home.data.description, voice: home.data.voice },
@@ -15,7 +15,7 @@ const surfaces = [
 ];
 const sharedCopy = [
   ...Object.entries(site.interfaceCopy).map(([owner, text]) => ({ owner: `src/site.ts interfaceCopy.${owner}`, text })),
-  ...navigationGroups.map((group) => ({ owner: `src/site.ts navigationGroups.${group.id}`, text: group.label })),
+  ...navigationScopes.map((scope) => ({ owner: `src/site.ts navigationScopes.${scope.id}`, text: scope.label })),
   ...Object.entries(evidenceLabels).flatMap(([id, value]) => [
     { owner: `docs/sources.json evidence_labels.${id}.label`, text: value.label },
     { owner: `docs/sources.json evidence_labels.${id}.description`, text: value.description },

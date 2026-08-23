@@ -2,7 +2,7 @@
 title: how coding agents got here
 description: a personal history of the models, agent loops, benchmarks, interfaces, and products behind today’s coding agents.
 products: [cross runtime]
-lastVerified: 2026-08-22
+updatedAt: "2026-08-22T19:55:02-04:00"
 status: current
 evidence: [official-source, analysis]
 sources: [transformer-paper, openai-gpt3, openai-codex-paper, github-copilot-preview, react-paper, aider-docs, cursor-2023-problems, swe-bench-paper, github-copilot-workspace, swe-agent-paper, anthropic-mcp-launch, github-copilot-agent-mode, anthropic-claude-code-preview, openai-codex-launch, openai-codex-app, cursor-3]
@@ -10,7 +10,7 @@ redirects: []
 tableOfContents: false
 voice: personal
 navigation:
-  group: practice
+  scope: general
   order: 35
 ---
 
@@ -29,6 +29,7 @@ story.
     <h2>the transformer creates the foundation</h2>
     <p><cite>Attention Is All You Need</cite> introduced the Transformer, an attention based architecture designed for parallel training. later large language models built on that architecture. <a href="https://arxiv.org/abs/1706.03762">read the paper</a></p>
     <p>every coding agent in this guide depends on a model that can carry instructions, code, and tool results through a sequence.</p>
+    <figure><img src="https://ar5iv.labs.arxiv.org/html/1706.03762/assets/x1.png" alt="the Transformer model architecture from Attention Is All You Need" loading="lazy" width="1290" height="1638" /><figcaption>the Transformer architecture in the original paper</figcaption></figure>
   </li>
   <li>
     <p class="history-year"><time datetime="2020">2020</time></p>
@@ -47,6 +48,7 @@ story.
     <h2>the model gets an action loop</h2>
     <p>ReAct described an interleaved loop of reasoning and actions against external systems. <a href="https://arxiv.org/abs/2210.03629">read the paper</a></p>
     <p>the core pattern now appears across agent systems: inspect state, decide what to do, use a tool, read the result, and continue.</p>
+    <figure><img src="https://ar5iv.labs.arxiv.org/html/2210.03629/assets/x1.png" alt="a diagram from the ReAct paper showing reasoning and action" loading="lazy" width="1800" height="1000" /><figcaption>reasoning and action joined in one loop</figcaption></figure>
   </li>
   <li>
     <p class="history-year"><time datetime="2023">2023</time></p>
@@ -59,6 +61,7 @@ story.
     <h2>the benchmark becomes a real repository</h2>
     <p>SWE-bench collected 2,294 real GitHub issues and their pull requests from twelve Python repositories. the original best reported result resolved 1.96 percent of the issues. <a href="https://arxiv.org/abs/2310.06770">read the paper</a></p>
     <p>the low result gave the field a harder target. repository work required long context, execution environments, and coordinated edits across files.</p>
+    <figure><img src="https://ar5iv.labs.arxiv.org/html/2310.06770/assets/x1.png" alt="the SWE bench task collection process" loading="lazy" width="1800" height="1000" /><figcaption>real repository issues become a benchmark</figcaption></figure>
   </li>
   <li>
     <p class="history-year"><time datetime="2024-04-29">april 2024</time></p>
@@ -71,6 +74,7 @@ story.
     <h2>the harness becomes its own engineering problem</h2>
     <p>SWE-agent showed that the interface between a model and a computer materially affects results. its custom interface let the agent navigate repositories, edit files, and run tests. <a href="https://arxiv.org/abs/2405.15793">read the paper</a></p>
     <p>this made the harness legible as its own engineering layer alongside model capability.</p>
+    <figure><img src="https://ar5iv.labs.arxiv.org/html/2405.15793/assets/x1.png" alt="the SWE agent computer interface design" loading="lazy" width="1800" height="1000" /><figcaption>the agent computer interface becomes an explicit design choice</figcaption></figure>
   </li>
   <li>
     <p class="history-year"><time datetime="2024-11-25">november 2024</time></p>
@@ -89,6 +93,7 @@ story.
     <h2>supervision gets a dedicated surface</h2>
     <p>OpenAI launched the Codex app for supervising agents across projects, threads, and isolated worktrees. Cursor later introduced a workspace centered on parallel local and cloud agents, review, and handoffs. <a href="https://openai.com/index/introducing-the-codex-app/">read the Codex announcement</a> and <a href="https://cursor.com/blog/cursor-3">the Cursor 3 announcement</a></p>
     <p>this is where my current practice sits: defining scope, providing context, setting permissions, and reviewing changes across parallel work.</p>
+    <figure><a href="https://openai.com/index/introducing-the-codex-app/"><img src="https://images.ctfassets.net/kftzwdyauwt9/7eyalGUXstkzzzJ3Pb008m/9f71260a3f127dc142cc8c479d0cf68f/Installer4.png?fm=webp&q=90&w=1600" alt="the Codex app supervising agent work" loading="lazy" width="1600" height="900" /></a><figcaption>supervision becomes a dedicated product surface</figcaption></figure>
   </li>
 </ol>
 
