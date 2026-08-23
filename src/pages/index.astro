@@ -17,8 +17,10 @@ const guides = await getHomepagePages();
     <article class="home-content"><Content /></article>
 
     <section class="home-guides" id="guides" aria-labelledby="guide-title">
-      <header>
+      <header class="home-guides-heading">
+        <p class="section-label">{site.interfaceCopy.guides}</p>
         <h2 id="guide-title">choose where to begin</h2>
+        <p>start with a provider, compare setups, or read the shared practices that apply across agent systems.</p>
       </header>
       <div class="home-guide-list">
         {

@@ -30,19 +30,21 @@ for (const [route, source] of contentFiles) {
   const file = routeFile(route);
   try { await access(file); } catch { failures.push(`${route}: generated page is missing`); continue; }
   const html = await readFile(file, 'utf8');
+  const publicText = text(html);
   const canonical = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/)?.[1];
   if (canonical !== `${origin}${route}`) failures.push(`${route}: canonical url is missing or incorrect`);
   if (!html.includes('<meta property="og:title"')) failures.push(`${route}: open graph title is missing`);
   if (!html.includes(`content="${description.replaceAll('&', '&amp;')}"`) && !text(html).includes(description)) failures.push(`${route}: canonical description is absent from rendered metadata`);
-  if (!text(html).includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
+  if (!publicText.includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
   if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/archive/') {
     for (const kind of inlineList(markdown, 'evidence')) {
       const definition = registry?.evidence_labels?.[kind];
-      if (!definition || !text(html).includes(definition.label)) failures.push(`${route}: evidence summary does not derive ${kind} from the source registry`);
+      if (!definition || !publicText.includes(definition.label)) failures.push(`${route}: evidence summary does not derive ${kind} from the source registry`);
     }
   }
-  if (!route.startsWith('/field-lab/') && !text(html).includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
-  for (const label of ['general', 'codex', 'claude code', 'grok']) if (!text(html).includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
+  if (!route.startsWith('/field-lab/') && !publicText.includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
+  for (const label of ['guides', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
+  if (/\bproduct guides\b/i.test(publicText)) failures.push(`${route}: retired product guides label appears in public output`);
   if (html.includes('·')) failures.push(`${route}: mid dot appears in public output`);
   if (!/coding agent tips on GitHub, \d+ stars/.test(html)) failures.push(`${route}: GitHub star count is missing from the site header`);
 

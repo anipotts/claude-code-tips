@@ -39,7 +39,7 @@ const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeSco
       </details>
     </div>
   </div>
-  <nav class="provider-tabs" aria-label="guide scope">
+  <nav class="provider-tabs" aria-label={site.interfaceCopy.guides}>
     {navigationScopes.map((scope) => (
       <a href={scope.href} aria-current={activeScope === scope.id ? 'page' : undefined}>{scope.label}</a>
     ))}

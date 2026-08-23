@@ -8,7 +8,7 @@ const pages = await getHandbookPages({ scope: activeScope });
 const label = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'general';
 ---
 
-<nav class="handbook-sidebar" aria-label={`${label} guide`}>
+<nav class="handbook-sidebar" aria-label={`${label} navigation`}>
   <h2>{label}</h2>
   <ul>
     {pages.map((page) => {

@@ -80,6 +80,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .home-content th { padding: .75rem; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); color: var(--slate); font: .62rem var(--font-mono); text-align: left; text-transform: uppercase; }
 .home-content td { padding: 1rem .75rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .home-guides { padding: 1rem 0 5rem; }
+.home-guides-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 34rem); gap: 1rem 3rem; align-items: end; margin: 4rem 0 1.5rem; }
+.home-guides-heading .section-label { grid-column: 1 / -1; margin: 0; color: var(--cobalt); font: .65rem var(--font-mono); text-transform: uppercase; letter-spacing: .07em; }
+.home-guides-heading h2 { margin: 0; }
+.home-guides-heading > p:last-child { max-width: 34rem; margin: 0 0 .2rem; color: var(--slate); font-size: 1.05rem; line-height: 1.5; }
 .home-guide-list { border-top: 1px solid var(--ink); }
 .home-guide-list a { display: grid; grid-template-columns: 1fr 1.5fr 1fr 1.5rem; align-items: start; gap: 1.5rem; padding: 1.25rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
 .home-guide-list h3, .home-guide-list p { margin: 0; }
@@ -183,6 +187,8 @@ header.header { height: var(--site-header-height); padding: 0 !important; border
   .home-content { padding-top: 3.5rem; }
   .home-content h1 { font-size: clamp(2.75rem, 12vw, 4rem); }
   .home-content > p:first-of-type { margin-bottom: 3.5rem; }
+  .home-guides-heading { grid-template-columns: 1fr; margin-top: 2.5rem; }
+  .home-guides-heading .section-label { grid-column: 1; }
   .home-content table { display: block; overflow-x: auto; font-size: .9rem; }
   .home-content th, .home-content td { min-width: 9.5rem; }
   .home-guide-list a { grid-template-columns: 1fr 1.5rem; gap: .6rem; }
