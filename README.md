@@ -1,56 +1,45 @@
 # coding agent tips
 
-evidence-backed guidance for coding agents in production software, from
-individual projects to startups and big tech.
+this is my evidence backed guide to working with coding agents, whether you are a student having an existential crisis, a startup founder working with real money for yourself and other people, or an engineer at one of the biggest technology companies in the world. the guidance is organized around the scale and consequences of the work.
 
-[read the publication](https://agents.anipotts.com) or go directly to a guide:
+[read the handbook](https://agents.anipotts.com) or go directly to a principal guide:
 
-| guide | focus |
-|---|---|
-| [codex](https://agents.anipotts.com/guides/codex/) | cli, desktop, ide, cloud, worktrees, permissions, and durable configuration |
-| [claude code](https://agents.anipotts.com/guides/claude-code/) | terminal, desktop, ide, skills, hooks, agents, and permissions |
-| [shared operating system](https://agents.anipotts.com/guides/operating-system/) | authority, isolation, verification, handoffs, and review |
-| [market and hardware](https://agents.anipotts.com/market/) | surfaces, harnesses, models, orchestration, and local-resource economics |
+<!-- generated:guides:start -->
+- [codex](https://agents.anipotts.com/guides/codex/)
+- [claude code](https://agents.anipotts.com/guides/claude-code/)
+- [grok](https://agents.anipotts.com/guides/grok/)
+- [working with coding agents](https://agents.anipotts.com/guides/operating-system/)
+- [how coding agents got here](https://agents.anipotts.com/history/)
+- [choosing a coding agent setup](https://agents.anipotts.com/market/)
+- [where this comes from](https://agents.anipotts.com/method/)
+<!-- generated:guides:end -->
 
-## evidence standard
+## what this helps you decide
 
-the guide separates four states:
+the handbook separates the surface where you steer work, the harness that runs the agent loop, the model that supplies inference, and the orchestration used for parallel work. it also covers repository instructions, permissions, review, evidence, hardware, and the operating costs that appear after the first demo.
 
-- `hands-on`: reproduced by the author with the product and date identified.
-- `source-verified`: checked against a linked primary source.
-- `inference`: a reasoned recommendation built from stated evidence.
-- `unknown`: a material gap that remains visible.
+## evidence principle
 
-the [field lab](https://agents.anipotts.com/field-lab/) publishes task
-specifications, sanitized run records, checks, artifacts, redactions, and
-limitations. current claude code guidance remains source-verified until the
-paired hands-on run is complete.
+<!-- generated:evidence:start -->
+- `tested`: reproduced by the author in a named environment and version
+- `official source`: confirmed in current primary documentation or source code
+- `analysis`: a judgment derived from stated evidence
+- `open question`: current evidence is missing or incomplete
+<!-- generated:evidence:end -->
 
-## repository map
-
-- `docs/` contains the canonical markdown, source registry, decisions, and
-  field-run records.
-- `src/` renders the astro and starlight publication.
-- `plugins/` and `hooks/` are frozen compatibility surfaces through
-  2026-11-05.
-- `.github/` contains deterministic validation, read-only freshness checks,
-  and the github pages workflow.
+citations sit beside the claims they support. field runs publish inspectable artifacts and keep their limits visible.
 
 ## local verification
 
 ```bash
 bun install --frozen-lockfile
-bun run check:field-runs
+bun run check:readme
 bun run check
 bun run build
 bun run test:site
 bun run test:a11y
 ```
 
-legacy plugin paths and their final-support policy are documented at
-[agents.anipotts.com/legacy](https://agents.anipotts.com/legacy/).
-
-built and maintained by [ani potts](https://anipotts.com). corrections with
-primary sources and reproducible field evidence are welcome.
+built and maintained by [ani potts](https://anipotts.com). corrections with primary sources or reproducible field evidence are welcome.
 
 MIT

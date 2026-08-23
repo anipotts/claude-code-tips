@@ -1,0 +1,19 @@
+---
+import { getHandbookPages, routeForEntry } from '../content';
+import { navigationScopes, scopeForPath } from '../site';
+
+const current = Astro.url.pathname;
+const activeScope = scopeForPath(current);
+const pages = await getHandbookPages({ scope: activeScope });
+const label = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'general';
+---
+
+<nav class="handbook-sidebar" aria-label={`${label} navigation`}>
+  <h2>{label}</h2>
+  <ul>
+    {pages.map((page) => {
+      const href = routeForEntry(page);
+      return <li><a href={href} aria-current={current === href ? 'page' : undefined}>{page.data.title}</a></li>;
+    })}
+  </ul>
+</nav>

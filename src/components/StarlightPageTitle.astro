@@ -1,13 +1,11 @@
 ---
-import EvidenceRail from './EvidenceRail.astro';
+import { formatUpdatedAt } from '../date';
+import { site } from '../site';
 
-const { title, lastVerified, status, evidenceRail } = Astro.locals.starlightRoute.entry.data;
-const verifiedDate = lastVerified.toISOString().slice(0, 10);
+const { title, updatedAt } = Astro.locals.starlightRoute.entry.data;
 ---
 
 <h1 id="_top">{title}</h1>
-<div class="page-meta" aria-label="page metadata">
-  <span>verified {verifiedDate}</span>
-  <span>{status}</span>
-</div>
-{evidenceRail.length > 0 && <div class="inline-rail"><EvidenceRail entries={evidenceRail} mobile /></div>}
+{updatedAt && <p class="page-meta" aria-label="page metadata">
+  {site.interfaceCopy.lastUpdated} <time datetime={updatedAt}>{formatUpdatedAt(updatedAt)}</time>
+</p>}

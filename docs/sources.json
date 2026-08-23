@@ -1,9 +1,27 @@
 {
   "schema_version": 1,
-  "checked_on": "2026-08-11",
+  "checked_on": "2026-08-22",
   "product_versions": {
-    "codex": "0.147.0",
-    "claude_code": "2.1.227"
+    "codex": "0.149.0",
+    "claude_code": "2.1.240"
+  },
+  "evidence_labels": {
+    "tested": {
+      "label": "tested",
+      "description": "reproduced by the author in a named environment and version"
+    },
+    "official-source": {
+      "label": "official source",
+      "description": "confirmed in current primary documentation or source code"
+    },
+    "analysis": {
+      "label": "analysis",
+      "description": "a judgment derived from stated evidence"
+    },
+    "open-question": {
+      "label": "open question",
+      "description": "current evidence is missing or incomplete"
+    }
   },
   "sources": [
     {
@@ -13,7 +31,7 @@
       "status": "core",
       "url": "https://developers.openai.com/codex/codex-manual.md",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["AGENTS.md", "config.toml", "Codex"]
@@ -26,7 +44,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["Claude Code", "terminal", "IDE"]
@@ -37,9 +55,9 @@
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
-      "url": "https://code.claude.com/docs/en/changelog#2-1-225",
+      "url": "https://code.claude.com/docs/en/changelog",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -56,7 +74,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/features-overview",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["skills", "hooks", "subagents"]
@@ -69,7 +87,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/desktop",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["Claude Code on desktop", "worktree", "diff"]
@@ -82,7 +100,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/permissions",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -99,7 +117,7 @@
       "status": "core",
       "url": "https://code.claude.com/docs/en/memory",
       "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
@@ -115,13 +133,13 @@
       "layer": "surface",
       "status": "core",
       "url": "https://code.claude.com/docs/en/remote-control",
-      "last_checked": "2026-08-11",
-      "evidence": "source-verified",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": [
           "Remote Control",
-          "research preview",
+          "available on all plans",
           "running locally"
         ]
       }
@@ -133,7 +151,7 @@
       "status": "watchlist",
       "url": "https://code.visualstudio.com/docs/agents/concepts/agent-host",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "vscode-third-party-agents",
@@ -142,7 +160,7 @@
       "status": "watchlist",
       "url": "https://code.visualstudio.com/docs/agents/agent-types/third-party-agents",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "cursor-pricing",
@@ -150,8 +168,8 @@
       "layer": "surface",
       "status": "pricing",
       "url": "https://cursor.com/pricing",
-      "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
     },
     {
       "id": "cursor-docs",
@@ -160,7 +178,7 @@
       "status": "watchlist",
       "url": "https://cursor.com/docs",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "conductor-harnesses",
@@ -169,7 +187,7 @@
       "status": "watchlist",
       "url": "https://www.conductor.build/docs/reference/harnesses",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "t3-code",
@@ -178,7 +196,7 @@
       "status": "watchlist",
       "url": "https://t3.codes/",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "opencode",
@@ -187,7 +205,7 @@
       "status": "watchlist",
       "url": "https://github.com/anomalyco/opencode",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "kimi-code",
@@ -196,7 +214,7 @@
       "status": "watchlist",
       "url": "https://www.kimi.com/code/docs/",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "kimi-k3",
@@ -205,7 +223,7 @@
       "status": "watchlist",
       "url": "https://github.com/MoonshotAI/Kimi-K3",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "qwen-code",
@@ -214,7 +232,7 @@
       "status": "watchlist",
       "url": "https://github.com/QwenLM/qwen-code",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "qwen-models",
@@ -223,7 +241,7 @@
       "status": "watchlist",
       "url": "https://github.com/QwenLM",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "grok-build",
@@ -232,7 +250,7 @@
       "status": "watchlist",
       "url": "https://docs.x.ai/build/overview",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
     },
     {
       "id": "grok-4-5",
@@ -241,7 +259,279 @@
       "status": "watchlist",
       "url": "https://docs.x.ai/developers/grok-4-5",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified"
+      "evidence": "official-source"
+    },
+    {
+      "id": "aider-docs",
+      "product": "aider",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://aider.chat/docs/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["AI pair programming in your terminal", "git repo"]
+      }
+    },
+    {
+      "id": "cursor-2023-problems",
+      "product": "cursor",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://www.cursor.com/blog/problems-2023",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Better context", "Constrained, in-flow agents"]
+      }
+    },
+    {
+      "id": "github-copilot-workspace",
+      "product": "github-copilot",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://github.blog/news-insights/product-news/github-copilot-workspace/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["GitHub Copilot Workspace", "technical preview"]
+      }
+    },
+    {
+      "id": "cursor-3",
+      "product": "cursor",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://cursor.com/blog/cursor-3",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Meet the new Cursor", "Run many agents in parallel"]
+      }
+    },
+    {
+      "id": "transformer-paper",
+      "product": "transformer",
+      "layer": "model",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Attention Is All You Need", "Transformer"]
+      }
+    },
+    {
+      "id": "openai-gpt3",
+      "product": "gpt-3",
+      "layer": "model",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2005.14165",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Language Models are Few-Shot Learners", "175 billion parameters"]
+      }
+    },
+    {
+      "id": "openai-codex-paper",
+      "product": "codex",
+      "layer": "model",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2107.03374",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Evaluating Large Language Models Trained on Code", "HumanEval"]
+      }
+    },
+    {
+      "id": "github-copilot-preview",
+      "product": "github-copilot",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://github.blog/news-insights/product-news/introducing-github-copilot-ai-pair-programmer/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Introducing GitHub Copilot", "OpenAI Codex"]
+      }
+    },
+    {
+      "id": "react-paper",
+      "product": "react",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2210.03629",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["ReAct", "reasoning and acting"]
+      }
+    },
+    {
+      "id": "swe-bench-paper",
+      "product": "swe-bench",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2310.06770",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["SWE-bench", "2,294"]
+      }
+    },
+    {
+      "id": "swe-agent-paper",
+      "product": "swe-agent",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://arxiv.org/abs/2405.15793",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["SWE-agent", "Agent-Computer Interfaces"]
+      }
+    },
+    {
+      "id": "anthropic-mcp-launch",
+      "product": "mcp",
+      "layer": "orchestration",
+      "status": "stable",
+      "url": "https://www.anthropic.com/news/model-context-protocol",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Introducing the Model Context Protocol", "open standard"]
+      }
+    },
+    {
+      "id": "github-copilot-agent-mode",
+      "product": "github-copilot",
+      "layer": "surface",
+      "status": "stable",
+      "url": "https://github.blog/news-insights/product-news/github-copilot-the-agent-awakens/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["GitHub Copilot", "agent mode"]
+      }
+    },
+    {
+      "id": "anthropic-claude-code-preview",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "stable",
+      "url": "https://www.anthropic.com/news/claude-3-7-sonnet",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": ["Claude Code", "research preview"]
+      }
+    },
+    {
+      "id": "openai-codex-launch",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://openai.com/index/introducing-codex/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-app",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://openai.com/index/introducing-the-codex-app/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-config",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/config-file/config-reference",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-security",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/security",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-mobile",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://openai.com/index/work-with-codex-from-anywhere/",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-work-and-codex",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-cowork",
+      "product": "claude",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "grok-build-settings",
+      "product": "grok",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://docs.x.ai/build/settings",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "grok-build-permissions",
+      "product": "grok",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://docs.x.ai/build/features/permissions",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
+    },
+    {
+      "id": "grok-bot",
+      "product": "grok",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://docs.x.ai/grok-bot/overview",
+      "last_checked": "2026-08-22",
+      "evidence": "official-source"
     },
     {
       "id": "git-worktrees",
@@ -250,7 +540,7 @@
       "status": "stable",
       "url": "https://git-scm.com/docs/git-worktree",
       "last_checked": "2026-08-07",
-      "evidence": "source-verified",
+      "evidence": "official-source",
       "watch": {
         "kind": "terms",
         "terms": ["git worktree", "add", "prune"]

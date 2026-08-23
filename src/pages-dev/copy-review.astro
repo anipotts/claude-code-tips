@@ -1,0 +1,142 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { getHandbookPages, routeForEntry } from '../content';
+import { evidenceLabels } from '../evidence';
+import { navigationScopes, site } from '../site';
+
+const home = await getEntry('home', 'home');
+if (!home) throw new Error('content/home.md is required');
+const pages = await getHandbookPages({ includeArchive: true });
+const runs = (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf());
+const surfaces = [
+  { route: '/', owner: 'content/home.md', title: home.data.title, description: home.data.description, voice: home.data.voice },
+  ...pages.map((page) => ({ route: routeForEntry(page), owner: page.filePath ?? `docs/${page.id}.md`, title: page.data.title, description: page.data.description, voice: page.data.voice })),
+  ...runs.map((run) => ({ route: `/field-lab/runs/${run.id}/`, owner: run.filePath ?? `content/runs/${run.id}.md`, title: run.data.title, description: run.data.description, voice: run.data.voice })),
+];
+const sharedCopy = [
+  ...Object.entries(site.interfaceCopy).map(([owner, text]) => ({ owner: `src/site.ts interfaceCopy.${owner}`, text })),
+  ...navigationScopes.map((scope) => ({ owner: `src/site.ts navigationScopes.${scope.id}`, text: scope.label })),
+  ...Object.entries(evidenceLabels).flatMap(([id, value]) => [
+    { owner: `docs/sources.json evidence_labels.${id}.label`, text: value.label },
+    { owner: `docs/sources.json evidence_labels.${id}.description`, text: value.description },
+  ]),
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>local copy review</title>
+    <style>
+      :root { font-family: ui-sans-serif, system-ui, sans-serif; color: #101114; background: #fff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      header, main { width: min(100% - 2rem, 86rem); margin: 0 auto; }
+      header { padding: 3rem 0 2rem; border-bottom: 1px solid #101114; }
+      h1 { margin: 0; font-size: clamp(2.5rem, 7vw, 6rem); letter-spacing: -.06em; }
+      header p { max-width: 48rem; color: #505760; line-height: 1.5; }
+      section { padding: 2.5rem 0; border-bottom: 1px solid #c9cdd3; }
+      h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); letter-spacing: -.04em; }
+      .tree, .shared, .surfaces { margin: 0; padding: 0; list-style: none; }
+      .tree li, .shared li { display: grid; grid-template-columns: minmax(12rem, .6fr) 1.4fr; gap: 1rem; padding: .7rem 0; border-top: 1px solid #e5e7ea; }
+      .surface { margin: 0 0 2rem; border: 1px solid #c9cdd3; }
+      .surface > header { width: auto; padding: 1.2rem; border-bottom: 1px solid #c9cdd3; }
+      .surface h3 { margin: 0 0 .35rem; font-size: 1.35rem; }
+      .surface header p { margin: .25rem 0; }
+      .owner, .voice { color: #505760; font: .72rem ui-monospace, monospace; }
+      .copy { margin: 0; padding: 0 1.2rem 1.2rem; list-style: none; }
+      .copy li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #e5e7ea; line-height: 1.45; }
+      a { color: #1247e6; }
+      @media (max-width: 42rem) { .tree li, .shared li, .copy li { grid-template-columns: 1fr; gap: .3rem; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>development only</p>
+      <h1>local copy review</h1>
+      <p>every active public writing surface in route order. each sentence points back to its canonical Markdown file or shared configuration owner.</p>
+    </header>
+    <main>
+      <section>
+        <h2>writing tree</h2>
+        <ul class="tree">{surfaces.map((surface) => <li><a href={surface.route}>{surface.route}</a><span>{surface.owner}</span></li>)}</ul>
+      </section>
+      <section>
+        <h2>shared interface copy</h2>
+        <ul class="shared">{sharedCopy.map((item) => <li><code>{item.owner}</code><span>{item.text}</span></li>)}</ul>
+        <h3>rendered framework actions</h3>
+        <p class="owner">@astrojs/starlight and shared shell components</p>
+        <ul class="shared shell-copy"><li><code>loading</code><span>rendered shared actions</span></li></ul>
+      </section>
+      <section>
+        <h2>rendered public copy</h2>
+        <div class="surfaces">
+          {surfaces.map((surface) => (
+            <article class="surface" data-route={surface.route} data-voice={surface.voice}>
+              <header>
+                <h3><a href={surface.route}>{surface.title}</a></h3>
+                <p>{surface.description}</p>
+                <p class="owner">{surface.owner}</p>
+                <p class="voice">{surface.voice}</p>
+              </header>
+              <ol class="copy"><li><span>loading</span><span>rendered route copy</span></li></ol>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+    <script>
+      const selectors = 'h1,h2,h3,h4,p,li,th,td,dt,dd,button,summary,a';
+      for (const surface of document.querySelectorAll<HTMLElement>('.surface')) {
+        const route = surface.dataset.route;
+        const list = surface.querySelector('.copy');
+        if (!route || !list) continue;
+        if (surface.dataset.voice === 'frozen') {
+          list.innerHTML = '<li><span>frozen</span><span>excluded from ordinary editorial review through the compatibility window</span></li>';
+          continue;
+        }
+        try {
+          const html = await fetch(route).then((response) => response.text());
+          const page = new DOMParser().parseFromString(html, 'text/html');
+          const main = page.querySelector('main');
+          const nodes = main ? [...main.querySelectorAll(selectors)] : [];
+          const copy = nodes
+            .filter((node) => !node.querySelector(selectors))
+            .map((node) => ({ kind: node.tagName.toLowerCase(), text: node.textContent?.replace(/\s+/g, ' ').trim() }))
+            .filter((item) => item.text);
+          list.replaceChildren(...copy.map((item) => {
+            const row = document.createElement('li');
+            const kind = document.createElement('span');
+            const text = document.createElement('span');
+            kind.textContent = item.kind;
+            text.textContent = item.text;
+            row.append(kind, text);
+            return row;
+          }));
+        } catch (error) {
+          list.textContent = `could not load ${route}: ${error}`;
+        }
+      }
+      const shellList = document.querySelector('.shell-copy');
+      if (shellList) {
+        const html = await fetch('/guides/codex/').then((response) => response.text());
+        const page = new DOMParser().parseFromString(html, 'text/html');
+        const elements = [...page.querySelectorAll('header.site-header a, header.site-header button, header.site-header summary, footer a')];
+        const labels = [...new Set(elements.map((element) => element.getAttribute('aria-label') || element.textContent?.replace(/\s+/g, ' ').trim()).filter(Boolean))];
+        shellList.replaceChildren(...labels.map((label) => {
+          const row = document.createElement('li');
+          const owner = document.createElement('code');
+          const text = document.createElement('span');
+          owner.textContent = 'rendered shell';
+          text.textContent = label;
+          row.append(owner, text);
+          return row;
+        }));
+      }
+    </script>
+  </body>
+</html>

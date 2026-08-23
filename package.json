@@ -1,6 +1,5 @@
 {
   "name": "coding-agent-tips",
-  "version": "4.0.0",
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.4",
@@ -8,10 +7,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
-    "check:field-runs": "node --test scripts/repository-evidence-url.test.mjs && node scripts/check-field-runs.mjs",
+    "check:field-runs": "node scripts/check-field-runs.mjs",
+    "check:readme": "bun scripts/sync-readme.ts --check",
     "test:site": "node scripts/test-site.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "sync:readme": "bun scripts/sync-readme.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",

@@ -3,6 +3,8 @@ import '@fontsource-variable/instrument-sans';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
+import AccessibleTables from '../components/AccessibleTables.astro';
+import { site } from '../site';
 
 interface Props {
   title: string;
@@ -23,7 +25,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="coding agent tips" />
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -33,5 +35,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a class="skip-link" href="#main">skip to content</a>
     <SiteHeader />
     <slot />
+    <AccessibleTables />
   </body>
 </html>

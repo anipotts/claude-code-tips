@@ -28,23 +28,9 @@ REQUIRED_SOURCE_FIELDS = {
     "evidence",
 }
 LAYERS = {"surface", "harness", "model", "orchestration"}
-EVIDENCE = {"hands-on", "source-verified", "inference", "unknown"}
-STATUSES = {"current", "pending", "legacy"}
+EVIDENCE = {"tested", "official-source", "analysis", "open-question"}
 MAX_AGE_DAYS = {"pricing": 14, "core": 30, "watchlist": 45, "stable": 90}
 WATCHED_STATUSES = {"core", "stable"}
-GUIDE_PATHS = [
-    ROOT / "docs" / "README.md",
-    ROOT / "docs" / "codex" / "README.md",
-    ROOT / "docs" / "claude-code" / "README.md",
-    ROOT / "docs" / "shared" / "operating-system.md",
-    ROOT / "docs" / "market" / "README.md",
-    ROOT / "docs" / "market" / "hardware.md",
-    ROOT / "docs" / "field-lab" / "README.md",
-    ROOT / "docs" / "methodology.md",
-    ROOT / "docs" / "changes.md",
-    ROOT / "docs" / "legacy-tools.md",
-]
-FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 
 
 def parse_args() -> argparse.Namespace:
@@ -62,21 +48,6 @@ def load_registry() -> dict:
         return json.load(handle)
 
 
-def inline_list(frontmatter: str, field: str) -> list[str] | None:
-    match = re.search(rf"^{re.escape(field)}:\s*\[(.*?)\]\s*$", frontmatter, re.MULTILINE)
-    if not match:
-        return None
-    value = match.group(1).strip()
-    if not value:
-        return []
-    return [item.strip().strip("'\"") for item in value.split(",")]
-
-
-def scalar(frontmatter: str, field: str) -> str | None:
-    match = re.search(rf"^{re.escape(field)}:\s*(.*?)\s*$", frontmatter, re.MULTILINE)
-    return match.group(1).strip("'\"") if match else None
-
-
 def normalized_upstream_text(url: str) -> str:
     request = Request(url, headers={"User-Agent": "coding-agent-tips-freshness/1"})
     with urlopen(request, timeout=30) as response:
@@ -91,6 +62,14 @@ def validate_registry(data: dict, freshness: bool) -> list[str]:
 
     if data.get("schema_version") != 1:
         errors.append("schema_version must be 1")
+
+    labels = data.get("evidence_labels")
+    if not isinstance(labels, dict) or set(labels) != EVIDENCE:
+        errors.append(f"evidence_labels must define {sorted(EVIDENCE)}")
+    else:
+        for label, definition in labels.items():
+            if not isinstance(definition, dict) or not definition.get("label") or not definition.get("description"):
+                errors.append(f"{label}: evidence label and description are required")
 
     sources = data.get("sources")
     if not isinstance(sources, list) or not sources:
@@ -170,67 +149,6 @@ def validate_registry(data: dict, freshness: bool) -> list[str]:
     return errors
 
 
-def validate_guides(data: dict) -> list[str]:
-    errors: list[str] = []
-    known_sources = {source["id"] for source in data.get("sources", [])}
-    today = date.today()
-
-    for path in GUIDE_PATHS:
-        relative = path.relative_to(ROOT)
-        if not path.exists():
-            errors.append(f"{relative}: guide file is missing")
-            continue
-
-        match = FRONTMATTER.search(path.read_text(encoding="utf-8"))
-        if not match:
-            errors.append(f"{relative}: yaml frontmatter is missing")
-            continue
-        frontmatter = match.group(1)
-
-        products = inline_list(frontmatter, "products")
-        evidence = inline_list(frontmatter, "evidence")
-        sources = inline_list(frontmatter, "sources")
-        verified_raw = scalar(frontmatter, "lastVerified")
-        status = scalar(frontmatter, "status")
-
-        for field, value in (("products", products), ("evidence", evidence), ("sources", sources)):
-            if value is None:
-                errors.append(f"{relative}: {field} must be an inline list")
-        if products == []:
-            errors.append(f"{relative}: products must not be empty")
-        if evidence is not None:
-            unknown_evidence = set(evidence) - EVIDENCE
-            if unknown_evidence:
-                errors.append(f"{relative}: unknown evidence labels {sorted(unknown_evidence)}")
-        if sources is not None:
-            unknown_sources = set(sources) - known_sources
-            if unknown_sources:
-                errors.append(f"{relative}: unknown source ids {sorted(unknown_sources)}")
-        if status not in STATUSES:
-            errors.append(f"{relative}: invalid status {status!r}")
-
-        rail_kinds = re.findall(r"^\s+- kind:\s*(\S+)\s*$", frontmatter, re.MULTILINE)
-        rail_sources = re.findall(r"^\s+sourceId:\s*(\S+)\s*$", frontmatter, re.MULTILINE)
-        if not rail_kinds:
-            errors.append(f"{relative}: evidenceRail must not be empty")
-        unknown_rail_kinds = set(rail_kinds) - EVIDENCE
-        if unknown_rail_kinds:
-            errors.append(f"{relative}: unknown evidenceRail kinds {sorted(unknown_rail_kinds)}")
-        unknown_rail_sources = set(rail_sources) - known_sources
-        if unknown_rail_sources:
-            errors.append(f"{relative}: unknown evidenceRail source ids {sorted(unknown_rail_sources)}")
-
-        try:
-            verified = date.fromisoformat(verified_raw or "")
-        except ValueError:
-            errors.append(f"{relative}: invalid lastVerified date")
-        else:
-            if verified > today:
-                errors.append(f"{relative}: lastVerified is in the future")
-
-    return errors
-
-
 def main() -> int:
     args = parse_args()
     try:
@@ -240,7 +158,6 @@ def main() -> int:
         return 1
 
     errors = validate_registry(data, args.freshness)
-    errors.extend(validate_guides(data))
     if errors:
         for error in errors:
             print(f"error: {error}", file=sys.stderr)

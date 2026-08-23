@@ -2,59 +2,51 @@ import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
+import { contentRedirects } from './src/content-manifest.mjs';
+import { site } from './src/site';
 
-const repository = 'https://github.com/anipotts/coding-agent-tips';
+const repository = site.repository;
+const redirects = {
+  ...contentRedirects(),
+  '/changes/': site.releaseHistory,
+};
+const redirectedPaths = new Set(Object.keys(redirects));
 
 export default defineConfig({
   site: 'https://agents.anipotts.com',
   output: 'static',
+  redirects,
   integrations: [
+    {
+      name: 'local-copy-review',
+      hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+          if (command === 'dev') injectRoute({ pattern: '/__copy-review/', entrypoint: './src/pages-dev/copy-review.astro' });
+        },
+      },
+    },
     icon({
       include: {
-        ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo', 'list'],
+        ph: ['app-window', 'terminal-window', 'brain', 'git-branch', 'arrow-right', 'arrow-up-right', 'github-logo', 'list', 'x'],
       },
     }),
-    sitemap(),
+    sitemap({ filter: (page) => {
+      const pathname = new URL(page).pathname;
+      return !pathname.startsWith('/__copy-review/') && !redirectedPaths.has(pathname);
+    } }),
     starlight({
-      title: 'coding agent tips',
-      description:
-        'evidence-backed guidance for coding agents in production software, from individual projects to startups and big tech.',
+      title: site.name,
       customCss: ['./src/styles/global.css'],
       components: {
         Header: './src/components/StarlightHeader.astro',
-        PageSidebar: './src/components/StarlightPageSidebar.astro',
         PageTitle: './src/components/StarlightPageTitle.astro',
+        Footer: './src/components/StarlightFooter.astro',
+        Sidebar: './src/components/StarlightSidebar.astro',
       },
       social: [{ icon: 'github', label: 'GitHub', href: repository }],
       editLink: { baseUrl: `${repository}/edit/main/` },
       lastUpdated: false,
-      sidebar: [
-        {
-          label: 'guides',
-          items: [
-            { label: 'all guides', slug: 'guides' },
-            { label: 'codex', slug: 'guides/codex' },
-            { label: 'claude code', slug: 'guides/claude-code' },
-            { label: 'operating system', slug: 'guides/operating-system' },
-          ],
-        },
-        {
-          label: 'market',
-          items: [
-            { label: 'market map', slug: 'market' },
-            { label: 'hardware', slug: 'market/hardware' },
-          ],
-        },
-        {
-          label: 'field work',
-          items: [
-            { label: 'field lab', slug: 'field-lab' },
-            { label: 'method', slug: 'method' },
-            { label: 'changes', slug: 'changes' },
-            { label: 'legacy', slug: 'legacy' },
-          ],
-        },
-      ],
+      pagination: false,
     }),
   ],
 });

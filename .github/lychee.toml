@@ -18,6 +18,8 @@ exclude = [
   "^https?://localhost",
   "^https?://127\\.0\\.0\\.1",
   "^https?://0\\.0\\.0\\.0",
+  # branch routes are built and resolved by test:site before they exist in production
+  "^https://agents\\.anipotts\\.com/",
   # github links that need auth or are flaky
   "^https://github\\.com/.*/edit/",
   "^https://github\\.com/.*/new/",
@@ -40,7 +42,6 @@ exclude = [
 
 # exclude paths that are gitignored or not actual documentation
 exclude_path = [
-  "content/",
   "data/",
   "node_modules/",
   ".git/",
