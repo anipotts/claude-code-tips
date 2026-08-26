@@ -33,6 +33,8 @@ exclude = [
   "^https://docs\\.anthropic\\.com",
   # shields.io endpoint badges (depend on external gist data)
   "^https://img\\.shields\\.io/endpoint",
+  # ar5iv paper figures reject automated HEAD requests while their source papers remain checked
+  "^https://ar5iv\\.labs\\.arxiv\\.org/html/.*/assets/",
   # gist raw content (dynamic, may 404 before first push)
   "^https://gist\\.githubusercontent\\.com",
   # same-repository main-branch links can target files introduced by the PR;
