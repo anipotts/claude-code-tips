@@ -16,6 +16,7 @@ const redirectedPaths = new Set(Object.keys(redirects));
 export default defineConfig({
   site: site.url,
   output: 'static',
+  prefetch: false,
   redirects,
   integrations: [
     {
@@ -47,6 +48,7 @@ export default defineConfig({
       ],
       customCss: ['./src/styles/global.css'],
       components: {
+        Head: './src/components/StarlightHead.astro',
         Header: './src/components/StarlightHeader.astro',
         PageTitle: './src/components/StarlightPageTitle.astro',
         Footer: './src/components/StarlightFooter.astro',
