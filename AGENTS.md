@@ -30,6 +30,10 @@ this repository is an opinionated, source backed handbook for experienced coding
 
 run the source, field run, Astro, generated route, Markdown, and shell checks before publishing a broad change. run `bun test plugins/cc/tests` and `pytest plugins/lore/tests` when archive files or shared runtime dependencies change, and during the scheduled full verification.
 
+- protected pull requests must use a committer identity GitHub recognizes. local cryptographic verification is supporting evidence; GitHub's `verified=true` result is the merge gate.
+- use `--body-file` for GitHub pull request or release text that contains Markdown code spans or shell syntax. never pass that content through an inline shell argument.
+- use the package scripts for Astro development, editing, checks, builds, and previews. they invoke Astro through Node so a restarted shell does not need Bun on `PATH` for those commands.
+
 ## review
 
 evaluate factual support, taxonomy, safety, maintenance cost, and whether the recommendation follows from the evidence. do not optimize prose for engagement at the expense of precision.
