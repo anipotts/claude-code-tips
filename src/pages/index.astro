@@ -10,6 +10,18 @@ const home = await getEntry('home', 'home');
 if (!home) throw new Error('content/home.md is required');
 const { Content } = await render(home);
 const guides = await getHomepagePages();
+const guideGroups = [
+  {
+    id: 'provider-guides',
+    title: 'by provider',
+    guides: guides.filter((guide) => guide.data.navigation.scope !== 'general'),
+  },
+  {
+    id: 'shared-guides',
+    title: 'across agents',
+    guides: guides.filter((guide) => guide.data.navigation.scope === 'general'),
+  },
+];
 ---
 
 <BaseLayout title={home.data.title} description={home.data.description}>
@@ -20,28 +32,35 @@ const guides = await getHomepagePages();
       <header class="home-guides-heading">
         <p class="section-label">{site.interfaceCopy.guides}</p>
         <h2 id="guide-title">choose where to begin</h2>
-        <p>start with a provider, compare setups, or read the shared practices that apply across agent systems.</p>
+        <p>pick a provider or a shared guide.</p>
       </header>
-      <div class="home-guide-list">
+      <div class="home-guide-groups">
         {
-          guides.map((guide) => (
-            <a href={routeForEntry(guide)}>
-              <h3>{guide.data.title}</h3>
-              <p>{guide.data.description}</p>
-              <span>{guide.data.navigation.scope}</span>
-              <Icon name="ph:arrow-right" aria-hidden="true" />
-            </a>
+          guideGroups.map((group) => (
+            <section class="home-guide-group" aria-labelledby={group.id}>
+              <h3 id={group.id}>{group.title}</h3>
+              <div class="home-guide-list">
+                {group.guides.map((guide) => (
+                  <a href={routeForEntry(guide)}>
+                    <h3>{guide.data.title}</h3>
+                    <p>{guide.data.description}</p>
+                    <Icon name="ph:arrow-right" aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
+            </section>
           ))
         }
       </div>
     </section>
 
-    <div class="home-meta" aria-label="page metadata">
-      <span>{site.interfaceCopy.lastUpdated} {formatUpdatedAt(home.data.updatedAt)}</span>
-    </div>
   </main>
-  <footer class="site-footer">
-    <p>{site.name}</p>
+  <footer class="site-footer" id="site-footer">
+    <a class="site-name footer-site-name" href="/" aria-label={site.interfaceCopy.home}>
+      <img src="/favicon.svg" alt="" width="24" height="24" />
+      <span>{site.name}</span>
+    </a>
+    <p class="footer-meta">{site.interfaceCopy.lastUpdated} {formatUpdatedAt(home.data.updatedAt)}</p>
     <nav aria-label="footer">
       <a href="/archive/">{site.interfaceCopy.archive}</a>
       <a href={site.releaseHistory}>{site.interfaceCopy.releases}</a>
