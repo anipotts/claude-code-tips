@@ -1,0 +1,105 @@
+{
+  "retrievedAt": "2026-08-27",
+  "derivativeFormat": "webp",
+  "derivativeWidths": [640, 1200],
+  "assets": [
+    {
+      "id": "codex-cli",
+      "originalUrl": "https://raw.githubusercontent.com/openai/codex/main/.github/codex-cli-splash.png",
+      "sourcePages": ["https://github.com/openai/codex"],
+      "canonicalPages": ["/guides/codex/"],
+      "original": { "width": 1898, "height": 1190, "sha256": "15b86fa9c0790a779ecdd84f1e7dee029ab79bfb093bd3c4876998696925b013" },
+      "derivativeSet": "codex-cli"
+    },
+    {
+      "id": "codex-app",
+      "originalUrl": "https://images.ctfassets.net/kftzwdyauwt9/7eyalGUXstkzzzJ3Pb008m/9f71260a3f127dc142cc8c479d0cf68f/Installer4.png?fm=webp&q=90&w=1600",
+      "sourcePages": ["https://openai.com/index/introducing-the-codex-app/", "https://openai.com/codex/"],
+      "canonicalPages": ["/guides/codex/"],
+      "original": { "width": 1600, "height": 962, "sha256": "3c41d5bacd12bd6ddfe2a1c9df028674357a7156e273c1d52d77797b95721102" },
+      "derivativeSet": "codex-app"
+    },
+    {
+      "id": "codex-mobile",
+      "originalUrl": "https://images.ctfassets.net/kftzwdyauwt9/4i08f39LTE7HOZ0R3EKaKA/74f6008bbde015cfef96a14209f7673b/16_9.png",
+      "sourcePages": ["https://openai.com/index/work-with-codex-from-anywhere/"],
+      "canonicalPages": ["/guides/codex/"],
+      "original": { "width": 1920, "height": 1080, "sha256": "4f013749c0b8e232a5c5a63b67a8bc37a65d056b8ccdf578faafe73b141769a9" },
+      "derivativeSet": "codex-mobile"
+    },
+    {
+      "id": "claude-code",
+      "originalUrl": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/699e1b736d83c9fb55a56d2a_698be3342261cf694fdae301_698bdd78a6031117e6bb41d6_Screenshot%2525202026-02-09%252520at%25252012.52.07%2525E2%252580%2525AFPM.png",
+      "sourcePages": ["https://code.claude.com/docs/en/overview"],
+      "canonicalPages": ["/guides/claude-code/"],
+      "original": { "width": 2064, "height": 1252, "sha256": "40fbc77a34b0790f53acda7cc3b7ed0476ac386e6ca57f6131800573f424fb32" },
+      "derivativeSet": "claude-code"
+    },
+    {
+      "id": "claude-chat",
+      "originalUrl": "https://academy.claude.com/assets/media/6fcef3fffebbdcc24dfe51c43e57196dcec0402c986c32bb803a2bd6a6fcdffc.png",
+      "sourcePages": ["https://claude.com/resources/tutorials/navigating-the-claude-desktop-app", "https://code.claude.com/docs/en/remote-control"],
+      "canonicalPages": ["/guides/claude-code/"],
+      "original": { "width": 2064, "height": 1252, "sha256": "6fcef3fffebbdcc24dfe51c43e57196dcec0402c986c32bb803a2bd6a6fcdffc" },
+      "derivativeSet": "claude-chat"
+    },
+    {
+      "id": "claude-cowork",
+      "originalUrl": "https://academy.claude.com/assets/media/782ff424a16217adc2bf15d89f81250e2d2c9c4f112ddad39a28942c6ae43386.png",
+      "sourcePages": ["https://code.claude.com/docs/en/desktop"],
+      "canonicalPages": ["/guides/claude-code/"],
+      "original": { "width": 2304, "height": 1616, "sha256": "782ff424a16217adc2bf15d89f81250e2d2c9c4f112ddad39a28942c6ae43386" },
+      "derivativeSet": "claude-cowork"
+    },
+    {
+      "id": "grok-build",
+      "originalUrl": "https://media.x.ai/v1/website/grok-build-mode-og-1454d1ce.png",
+      "sourcePages": ["https://docs.x.ai/build/overview"],
+      "canonicalPages": ["/guides/grok/"],
+      "original": { "width": 1200, "height": 630, "sha256": "df1fc4b220ca48749f61d9959446a39f1a118423d8acea47bb1d5f9417202894" },
+      "derivativeSet": "grok-build"
+    },
+    {
+      "id": "grok-bot",
+      "originalUrl": "https://media.x.ai/v1/website/open-source-cover-930d1067.png",
+      "sourcePages": ["https://docs.x.ai/grok-bot/overview"],
+      "canonicalPages": ["/guides/grok/"],
+      "original": { "width": 1200, "height": 630, "sha256": "a0589b382026d4ee6120dd91f582c17ba79c914a5a51040550ead128711232a8" },
+      "derivativeSet": "grok-bot"
+    }
+  ],
+  "derivativeSets": {
+    "claude-chat": [
+      { "path": "/media/publications/claude-chat-640.webp", "width": 640, "height": 389, "bytes": 9456, "sha256": "3f71cb9fd4b5a3e8d6bde417b95c930c8048cd0ad754fbb6e06ccb0b460e9108" },
+      { "path": "/media/publications/claude-chat-1200.webp", "width": 1200, "height": 728, "bytes": 41278, "sha256": "3304233750961a282ecb9da7ff59cea05f4b9a52574861ca71728bd65788e5da" }
+    ],
+    "claude-code": [
+      { "path": "/media/publications/claude-code-640.webp", "width": 640, "height": 389, "bytes": 9998, "sha256": "a970aa392b75fe4c8ae00479e94e7991a25211879d3ef3bd95f1093e5477c395" },
+      { "path": "/media/publications/claude-code-1200.webp", "width": 1200, "height": 728, "bytes": 46452, "sha256": "b868a68eba2544728007dfa29dd015f8eb34baf9f2b2b70d3ee9d0af701e3722" }
+    ],
+    "claude-cowork": [
+      { "path": "/media/publications/claude-cowork-640.webp", "width": 640, "height": 449, "bytes": 10076, "sha256": "90368488365a7143b28475c740a65a8e4ac1422104af15468b60079fb4268946" },
+      { "path": "/media/publications/claude-cowork-1200.webp", "width": 1200, "height": 842, "bytes": 28620, "sha256": "2204d3dfc32e968ec3fa8845f058b2c7fd7942ef9d43f480abbaf644a4ef29ee" }
+    ],
+    "codex-app": [
+      { "path": "/media/publications/codex-app-640.webp", "width": 640, "height": 385, "bytes": 6032, "sha256": "417123e2a40b4a44a9f683b2b6bebcb664ddd13c4c66ee2a8b23a84e9ea66c36" },
+      { "path": "/media/publications/codex-app-1200.webp", "width": 1200, "height": 722, "bytes": 12670, "sha256": "4c6f4898a9521257140ce5390a30d7f4872f88a966a1e38962ceffe1f85af684" }
+    ],
+    "codex-cli": [
+      { "path": "/media/publications/codex-cli-640.webp", "width": 640, "height": 402, "bytes": 16352, "sha256": "1d95d1d066743babc77c907afc6044b21038115627a10c9b85ee356345d3f24e" },
+      { "path": "/media/publications/codex-cli-1200.webp", "width": 1200, "height": 753, "bytes": 38982, "sha256": "db5c2ce328065ca026eccf4cbff8cb43a2e49dd1f183ec4d82674f7b3f6ca1ab" }
+    ],
+    "codex-mobile": [
+      { "path": "/media/publications/codex-mobile-640.webp", "width": 640, "height": 360, "bytes": 6772, "sha256": "e4b424639adfb1505647fae90e23dc275068cbcf2c336141d5e4766a037b60f2" },
+      { "path": "/media/publications/codex-mobile-1200.webp", "width": 1200, "height": 675, "bytes": 14288, "sha256": "5fa3fe9a0b94daf6a1852fcf7b2791d42e8c74c88fabe8deafff224df15ea011" }
+    ],
+    "grok-bot": [
+      { "path": "/media/publications/grok-bot-640.webp", "width": 640, "height": 336, "bytes": 3076, "sha256": "87527944e6d00761d4b09e7c9e8416593cccbd70587f6866d62ad1ef6e4e8f33" },
+      { "path": "/media/publications/grok-bot-1200.webp", "width": 1200, "height": 630, "bytes": 6572, "sha256": "ad2d929f83a91c016b3d964c14462a96f192f051c1ca5e82e8d82a3449aca2af" }
+    ],
+    "grok-build": [
+      { "path": "/media/publications/grok-build-640.webp", "width": 640, "height": 336, "bytes": 4100, "sha256": "7c88cce9e95840c5f6d43bfe4706a85e1fc90ad369a5085cea0bd8fd3c02fe6c" },
+      { "path": "/media/publications/grok-build-1200.webp", "width": 1200, "height": 630, "bytes": 9582, "sha256": "37722e63d49e52938235a432714a186a4168b4f592f78ff7480d28ba1156cf3c" }
+    ]
+  }
+}

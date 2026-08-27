@@ -41,6 +41,15 @@ jobs:
       - name: verify generated publication
         run: bun run test:site
 
+      - name: enforce publication performance budgets
+        run: bun run check:performance
+
+      - name: install browser test runtime
+        run: bunx playwright install --with-deps chromium
+
+      - name: verify client navigation
+        run: bun run test:navigation
+
       - name: check documentation links
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
@@ -63,9 +72,6 @@ jobs:
             "docs/method.md"
             "docs/decisions/*.md"
           fail: true
-
-      - name: install accessibility browser
-        run: bunx playwright install --with-deps chromium
 
       - name: scan mobile and desktop accessibility
         run: bun run test:a11y

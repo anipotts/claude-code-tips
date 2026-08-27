@@ -20,8 +20,8 @@ cloud agents called Grok Bot. this section keeps those products separate so a
 model comparison does not get confused with a harness or a cloud computer.
 
 <div class="surface-bento">
-  <figure><a href="https://docs.x.ai/build/overview"><img src="https://media.x.ai/v1/website/grok-build-mode-og-1454d1ce.png" alt="Grok Build in its coding interface" loading="lazy" width="1600" height="900" /><figcaption>Grok Build and Build Mode</figcaption></a></figure>
-  <figure><a href="https://docs.x.ai/grok-bot/overview"><img src="https://media.x.ai/v1/website/open-source-cover-930d1067.png" alt="an xAI product graphic for Grok tools" loading="lazy" width="1600" height="900" /><figcaption>Grok Bot and persistent cloud work</figcaption></a></figure>
+  <figure><a href="https://docs.x.ai/build/overview"><img src="/media/publications/grok-build-1200.webp" srcset="/media/publications/grok-build-640.webp 640w, /media/publications/grok-build-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="Grok Build in its coding interface" loading="eager" fetchpriority="high" decoding="async" width="1200" height="630" /><figcaption>Grok Build and Build Mode</figcaption></a></figure>
+  <figure><a href="https://docs.x.ai/grok-bot/overview"><img src="/media/publications/grok-bot-1200.webp" srcset="/media/publications/grok-bot-640.webp 640w, /media/publications/grok-bot-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="an xAI product graphic for Grok tools" loading="lazy" decoding="async" width="1200" height="630" /><figcaption>Grok Bot and persistent cloud work</figcaption></a></figure>
 </div>
 
 as of august 22, 2026, Grok Build provides an interactive terminal interface,

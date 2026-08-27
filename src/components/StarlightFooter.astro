@@ -45,14 +45,18 @@ const runs = entry.id === 'method'
 </section>}
 <AccessibleTables />
 <DefaultFooter />
-<script is:inline>
-  (() => {
-    const links = [...document.querySelectorAll('.right-sidebar a[href^="#"]')];
+<script>
+  let cleanup: () => void = () => {};
+
+  const setupActiveHeading = () => {
+    cleanup();
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.right-sidebar a[href^="#"]')];
     const headings = links
       .map((link) => ({ link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) }))
-      .filter((item) => item.heading);
+      .filter((item): item is { link: HTMLAnchorElement; heading: HTMLElement } => item.heading !== null);
     if (headings.length === 0) return;
-    let frame;
+    const controller = new AbortController();
+    let frame: number | undefined;
     const update = () => {
       frame = undefined;
       const header = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
@@ -64,10 +68,16 @@ const runs = entry.id === 'method'
       for (const item of headings) item.link.setAttribute('aria-current', item.heading.id === active ? 'true' : 'false');
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    addEventListener('scroll', schedule, { passive: true });
-    addEventListener('hashchange', schedule);
-    requestAnimationFrame(update);
-  })();
+    addEventListener('scroll', schedule, { passive: true, signal: controller.signal });
+    addEventListener('hashchange', schedule, { signal: controller.signal });
+    frame = requestAnimationFrame(update);
+    cleanup = () => {
+      controller.abort();
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
+  };
+
+  document.addEventListener('astro:page-load', setupActiveHeading);
 </script>
 
 <style>
