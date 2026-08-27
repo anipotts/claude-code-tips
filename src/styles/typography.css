@@ -166,7 +166,16 @@ body {
 
 .mobile-site-menu nav a[aria-current='page'] { font-weight: 600; }
 
-.github-stars, .section-label, .home-guide-list span, .home-meta,
+.copy-review-page :where(input, button) {
+  font-family: var(--font-sans);
+  font-size: var(--type-navigation-size);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: var(--type-navigation-line);
+  text-transform: none;
+}
+
+.section-label, .home-guide-list span, .home-meta,
 .sidebar-label, .page-meta, .surface-bento figcaption, .history-year,
 .history-timeline figcaption, .run-header > p:first-child, .run-page dt,
 .run-evidence, .run-inventory span, .source-kinds,
@@ -180,7 +189,7 @@ body {
   line-height: var(--type-metadata-line);
 }
 
-.github-stars, .sidebar-label, .page-meta, .surface-bento figcaption,
+.sidebar-label, .page-meta, .surface-bento figcaption,
 .history-timeline figcaption, .run-inventory span, .source-kinds,
 .copy-review-page .owner, .copy-review-page .voice,
 .copy-review-page .copy li > span:first-child,

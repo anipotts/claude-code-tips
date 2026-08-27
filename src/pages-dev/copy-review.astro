@@ -1,10 +1,14 @@
 ---
+import { execFileSync } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { getCollection, getEntry } from 'astro:content';
 import '../styles/global.css';
 import { getHandbookPages, routeForEntry } from '../content';
 import { evidenceLabels } from '../evidence';
 import { navigationScopes, site } from '../site';
 
+const root = process.cwd();
 const home = await getEntry('home', 'home');
 if (!home) throw new Error('content/home.md is required');
 const pages = await getHandbookPages({ includeArchive: true });
@@ -22,6 +26,34 @@ const sharedCopy = [
     { owner: `docs/sources.json evidence_labels.${id}.description`, text: value.description },
   ]),
 ];
+
+const changedFiles = new Set<string>();
+let workingTree = '';
+try {
+  workingTree = execFileSync('git', ['status', '--porcelain=v1'], { cwd: root, encoding: 'utf8' });
+  for (const line of workingTree.split('\n').filter(Boolean)) {
+    const raw = line.slice(3);
+    changedFiles.add(raw.includes(' -> ') ? raw.split(' -> ').at(-1) ?? raw : raw);
+  }
+} catch {}
+
+const ownerFile = (owner: string) => owner.split(' ')[0];
+const absoluteOwner = (owner: string) => path.join(root, ownerFile(owner));
+const sourceUrl = (owner: string) => `${site.repository}/blob/main/${ownerFile(owner)}`;
+const changed = (owner: string) => changedFiles.has(ownerFile(owner));
+
+type CheckStatus = {
+  status: 'passed' | 'failed';
+  checkedAt: string;
+  durationMs: number;
+  failure: string | null;
+  workingTree: string;
+};
+let checkStatus: CheckStatus | null = null;
+try {
+  checkStatus = JSON.parse(await readFile(path.join(root, '.astro/copy-review-status.json'), 'utf8'));
+} catch {}
+const visibleCheckStatus = checkStatus && checkStatus.workingTree === workingTree ? checkStatus.status : checkStatus ? 'outdated' : 'not-run';
 ---
 
 <!doctype html>
@@ -36,66 +68,162 @@ const sharedCopy = [
       :root { color: #101114; background: #fff; }
       * { box-sizing: border-box; }
       body { margin: 0; }
-      header, main { width: min(100% - 2rem, 86rem); margin: 0 auto; }
-      header { padding: 3rem 0 2rem; border-bottom: 1px solid #101114; }
-      h1 { margin: 0; }
-      header p { max-width: 48rem; }
-      section { padding: 2.5rem 0; border-bottom: 1px solid #c9cdd3; }
-      .tree, .shared, .surfaces { margin: 0; padding: 0; list-style: none; }
-      .tree li, .shared li { display: grid; grid-template-columns: minmax(12rem, .6fr) 1.4fr; gap: 1rem; padding: .7rem 0; border-top: 1px solid #e5e7ea; }
-      .surface { margin: 0 0 2rem; border: 1px solid #c9cdd3; }
-      .surface > header { width: auto; padding: 1.2rem; border-bottom: 1px solid #c9cdd3; }
-      .surface h3 { margin: 0 0 .35rem; }
-      .surface header p { margin: .25rem 0; }
-      .copy { margin: 0; padding: 0 1.2rem 1.2rem; list-style: none; }
+      body > header, main { width: min(100% - 2rem, 86rem); margin: 0 auto; }
+      body > header { padding: 3rem 0 2rem; border-bottom: 1px solid #101114; }
+      h1, h2, h3, p { margin-block-start: 0; }
+      body > header > p { max-width: 48rem; }
+      .status-panel { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; margin-top: 1.5rem; padding: 1rem; border: 1px solid #c9cdd3; background: #f4f5f7; }
+      .status-panel[data-status='passed'] { border-color: #238636; background: #f0fff4; }
+      .status-panel[data-status='failed'] { border-color: #e52b1a; background: #fff3f1; }
+      .status-panel[data-status='outdated'] { border-color: #9a6700; background: #fff8c5; }
+      .status-panel p { margin: 0; }
+      .toolbar { position: sticky; top: 0; z-index: 10; display: grid; grid-template-columns: minmax(15rem, 1fr) auto; gap: 1rem; align-items: end; padding: 1rem 0; border-bottom: 1px solid #c9cdd3; background: rgba(255, 255, 255, .97); }
+      .toolbar label { display: grid; gap: .35rem; }
+      .toolbar input[type='search'] { width: 100%; padding: .65rem .75rem; border: 1px solid #7d848d; border-radius: .25rem; }
+      .changed-toggle { display: flex !important; grid-auto-flow: column; align-items: center; gap: .5rem !important; padding-bottom: .65rem; white-space: nowrap; }
+      .review-section { padding: 1.5rem 0; border-bottom: 1px solid #c9cdd3; }
+      .review-section > summary { cursor: pointer; }
+      .review-section > summary h2 { display: inline; }
+      .tree, .shared, .surfaces { margin: 1rem 0 0; padding: 0; list-style: none; }
+      .tree li, .shared li { display: grid; grid-template-columns: minmax(12rem, .6fr) 1.4fr auto; gap: 1rem; align-items: center; padding: .7rem 0; border-top: 1px solid #e5e7ea; }
+      .actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+      .actions a, .actions button { min-height: 2.25rem; padding: .4rem .65rem; border: 1px solid #7d848d; border-radius: .25rem; background: #fff; color: #101114; cursor: pointer; text-decoration: none; }
+      .actions a:hover, .actions button:hover { border-color: #1247e6; color: #1247e6; }
+      .surface { margin: 0 0 1rem; border: 1px solid #c9cdd3; }
+      .surface > summary { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; padding: 1rem 1.2rem; cursor: pointer; list-style-position: inside; }
+      .surface > summary h3 { display: inline; margin: 0 0 0 .5rem; }
+      .surface > summary p { margin: .35rem 0 0 1.4rem; }
+      .surface-content { padding: 1.2rem; border-top: 1px solid #c9cdd3; }
+      .surface-content > p { margin: .35rem 0; }
+      .changed-badge { padding: .25rem .45rem; border: 1px solid #1247e6; border-radius: .25rem; color: #1247e6; }
+      .copy { margin: 1rem 0 0; padding: 0; list-style: none; }
       .copy li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #e5e7ea; }
+      .empty-state { padding: 2rem 0; color: #505760; }
       a { color: #1247e6; }
-      @media (max-width: 42rem) { .tree li, .shared li, .copy li { grid-template-columns: 1fr; gap: .3rem; } }
+      [hidden] { display: none !important; }
+      @media (max-width: 48rem) {
+        .status-panel, .toolbar, .tree li, .shared li, .copy li { grid-template-columns: 1fr; }
+        .changed-toggle { padding-bottom: 0; }
+        .surface > summary { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body class="copy-review-page">
     <header>
       <p>development only</p>
       <h1>local copy review</h1>
-      <p>every active public writing surface in route order. each sentence points back to its canonical Markdown file or shared configuration owner.</p>
+      <p>every active public writing surface in route order. preview the page, open its canonical source, or copy the local path before making a focused edit.</p>
+      <div class="status-panel" data-status={visibleCheckStatus}>
+        <div>
+          <p><strong>fast content check: {visibleCheckStatus === 'not-run' ? 'not run' : visibleCheckStatus}</strong></p>
+          <p>{visibleCheckStatus === 'outdated' ? 'files changed after the last check' : checkStatus ? `${new Date(checkStatus.checkedAt).toLocaleString()} in ${(checkStatus.durationMs / 1000).toFixed(1)}s` : 'run the focused check after each editing batch'}</p>
+          {visibleCheckStatus === 'failed' && checkStatus?.failure && <p>stopped at <code>{checkStatus.failure}</code></p>}
+        </div>
+        <div class="actions"><button type="button" data-copy-value="bun run check:content">copy check command</button></div>
+      </div>
     </header>
     <main>
-      <section>
-        <h2>writing tree</h2>
-        <ul class="tree">{surfaces.map((surface) => <li><a href={surface.route}>{surface.route}</a><span>{surface.owner}</span></li>)}</ul>
-      </section>
-      <section>
-        <h2>shared interface copy</h2>
-        <ul class="shared">{sharedCopy.map((item) => <li><code>{item.owner}</code><span>{item.text}</span></li>)}</ul>
+      <div class="toolbar">
+        <label>filter routes, files, or text<input id="copy-filter" type="search" placeholder="try codex, configuration, or permissions" autocomplete="off" /></label>
+        <label class="changed-toggle"><input id="changed-only" type="checkbox" /> changed files only</label>
+      </div>
+      <p id="result-count" aria-live="polite"></p>
+
+      <details class="review-section" open>
+        <summary><h2>writing tree</h2></summary>
+        <ul class="tree">
+          {surfaces.map((surface) => (
+            <li data-review-item data-search={`${surface.route} ${surface.owner} ${surface.title} ${surface.description}`.toLowerCase()} data-changed={String(changed(surface.owner))}>
+              <a href={surface.route}>{surface.route}</a>
+              <span>{surface.owner}</span>
+              <div class="actions">
+                <a href={surface.route}>preview</a>
+                <a href={sourceUrl(surface.owner)} target="_blank" rel="noreferrer">source</a>
+                <button type="button" data-copy-value={absoluteOwner(surface.owner)}>copy path</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </details>
+
+      <details class="review-section">
+        <summary><h2>shared interface copy</h2></summary>
+        <ul class="shared">
+          {sharedCopy.map((item) => (
+            <li data-review-item data-search={`${item.owner} ${item.text}`.toLowerCase()} data-changed={String(changed(item.owner))}>
+              <code>{item.owner}</code>
+              <span>{item.text}</span>
+              <div class="actions">
+                <a href={sourceUrl(item.owner)} target="_blank" rel="noreferrer">source</a>
+                <button type="button" data-copy-value={absoluteOwner(item.owner)}>copy path</button>
+              </div>
+            </li>
+          ))}
+        </ul>
         <h3>rendered framework actions</h3>
         <p class="owner">@astrojs/starlight and shared shell components</p>
         <ul class="shared shell-copy"><li><code>loading</code><span>rendered shared actions</span></li></ul>
-      </section>
-      <section>
-        <h2>rendered public copy</h2>
+      </details>
+
+      <details class="review-section" open>
+        <summary><h2>rendered public copy</h2></summary>
         <div class="surfaces">
           {surfaces.map((surface) => (
-            <article class="surface" data-route={surface.route} data-voice={surface.voice}>
-              <header>
-                <h3><a href={surface.route}>{surface.title}</a></h3>
+            <details class="surface" data-review-item data-route={surface.route} data-voice={surface.voice} data-search={`${surface.route} ${surface.owner} ${surface.title} ${surface.description}`.toLowerCase()} data-changed={String(changed(surface.owner))}>
+              <summary>
+                <div><h3>{surface.title}</h3><p>{surface.route}</p></div>
+                {changed(surface.owner) && <span class="changed-badge">changed</span>}
+              </summary>
+              <div class="surface-content">
                 <p>{surface.description}</p>
                 <p class="owner">{surface.owner}</p>
                 <p class="voice">{surface.voice}</p>
-              </header>
-              <ol class="copy"><li><span>loading</span><span>rendered route copy</span></li></ol>
-            </article>
+                <div class="actions">
+                  <a href={surface.route}>preview page</a>
+                  <a href={sourceUrl(surface.owner)} target="_blank" rel="noreferrer">open source</a>
+                  <button type="button" data-copy-value={absoluteOwner(surface.owner)}>copy local path</button>
+                </div>
+                <ol class="copy"><li><span>loading</span><span>rendered route copy</span></li></ol>
+              </div>
+            </details>
           ))}
         </div>
-      </section>
+        <p class="empty-state" hidden>no writing surfaces match this filter.</p>
+      </details>
     </main>
     <script>
       const selectors = 'h1,h2,h3,h4,p,li,th,td,dt,dd,button,summary,a';
+      const filter = document.querySelector<HTMLInputElement>('#copy-filter');
+      const changedOnly = document.querySelector<HTMLInputElement>('#changed-only');
+      const resultCount = document.querySelector<HTMLElement>('#result-count');
+
+      const applyFilters = () => {
+        const query = filter?.value.trim().toLowerCase() ?? '';
+        const requireChanged = changedOnly?.checked ?? false;
+        const renderedSurfaces = [...document.querySelectorAll<HTMLElement>('.surfaces .surface')];
+        for (const item of document.querySelectorAll<HTMLElement>('[data-review-item]')) {
+          const matchesText = !query || (item.dataset.search ?? '').includes(query);
+          const matchesChanged = !requireChanged || item.dataset.changed === 'true';
+          item.hidden = !(matchesText && matchesChanged);
+        }
+        const visible = renderedSurfaces.filter((item) => !item.hidden).length;
+        if (resultCount) resultCount.textContent = `${visible} of ${renderedSurfaces.length} writing surfaces shown`;
+        const empty = document.querySelector<HTMLElement>('.empty-state');
+        if (empty) empty.hidden = visible !== 0;
+        if (requireChanged) {
+          for (const section of document.querySelectorAll<HTMLDetailsElement>('.review-section')) {
+            if (section.querySelector('[data-review-item]:not([hidden])')) section.open = true;
+          }
+        }
+      };
+
       for (const surface of document.querySelectorAll<HTMLElement>('.surface')) {
         const route = surface.dataset.route;
         const list = surface.querySelector('.copy');
         if (!route || !list) continue;
         if (surface.dataset.voice === 'frozen') {
           list.innerHTML = '<li><span>frozen</span><span>excluded from ordinary editorial review through the compatibility window</span></li>';
+          surface.dataset.search += ' frozen compatibility window';
           continue;
         }
         try {
@@ -107,12 +235,13 @@ const sharedCopy = [
             .filter((node) => !node.querySelector(selectors))
             .map((node) => ({ kind: node.tagName.toLowerCase(), text: node.textContent?.replace(/\s+/g, ' ').trim() }))
             .filter((item) => item.text);
+          surface.dataset.search += ` ${copy.map((item) => item.text).join(' ').toLowerCase()}`;
           list.replaceChildren(...copy.map((item) => {
             const row = document.createElement('li');
             const kind = document.createElement('span');
             const text = document.createElement('span');
             kind.textContent = item.kind;
-            text.textContent = item.text;
+            text.textContent = item.text ?? '';
             row.append(kind, text);
             return row;
           }));
@@ -120,6 +249,7 @@ const sharedCopy = [
           list.textContent = `could not load ${route}: ${error}`;
         }
       }
+
       const shellList = document.querySelector('.shell-copy');
       if (shellList) {
         const html = await fetch('/guides/codex/').then((response) => response.text());
@@ -131,11 +261,23 @@ const sharedCopy = [
           const owner = document.createElement('code');
           const text = document.createElement('span');
           owner.textContent = 'rendered shell';
-          text.textContent = label;
+          text.textContent = label ?? '';
           row.append(owner, text);
           return row;
         }));
       }
+
+      document.addEventListener('click', async (event) => {
+        const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-copy-value]');
+        if (!button?.dataset.copyValue) return;
+        await navigator.clipboard.writeText(button.dataset.copyValue);
+        const previous = button.textContent;
+        button.textContent = 'copied';
+        window.setTimeout(() => { button.textContent = previous; }, 1200);
+      });
+      filter?.addEventListener('input', applyFilters);
+      changedOnly?.addEventListener('change', applyFilters);
+      applyFilters();
     </script>
   </body>
 </html>
