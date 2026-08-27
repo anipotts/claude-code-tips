@@ -124,7 +124,7 @@ body {
 .sl-markdown-content :where(p, ul, ol) + :where(p, ul, ol),
 .run-page :where(p, ul, ol) + :where(p, ul, ol) { margin-top: 1.125rem; }
 
-.home-content h2 + p, .home-guides-heading > p:last-child, .home-guide-list p, .run-description,
+.home-content h2 + p, .home-guide-list p, .run-description,
 .artifact-list span, .run-grid ul, .run-page section > ul, .page-sources > p:last-child {
   color: var(--ink);
 }
@@ -152,7 +152,7 @@ body {
   text-transform: none;
 }
 
-.site-name, .provider-tabs a[aria-current='page'], .handbook-sidebar a[aria-current='page'],
+.site-name, .site-footer .footer-site-name, .provider-tabs a[aria-current='page'], .handbook-sidebar a[aria-current='page'],
 .right-sidebar a[aria-current='true'] { font-weight: 600; }
 
 .mobile-site-menu nav a {

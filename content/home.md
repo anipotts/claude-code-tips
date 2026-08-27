@@ -28,7 +28,7 @@ that started with using them to build things for myself, mostly because i was
 curious and wanted to learn faster. then i started using them for my own
 business, for work with record labels, and eventually on software being used by
 YC-backed companies. somewhere along the way, i also became the kind of person
-who checks x every other week to see which model suddenly got better, what
+who checks X every other week to see which model suddenly got better, what
 changed in codex or claude code, which tiny startup just got acquihired for $10B,
 and who the next freakishly smart 24yo everyone is arguing about will be.
 
