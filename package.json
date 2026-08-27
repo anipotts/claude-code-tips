@@ -11,8 +11,11 @@
     "check:field-runs": "node scripts/check-field-runs.mjs",
     "check:readme": "bun scripts/sync-readme.ts --check",
     "check:content": "node scripts/check-content.mjs",
+    "check:performance": "node scripts/check-performance.mjs",
     "test:site": "node scripts/check-typography.mjs && node scripts/test-site.mjs",
+    "test:navigation": "node scripts/test-navigation.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
+    "audit:performance": "node scripts/audit-performance.mjs",
     "preview": "node node_modules/astro/bin/astro.mjs preview",
     "sync:readme": "bun scripts/sync-readme.ts"
   },
@@ -31,6 +34,8 @@
     "@playwright/test": "1.62.1",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
+    "lighthouse": "13.4.1",
+    "sharp": "0.35.4",
     "typescript": "6.0.3"
   }
 }
