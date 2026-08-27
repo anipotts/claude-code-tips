@@ -27,6 +27,7 @@
   --sl-text-3xl: 2rem;
   --sl-text-4xl: 3rem;
   --sl-text-5xl: 4rem;
+
   font-family: var(--font-sans);
   font-synthesis: none;
 }
@@ -42,7 +43,8 @@ body {
 :where(button, input, select, summary, textarea) { font: inherit; }
 :where(strong, b) { font-weight: 600; }
 
-:where(main, .run-inventory, .page-sources) h1 {
+:where(main, .run-inventory, .page-sources) h1,
+.copy-review-page > header h1 {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--type-title-size);
