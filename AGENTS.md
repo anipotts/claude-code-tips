@@ -9,6 +9,8 @@ this repository is an opinionated, source backed handbook for experienced coding
 - prefer primary sources and record them in `docs/sources.json`.
 - do not use generated activity, commit frequency, or vendor benchmarks as evidence of quality.
 - keep the voice direct, lowercase, and professional. avoid hype, fan language, and unsupported authority claims.
+- treat Ani's submitted wording and manual browser edits as the primary voice reference. preserve his phrasing unless accuracy, safety, or clarity requires a change, and explain that conflict instead of silently polishing it away.
+- write like a personal, engaging handbook built from curiosity and use: concrete experiences, recognizable details, honest uncertainty, and a clear reason for caring. avoid generic authority language and an overly technical textbook voice.
 - do not use mid-dot dividers in public copy or interface labels.
 - never use litotes or negative comparison frames in public copy. state the intended claim directly.
 - repeat context only when it changes understanding or supports a deliberate editorial rhythm. remove labels that restate the title, route, or surrounding section.
