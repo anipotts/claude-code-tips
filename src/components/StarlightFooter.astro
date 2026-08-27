@@ -71,14 +71,11 @@ const runs = entry.id === 'method'
 </script>
 
 <style>
-  .run-inventory, .page-sources { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
-  .run-inventory h2, .page-sources h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); }
+  .run-inventory, .page-sources { margin-top: 4rem; padding-top: 0; border-top: 1px solid var(--rule); }
   .run-inventory ul, .page-sources ul { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
   .run-inventory li { display: grid; grid-template-columns: minmax(16rem, 1fr) auto auto; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
   .page-sources li { padding: .8rem 0; border-bottom: 1px solid var(--rule); }
   .run-inventory a, .page-sources a { color: var(--cobalt); }
-  .run-inventory span, .source-kinds { color: var(--slate); font: .66rem var(--font-mono); text-transform: uppercase; }
-  .page-sources > p:last-child { color: var(--slate); }
   @media (max-width: 48rem) {
     .run-inventory li { grid-template-columns: 1fr; gap: .35rem; }
   }

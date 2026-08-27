@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
+import '../styles/global.css';
 import { getHandbookPages, routeForEntry } from '../content';
 import { evidenceLabels } from '../evidence';
 import { navigationScopes, site } from '../site';
@@ -32,29 +33,27 @@ const sharedCopy = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>local copy review</title>
     <style>
-      :root { font-family: ui-sans-serif, system-ui, sans-serif; color: #101114; background: #fff; }
+      :root { color: #101114; background: #fff; }
       * { box-sizing: border-box; }
       body { margin: 0; }
       header, main { width: min(100% - 2rem, 86rem); margin: 0 auto; }
       header { padding: 3rem 0 2rem; border-bottom: 1px solid #101114; }
-      h1 { margin: 0; font-size: clamp(2.5rem, 7vw, 6rem); letter-spacing: -.06em; }
-      header p { max-width: 48rem; color: #505760; line-height: 1.5; }
+      h1 { margin: 0; }
+      header p { max-width: 48rem; }
       section { padding: 2.5rem 0; border-bottom: 1px solid #c9cdd3; }
-      h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); letter-spacing: -.04em; }
       .tree, .shared, .surfaces { margin: 0; padding: 0; list-style: none; }
       .tree li, .shared li { display: grid; grid-template-columns: minmax(12rem, .6fr) 1.4fr; gap: 1rem; padding: .7rem 0; border-top: 1px solid #e5e7ea; }
       .surface { margin: 0 0 2rem; border: 1px solid #c9cdd3; }
       .surface > header { width: auto; padding: 1.2rem; border-bottom: 1px solid #c9cdd3; }
-      .surface h3 { margin: 0 0 .35rem; font-size: 1.35rem; }
+      .surface h3 { margin: 0 0 .35rem; }
       .surface header p { margin: .25rem 0; }
-      .owner, .voice { color: #505760; font: .72rem ui-monospace, monospace; }
       .copy { margin: 0; padding: 0 1.2rem 1.2rem; list-style: none; }
-      .copy li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #e5e7ea; line-height: 1.45; }
+      .copy li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid #e5e7ea; }
       a { color: #1247e6; }
       @media (max-width: 42rem) { .tree li, .shared li, .copy li { grid-template-columns: 1fr; gap: .3rem; } }
     </style>
   </head>
-  <body>
+  <body class="copy-review-page">
     <header>
       <p>development only</p>
       <h1>local copy review</h1>

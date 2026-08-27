@@ -9,7 +9,7 @@ const label = navigationScopes.find((scope) => scope.id === activeScope)?.label 
 ---
 
 <nav class="handbook-sidebar" aria-label={`${label} navigation`}>
-  <h2>{label}</h2>
+  <p class="sidebar-label">{label}</p>
   <ul>
     {pages.map((page) => {
       const href = routeForEntry(page);

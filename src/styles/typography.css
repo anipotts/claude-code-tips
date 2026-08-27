@@ -1,0 +1,221 @@
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource/ibm-plex-mono/400.css';
+
+:root {
+  --font-sans: 'Instrument Sans Variable', 'Instrument Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --type-display-size: clamp(2.75rem, 5vw, 4rem);
+  --type-title-size: clamp(2.25rem, 4vw, 3rem);
+  --type-heading-size: clamp(1.75rem, 2vw, 2rem);
+  --type-subheading-size: 1.375rem;
+  --type-body-size: 1.125rem;
+  --type-dense-size: 1rem;
+  --type-navigation-size: .875rem;
+  --type-metadata-size: .75rem;
+  --type-body-line: 1.875rem;
+  --type-dense-line: 1.5rem;
+  --type-navigation-line: 1.25rem;
+  --type-metadata-line: 1.125rem;
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+  --sl-text-xs: var(--type-metadata-size);
+  --sl-text-sm: var(--type-navigation-size);
+  --sl-text-base: var(--type-dense-size);
+  --sl-text-lg: var(--type-body-size);
+  --sl-text-xl: var(--type-subheading-size);
+  --sl-text-2xl: 1.75rem;
+  --sl-text-3xl: 2rem;
+  --sl-text-4xl: 3rem;
+  --sl-text-5xl: 4rem;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: 400;
+  line-height: var(--type-body-line);
+}
+
+:where(button, input, select, summary, textarea) { font: inherit; }
+:where(strong, b) { font-weight: 600; }
+
+:where(main, .run-inventory, .page-sources) h1 {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-title-size);
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+}
+
+.home-content h1 {
+  font-size: var(--type-display-size);
+  letter-spacing: -.035em;
+  line-height: 1;
+}
+
+:where(main, .run-inventory, .page-sources) h2 {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-heading-size);
+  font-weight: 600;
+  letter-spacing: -.025em;
+  line-height: 1.15;
+}
+
+:where(main, .run-inventory, .page-sources) h3 {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-subheading-size);
+  font-weight: 600;
+  letter-spacing: -.015em;
+  line-height: 1.25;
+}
+
+:where(main, .run-inventory, .page-sources) h4 {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.home-content h1 { margin-block: 0 1.5rem; }
+.home-content > p:first-of-type { margin-block: 0; }
+.home-content h2 { margin-block: 3rem 1rem; }
+.home-guides h2 { margin-block: 0; }
+.home-guide-list h3, .home-guide-list p { margin: 0; }
+
+.sl-markdown-content h2, .run-page h2, .run-inventory h2, .page-sources h2, .copy-review-page main h2 {
+  margin-block: 3rem 1rem;
+}
+
+.sl-markdown-content h2 {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.sl-markdown-content > h2:first-child { margin-top: 0; }
+.sl-markdown-content h3, .run-page h3, .copy-review-page main h3 { margin-block: 2rem .75rem; }
+.sl-markdown-content h4, .run-page h4, .copy-review-page main h4 { margin-block: 1.5rem .5rem; }
+
+.home-content :where(p, ul, ol),
+.home-guides :where(p, ul, ol),
+.sl-markdown-content :where(p, ul, ol),
+.run-page :where(p, ul, ol),
+.copy-review-page main :where(p, ul, ol) {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: 400;
+  line-height: var(--type-body-line);
+  margin-block: 0;
+}
+
+.home-content :where(p, ul, ol), .sl-markdown-content :where(p, ul, ol), .run-page :where(p, ul, ol) { max-width: 68ch; }
+.page-sources > p:last-child { max-width: 68ch; }
+.home-content :where(p, ul, ol) + :where(p, ul, ol),
+.sl-markdown-content :where(p, ul, ol) + :where(p, ul, ol),
+.run-page :where(p, ul, ol) + :where(p, ul, ol) { margin-top: 1.125rem; }
+
+.home-content h2 + p, .home-guides-heading > p:last-child, .home-guide-list p, .run-description,
+.artifact-list span, .run-grid ul, .run-page section > ul, .page-sources > p:last-child {
+  color: var(--ink);
+}
+
+:where(.home-content, .sl-markdown-content, .run-body) table,
+:where(.home-content, .sl-markdown-content, .run-body) td,
+.run-page dd,
+.artifact-list,
+.run-inventory li,
+.page-sources li {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-dense-size);
+  font-weight: 400;
+  line-height: var(--type-dense-line);
+}
+
+.site-name, .provider-tabs a, .handbook-sidebar a, .right-sidebar a,
+.right-sidebar h2, .site-footer a, .site-footer p {
+  font-family: var(--font-sans);
+  font-size: var(--type-navigation-size);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: var(--type-navigation-line);
+  text-transform: none;
+}
+
+.site-name, .provider-tabs a[aria-current='page'], .handbook-sidebar a[aria-current='page'],
+.right-sidebar a[aria-current='true'] { font-weight: 600; }
+
+.mobile-site-menu nav a {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5rem;
+  text-transform: none;
+}
+
+.mobile-site-menu nav a[aria-current='page'] { font-weight: 600; }
+
+.github-stars, .section-label, .home-guide-list span, .home-meta,
+.sidebar-label, .page-meta, .surface-bento figcaption, .history-year,
+.history-timeline figcaption, .run-header > p:first-child, .run-page dt,
+.run-evidence, .run-inventory span, .source-kinds,
+.copy-review-page .owner, .copy-review-page .voice,
+.copy-review-page .copy li > span:first-child,
+:where(.home-content, .sl-markdown-content, .run-body) th {
+  font-family: var(--font-mono);
+  font-size: var(--type-metadata-size);
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: var(--type-metadata-line);
+}
+
+.github-stars, .sidebar-label, .page-meta, .surface-bento figcaption,
+.history-timeline figcaption, .run-inventory span, .source-kinds,
+.copy-review-page .owner, .copy-review-page .voice,
+.copy-review-page .copy li > span:first-child,
+:where(.home-content, .sl-markdown-content, .run-body) th { color: var(--slate); }
+
+.section-label, .home-guide-list span, .home-meta, .history-year,
+.run-header > p:first-child, .run-page dt, .run-evidence { color: var(--slate); }
+
+.section-label, .home-guide-list span, .home-meta, .sidebar-label, .page-meta,
+.surface-bento figcaption, .history-year, .history-timeline figcaption,
+.run-header > p:first-child, .run-page dt, .run-evidence, .run-inventory span,
+.source-kinds, .copy-review-page .owner, .copy-review-page .voice,
+.copy-review-page .copy li > span:first-child { max-width: none; }
+
+.section-label, .home-guide-list span, .home-meta, .sidebar-label, .page-meta,
+.history-year, .run-header > p:first-child, .run-page dt, .run-evidence,
+.run-inventory span, .source-kinds,
+:where(.home-content, .sl-markdown-content, .run-body) th { text-transform: uppercase; }
+
+.surface-bento figcaption, .history-timeline figcaption,
+.copy-review-page .owner, .copy-review-page .voice,
+.copy-review-page .copy li > span:first-child { text-transform: none; }
+
+:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: var(--type-dense-size);
+  font-weight: 400;
+  line-height: var(--type-dense-line);
+}
+
+:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) pre,
+:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) pre code,
+:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) pre code span {
+  font-family: var(--font-mono);
+  font-size: var(--type-navigation-size);
+  font-weight: 400;
+  line-height: 1.375rem;
+}
+
+.copy-review-page header p { line-height: var(--type-body-line); }
