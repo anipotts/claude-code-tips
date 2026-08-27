@@ -71,10 +71,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .home-content th { padding: .75rem 1rem; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); text-align: left; }
 .home-content td { padding: .75rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .home-guides { padding: 4rem 0 5rem; }
-.home-guides-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 34rem); gap: 1rem 3rem; align-items: end; margin: 0 0 2.5rem; }
+.home-guides-heading { display: grid; gap: 1rem; margin: 0 0 2.5rem; }
 .home-guides-heading .section-label { grid-column: 1 / -1; margin: 0; }
 .home-guides-heading h2 { margin: 0; }
-.home-guides-heading > p:last-child { max-width: 34rem; margin: 0 0 .2rem; }
 .home-guide-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; }
 .home-guide-group > h3 { margin: 0 0 1rem; }
 .home-guide-list { border-top: 1px solid var(--ink); }
@@ -166,7 +165,7 @@ header.header { height: var(--site-header-height); padding: 0 !important; border
   .provider-tabs { justify-content: flex-start; }
   .home-content { padding-top: 3.5rem; }
   .home-guides { padding-top: 3rem; }
-  .home-guides-heading { grid-template-columns: 1fr; margin-top: 0; }
+  .home-guides-heading { margin-top: 0; }
   .home-guides-heading .section-label { grid-column: 1; }
   .home-guide-groups { grid-template-columns: 1fr; gap: 2.5rem; }
   .home-content table { display: block; overflow-x: auto; }
