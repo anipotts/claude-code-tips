@@ -47,7 +47,7 @@ for (const [route, source] of contentFiles) {
     }
   }
   if (!route.startsWith('/field-lab/') && !publicText.includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
-  for (const label of ['guides', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
+  for (const label of ['index', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
   if (/\bproduct guides\b/i.test(publicText)) failures.push(`${route}: retired product guides label appears in public output`);
   if (html.includes('·')) failures.push(`${route}: mid dot appears in public output`);
   if (!html.includes('coding agent tips on GitHub')) failures.push(`${route}: GitHub link is missing from the site header`);

@@ -20,7 +20,7 @@ export const site = {
 } as const;
 
 export const navigationScopes = [
-  { id: 'general', label: site.interfaceCopy.guides, href: '/', order: 10 },
+  { id: 'general', label: 'index', href: '/', order: 10 },
   { id: 'codex', label: 'codex', href: '/guides/codex/', order: 20 },
   { id: 'claude-code', label: 'claude code', href: '/guides/claude-code/', order: 30 },
   { id: 'grok', label: 'grok', href: '/guides/grok/', order: 40 },
