@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://agents.anipotts.com/sitemap-index.xml

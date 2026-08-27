@@ -17,6 +17,8 @@ const routeFile = (route) => route === '/' ? path.join(dist, 'index.html') : pat
 const contentFiles = canonicalContentFiles().map(({ route, file }) => [route, file]);
 
 try { await access(path.join(root, 'public/favicon.svg')); } catch { failures.push('favicon source is missing'); }
+try { await access(path.join(root, 'public/social-card.png')); } catch { failures.push('social card source is missing'); }
+try { await access(path.join(root, 'public/robots.txt')); } catch { failures.push('robots source is missing'); }
 
 const registry = JSON.parse(await readFile(path.join(root, 'docs/sources.json'), 'utf8'));
 const metadata = [];
@@ -34,6 +36,8 @@ for (const [route, source] of contentFiles) {
   const canonical = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/)?.[1];
   if (canonical !== `${origin}${route}`) failures.push(`${route}: canonical url is missing or incorrect`);
   if (!html.includes('<meta property="og:title"')) failures.push(`${route}: open graph title is missing`);
+  if (!html.includes(`<meta property="og:image" content="${origin}/social-card.png"`)) failures.push(`${route}: social preview image is missing`);
+  if (!html.includes(`<meta name="twitter:image" content="${origin}/social-card.png"`)) failures.push(`${route}: twitter preview image is missing`);
   if (!html.includes(`content="${description.replaceAll('&', '&amp;')}"`) && !text(html).includes(description)) failures.push(`${route}: canonical description is absent from rendered metadata`);
   if (!publicText.includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
   if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/archive/') {
@@ -46,7 +50,8 @@ for (const [route, source] of contentFiles) {
   for (const label of ['guides', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
   if (/\bproduct guides\b/i.test(publicText)) failures.push(`${route}: retired product guides label appears in public output`);
   if (html.includes('·')) failures.push(`${route}: mid dot appears in public output`);
-  if (!/coding agent tips on GitHub, \d+ stars/.test(html)) failures.push(`${route}: GitHub star count is missing from the site header`);
+  if (!html.includes('coding agent tips on GitHub')) failures.push(`${route}: GitHub link is missing from the site header`);
+  if (/GitHub stars|github-stars|\d+ stars, checked/i.test(html)) failures.push(`${route}: stale GitHub star metadata appears in the site header`);
 
   const links = [...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
   for (const href of links) {
@@ -86,6 +91,12 @@ else {
 }
 
 try { await access(path.join(dist, '__copy-review')); failures.push('/__copy-review/: production output exists'); } catch {}
+
+try {
+  const robots = await readFile(path.join(dist, 'robots.txt'), 'utf8');
+  if (!robots.includes('User-agent: *') || !robots.includes('Allow: /')) failures.push('robots.txt does not permit public crawling');
+  if (!robots.includes(`${origin}/sitemap-index.xml`)) failures.push('robots.txt does not reference the sitemap index');
+} catch { failures.push('generated robots.txt is missing'); }
 
 if (failures.length > 0) {
   console.error(failures.join('\n'));

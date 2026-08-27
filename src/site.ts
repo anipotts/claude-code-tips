@@ -1,8 +1,9 @@
 export const site = {
   name: 'coding agent tips',
+  url: 'https://agents.anipotts.com',
   repository: 'https://github.com/anipotts/coding-agent-tips',
-  repositoryStars: 28,
-  repositoryStarsVerified: '2026-08-22',
+  socialImage: '/social-card.png',
+  socialImageAlt: 'coding agent tips: a guide to coding agents in production software',
   releaseHistory: 'https://github.com/anipotts/coding-agent-tips/releases',
   interfaceCopy: {
     menu: 'menu',
