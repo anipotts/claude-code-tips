@@ -6,6 +6,7 @@ import { contentRedirects } from './src/content-manifest.mjs';
 import { site } from './src/site';
 
 const repository = site.repository;
+const socialImage = new URL(site.socialImage, site.url).href;
 const redirects = {
   ...contentRedirects(),
   '/changes/': site.releaseHistory,
@@ -13,7 +14,7 @@ const redirects = {
 const redirectedPaths = new Set(Object.keys(redirects));
 
 export default defineConfig({
-  site: 'https://agents.anipotts.com',
+  site: site.url,
   output: 'static',
   redirects,
   integrations: [
@@ -36,6 +37,14 @@ export default defineConfig({
     } }),
     starlight({
       title: site.name,
+      head: [
+        { tag: 'meta', attrs: { property: 'og:image', content: socialImage } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1280' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '640' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: site.socialImageAlt } },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: socialImage } },
+        { tag: 'meta', attrs: { name: 'twitter:image:alt', content: site.socialImageAlt } },
+      ],
       customCss: ['./src/styles/global.css'],
       components: {
         Header: './src/components/StarlightHeader.astro',

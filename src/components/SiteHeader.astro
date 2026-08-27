@@ -19,11 +19,9 @@ const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeSco
       <a
         class="github-link"
         href={site.repository}
-        aria-label={`${site.interfaceCopy.github}, ${site.repositoryStars} stars`}
-        title={`${site.repositoryStars} GitHub stars, checked ${site.repositoryStarsVerified}`}
+        aria-label={site.interfaceCopy.github}
       >
         <Icon name="ph:github-logo" aria-hidden="true" />
-        <span class="github-stars" aria-hidden="true">{site.repositoryStars}</span>
       </a>
       <details class="mobile-site-menu">
         <summary aria-label={site.interfaceCopy.menu} aria-controls="mobile-scope-menu">
