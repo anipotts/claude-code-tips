@@ -78,26 +78,22 @@ const date = data.date.toISOString().slice(0, 10);
 
 <style>
   .run-page { max-width: 76rem; margin: 0 auto; padding: 5rem clamp(1.25rem, 6vw, 5rem); }
-  .run-header > p:first-child { margin: 0 0 1rem; color: var(--cobalt); font: .66rem var(--font-mono); text-transform: uppercase; letter-spacing: .09em; }
-  .run-header h1 { max-width: 58rem; margin: 0; font-size: clamp(2.6rem, 6vw, 5.4rem); line-height: .96; letter-spacing: -.055em; overflow-wrap: anywhere; }
-  .run-description { max-width: 46rem; color: var(--slate); font-size: 1.15rem; line-height: 1.5; }
+  .run-header > p:first-child { margin: 0 0 1rem; }
+  .run-header h1 { max-width: 58rem; margin: 0; overflow-wrap: anywhere; }
+  .run-description { max-width: 68ch; margin: 1.5rem 0 0; }
   .run-header dl, .run-task dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 3rem 0 5rem; border-top: 1px solid var(--ink); }
   .run-header dl div, .run-task dl div, .compact-data div { padding: 1.1rem 1rem 1.1rem 0; border-bottom: 1px solid var(--rule); }
-  dt { color: var(--slate); font: .61rem var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
   dd { margin: .45rem 0 0; overflow-wrap: anywhere; }
-  .run-page h2 { margin-top: 4.5rem; font-size: clamp(1.8rem, 3.5vw, 3rem); letter-spacing: -.045em; }
   .run-body :global(table) { width: 100%; }
   .artifact-list { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
   .artifact-list li { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr; gap: 2rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
   .artifact-list a { color: var(--cobalt); }
-  .artifact-list span { color: var(--slate); }
   .run-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; }
-  .run-grid ul, .run-page section > ul { padding-left: 1.2rem; color: var(--slate); line-height: 1.6; }
+  .run-grid ul, .run-page section > ul { padding-left: 1.2rem; }
   .compact-data { margin: 0; }
-  .run-evidence { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--ink); color: var(--cobalt); font: .65rem var(--font-mono); text-transform: uppercase; }
+  .run-evidence { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--ink); }
   @media (max-width: 48rem) {
     .run-page { padding-top: 3.5rem; }
-    .run-header h1 { font-size: clamp(2.4rem, 12vw, 3.2rem); }
     .run-header dl, .run-task dl, .run-grid { grid-template-columns: 1fr; }
     .artifact-list li { grid-template-columns: 1fr; gap: .4rem; }
   }
