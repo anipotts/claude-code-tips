@@ -87,10 +87,9 @@ window. current publication changes live at [agents.anipotts.com/changes](https:
 - drafted v3-horizon RFCs in `docs/rfcs/`: `mine-v2-observability.md`, `freshness-watcher.md`, `mini-control-plane.md`
 
 ### review automation
-- replaces CodeRabbit with an ai-review-team: `anthropics/claude-code-action` (prose, voice, contract shape) plus a codex reviewer (openai responses api, o3-mini) for bugs, security, shell/python correctness
+- replaces the previous single-reviewer setup with an ai-review-team: `anthropics/claude-code-action` (prose, voice, contract shape) plus a codex reviewer (openai responses api, o3-mini) for bugs, security, shell/python correctness
 - historical rubric at `.github/AI_REVIEW_RUBRIC.md` gave both reviewers a fixed output format, lane split, and auto-dismiss list for voice-conflicting style nits
 - historical workflow at `.github/workflows/ai-review.yml` ran on pull requests, issues, and manual dispatch; it was concurrency-gated and skipped drafts
-- `.coderabbit.yaml` disables CodeRabbit auto-reviews; full uninstall is a one-click action in repo settings.
 
 ## 2026-03-15
 
