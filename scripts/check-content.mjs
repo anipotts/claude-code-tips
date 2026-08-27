@@ -2,10 +2,11 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { spawnSync } from 'node:child_process';
+import { resolveBun } from './runtime.mjs';
 
 const root = process.cwd();
 const startedAt = Date.now();
-const bun = process.env.npm_execpath?.endsWith('/bun') ? process.env.npm_execpath : 'bun';
+const bun = resolveBun();
 const childEnvironment = {
   ...process.env,
   PATH: `${path.dirname(bun)}:${process.env.PATH ?? ''}`,

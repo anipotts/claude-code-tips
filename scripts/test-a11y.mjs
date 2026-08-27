@@ -1,11 +1,12 @@
 import { spawn, spawnSync } from 'node:child_process';
+import path from 'node:path';
 import process from 'node:process';
 import AxeBuilder from '@axe-core/playwright';
 import { chromium } from '@playwright/test';
 import { canonicalContentFiles } from '../src/content-manifest.mjs';
 
 const origin = 'http://127.0.0.1:4173';
-const bun = process.env.npm_execpath?.endsWith('/bun') ? process.env.npm_execpath : 'bun';
+const astro = path.join(process.cwd(), 'node_modules/astro/bin/astro.mjs');
 const routes = canonicalContentFiles().map((entry) => entry.route);
 const viewports = [
   { name: 'reflow narrow', width: 320, height: 800 },
@@ -17,8 +18,8 @@ const viewports = [
   { name: 'desktop annotated', width: 1191, height: 942 },
   { name: 'desktop wide', width: 1440, height: 1024 },
 ];
-spawnSync(bun, ['x', 'astro', 'preview', 'stop'], { stdio: 'ignore' });
-const server = spawn(bun, ['x', 'astro', 'preview', '--host', '127.0.0.1', '--port', '4173'], { stdio: 'inherit' });
+spawnSync(process.execPath, [astro, 'preview', 'stop'], { stdio: 'ignore' });
+const server = spawn(process.execPath, [astro, 'preview', '--host', '127.0.0.1', '--port', '4173'], { stdio: 'inherit' });
 const failures = [];
 let browser;
 
@@ -135,7 +136,7 @@ try {
 } finally {
   await browser?.close();
   server.kill('SIGTERM');
-  spawnSync(bun, ['x', 'astro', 'preview', 'stop'], { stdio: 'ignore' });
+  spawnSync(process.execPath, [astro, 'preview', 'stop'], { stdio: 'ignore' });
 }
 
 if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
