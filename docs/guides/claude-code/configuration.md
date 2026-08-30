@@ -4,7 +4,8 @@ description: where claude code instructions, settings, permissions, hooks, and r
 products: [claude-code]
 updatedAt: "2026-08-29T19:04:00-04:00"
 checkedAt: "2026-08-28T00:00:00-04:00"
-status: pending
+status: current
+completion: excerpt
 evidence: [official-source, open-question]
 sources: [anthropic-features-overview, anthropic-permissions, anthropic-memory, anthropic-settings, anthropic-changelog]
 redirects: []
@@ -31,20 +32,6 @@ navigation:
 keep sensitive machine details and credentials outside shared repository files.
 Claude Code documents the permission system.
 
-## understand the scope before changing a value
-
-### user settings follow you
-
-<!-- Ani voice pass follows this approved structure. -->
-
-### project settings travel with the repository
-
-<!-- Ani voice pass follows this approved structure. -->
-
-### local and managed settings change precedence
-
-<!-- Ani voice pass follows this approved structure. -->
-
 ## separate instructions from memory
 
 ### shared rules have one canonical source
@@ -53,30 +40,6 @@ when a repository supports several agents, keep the shared operating rules in
 one canonical file. make `CLAUDE.md` import those rules, then add only genuine
 Claude Code differences. this prevents the same verification command or safety
 boundary from drifting between agent specific files.
-
-### auto memory records useful experience
-
-<!-- Ani voice pass follows this approved structure. -->
-
-## permissions answer two questions
-
-### rules define allow, ask, and deny
-
-<!-- Ani voice pass follows this approved structure. -->
-
-### modes define the session posture
-
-<!-- Ani voice pass follows this approved structure. -->
-
-## keep identity and secrets outside the repository
-
-### authentication belongs to the account
-
-<!-- Ani voice pass follows this approved structure. -->
-
-### credentials belong in external storage
-
-<!-- Ani voice pass follows this approved structure. -->
 
 ## inspect the effective configuration
 

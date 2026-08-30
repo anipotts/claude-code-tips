@@ -5,6 +5,7 @@ products: [codex, claude-code]
 updatedAt: "2026-08-28T00:00:00-04:00"
 checkedAt: "2026-08-28T00:00:00-04:00"
 status: pending
+completion: outline
 draft: true
 evidence: [official-source, analysis, open-question]
 sources: [onepassword-codex, onepassword-claude, onepassword-cli-secrets]

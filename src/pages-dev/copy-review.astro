@@ -11,7 +11,7 @@ import { navigationScopes, site } from '../site';
 const root = process.cwd();
 const home = await getEntry('home', 'home');
 if (!home) throw new Error('content/home.md is required');
-const pages = await getHandbookPages({ includeArchive: true });
+const pages = await getHandbookPages({ includeArchive: true, includeDrafts: true });
 const runs = (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf());
 const surfaces = [
   { route: '/', owner: 'content/home.md', title: home.data.title, description: home.data.description, voice: home.data.voice },

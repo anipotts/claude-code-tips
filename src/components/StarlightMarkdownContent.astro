@@ -1,0 +1,15 @@
+---
+import DefaultMarkdownContent from '@astrojs/starlight/components/MarkdownContent.astro';
+
+const entry = Astro.locals.starlightRoute.entry;
+const isOutline = entry.data.completion === 'outline';
+---
+
+<DefaultMarkdownContent>
+  {isOutline ? (
+    <div class="outline-review-state" role="status">
+      <p><strong>this chapter is still in the editorial blueprint.</strong></p>
+      <p>its section structure stays out of the reader preview until the paired Codex and Claude Code chapter has substantive copy ready for review.</p>
+    </div>
+  ) : <slot />}
+</DefaultMarkdownContent>

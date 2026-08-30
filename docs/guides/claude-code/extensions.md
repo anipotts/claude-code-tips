@@ -5,6 +5,7 @@ products: [claude-code]
 updatedAt: "2026-08-27T12:00:00-04:00"
 checkedAt: "2026-08-28T00:00:00-04:00"
 status: pending
+completion: outline
 draft: true
 evidence: [official-source, open-question]
 sources: [anthropic-features-overview, anthropic-memory, anthropic-skills, anthropic-mcp, anthropic-subagents, anthropic-hooks, anthropic-plugins]

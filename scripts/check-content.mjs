@@ -14,6 +14,7 @@ const childEnvironment = {
 const checks = [
   [bun, ['run', 'check']],
   [bun, ['run', 'check:handbook']],
+  [bun, ['run', 'check:completeness']],
   [bun, ['run', 'check:field-runs']],
   [bun, ['run', 'check:readme']],
   [bun, ['run', 'check:links']],

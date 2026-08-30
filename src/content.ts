@@ -6,7 +6,7 @@ export type HandbookEntry = CollectionEntry<'docs'>;
 export const routeForEntry = (entry: HandbookEntry) => `/${entry.id.replace(/\/$/, '')}/`;
 
 export async function getHandbookPages(options: { includeHidden?: boolean; includeArchive?: boolean; includeDrafts?: boolean; scope?: NavigationScope } = {}) {
-  const { includeHidden = false, includeArchive = true, includeDrafts = !import.meta.env.PROD, scope } = options;
+  const { includeHidden = false, includeArchive = true, includeDrafts = false, scope } = options;
   const scopeOrder = new Map(handbookScopes.map((item) => [item.id, item.order]));
   const entries = await getCollection('docs');
 

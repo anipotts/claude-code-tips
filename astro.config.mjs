@@ -78,6 +78,7 @@ export default defineConfig({
         Header: './src/components/StarlightHeader.astro',
         PageTitle: './src/components/StarlightPageTitle.astro',
         PageSidebar: './src/components/StarlightPageSidebar.astro',
+        MarkdownContent: './src/components/StarlightMarkdownContent.astro',
         Footer: './src/components/StarlightFooter.astro',
         Sidebar: './src/components/StarlightSidebar.astro',
       },

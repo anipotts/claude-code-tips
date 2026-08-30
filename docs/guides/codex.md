@@ -2,11 +2,12 @@
 title: codex
 description: a practical map of the codex terminal, app, editor, cloud, and mobile surfaces.
 products: [codex]
-updatedAt: "2026-08-29T19:04:00-04:00"
-checkedAt: "2026-08-28T00:00:00-04:00"
+updatedAt: "2026-08-30T14:33:21-04:00"
+checkedAt: "2026-08-30T14:33:21-04:00"
 status: current
+completion: complete
 evidence: [tested, official-source, analysis]
-sources: [openai-chatgpt-overview, openai-codex-product, openai-codex-manual, openai-codex-cli, openai-codex-ide, openai-chatgpt-desktop-app, openai-codex-app, openai-codex-cloud, openai-codex-mobile, openai-codex-agents-md, openai-codex-skills, openai-codex-plugins, openai-codex-hooks, openai-codex-mcp, openai-codex-subagents, openai-work-and-codex]
+sources: [openai-chatgpt-overview, openai-codex-product, openai-codex-manual, openai-codex-cli, openai-codex-ide, openai-chatgpt-desktop-app, openai-codex-app, openai-codex-cloud, openai-codex-mobile, openai-remote-connections, openai-codex-agents-md, openai-codex-skills, openai-codex-plugins, openai-codex-hooks, openai-codex-mcp, openai-codex-subagents, openai-work-and-codex]
 redirects: []
 voice: personal
 navigation:
@@ -49,7 +50,15 @@ becomes dependable when the environment gives that motion a visible boundary.
 
 ### the task can be its own workspace
 
-<!-- Ani voice pass: introduce the dated projectless task observation here. -->
+Codex does not always need a repository before it can become useful. I can
+begin with a file, a question, a browser, or a piece of visual context and let
+the task become a temporary workspace around the problem. that is useful for
+triage, comparison, and the work that decides which repository should change.
+
+I still name the durable destination as soon as the task becomes code. a
+projectless conversation can hold the investigation, while the implementation
+should settle into a repository, a checkout, and a verification command that
+another person can inspect.
 
 ## where codex lives
 
@@ -171,15 +180,44 @@ switch interfaces without rebuilding the rules of the project from memory.
 
 ### steering is different from hosting
 
-<!-- Ani voice pass: distinguish the control surface from the execution host. -->
+the device in my hand does not have to be the machine doing the work. with
+[Remote](https://learn.chatgpt.com/docs/remote-connections), my phone or another
+desktop can send prompts, approvals, and follow up instructions to a connected
+host. the host still supplies the files, shell, credentials, permissions,
+skills, MCP servers, browser setup, and local tools.
+
+this distinction keeps remote work understandable. I first ask where the
+process is running and which environment it can reach. only then do I decide
+which screen is the most convenient place to steer it.
 
 ### local, remote, and cloud execution are different
 
-<!-- Ani voice pass: orient the reader before the full workflows comparison. -->
+local work uses the machine in front of me. Control Other Devices keeps the
+work on a connected desktop host and moves the controls somewhere else. an SSH
+project goes further: the desktop app starts Codex through SSH, then reads,
+writes, and runs commands against the remote machine. [Codex
+cloud](https://learn.chatgpt.com/docs/cloud) uses a separate hosted environment
+that can continue after I close the desktop app.
+
+those options solve different problems. a connected host preserves the setup I
+already trust. SSH is useful when the repository and its dependencies already
+live on another machine. cloud work is useful when the task should be isolated
+from my computer and continue independently. convenience comes after choosing
+the right execution boundary.
 
 ### mobile keeps the control loop close
 
-<!-- Ani voice pass: preserve the direct mobile experience and dated feature notes. -->
+mobile Codex is genuinely useful to me because it keeps much more of the control
+loop available than a simple notification screen. I can start or continue
+chats, choose branches and worktrees, inspect diffs and terminal output, manage
+goals, leave review comments, answer questions, and approve actions while the
+connected host keeps its full environment.
+
+the phone works best for steering and review. I still return to a larger screen
+for a wide diff, a long terminal trace, or a decision that depends on several
+files at once. mobile shortens the distance between the task needing attention
+and me making the next decision without pretending that every review belongs on
+a phone.
 
 ## start with what you are trying to finish
 
@@ -198,8 +236,6 @@ verification result; knowledge work should end in a deliverable I can read,
 edit, and share.
 
 ### ChatGPT Work begins with a finished deliverable
-
-<!-- Ani voice pass: develop the finished knowledge work boundary here. -->
 
 the final authority stays easy to name in either case. an agent can prepare a
 commit, a pull request, a deployment, a message, or a deletion. preparing that

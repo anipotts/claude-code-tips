@@ -9,6 +9,7 @@ const sourceId = z.string().refine((id) => sourceIds.has(id), 'source identifier
 const evidenceStatus = z.enum(['tested', 'official-source', 'analysis', 'open-question']);
 const navigationScope = z.enum(['general', 'codex', 'claude-code', 'grok', 'opencode', 'qwen-code', 'kimi-code', 'aider']);
 const voice = z.enum(['personal', 'evidence', 'documentary', 'frozen']);
+const completion = z.enum(['outline', 'excerpt', 'complete']);
 const navigation = z.object({
   scope: navigationScope,
   order: z.number().int().nonnegative(),
@@ -23,6 +24,7 @@ const common = {
   sources: z.array(sourceId),
   redirects: z.array(z.string()).default([]),
   voice,
+  completion: completion.optional(),
   navigation,
 };
 
