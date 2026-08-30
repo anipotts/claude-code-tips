@@ -2,7 +2,7 @@
 title: grok
 description: a current source based map of grok build, grok bot, and the wider grok product surface.
 products: [grok]
-updatedAt: "2026-08-22T19:55:02-04:00"
+updatedAt: "2026-08-29T19:04:00-04:00"
 status: pending
 evidence: [official-source, analysis, open-question]
 sources: [grok-build, grok-4-5, grok-bot]
@@ -24,11 +24,10 @@ model comparison does not get confused with a harness or a cloud computer.
   <figure><a href="https://docs.x.ai/grok-bot/overview"><img src="/media/publications/grok-bot-1200.webp" srcset="/media/publications/grok-bot-640.webp 640w, /media/publications/grok-bot-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="an xAI product graphic for Grok tools" loading="lazy" decoding="async" width="1200" height="630" /><figcaption>Grok Bot and persistent cloud work</figcaption></a></figure>
 </div>
 
-as of august 22, 2026, Grok Build provides an interactive terminal interface,
+as of august 22, 2026, [Grok Build provides](https://docs.x.ai/build/overview) an interactive terminal interface,
 headless scripting, ACP integration, custom models, skills, plugins, hooks, MCP,
-subagents, and workflows. Grok Bot provides persistent agents on a shared cloud
-computer. [Grok Build](https://docs.x.ai/build/overview) and
-[Grok Bot](https://docs.x.ai/grok-bot/overview)
+subagents, and workflows. [Grok Bot provides](https://docs.x.ai/grok-bot/overview)
+persistent agents on a shared cloud computer.
 
 i use Grok less than Codex and Claude Code. these pages therefore stay concise,
 source based, and explicit about what still needs a real field run.

@@ -2,10 +2,11 @@
 title: choosing a coding agent setup
 description: compare surfaces, harnesses, models, orchestration, and hardware before choosing a setup.
 products: [market]
-updatedAt: "2026-08-22T19:55:02-04:00"
+updatedAt: "2026-08-29T19:04:00-04:00"
+checkedAt: "2026-08-29T18:57:04-04:00"
 status: current
 evidence: [tested, official-source, analysis, open-question]
-sources: [openai-codex-manual, anthropic-claude-overview, vscode-agent-host, cursor-docs, conductor-harnesses, t3-code, opencode, kimi-code, qwen-code, git-worktrees]
+sources: [openai-codex-manual, anthropic-claude-overview, vscode-agent-host, cursor-docs, openai-cursor-contract, conductor-harnesses, t3-code, opencode, kimi-code, qwen-code, git-worktrees]
 redirects: [/market/hardware/]
 voice: evidence
 navigation:
@@ -29,6 +30,14 @@ one product can occupy several layers. Cursor combines an editor with an agent
 harness. Codex and Claude Code span several surfaces. Grok now has its own
 [product guide](/guides/grok/) so its model, coding harness, and cloud agents do
 not get flattened into one row here.
+
+model access inside a third party harness can also change independently of the
+editor or agent loop. on august 28, 2026, OpenAI said it had [proposed winding
+down its custom model access contract](https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/)
+with Cursor on november 12, 2026 and would not provide future models. that is a
+contract change with a proposed cutoff date, not evidence that every OpenAI
+model disappeared from Cursor immediately. it is one reason I treat the editor,
+harness, and model as separate choices.
 
 ## common setups
 

@@ -7,7 +7,7 @@ import sourceRegistry from '../docs/sources.json';
 const sourceIds = new Set(sourceRegistry.sources.map((source) => source.id));
 const sourceId = z.string().refine((id) => sourceIds.has(id), 'source identifier is absent from docs/sources.json');
 const evidenceStatus = z.enum(['tested', 'official-source', 'analysis', 'open-question']);
-const navigationScope = z.enum(['general', 'codex', 'claude-code', 'grok']);
+const navigationScope = z.enum(['general', 'codex', 'claude-code', 'grok', 'opencode', 'qwen-code', 'kimi-code', 'aider']);
 const voice = z.enum(['personal', 'evidence', 'documentary', 'frozen']);
 const navigation = z.object({
   scope: navigationScope,
@@ -17,6 +17,7 @@ const navigation = z.object({
 const common = {
   products: z.array(z.string()).min(1),
   updatedAt: z.iso.datetime({ offset: true }),
+  checkedAt: z.iso.datetime({ offset: true }).optional(),
   status: z.enum(['current', 'pending', 'archive']),
   evidence: z.array(evidenceStatus).min(1),
   sources: z.array(sourceId),

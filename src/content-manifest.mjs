@@ -9,6 +9,14 @@ function inlineList(markdown, key) {
   return match[1].split(',').map((value) => value.trim().replace(/^['"]|['"]$/g, ''));
 }
 
+function scalar(markdown, key) {
+  return markdown.match(new RegExp(`^\\s*${key}:\\s*(.+)$`, 'm'))?.[1].trim().replace(/^['"]|['"]$/g, '') ?? '';
+}
+
+function isDraft(file) {
+  return scalar(readFileSync(file, 'utf8'), 'draft') === 'true';
+}
+
 function routeForFile(file) {
   const path = relative(resolve(root, 'docs'), file).replace(/\.md$/, '');
   return `/${path}/`;
@@ -29,13 +37,13 @@ export function canonicalContentFiles() {
   const runs = readdirSync(resolve(root, 'content/runs')).filter((file) => file.endsWith('.md'));
   return [
     { route: '/', file: resolve(root, 'content/home.md'), kind: 'home' },
-    ...handbookFiles().map((file) => ({ route: routeForFile(file), file, kind: file.endsWith('archive.md') ? 'archive' : 'guide' })),
+    ...handbookFiles().filter((file) => !isDraft(file)).map((file) => ({ route: routeForFile(file), file, kind: file.endsWith('archive.md') ? 'archive' : 'guide' })),
     ...runs.map((file) => ({ route: `/field-lab/runs/${file.replace(/\.md$/, '')}/`, file: resolve(root, 'content/runs', file), kind: 'run' })),
   ];
 }
 
 export function contentRedirects() {
-  const files = handbookFiles();
+  const files = handbookFiles().filter((file) => !isDraft(file));
   const redirects = {};
   for (const file of files) {
     const target = routeForFile(file);

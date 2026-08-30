@@ -1,16 +1,17 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { navigationScopes, type NavigationScope } from './site';
+import { handbookScopes, type NavigationScope } from './site';
 
 export type HandbookEntry = CollectionEntry<'docs'>;
 
 export const routeForEntry = (entry: HandbookEntry) => `/${entry.id.replace(/\/$/, '')}/`;
 
-export async function getHandbookPages(options: { includeHidden?: boolean; includeArchive?: boolean; scope?: NavigationScope } = {}) {
-  const { includeHidden = false, includeArchive = true, scope } = options;
-  const scopeOrder = new Map(navigationScopes.map((item) => [item.id, item.order]));
+export async function getHandbookPages(options: { includeHidden?: boolean; includeArchive?: boolean; includeDrafts?: boolean; scope?: NavigationScope } = {}) {
+  const { includeHidden = false, includeArchive = true, includeDrafts = !import.meta.env.PROD, scope } = options;
+  const scopeOrder = new Map(handbookScopes.map((item) => [item.id, item.order]));
   const entries = await getCollection('docs');
 
   return entries
+    .filter((entry) => includeDrafts || !entry.data.draft)
     .filter((entry) => includeHidden || !entry.data.navigation.hidden)
     .filter((entry) => includeArchive || entry.data.status !== 'archive')
     .filter((entry) => !scope || entry.data.navigation.scope === scope)
@@ -23,5 +24,5 @@ export async function getHandbookPages(options: { includeHidden?: boolean; inclu
 
 export async function getHomepagePages() {
   const pages = await getHandbookPages({ includeArchive: false });
-  return pages.filter((entry) => entry.data.navigation.scope === 'general' || entry.data.navigation.order === 10);
+  return pages;
 }

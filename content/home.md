@@ -21,7 +21,7 @@ of the real world.
 
 ## why i made this
 
-over the last two years, i’ve spent a pretty unreasonable amount of time trying
+over the last two years, i’ve spent a crazy amount of time trying
 to understand coding with AI.
 
 that started with using them to build things for myself, mostly because i was
