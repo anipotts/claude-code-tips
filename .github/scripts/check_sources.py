@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "docs" / "sources.json"
 REQUIRED_SOURCE_FIELDS = {
     "id",
+    "title",
+    "publisher",
     "product",
     "layer",
     "status",
@@ -27,6 +29,7 @@ REQUIRED_SOURCE_FIELDS = {
     "last_checked",
     "evidence",
 }
+REQUIRED_PUBLISHER_FIELDS = {"id", "label", "domain", "icon"}
 LAYERS = {"surface", "harness", "model", "orchestration"}
 EVIDENCE = {"tested", "official-source", "analysis", "open-question"}
 MAX_AGE_DAYS = {"pricing": 14, "core": 30, "watchlist": 45, "stable": 90}
@@ -60,8 +63,29 @@ def validate_registry(data: dict, freshness: bool) -> list[str]:
     errors: list[str] = []
     today = date.today()
 
-    if data.get("schema_version") != 1:
-        errors.append("schema_version must be 1")
+    if data.get("schema_version") != 2:
+        errors.append("schema_version must be 2")
+
+    publishers = data.get("publishers")
+    if not isinstance(publishers, list) or not publishers:
+        errors.append("publishers must be a non-empty list")
+        publisher_ids: set[str] = set()
+    else:
+        publisher_ids = set()
+        for index, publisher in enumerate(publishers):
+            label = publisher.get("id", f"publisher[{index}]")
+            missing = REQUIRED_PUBLISHER_FIELDS - publisher.keys()
+            if missing:
+                errors.append(f"{label}: missing publisher fields {sorted(missing)}")
+                continue
+            if publisher["id"] in publisher_ids:
+                errors.append(f"{label}: duplicate publisher id")
+            publisher_ids.add(publisher["id"])
+            if not publisher["domain"] or "://" in publisher["domain"]:
+                errors.append(f"{label}: publisher domain must be a hostname")
+            icon_path = ROOT / "public" / publisher["icon"].lstrip("/")
+            if not publisher["icon"].startswith("/") or not icon_path.is_file():
+                errors.append(f"{label}: publisher icon must be a local public file")
 
     labels = data.get("evidence_labels")
     if not isinstance(labels, dict) or set(labels) != EVIDENCE:
@@ -86,6 +110,20 @@ def validate_registry(data: dict, freshness: bool) -> list[str]:
         if source["id"] in seen:
             errors.append(f"{label}: duplicate id")
         seen.add(source["id"])
+
+        if not source["title"].strip():
+            errors.append(f"{label}: source title is required")
+        if source["publisher"] not in publisher_ids:
+            errors.append(f"{label}: unknown publisher {source['publisher']!r}")
+
+        aliases = source.get("aliases", [])
+        if not isinstance(aliases, list):
+            errors.append(f"{label}: aliases must be a list")
+        else:
+            for alias in aliases:
+                parsed_alias = urlparse(alias)
+                if parsed_alias.scheme != "https" or not parsed_alias.netloc:
+                    errors.append(f"{label}: aliases must contain absolute https urls")
 
         if source["layer"] not in LAYERS:
             errors.append(f"{label}: invalid layer {source['layer']!r}")

@@ -1,11 +1,101 @@
 ---
 import { formatUpdatedAt } from '../date';
 import { site } from '../site';
+import { Icon } from 'astro-icon/components';
 
-const { title, updatedAt } = Astro.locals.starlightRoute.entry.data;
+const entry = Astro.locals.starlightRoute.entry;
+const { title, updatedAt, draft } = entry.data;
+const markdownPath = `${Astro.url.pathname.replace(/\/$/, '') || '/index'}.md`;
+const editPath = `${site.repository}/edit/main/docs/${entry.id}.md`;
 ---
 
-<h1 id="_top">{title}</h1>
+<div class="page-title-row">
+  <h1 id="_top">{title}</h1>
+  {!draft && <div class="page-actions" aria-label="page actions">
+    <button type="button" data-copy-page data-markdown-path={markdownPath} aria-label="copy page as Markdown" title="copy page as Markdown">
+      <Icon name="ph:copy" aria-hidden="true" /><span data-copy-page-label>copy page</span>
+    </button>
+    <details class="page-action-menu" data-page-action-menu>
+      <summary aria-label="more page actions" title="more page actions"><Icon name="ph:caret-down" aria-hidden="true" /></summary>
+      <div class="page-action-menu-panel">
+        <a href={markdownPath} target="_blank" rel="noopener"><Icon name="ph:list" aria-hidden="true" /><span>view Markdown</span></a>
+        <button type="button" data-copy-page-link><Icon name="ph:copy" aria-hidden="true" /><span>copy page link</span></button>
+        <a href={editPath}><Icon name="ph:pencil-simple" aria-hidden="true" /><span>edit on GitHub</span></a>
+      </div>
+    </details>
+    <span class="page-action-status" data-copy-page-status aria-live="polite"></span>
+  </div>}
+</div>
 {updatedAt && <p class="page-meta" aria-label="page metadata">
-  {site.interfaceCopy.lastUpdated} <time datetime={updatedAt}>{formatUpdatedAt(updatedAt)}</time>
+  {updatedAt && <span>{site.interfaceCopy.lastUpdated} <time datetime={updatedAt}>{formatUpdatedAt(updatedAt)}</time></span>}
 </p>}
+
+<script>
+  let cleanupPageActions = () => {};
+  const setupPageActions = () => {
+    cleanupPageActions();
+    const controller = new AbortController();
+    document.querySelectorAll<HTMLButtonElement>('[data-copy-page]').forEach((button) => {
+      let markdownRequest: Promise<string> | undefined;
+      const getMarkdown = () => markdownRequest ??= fetch(button.dataset.markdownPath ?? '', {
+        headers: { accept: 'text/markdown' },
+      }).then((response) => {
+        if (!response.ok) throw new Error('page Markdown is unavailable');
+        return response.text();
+      });
+      button.addEventListener('click', async () => {
+        const status = button.parentElement?.querySelector<HTMLElement>('[data-copy-page-status]');
+        const label = button.querySelector<HTMLElement>('[data-copy-page-label]');
+        try {
+          if ('ClipboardItem' in window && typeof navigator.clipboard.write === 'function') {
+            const item = new ClipboardItem({
+              'text/plain': getMarkdown().then((value) => new Blob([value], { type: 'text/plain' })),
+            });
+            await navigator.clipboard.write([item]);
+          } else {
+            await navigator.clipboard.writeText(await getMarkdown());
+          }
+          if (label) label.textContent = 'copied';
+          if (status) status.textContent = 'copied as Markdown';
+        } catch {
+          if (label) label.textContent = 'copy failed';
+          if (status) status.textContent = 'page Markdown could not be copied';
+        }
+        window.setTimeout(() => {
+          if (label) label.textContent = 'copy page';
+          if (status) status.textContent = '';
+        }, 1800);
+      }, { signal: controller.signal });
+    });
+    document.querySelectorAll<HTMLButtonElement>('[data-copy-page-link]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const status = button.closest('.page-actions')?.querySelector<HTMLElement>('[data-copy-page-status]');
+        const url = new URL(location.href);
+        url.hash = '';
+        try {
+          await navigator.clipboard.writeText(url.href);
+          if (status) status.textContent = 'page link copied';
+          button.closest<HTMLDetailsElement>('[data-page-action-menu]')?.removeAttribute('open');
+        } catch {
+          if (status) status.textContent = 'page link could not be copied';
+        }
+        window.setTimeout(() => { if (status) status.textContent = ''; }, 1800);
+      }, { signal: controller.signal });
+    });
+    document.addEventListener('pointerdown', (event) => {
+      document.querySelectorAll<HTMLDetailsElement>('[data-page-action-menu][open]').forEach((menu) => {
+        if (!menu.contains(event.target as Node)) menu.removeAttribute('open');
+      });
+    }, { signal: controller.signal });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      document.querySelectorAll<HTMLDetailsElement>('[data-page-action-menu][open]').forEach((menu) => {
+        menu.removeAttribute('open');
+        menu.querySelector<HTMLElement>('summary')?.focus();
+      });
+    }, { signal: controller.signal });
+    cleanupPageActions = () => controller.abort();
+  };
+  document.addEventListener('astro:page-load', setupPageActions);
+  setupPageActions();
+</script>

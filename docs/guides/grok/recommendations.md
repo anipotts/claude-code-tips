@@ -10,7 +10,7 @@ redirects: []
 voice: personal
 navigation:
   scope: grok
-  order: 30
+  order: 70
 ---
 
 ## begin with the product boundary

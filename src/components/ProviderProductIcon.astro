@@ -1,0 +1,24 @@
+---
+interface Props {
+  light: string;
+  dark?: string;
+  size?: number;
+  class?: string;
+}
+
+const {
+  light,
+  dark,
+  size = 24,
+  class: className,
+} = Astro.props;
+---
+
+<span
+  class:list={['provider-product-icon', className, { 'has-theme-pair': Boolean(dark) }]}
+  style={`--provider-product-icon-size: ${size}px`}
+  aria-hidden="true"
+>
+  <img class="provider-product-icon-light" src={light} alt="" width={size} height={size} />
+  {dark && <img class="provider-product-icon-dark" src={dark} alt="" width={size} height={size} />}
+</span>

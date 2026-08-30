@@ -1,12 +1,14 @@
-import { spawn, spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
 import path from 'node:path';
 import process from 'node:process';
 import AxeBuilder from '@axe-core/playwright';
 import { chromium } from '@playwright/test';
 import { canonicalContentFiles } from '../src/content-manifest.mjs';
 
-const origin = 'http://127.0.0.1:4173';
-const astro = path.join(process.cwd(), 'node_modules/astro/bin/astro.mjs');
+const previewPort = 4176;
+const origin = `http://127.0.0.1:${previewPort}`;
+const vite = path.join(process.cwd(), 'node_modules/vite/bin/vite.js');
 const routes = canonicalContentFiles().map((entry) => entry.route);
 const viewports = [
   { name: 'reflow narrow', width: 320, height: 800 },
@@ -18,8 +20,8 @@ const viewports = [
   { name: 'desktop annotated', width: 1191, height: 942 },
   { name: 'desktop wide', width: 1440, height: 1024 },
 ];
-spawnSync(process.execPath, [astro, 'preview', 'stop'], { stdio: 'ignore' });
-const server = spawn(process.execPath, [astro, 'preview', '--host', '127.0.0.1', '--port', '4173'], { stdio: 'inherit' });
+const server = spawn(process.execPath, [vite, 'preview', '--host', '127.0.0.1', '--port', String(previewPort), '--strictPort'], { stdio: 'inherit' });
+const serverExit = once(server, 'exit');
 const failures = [];
 let browser;
 
@@ -71,9 +73,10 @@ try {
         else checkRole(elements('main h1'), { size: titleSize, line: titleSize * 1.05, weight: 600, family: 'Instrument Sans', color: ink }, 'page h1');
         if (route !== '/' && elements('.home-content h1').length > 0) findings.push('display h1 appears outside the homepage');
         checkRole(elements('main h2'), { size: headingSize, line: headingSize * 1.15, weight: 600, family: 'Instrument Sans', color: ink }, 'content h2');
-        checkRole(elements('main h3'), { size: 22, line: 27.5, weight: 600, family: 'Instrument Sans', color: ink }, 'content h3');
+        checkRole(elements('main h3:not(.source-publisher h3)'), { size: 22, line: 27.5, weight: 600, family: 'Instrument Sans', color: ink }, 'content h3');
+        checkRole(elements('.source-publisher h3'), { size: 16, line: 24, weight: 600, family: 'Instrument Sans', color: ink }, 'source publisher heading');
 
-        const reading = elements('.home-content p, .home-guides p, .sl-markdown-content p, .run-page p, .page-sources > p:last-child')
+        const reading = elements('.home-content p, .home-guides p, .sl-markdown-content p, .run-page p, .source-groups > p')
           .filter((element) => !element.matches('.section-label, .history-year, .run-header > p:first-child, .source-kinds, .page-meta'));
         checkRole(reading, { size: 18, line: 30, weight: 400, family: 'Instrument Sans', color: ink }, 'reading prose');
         for (const element of reading.filter(visible)) if (element.getBoundingClientRect().width > 816) findings.push(`reading measure exceeds 68ch: ${element.textContent.trim().slice(0, 60)}`);
@@ -81,7 +84,7 @@ try {
         checkRole(elements('td, .page-sources li, .run-inventory li, .artifact-list li, .run-page dd'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: ink }, 'dense content');
         const metadata = elements('.section-label, .home-guide-list span, .footer-meta, .sidebar-label, .page-meta, figcaption, .history-year, .run-header > p:first-child, .run-page dt, .run-evidence, .run-inventory span, .source-kinds, th');
         checkRole(metadata, { size: 12, line: 18, weight: 400, family: 'IBM Plex Mono', color: slate }, 'metadata');
-        checkRole(elements('.site-name, .provider-tabs a, .handbook-sidebar a, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 14, line: 20, family: 'Instrument Sans' }, 'navigation');
+        checkRole(elements('.site-name, .provider-tabs a, .search-trigger, .handbook-sidebar a, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 14, line: 20, family: 'Instrument Sans' }, 'navigation');
         return findings;
       }, { route, viewportWidth: viewport.width });
       for (const finding of typographyFailures) failures.push(`${viewport.name} ${route}: ${finding}`);
@@ -93,6 +96,7 @@ try {
         await page.keyboard.press('Enter');
         if (await details.getAttribute('open') === null) failures.push(`${viewport.name} ${route}: mobile menu does not open with Enter`);
         await page.keyboard.press('Enter');
+        await page.waitForFunction(() => !document.querySelector('.mobile-site-menu')?.hasAttribute('open'));
         if (await details.getAttribute('open') !== null) failures.push(`${viewport.name} ${route}: mobile menu does not close with Enter`);
       }
 
@@ -135,8 +139,8 @@ try {
   }
 } finally {
   await browser?.close();
-  server.kill('SIGTERM');
-  spawnSync(process.execPath, [astro, 'preview', 'stop'], { stdio: 'ignore' });
+  if (server.exitCode === null && server.signalCode === null) server.kill('SIGTERM');
+  await serverExit;
 }
 
 if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }

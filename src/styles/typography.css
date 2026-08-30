@@ -93,7 +93,7 @@ body {
 .home-guide-list h3, .home-guide-list p { margin: 0; }
 
 .sl-markdown-content h2, .run-page h2, .run-inventory h2, .page-sources h2, .copy-review-page main h2 {
-  margin-block: 3rem 1rem;
+  margin-block: 4rem 1rem;
 }
 
 .sl-markdown-content h2 {
@@ -102,8 +102,8 @@ body {
 }
 
 .sl-markdown-content > h2:first-child { margin-top: 0; }
-.sl-markdown-content h3, .run-page h3, .copy-review-page main h3 { margin-block: 2rem .75rem; }
-.sl-markdown-content h4, .run-page h4, .copy-review-page main h4 { margin-block: 1.5rem .5rem; }
+.sl-markdown-content h3, .run-page h3, .copy-review-page main h3 { margin-block: 2.5rem .75rem; }
+.sl-markdown-content h4, .run-page h4, .copy-review-page main h4 { margin-block: 2rem .5rem; }
 
 .home-content :where(p, ul, ol),
 .home-guides :where(p, ul, ol),
@@ -118,11 +118,11 @@ body {
   margin-block: 0;
 }
 
-.home-content :where(p, ul, ol), .sl-markdown-content :where(p, ul, ol), .run-page :where(p, ul, ol) { max-width: 68ch; }
+.home-content :where(p, ul, ol), .home-guides p, .sl-markdown-content :where(p, ul, ol), .run-page :where(p, ul, ol) { max-width: 66ch; }
 .page-sources > p:last-child { max-width: 68ch; }
 .home-content :where(p, ul, ol) + :where(p, ul, ol),
 .sl-markdown-content :where(p, ul, ol) + :where(p, ul, ol),
-.run-page :where(p, ul, ol) + :where(p, ul, ol) { margin-top: 1.125rem; }
+.run-page :where(p, ul, ol) + :where(p, ul, ol) { margin-top: 1rem; }
 
 .home-content h2 + p, .home-guide-list p, .run-description,
 .artifact-list span, .run-grid ul, .run-page section > ul, .page-sources > p:last-child {
@@ -131,6 +131,7 @@ body {
 
 :where(.home-content, .sl-markdown-content, .run-body) table,
 :where(.home-content, .sl-markdown-content, .run-body) td,
+.editorial-rows :where(dt, dd),
 .run-page dd,
 .artifact-list,
 .run-inventory li,
@@ -142,7 +143,7 @@ body {
   line-height: var(--type-dense-line);
 }
 
-.site-name, .provider-tabs a, .handbook-sidebar a, .right-sidebar a,
+.site-name, .provider-tabs a, .search-trigger, .handbook-sidebar a, .right-sidebar a,
 .right-sidebar h2, .site-footer a {
   font-family: var(--font-sans);
   font-size: var(--type-navigation-size);
@@ -151,6 +152,29 @@ body {
   line-height: var(--type-navigation-line);
   text-transform: none;
 }
+
+.source-summary-title {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.source-publisher h3 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.source-summary-count, .source-domain {
+  font-family: var(--font-mono);
+  font-size: var(--type-metadata-size);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.source-domain { font-weight: 400; line-height: var(--type-metadata-line); }
 
 .site-name, .site-footer .footer-site-name, .provider-tabs a[aria-current='page'], .handbook-sidebar a[aria-current='page'],
 .right-sidebar a[aria-current='true'] { font-weight: 600; }
@@ -188,6 +212,49 @@ body {
   letter-spacing: .04em;
   line-height: var(--type-metadata-line);
 }
+
+.editorial-rows .row-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-metadata-size);
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: var(--type-metadata-line);
+  text-transform: uppercase;
+}
+
+.provider-handbook nav a {
+  font-family: var(--font-sans);
+  font-size: var(--type-navigation-size);
+  font-weight: 400;
+  line-height: var(--type-navigation-line);
+}
+
+.search-trigger kbd,
+.enlarge-image,
+.link-preview small,
+.code-copy {
+  font-family: var(--font-sans);
+  font-size: .75rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.page-actions :where(button, a),
+.link-preview strong {
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.reading-label {
+  font-family: var(--font-sans);
+  font-size: var(--rail-label-size, .8125rem);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.reading-rail a[aria-current='true'] .reading-label { font-weight: 600; }
 
 .sidebar-label, .page-meta, .surface-bento figcaption,
 .history-timeline figcaption, .run-inventory span, .source-kinds,
@@ -230,3 +297,33 @@ body {
 }
 
 .copy-review-page header p { line-height: var(--type-body-line); }
+
+.reading-rail a[aria-current='true'] { font-weight: 600; }
+.reading-label { line-height: 1.25; }
+html[data-left-rail='collapsed'] .handbook-sidebar a::after,
+html[data-right-rail='collapsed'] .reading-rail a::after {
+  font-family: var(--font-sans);
+  font-size: .75rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
+.mobile-toc-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-metadata-size);
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: var(--type-metadata-line);
+  text-transform: uppercase;
+}
+.mobile-toc-current {
+  font-family: var(--font-sans);
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1rem;
+}
+.handbook-mobile-toc a {
+  font-family: var(--font-sans);
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+}

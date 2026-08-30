@@ -11,14 +11,28 @@ const failures = [];
 
 const scalar = (markdown, key) => markdown.match(new RegExp(`^${key}:\\s*(.+)$`, 'm'))?.[1].trim().replace(/^['"]|['"]$/g, '');
 const inlineList = (markdown, key) => (markdown.match(new RegExp(`^${key}:\\s*\\[([^\\]]*)\\]`, 'm'))?.[1] ?? '').split(',').map((item) => item.trim()).filter(Boolean);
-const text = (html) => html.replace(/<[^>]+>/g, ' ').replaceAll('&amp;', '&').replace(/\s+/g, ' ').trim();
+const ampersandEntities = new Set(['&amp;', '&#x26;', '&#38;']);
+const text = (html) => html
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&(?:amp|#x26|#38);/g, (entity) => ampersandEntities.has(entity) ? '&' : entity)
+  .replace(/\s+/g, ' ')
+  .trim();
 const routeFile = (route) => route === '/' ? path.join(dist, 'index.html') : path.join(dist, route.replace(/^\//, ''), 'index.html');
+const publicFile = (pathname) => pathname.endsWith('.md') ? path.join(dist, pathname.replace(/^\//, '')) : routeFile(pathname.endsWith('/') ? pathname : `${pathname}/`);
+const markdownFiles = async (directory) => (await Promise.all((await readdir(directory, { withFileTypes: true })).map(async (entry) => {
+  const absolute = path.join(directory, entry.name);
+  if (entry.isDirectory()) return markdownFiles(absolute);
+  return entry.isFile() && entry.name.endsWith('.md') ? [absolute] : [];
+}))).flat();
 
 const contentFiles = canonicalContentFiles().map(({ route, file }) => [route, file]);
 
 try { await access(path.join(root, 'public/favicon.svg')); } catch { failures.push('favicon source is missing'); }
 try { await access(path.join(root, 'public/social-card.png')); } catch { failures.push('social card source is missing'); }
 try { await access(path.join(root, 'public/robots.txt')); } catch { failures.push('robots source is missing'); }
+for (const icon of ['codex-light.png', 'codex-dark.png', 'claude-code.png', 'grok.png']) {
+  try { await access(path.join(root, 'public/icons/products', icon)); } catch { failures.push(`product icon is missing: ${icon}`); }
+}
 
 const registry = JSON.parse(await readFile(path.join(root, 'docs/sources.json'), 'utf8'));
 const metadata = [];
@@ -41,12 +55,17 @@ for (const [route, source] of contentFiles) {
   if (!html.includes(`content="${description.replaceAll('&', '&amp;')}"`) && !text(html).includes(description)) failures.push(`${route}: canonical description is absent from rendered metadata`);
   if (!publicText.includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
   if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/archive/') {
-    for (const kind of inlineList(markdown, 'evidence')) {
-      const definition = registry?.evidence_labels?.[kind];
-      if (!definition || !publicText.includes(definition.label)) failures.push(`${route}: evidence summary does not derive ${kind} from the source registry`);
+    const sourceIds = inlineList(markdown, 'sources');
+    if (!/<details\b[^>]*\bclass="[^"]*\bpage-sources\b/.test(html)) failures.push(`${route}: collapsed sources disclosure is missing`);
+    if (/TESTED \/ OFFICIAL SOURCE \/ ANALYSIS/i.test(publicText)) failures.push(`${route}: retired evidence microcopy appears in the source footer`);
+    for (const id of sourceIds) {
+      const source = registry.sources.find((candidate) => candidate.id === id);
+      if (!source || !publicText.includes(source.title)) failures.push(`${route}: registered source is absent from the source disclosure: ${id}`);
     }
+    if (sourceIds.length > 0 && (!html.includes('source-summary-badge') || !html.includes('source-summary-count'))) failures.push(`${route}: source icon count badge is missing`);
   }
   if (!route.startsWith('/field-lab/') && !publicText.includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
+  if ((route.startsWith('/guides/codex') || route.startsWith('/guides/claude-code')) && publicText.includes('last checked')) failures.push(`${route}: internal source check metadata is exposed in the public page header`);
   for (const label of ['index', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
   if (/\bproduct guides\b/i.test(publicText)) failures.push(`${route}: retired product guides label appears in public output`);
   if (html.includes('·')) failures.push(`${route}: mid dot appears in public output`);
@@ -57,10 +76,30 @@ for (const [route, source] of contentFiles) {
   for (const href of links) {
     if (!href.startsWith('/') || href.startsWith('//')) continue;
     const pathname = new URL(href, origin).pathname;
-    const candidate = pathname.endsWith('/') ? pathname : `${pathname}/`;
-    try { await access(routeFile(candidate)); } catch { failures.push(`${route}: internal link does not resolve: ${href}`); }
+    try { await access(publicFile(pathname)); } catch { failures.push(`${route}: internal link does not resolve: ${href}`); }
   }
+  const registeredLinks = [...html.matchAll(/<a\b[^>]*class="[^"]*\bregistered-link\b[^"]*"[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0]);
+  for (const link of registeredLinks) {
+    if (!link.includes('data-link-title=') || !link.includes('data-link-domain=') || !link.includes('data-link-publisher=') || !link.includes('data-link-icon=') || !link.includes('data-link-kind=')) failures.push(`${route}: registered link metadata is incomplete`);
+    const href = link.match(/\bhref="([^"]+)"/)?.[1];
+    const domain = link.match(/\bdata-link-domain="([^"]+)"/)?.[1];
+    if (href?.startsWith('http') && domain !== new URL(href.replaceAll('&amp;', '&')).hostname) failures.push(`${route}: registered link domain does not match its actual hostname: ${href}`);
+    if (/\blink-favicon\b/.test(link)) failures.push(`${route}: article link still includes an inline publisher icon`);
+  }
+  if (html.includes('link-favicon')) failures.push(`${route}: retired inline link favicon class appears in rendered HTML`);
 }
+
+try {
+  const llms = await readFile(path.join(dist, 'llms.txt'), 'utf8');
+  for (const { route, file, kind } of canonicalContentFiles().filter((entry) => entry.kind === 'home' || entry.kind === 'guide')) {
+    const markdown = await readFile(file, 'utf8');
+    const title = scalar(markdown, 'title');
+    const markdownPath = `${route.replace(/\/$/, '') || '/index'}.md`;
+    if (!llms.includes(`[${title}](${origin}${markdownPath})`)) failures.push(`/llms.txt: missing public Markdown route ${markdownPath}`);
+    if (kind === 'guide' && scalar(markdown, 'draft') === 'true') failures.push(`/llms.txt: draft route entered canonical content ${route}`);
+  }
+  if (llms.includes('__copy-review') || llms.includes('/changes/') || llms.includes('/field-lab/')) failures.push('/llms.txt: internal, redirected, or field-run route is present');
+} catch { failures.push('/llms.txt: generated index is missing'); }
 
 const activeGuideText = (await Promise.all(contentFiles.filter(([route]) => !route.startsWith('/field-lab/')).map(([, source]) => readFile(source, 'utf8')))).join('\n');
 for (const version of Object.values(registry.product_versions)) {
@@ -69,6 +108,29 @@ for (const version of Object.values(registry.product_versions)) {
 }
 
 const home = await readFile(routeFile('/'), 'utf8');
+for (const expected of [
+  'control rooms and surfaces',
+  'config.toml, trust, and approvals',
+  'remote, cloud, and mobile steering',
+  'repository context and interfaces',
+  'config, settings, rules, and memory',
+  'web, Remote Control, and mobile',
+  'Grok Build and Grok Bot',
+  'settings and permissions',
+  'what still needs a field run',
+  'shared foundations',
+]) if (!text(home).includes(expected)) failures.push(`/: homepage comparison is missing: ${expected}`);
+if (text(home).includes('across agents')) failures.push('/: retired shared-guide framing appears on the homepage');
+for (const icon of ['codex-light.png', 'claude-code.png', 'grok.png']) {
+  if (!home.includes(`/icons/products/${icon}`)) failures.push(`/: product icon is absent from the homepage: ${icon}`);
+}
+const draftGuides = (await Promise.all((await markdownFiles(path.join(root, 'docs/guides'))).map(async (file) => ({ file, markdown: await readFile(file, 'utf8') }))))
+  .filter(({ markdown }) => scalar(markdown, 'draft') === 'true')
+  .map(({ file }) => `/guides/${path.relative(path.join(root, 'docs/guides'), file).replace(/\.md$/, '')}/`);
+for (const route of draftGuides) {
+  try { await access(routeFile(route)); failures.push(`${route}: draft route exists in production output`); } catch {}
+  if (home.includes(`href="${route}"`)) failures.push(`${route}: draft route is linked from the production homepage`);
+}
 const h1Values = [...home.matchAll(/<h1\b[^>]*>(.*?)<\/h1>/gs)].map((match) => text(match[1]));
 if (h1Values.length !== 1 || h1Values[0] !== canonicalH1) failures.push(`/: expected one exact canonical h1, received ${JSON.stringify(h1Values)}`);
 for (const item of metadata.filter((item) => item.route !== '/' && item.route !== '/archive/' && (item.scope === 'general' || item.order === 10))) {
@@ -87,6 +149,7 @@ else {
   const sitemap = await readFile(path.join(dist, sitemapFiles[0]), 'utf8');
   const locations = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]));
   for (const { route } of metadata) if (!locations.has(`${origin}${route}`)) failures.push(`${route}: absent from sitemap`);
+  for (const route of draftGuides) if (locations.has(`${origin}${route}`)) failures.push(`${route}: draft route appears in sitemap`);
   for (const alias of [...Object.keys(contentRedirects()), '/changes/', '/__copy-review/']) if (locations.has(`${origin}${alias}`)) failures.push(`${alias}: redirect or local review route appears in sitemap`);
 }
 

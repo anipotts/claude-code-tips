@@ -35,9 +35,9 @@ const guides = guideFiles
   .map((file) => {
     const markdown = readFileSync(file, 'utf8');
     const path = relative(resolve(root, 'docs'), file).replace(/\.md$/, '');
-    return { title: scalar(markdown, 'title'), scope: scalar(markdown, 'scope'), order: Number(scalar(markdown, 'order')), route: `/${path}/` };
+    return { title: scalar(markdown, 'title'), scope: scalar(markdown, 'scope'), order: Number(scalar(markdown, 'order')), route: `/${path}/`, draft: scalar(markdown, 'draft') === 'true' };
   })
-  .filter((guide) => guide.scope === 'general' || guide.order === 10)
+  .filter((guide) => !guide.draft && (guide.scope === 'general' || guide.order === 10))
   .sort((left, right) => (scopeOrder.get(left.scope) ?? 99) - (scopeOrder.get(right.scope) ?? 99) || left.order - right.order || left.route.localeCompare(right.route));
 const guideBlock = guides.map((guide) => `- [${guide.title}](${origin}${guide.route})`).join('\n');
 const evidenceBlock = Object.values(evidenceLabels).map((item) => `- \`${item.label}\`: ${item.description}`).join('\n');

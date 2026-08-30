@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "checked_on": "2026-08-22",
+  "schema_version": 2,
+  "checked_on": "2026-08-28",
   "product_versions": {
     "codex": "0.149.0",
     "claude_code": "2.1.240"
@@ -26,32 +26,218 @@
   "sources": [
     {
       "id": "openai-codex-manual",
+      "title": "Codex documentation",
+      "publisher": "openai",
       "product": "codex",
       "layer": "harness",
       "status": "core",
       "url": "https://developers.openai.com/codex/codex-manual.md",
+      "aliases": [
+        "https://learn.chatgpt.com/docs/codex",
+        "https://github.com/openai/codex"
+      ],
       "last_checked": "2026-08-07",
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["AGENTS.md", "config.toml", "Codex"]
+        "terms": [
+          "AGENTS.md",
+          "config.toml",
+          "Codex"
+        ]
       }
     },
     {
+      "id": "openai-chatgpt-overview",
+      "title": "ChatGPT and Codex overview",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-product",
+      "title": "Codex",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://openai.com/codex/",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-cli",
+      "title": "Codex CLI",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/codex/cli",
+      "last_checked": "2026-08-27",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-ide",
+      "title": "Codex IDE extension",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/codex/ide",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-chatgpt-desktop-app",
+      "title": "ChatGPT desktop app",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/app",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-agents-md",
+      "title": "Custom instructions with AGENTS.md",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-subagents",
+      "title": "Codex subagents",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-mcp",
+      "title": "Model Context Protocol",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/extend/mcp",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-skills",
+      "title": "Build skills",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/build-skills",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-plugins",
+      "title": "Build plugins",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/build-plugins",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-hooks",
+      "title": "Codex hooks",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/hooks",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "openai-codex-cloud",
+      "title": "Codex cloud",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/cloud",
+      "last_checked": "2026-08-27",
+      "evidence": "official-source"
+    },
+    {
       "id": "anthropic-claude-overview",
+      "title": "Claude Code overview",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
       "url": "https://code.claude.com/docs/en",
+      "aliases": [
+        "https://code.claude.com/docs/en/overview"
+      ],
       "last_checked": "2026-08-11",
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Claude Code", "terminal", "IDE"]
+        "terms": [
+          "Claude Code",
+          "terminal",
+          "IDE"
+        ]
       }
     },
     {
+      "id": "anthropic-how-claude-code-works",
+      "title": "How Claude Code works",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/how-claude-code-works",
+      "last_checked": "2026-08-27",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-platforms",
+      "title": "Claude Code platforms and integrations",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/platforms",
+      "last_checked": "2026-08-27",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-web",
+      "title": "Claude Code on the web",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/claude-code-on-the-web",
+      "last_checked": "2026-08-27",
+      "evidence": "official-source"
+    },
+    {
       "id": "anthropic-changelog",
+      "title": "Claude Code changelog",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
@@ -69,6 +255,8 @@
     },
     {
       "id": "anthropic-features-overview",
+      "title": "Claude Code features overview",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
@@ -77,11 +265,83 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["skills", "hooks", "subagents"]
+        "terms": [
+          "skills",
+          "hooks",
+          "subagents"
+        ]
       }
     },
     {
+      "id": "anthropic-skills",
+      "title": "Claude Code skills",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/skills",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-mcp",
+      "title": "Connect Claude Code to tools via MCP",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/mcp",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-subagents",
+      "title": "Claude Code subagents",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-hooks",
+      "title": "Claude Code hooks",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/hooks",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-plugins",
+      "title": "Claude Code plugins",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/plugins",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-settings",
+      "title": "Claude Code settings",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/settings",
+      "last_checked": "2026-08-29",
+      "evidence": "official-source"
+    },
+    {
       "id": "anthropic-desktop",
+      "title": "Claude Code on desktop",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "surface",
       "status": "core",
@@ -90,11 +350,17 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Claude Code on desktop", "worktree", "diff"]
+        "terms": [
+          "Claude Code on desktop",
+          "worktree",
+          "diff"
+        ]
       }
     },
     {
       "id": "anthropic-permissions",
+      "title": "Claude Code permissions",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
@@ -112,6 +378,8 @@
     },
     {
       "id": "anthropic-memory",
+      "title": "Claude Code memory",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "harness",
       "status": "core",
@@ -129,6 +397,8 @@
     },
     {
       "id": "anthropic-remote-control",
+      "title": "Claude Code Remote Control",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "surface",
       "status": "core",
@@ -145,7 +415,61 @@
       }
     },
     {
+      "id": "anthropic-commands",
+      "title": "Claude Code commands",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "harness",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/commands",
+      "last_checked": "2026-08-28",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "/background",
+          "/batch",
+          "/teleport"
+        ]
+      }
+    },
+    {
+      "id": "anthropic-scheduled-tasks",
+      "title": "Claude Code desktop scheduled tasks",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/desktop-scheduled-tasks",
+      "last_checked": "2026-08-28",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-routines",
+      "title": "Claude Code routines",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/routines",
+      "last_checked": "2026-08-28",
+      "evidence": "official-source"
+    },
+    {
+      "id": "anthropic-agents",
+      "title": "Run Claude Code agents in parallel",
+      "publisher": "anthropic",
+      "product": "claude-code",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://code.claude.com/docs/en/agents",
+      "last_checked": "2026-08-28",
+      "evidence": "official-source"
+    },
+    {
       "id": "vscode-agent-host",
+      "title": "VS Code agent host",
+      "publisher": "microsoft",
       "product": "vscode",
       "layer": "surface",
       "status": "watchlist",
@@ -155,6 +479,8 @@
     },
     {
       "id": "vscode-third-party-agents",
+      "title": "Third party agents in VS Code",
+      "publisher": "microsoft",
       "product": "vscode",
       "layer": "orchestration",
       "status": "watchlist",
@@ -164,6 +490,8 @@
     },
     {
       "id": "cursor-pricing",
+      "title": "Cursor pricing",
+      "publisher": "cursor",
       "product": "cursor",
       "layer": "surface",
       "status": "pricing",
@@ -173,6 +501,8 @@
     },
     {
       "id": "cursor-docs",
+      "title": "Cursor documentation",
+      "publisher": "cursor",
       "product": "cursor",
       "layer": "harness",
       "status": "watchlist",
@@ -182,6 +512,8 @@
     },
     {
       "id": "conductor-harnesses",
+      "title": "Conductor harnesses",
+      "publisher": "conductor",
       "product": "conductor",
       "layer": "orchestration",
       "status": "watchlist",
@@ -191,6 +523,8 @@
     },
     {
       "id": "t3-code",
+      "title": "T3 Code",
+      "publisher": "t3",
       "product": "t3-code",
       "layer": "orchestration",
       "status": "watchlist",
@@ -200,6 +534,8 @@
     },
     {
       "id": "opencode",
+      "title": "OpenCode repository",
+      "publisher": "github",
       "product": "opencode",
       "layer": "harness",
       "status": "watchlist",
@@ -209,6 +545,8 @@
     },
     {
       "id": "kimi-code",
+      "title": "Kimi Code documentation",
+      "publisher": "kimi",
       "product": "kimi-code",
       "layer": "harness",
       "status": "watchlist",
@@ -218,6 +556,8 @@
     },
     {
       "id": "kimi-k3",
+      "title": "Kimi K3 repository",
+      "publisher": "github",
       "product": "kimi-k3",
       "layer": "model",
       "status": "watchlist",
@@ -227,6 +567,8 @@
     },
     {
       "id": "qwen-code",
+      "title": "Qwen Code repository",
+      "publisher": "github",
       "product": "qwen-code",
       "layer": "harness",
       "status": "watchlist",
@@ -236,6 +578,8 @@
     },
     {
       "id": "qwen-models",
+      "title": "Qwen model repositories",
+      "publisher": "github",
       "product": "qwen",
       "layer": "model",
       "status": "watchlist",
@@ -245,6 +589,8 @@
     },
     {
       "id": "grok-build",
+      "title": "Grok Build overview",
+      "publisher": "xai",
       "product": "grok-build",
       "layer": "harness",
       "status": "watchlist",
@@ -254,6 +600,8 @@
     },
     {
       "id": "grok-4-5",
+      "title": "Grok 4.5 documentation",
+      "publisher": "xai",
       "product": "grok-4.5",
       "layer": "model",
       "status": "watchlist",
@@ -263,6 +611,8 @@
     },
     {
       "id": "aider-docs",
+      "title": "Aider documentation",
+      "publisher": "aider",
       "product": "aider",
       "layer": "harness",
       "status": "stable",
@@ -271,11 +621,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["AI pair programming in your terminal", "git repo"]
+        "terms": [
+          "AI pair programming in your terminal",
+          "git repo"
+        ]
       }
     },
     {
       "id": "cursor-2023-problems",
+      "title": "The problems Cursor set out to solve",
+      "publisher": "cursor",
       "product": "cursor",
       "layer": "surface",
       "status": "stable",
@@ -284,11 +639,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Better context", "Constrained, in-flow agents"]
+        "terms": [
+          "Better context",
+          "Constrained, in-flow agents"
+        ]
       }
     },
     {
       "id": "github-copilot-workspace",
+      "title": "GitHub Copilot Workspace",
+      "publisher": "github",
       "product": "github-copilot",
       "layer": "surface",
       "status": "stable",
@@ -297,11 +657,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["GitHub Copilot Workspace", "technical preview"]
+        "terms": [
+          "GitHub Copilot Workspace",
+          "technical preview"
+        ]
       }
     },
     {
       "id": "cursor-3",
+      "title": "Cursor 3",
+      "publisher": "cursor",
       "product": "cursor",
       "layer": "surface",
       "status": "stable",
@@ -310,11 +675,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Meet the new Cursor", "Run many agents in parallel"]
+        "terms": [
+          "Meet the new Cursor",
+          "Run many agents in parallel"
+        ]
       }
     },
     {
       "id": "transformer-paper",
+      "title": "Attention Is All You Need",
+      "publisher": "arxiv",
       "product": "transformer",
       "layer": "model",
       "status": "stable",
@@ -323,11 +693,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Attention Is All You Need", "Transformer"]
+        "terms": [
+          "Attention Is All You Need",
+          "Transformer"
+        ]
       }
     },
     {
       "id": "openai-gpt3",
+      "title": "Language Models are Few Shot Learners",
+      "publisher": "arxiv",
       "product": "gpt-3",
       "layer": "model",
       "status": "stable",
@@ -336,11 +711,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Language Models are Few-Shot Learners", "175 billion parameters"]
+        "terms": [
+          "Language Models are Few-Shot Learners",
+          "175 billion parameters"
+        ]
       }
     },
     {
       "id": "openai-codex-paper",
+      "title": "Evaluating Large Language Models Trained on Code",
+      "publisher": "arxiv",
       "product": "codex",
       "layer": "model",
       "status": "stable",
@@ -349,11 +729,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Evaluating Large Language Models Trained on Code", "HumanEval"]
+        "terms": [
+          "Evaluating Large Language Models Trained on Code",
+          "HumanEval"
+        ]
       }
     },
     {
       "id": "github-copilot-preview",
+      "title": "Introducing GitHub Copilot",
+      "publisher": "github",
       "product": "github-copilot",
       "layer": "surface",
       "status": "stable",
@@ -362,11 +747,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Introducing GitHub Copilot", "OpenAI Codex"]
+        "terms": [
+          "Introducing GitHub Copilot",
+          "OpenAI Codex"
+        ]
       }
     },
     {
       "id": "react-paper",
+      "title": "ReAct",
+      "publisher": "arxiv",
       "product": "react",
       "layer": "harness",
       "status": "stable",
@@ -375,11 +765,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["ReAct", "reasoning and acting"]
+        "terms": [
+          "ReAct",
+          "reasoning and acting"
+        ]
       }
     },
     {
       "id": "swe-bench-paper",
+      "title": "SWE bench",
+      "publisher": "arxiv",
       "product": "swe-bench",
       "layer": "harness",
       "status": "stable",
@@ -388,11 +783,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["SWE-bench", "2,294"]
+        "terms": [
+          "SWE-bench",
+          "2,294"
+        ]
       }
     },
     {
       "id": "swe-agent-paper",
+      "title": "SWE agent",
+      "publisher": "arxiv",
       "product": "swe-agent",
       "layer": "harness",
       "status": "stable",
@@ -401,11 +801,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["SWE-agent", "Agent-Computer Interfaces"]
+        "terms": [
+          "SWE-agent",
+          "Agent-Computer Interfaces"
+        ]
       }
     },
     {
       "id": "anthropic-mcp-launch",
+      "title": "Introducing the Model Context Protocol",
+      "publisher": "anthropic",
       "product": "mcp",
       "layer": "orchestration",
       "status": "stable",
@@ -414,11 +819,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Introducing the Model Context Protocol", "open standard"]
+        "terms": [
+          "Introducing the Model Context Protocol",
+          "open standard"
+        ]
       }
     },
     {
       "id": "github-copilot-agent-mode",
+      "title": "GitHub Copilot agent mode",
+      "publisher": "github",
       "product": "github-copilot",
       "layer": "surface",
       "status": "stable",
@@ -427,11 +837,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["GitHub Copilot", "agent mode"]
+        "terms": [
+          "GitHub Copilot",
+          "agent mode"
+        ]
       }
     },
     {
       "id": "anthropic-claude-code-preview",
+      "title": "Claude Code research preview",
+      "publisher": "anthropic",
       "product": "claude-code",
       "layer": "harness",
       "status": "stable",
@@ -440,11 +855,16 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["Claude Code", "research preview"]
+        "terms": [
+          "Claude Code",
+          "research preview"
+        ]
       }
     },
     {
       "id": "openai-codex-launch",
+      "title": "Introducing Codex",
+      "publisher": "openai",
       "product": "codex",
       "layer": "harness",
       "status": "watchlist",
@@ -454,6 +874,8 @@
     },
     {
       "id": "openai-codex-app",
+      "title": "Introducing the Codex app",
+      "publisher": "openai",
       "product": "codex",
       "layer": "surface",
       "status": "watchlist",
@@ -463,6 +885,8 @@
     },
     {
       "id": "openai-codex-config",
+      "title": "Codex configuration reference",
+      "publisher": "openai",
       "product": "codex",
       "layer": "harness",
       "status": "watchlist",
@@ -472,6 +896,8 @@
     },
     {
       "id": "openai-codex-security",
+      "title": "Codex security",
+      "publisher": "openai",
       "product": "codex",
       "layer": "harness",
       "status": "watchlist",
@@ -481,6 +907,8 @@
     },
     {
       "id": "openai-codex-mobile",
+      "title": "Work with Codex from anywhere",
+      "publisher": "openai",
       "product": "codex",
       "layer": "surface",
       "status": "watchlist",
@@ -490,6 +918,8 @@
     },
     {
       "id": "openai-work-and-codex",
+      "title": "ChatGPT Work and Codex",
+      "publisher": "openai",
       "product": "codex",
       "layer": "surface",
       "status": "watchlist",
@@ -498,7 +928,30 @@
       "evidence": "official-source"
     },
     {
+      "id": "openai-cursor-contract",
+      "title": "Our decision on Cursor following its acquisition by SpaceX",
+      "publisher": "openai",
+      "product": "cursor",
+      "layer": "model",
+      "status": "watchlist",
+      "url": "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/",
+      "aliases": [
+        "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex"
+      ],
+      "last_checked": "2026-08-29",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "November 12, 2026",
+          "future models"
+        ]
+      }
+    },
+    {
       "id": "anthropic-cowork",
+      "title": "Get started with Claude Cowork",
+      "publisher": "anthropic",
       "product": "claude",
       "layer": "surface",
       "status": "watchlist",
@@ -508,6 +961,8 @@
     },
     {
       "id": "grok-build-settings",
+      "title": "Grok Build settings",
+      "publisher": "xai",
       "product": "grok",
       "layer": "harness",
       "status": "watchlist",
@@ -517,6 +972,8 @@
     },
     {
       "id": "grok-build-permissions",
+      "title": "Grok Build permissions",
+      "publisher": "xai",
       "product": "grok",
       "layer": "harness",
       "status": "watchlist",
@@ -526,6 +983,8 @@
     },
     {
       "id": "grok-bot",
+      "title": "Grok bot overview",
+      "publisher": "xai",
       "product": "grok",
       "layer": "surface",
       "status": "watchlist",
@@ -535,6 +994,8 @@
     },
     {
       "id": "git-worktrees",
+      "title": "Git worktree documentation",
+      "publisher": "git",
       "product": "git",
       "layer": "orchestration",
       "status": "stable",
@@ -543,8 +1004,134 @@
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
-        "terms": ["git worktree", "add", "prune"]
+        "terms": [
+          "git worktree",
+          "add",
+          "prune"
+        ]
       }
+    },
+    {
+      "id": "onepassword-codex",
+      "title": "1Password as an access layer for Codex",
+      "publisher": "1password",
+      "product": "onepassword",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://1password.com/blog/1password-trusted-access-layer-for-openai-codex",
+      "aliases": [
+        "https://1password.com/press/2026/may/openai-codex-integration"
+      ],
+      "last_checked": "2026-08-28",
+      "evidence": "official-source"
+    },
+    {
+      "id": "onepassword-claude",
+      "title": "1Password for Claude",
+      "publisher": "1password",
+      "product": "onepassword",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://1password.com/blog/1password-for-claude",
+      "aliases": [
+        "https://1password.com/press/2026/july/1password-for-claude"
+      ],
+      "last_checked": "2026-08-28",
+      "evidence": "official-source"
+    },
+    {
+      "id": "onepassword-cli-secrets",
+      "title": "Load secrets into scripts with 1Password CLI",
+      "publisher": "1password",
+      "product": "onepassword",
+      "layer": "orchestration",
+      "status": "watchlist",
+      "url": "https://developer.1password.com/docs/cli/secrets-scripts",
+      "aliases": [
+        "https://www.1password.dev/cli/secrets-scripts"
+      ],
+      "last_checked": "2026-08-28",
+      "evidence": "official-source"
+    }
+  ],
+  "publishers": [
+    {
+      "id": "openai",
+      "label": "OpenAI",
+      "domain": "openai.com",
+      "icon": "/icons/publishers/openai.png"
+    },
+    {
+      "id": "anthropic",
+      "label": "Anthropic",
+      "domain": "anthropic.com",
+      "icon": "/icons/publishers/anthropic.png"
+    },
+    {
+      "id": "1password",
+      "label": "1Password",
+      "domain": "1password.com",
+      "icon": "/icons/publishers/1password.png"
+    },
+    {
+      "id": "microsoft",
+      "label": "Microsoft",
+      "domain": "microsoft.com",
+      "icon": "/icons/publishers/microsoft.png"
+    },
+    {
+      "id": "cursor",
+      "label": "Cursor",
+      "domain": "cursor.com",
+      "icon": "/icons/publishers/cursor.png"
+    },
+    {
+      "id": "conductor",
+      "label": "Conductor",
+      "domain": "conductor.build",
+      "icon": "/icons/publishers/conductor.png"
+    },
+    {
+      "id": "t3",
+      "label": "T3",
+      "domain": "t3.codes",
+      "icon": "/icons/publishers/t3.png"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "domain": "github.com",
+      "icon": "/icons/publishers/github.png"
+    },
+    {
+      "id": "kimi",
+      "label": "Kimi",
+      "domain": "kimi.com",
+      "icon": "/icons/publishers/kimi.png"
+    },
+    {
+      "id": "xai",
+      "label": "xAI",
+      "domain": "x.ai",
+      "icon": "/icons/publishers/xai.png"
+    },
+    {
+      "id": "aider",
+      "label": "Aider",
+      "domain": "aider.chat",
+      "icon": "/icons/publishers/aider.png"
+    },
+    {
+      "id": "arxiv",
+      "label": "arXiv",
+      "domain": "arxiv.org",
+      "icon": "/icons/publishers/arxiv.png"
+    },
+    {
+      "id": "git",
+      "label": "Git",
+      "domain": "git-scm.com",
+      "icon": "/icons/publishers/git.png"
     }
   ]
 }

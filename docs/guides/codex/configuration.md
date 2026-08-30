@@ -2,47 +2,91 @@
 title: configuration
 description: where codex instructions, permissions, tools, and reusable workflows belong.
 products: [codex]
-updatedAt: "2026-08-22T19:55:02-04:00"
+updatedAt: "2026-08-29T19:04:00-04:00"
+checkedAt: "2026-08-28T00:00:00-04:00"
 status: current
 evidence: [tested, official-source, analysis]
-sources: [openai-codex-manual, openai-codex-config, openai-codex-security]
+sources: [openai-codex-manual, openai-codex-agents-md, openai-codex-skills, openai-codex-plugins, openai-codex-mcp, openai-codex-config, openai-codex-security]
 redirects: []
 voice: evidence
 navigation:
   scope: codex
-  order: 20
+  order: 30
 ---
 
 ## configuration has separate jobs
 
-| need | canonical place |
-|---|---|
-| repository instructions and verification commands | `AGENTS.md` |
-| personal defaults | `~/.codex/config.toml` |
-| trusted repository settings | `.codex/config.toml` |
-| reusable workflow and reference material | a skill |
-| distributable tools and extensions | a plugin or MCP server |
+### AGENTS.md explains the repository
+
+- repository instructions and verification commands: `AGENTS.md`
+- reusable workflow and reference material: a skill
+- distributable tools and extensions: a plugin or MCP server
+
+### config.toml chooses defaults
+
+- personal defaults: `~/.codex/config.toml`
+- trusted repository settings: `.codex/config.toml`
 
 Codex loads project configuration only after the project is trusted. project
 files also cannot override provider, authentication, or profile keys. this
 keeps shared repository configuration narrower than personal account settings.
-[configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
+the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) describes each value.
+
+## understand the scope before changing a value
+
+### personal configuration follows you
+
+<!-- Ani voice pass follows this approved structure. -->
+
+### project configuration begins with trust
+
+<!-- Ani voice pass follows this approved structure. -->
+
+### profiles group deliberate modes
+
+<!-- Ani voice pass follows this approved structure. -->
+
+## separate instructions from memory
+
+### shared rules have one canonical source
+
+<!-- Ani voice pass follows this approved structure. -->
+
+### memory records useful experience
+
+<!-- Ani voice pass follows this approved structure. -->
 
 ## permissions are two different questions
+
+### the sandbox defines reach
 
 filesystem and network access describe what a command can reach. approval
 policy describes when Codex needs your decision before running it. final
 authority to merge, publish, send, pay, or delete remains a separate human
 decision.
 
+### approval policy defines interruption
+
 current Codex releases expose the established `sandbox_mode` and
 `approval_policy` settings alongside newer permission profiles. inspect the
 effective configuration before relying on a profile, especially when a desktop
-app and CLI installation may be on different versions. [Codex security](https://learn.chatgpt.com/docs/security)
+app and CLI installation may be on different versions. the [security guide](https://learn.chatgpt.com/docs/security) explains the current controls.
 
-## a durable default
+## keep identity and secrets outside the repository
+
+### authentication belongs to the account
+
+<!-- Ani voice pass follows this approved structure. -->
+
+### credentials belong in external storage
 
 keep stable team rules in version control. keep machine specific paths,
 credentials, and account choices outside the repository. after any handoff
 between terminal, app, editor, or remote machine, confirm the working directory,
 branch, permissions, and verification command before editing.
+
+## inspect the effective configuration
+
+### profiles can change several assumptions at once
+
+<!-- Ani voice pass follows this approved structure. -->

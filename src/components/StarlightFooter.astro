@@ -1,14 +1,26 @@
 ---
 import { getCollection } from 'astro:content';
 import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
+import { Icon } from 'astro-icon/components';
 import registry from '../../docs/sources.json';
 import AccessibleTables from './AccessibleTables.astro';
-import { evidenceLabels } from '../evidence';
+import PublicationEnhancements from './PublicationEnhancements.astro';
 
 const entry = Astro.locals.starlightRoute.entry;
 const showSources = Array.isArray(entry.data.sources);
 const sourceById = new Map(registry.sources.map((source) => [source.id, source]));
+const publisherById = new Map(registry.publishers.map((publisher) => [publisher.id, publisher]));
 const pageSources = (entry.data.sources ?? []).map((id) => sourceById.get(id)).filter((source) => source !== undefined);
+const pageSourceGroups = [...pageSources.reduce((groups, source) => {
+  const sources = groups.get(source.publisher) ?? [];
+  sources.push(source);
+  groups.set(source.publisher, sources);
+  return groups;
+}, new Map<string, typeof pageSources>())].map(([publisherId, sources]) => ({
+  publisher: publisherById.get(publisherId),
+  sources,
+})).filter((group) => group.publisher !== undefined);
+const sourceCountLabel = `${pageSources.length} ${pageSources.length === 1 ? 'source' : 'sources'}`;
 const runs = entry.id === 'method'
   ? (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf())
   : [];
@@ -30,63 +42,84 @@ const runs = entry.id === 'method'
     </section>
   )
 }
-{showSources && <section class="page-sources" aria-labelledby="page-sources-title">
-  <h2 id="page-sources-title">sources</h2>
-  {entry.data.evidence && <p class="source-kinds">{entry.data.evidence.map((kind) => evidenceLabels[kind].label).join(' / ')}</p>}
-  {
-    pageSources.length > 0 ? (
+{showSources && <details class="page-sources" data-animated-disclosure>
+  <summary>
+    <span id="page-sources-title" class="source-summary-title" role="heading" aria-level="2">sources</span>
+    {pageSourceGroups.length > 0 && <span class="source-summary-badge" aria-label={sourceCountLabel}>
+      <span class="source-summary-publishers" aria-hidden="true">
+        {pageSourceGroups.map(({ publisher }) => <span class="publisher-icon-frame"><img src={publisher!.icon} alt="" width="20" height="20" loading="lazy" /></span>)}
+      </span>
+      <sup class="source-summary-count" aria-hidden="true">{pageSources.length}</sup>
+    </span>}
+    <Icon class="source-summary-arrow" name="ph:caret-down" aria-hidden="true" />
+  </summary>
+  <div class="source-groups" data-disclosure-content aria-labelledby="page-sources-title">
+    {pageSourceGroups.length > 0 ? pageSourceGroups.map(({ publisher, sources }) => <section class="source-publisher">
+      <h3>
+        <span class="publisher-icon-frame"><img src={publisher!.icon} alt="" width="20" height="20" loading="lazy" /></span>
+        <span>{publisher!.label}</span>
+        <span class="source-domain">{publisher!.domain}</span>
+      </h3>
       <ul>
-        {pageSources.map((source) => <li><a href={source.url}>{source.id.replaceAll('-', ' ')}</a></li>)}
+        {sources.map((source) => <li><a href={source.url}>
+          <span>{source.title}</span>
+          <Icon name="ph:arrow-up-right" aria-hidden="true" />
+        </a></li>)}
       </ul>
-    ) : (
-      <p>this page is based on the author’s own working notes and linked examples.</p>
-    )
-  }
-</section>}
+    </section>) : <p>this page is based on the author’s own working notes and linked examples.</p>}
+  </div>
+</details>}
 <AccessibleTables />
+<PublicationEnhancements />
 <DefaultFooter />
-<script>
-  let cleanup: () => void = () => {};
-
-  const setupActiveHeading = () => {
-    cleanup();
-    const links = [...document.querySelectorAll<HTMLAnchorElement>('.right-sidebar a[href^="#"]')];
-    const headings = links
-      .map((link) => ({ link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) }))
-      .filter((item): item is { link: HTMLAnchorElement; heading: HTMLElement } => item.heading !== null);
-    if (headings.length === 0) return;
-    const controller = new AbortController();
-    let frame: number | undefined;
-    const update = () => {
-      frame = undefined;
-      const header = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
-      const threshold = header + 40;
-      let active = headings[0].heading.id;
-      for (const item of headings) {
-        if (item.heading.getBoundingClientRect().top <= threshold) active = item.heading.id;
-      }
-      for (const item of headings) item.link.setAttribute('aria-current', item.heading.id === active ? 'true' : 'false');
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    addEventListener('scroll', schedule, { passive: true, signal: controller.signal });
-    addEventListener('hashchange', schedule, { signal: controller.signal });
-    frame = requestAnimationFrame(update);
-    cleanup = () => {
-      controller.abort();
-      if (frame !== undefined) cancelAnimationFrame(frame);
-    };
-  };
-
-  document.addEventListener('astro:page-load', setupActiveHeading);
-</script>
 
 <style>
-  .run-inventory, .page-sources { margin-top: 4rem; padding-top: 0; border-top: 1px solid var(--rule); }
-  .run-inventory ul, .page-sources ul { margin: 0; padding: 0; border-top: 1px solid var(--ink); list-style: none; }
+  .run-inventory { margin-top: 4rem; padding-top: 0; border-top: 1px solid var(--rule); }
+  .page-sources { margin-top: 4rem; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface-raised); overflow: clip; }
+  .run-inventory ul, .page-sources ul { margin: 0; padding: 0; list-style: none; }
   .run-inventory li { display: grid; grid-template-columns: minmax(16rem, 1fr) auto auto; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
-  .page-sources li { padding: .8rem 0; border-bottom: 1px solid var(--rule); }
-  .run-inventory a, .page-sources a { color: var(--cobalt); }
+  .page-sources summary { min-height: 3rem; display: grid; grid-template-columns: minmax(0, 1fr) auto 1rem; align-items: center; gap: .75rem; padding: .55rem .75rem; cursor: pointer; list-style: none; transition: background-color var(--motion-ui-duration) var(--motion-ui-ease); }
+  .page-sources summary:hover { background: var(--soft); }
+  .page-sources summary::-webkit-details-marker { display: none; }
+  .source-summary-badge { position: relative; display: inline-grid; place-items: center; min-inline-size: 1.5rem; min-block-size: 1.5rem; }
+  .source-summary-publishers { display: flex; align-items: center; }
+  .publisher-icon-frame { display: grid; place-items: center; inline-size: 1.45rem; block-size: 1.45rem; padding: .12rem; border: 1px solid var(--rule); border-radius: .32rem; background: #fff; overflow: hidden; }
+  .source-summary-publishers .publisher-icon-frame + .publisher-icon-frame { margin-inline-start: -.35rem; }
+  .publisher-icon-frame img { display: block; inline-size: 100%; block-size: 100%; border-radius: .16rem; object-fit: contain; }
+  .source-summary-count { position: absolute; inset: -.45rem -.55rem auto auto; min-inline-size: 1.15rem; block-size: 1.15rem; display: grid; place-items: center; padding: 0 .18rem; border: 2px solid var(--surface-raised); border-radius: var(--radius-pill); background: var(--cobalt); color: var(--accent-on-solid); }
+  .source-summary-arrow { inline-size: .9rem; block-size: .9rem; color: var(--slate); transition: transform 160ms cubic-bezier(.2, .8, .2, 1); }
+  .page-sources[open] .source-summary-arrow { transform: rotate(180deg); }
+  .source-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; padding: 1.25rem; background: color-mix(in srgb, var(--surface-subtle) 42%, var(--surface-raised)); }
+  .source-publisher { min-width: 0; margin: 0; padding: 0; }
+  .source-publisher:only-child { grid-column: 1 / -1; }
+  .source-publisher + .source-publisher { margin-top: 0; border-top: 0; }
+  .source-publisher h3 { display: grid; grid-template-columns: 1.45rem auto minmax(0, 1fr); align-items: center; gap: .55rem; margin: 0 0 .65rem; }
+  .source-publisher ul { display: grid; grid-template-columns: 1fr; gap: .2rem; }
+  .source-publisher:only-child ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .source-domain { justify-self: end; color: var(--slate); }
+  .page-sources li { min-width: 0; padding: 0; border: 0; }
+  .page-sources li + li { margin-top: 0; }
+  .run-inventory a { color: var(--cobalt); }
+  .page-sources a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) .9rem;
+    align-items: center;
+    gap: .6rem;
+    min-height: 2.4rem;
+    padding: .5rem .6rem;
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-ui-duration) var(--motion-ui-ease), background-color var(--motion-ui-duration) var(--motion-ui-ease);
+  }
+  .page-sources a svg { inline-size: .85rem; block-size: .85rem; color: var(--slate); opacity: .68; transition: color var(--motion-ui-duration) var(--motion-ui-ease), opacity var(--motion-ui-duration) var(--motion-ui-ease), transform var(--motion-ui-duration) var(--motion-ui-ease); }
+  .page-sources a:hover, .page-sources a:focus-visible { background: var(--soft); color: var(--cobalt); }
+  .page-sources a:hover svg, .page-sources a:focus-visible svg { color: var(--cobalt); opacity: 1; transform: translate(.08rem, -.08rem); }
   @media (max-width: 48rem) {
     .run-inventory li { grid-template-columns: 1fr; gap: .35rem; }
+    .page-sources summary { grid-template-columns: minmax(0, 1fr) auto 1rem; }
+    .source-groups { grid-template-columns: 1fr; gap: 1.25rem; padding: 1rem; }
+    .source-publisher:only-child ul { grid-template-columns: 1fr; }
+    .source-domain { display: none; }
   }
 </style>

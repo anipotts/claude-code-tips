@@ -1,0 +1,174 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="link-preview" data-link-preview role="tooltip" hidden>
+  <img data-link-preview-icon src="/favicon.svg" alt="" width="20" height="20" />
+  <span><strong data-link-preview-title></strong><small data-link-preview-meta></small></span>
+</div>
+
+<dialog class="image-dialog" data-image-dialog aria-label="image preview">
+  <button type="button" data-image-dialog-close aria-label="close image preview"><Icon name="ph:x" aria-hidden="true" /></button>
+  <figure>
+    <img data-image-dialog-image src="" alt="" />
+    <figcaption data-image-dialog-caption></figcaption>
+  </figure>
+</dialog>
+
+<script>
+  let cleanupPublicationEnhancements = () => {};
+
+  const setupPublicationEnhancements = () => {
+    cleanupPublicationEnhancements();
+    const controller = new AbortController();
+    let overlay = document.querySelector<HTMLElement>('[data-publication-overlay]');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'publication-overlay';
+      overlay.dataset.publicationOverlay = '';
+      document.body.append(overlay);
+    }
+    const previewCandidates = [...document.querySelectorAll<HTMLElement>('[data-link-preview]')];
+    const preview = previewCandidates.find((candidate) => candidate.parentElement !== overlay) ?? previewCandidates[0];
+    if (preview && preview.parentElement !== overlay) overlay.replaceChildren(preview);
+    for (const candidate of previewCandidates) if (candidate !== preview) candidate.remove();
+    const hoverMedia = matchMedia('(hover: hover) and (pointer: fine)');
+    let activeLink: HTMLElement | null = null;
+    let previewHideTimer = 0;
+    let previewFrame = 0;
+
+    const finishHidingPreview = () => {
+      if (!preview) return;
+      preview.hidden = true;
+      activeLink?.removeAttribute('aria-describedby');
+      activeLink = null;
+    };
+    const hidePreview = (immediate = false) => {
+      if (!preview) return;
+      clearTimeout(previewHideTimer);
+      cancelAnimationFrame(previewFrame);
+      preview.classList.remove('is-visible');
+      if (immediate || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        finishHidingPreview();
+        return;
+      }
+      previewHideTimer = window.setTimeout(finishHidingPreview, 100);
+    };
+    const referenceRect = (link: HTMLElement, point?: { x: number; y: number }) => {
+      const rects = [...link.getClientRects()].filter((rect) => rect.width > 0 && rect.height > 0);
+      if (rects.length === 0) return link.getBoundingClientRect();
+      if (!point) return rects[0];
+      const containing = rects.find((rect) => point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom);
+      if (containing) return containing;
+      return rects.reduce((nearest, rect) => {
+        const distance = Math.hypot(point.x - Math.max(rect.left, Math.min(point.x, rect.right)), point.y - Math.max(rect.top, Math.min(point.y, rect.bottom)));
+        const nearestDistance = Math.hypot(point.x - Math.max(nearest.left, Math.min(point.x, nearest.right)), point.y - Math.max(nearest.top, Math.min(point.y, nearest.bottom)));
+        return distance < nearestDistance ? rect : nearest;
+      });
+    };
+    const showPreview = (link: HTMLElement, point?: { x: number; y: number }) => {
+      if (!preview || !hoverMedia.matches) return;
+      clearTimeout(previewHideTimer);
+      cancelAnimationFrame(previewFrame);
+      if (activeLink !== link) activeLink?.removeAttribute('aria-describedby');
+      activeLink = link;
+      const image = preview.querySelector<HTMLImageElement>('[data-link-preview-icon]');
+      const title = preview.querySelector<HTMLElement>('[data-link-preview-title]');
+      const meta = preview.querySelector<HTMLElement>('[data-link-preview-meta]');
+      if (image) image.src = link.dataset.linkIcon ?? '/favicon.svg';
+      if (title) title.textContent = link.dataset.linkTitle ?? link.textContent?.trim() ?? '';
+      if (meta) meta.textContent = link.dataset.linkDomain ?? '';
+      preview.hidden = false;
+      preview.id = 'active-link-preview';
+      link.setAttribute('aria-describedby', preview.id);
+      const linkRect = referenceRect(link, point);
+      const previewRect = preview.getBoundingClientRect();
+      const gap = 6;
+      const edge = 10;
+      const above = linkRect.top >= previewRect.height + gap + edge;
+      const top = above ? linkRect.top - previewRect.height - gap : linkRect.bottom + gap;
+      const left = Math.min(innerWidth - previewRect.width - edge, Math.max(edge, linkRect.left));
+      preview.style.setProperty('--preview-x', `${left}px`);
+      preview.style.setProperty('--preview-y', `${top}px`);
+      preview.dataset.placement = above ? 'above' : 'below';
+      previewFrame = requestAnimationFrame(() => preview.classList.add('is-visible'));
+    };
+
+    document.addEventListener('pointerover', (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLElement>('.registered-link');
+      if (link) showPreview(link, { x: event.clientX, y: event.clientY });
+    }, { signal: controller.signal });
+    document.addEventListener('pointerout', (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLElement>('.registered-link');
+      if (link && !(event.relatedTarget as Element | null)?.closest?.('.registered-link')) hidePreview();
+    }, { signal: controller.signal });
+    document.addEventListener('focusin', (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLElement>('.registered-link');
+      if (link) showPreview(link);
+    }, { signal: controller.signal });
+    document.addEventListener('focusout', (event) => {
+      if ((event.target as Element | null)?.closest?.('.registered-link')) hidePreview();
+    }, { signal: controller.signal });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !preview?.hidden) hidePreview();
+    }, { signal: controller.signal });
+    addEventListener('scroll', () => hidePreview(true), { passive: true, signal: controller.signal });
+    addEventListener('resize', () => hidePreview(true), { passive: true, signal: controller.signal });
+
+    const dialog = document.querySelector<HTMLDialogElement>('[data-image-dialog]');
+    document.querySelectorAll<HTMLElement>('.surface-bento figure').forEach((figure) => {
+      const sourceImage = figure.querySelector<HTMLImageElement>('img');
+      if (!sourceImage) return;
+      let button = figure.querySelector<HTMLButtonElement>('[data-enlarge-image]');
+      if (!button) {
+        button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'enlarge-image';
+        button.dataset.enlargeImage = '';
+        button.setAttribute('aria-label', `enlarge ${sourceImage.alt}`);
+        button.textContent = 'view';
+        figure.append(button);
+      }
+      button.addEventListener('click', () => {
+        if (!dialog) return;
+        const image = dialog.querySelector<HTMLImageElement>('[data-image-dialog-image]');
+        const caption = dialog.querySelector<HTMLElement>('[data-image-dialog-caption]');
+        if (image) { image.src = sourceImage.currentSrc || sourceImage.src; image.alt = sourceImage.alt; }
+        if (caption) caption.textContent = figure.querySelector('figcaption')?.textContent?.trim() ?? '';
+        dialog.showModal();
+      }, { signal: controller.signal });
+    });
+    dialog?.querySelector<HTMLButtonElement>('[data-image-dialog-close]')?.addEventListener('click', () => dialog.close(), { signal: controller.signal });
+    dialog?.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }, { signal: controller.signal });
+
+    document.querySelectorAll<HTMLElement>('.sl-markdown-content pre').forEach((pre) => {
+      let frame = pre.parentElement?.classList.contains('code-frame') ? pre.parentElement : null;
+      if (!frame) {
+        frame = document.createElement('div');
+        frame.className = 'code-frame';
+        pre.before(frame);
+        frame.append(pre);
+      }
+      let copy = frame.querySelector<HTMLButtonElement>('.code-copy');
+      if (!copy) {
+        copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'code-copy';
+        copy.textContent = 'copy';
+        frame.prepend(copy);
+      }
+      copy.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(pre.textContent ?? '');
+        copy.textContent = 'copied';
+        setTimeout(() => { copy.textContent = 'copy'; }, 1500);
+      }, { signal: controller.signal });
+    });
+
+    cleanupPublicationEnhancements = () => {
+      controller.abort();
+      hidePreview(true);
+    };
+  };
+  document.addEventListener('astro:page-load', setupPublicationEnhancements);
+  setupPublicationEnhancements();
+</script>
