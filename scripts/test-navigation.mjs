@@ -85,6 +85,28 @@ try {
   expect(Math.abs(mobileHeaderGeometry.tabCenterDelta) <= .5, `mobile provider tabs are not centered as a group: ${mobileHeaderGeometry.tabCenterDelta}`);
   expect(mobileHeaderGeometry.controlSizes.every(({ width, height }) => width === 36 && height === 36), `mobile header controls do not share one 36px geometry: ${JSON.stringify(mobileHeaderGeometry.controlSizes)}`);
   expect(mobileHeaderGeometry.actionRailHeight === 44, `mobile header utility rail is not a compact 44px group: ${mobileHeaderGeometry.actionRailHeight}`);
+  const mobileScrollContract = await page.evaluate(() => ({
+    rootOverscroll: getComputedStyle(document.documentElement).overscrollBehaviorY,
+    bodyOverscroll: getComputedStyle(document.body).overscrollBehaviorY,
+    horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  }));
+  expect(mobileScrollContract.rootOverscroll === 'none' && mobileScrollContract.bodyOverscroll === 'none', `mobile page retains rubber-band overscroll: ${JSON.stringify(mobileScrollContract)}`);
+  expect(mobileScrollContract.horizontalOverflow === 0, `mobile page has horizontal overflow: ${mobileScrollContract.horizontalOverflow}`);
+  await page.locator('.search-trigger').click();
+  const mobileSearchDialog = page.locator('.search-access site-search dialog');
+  await mobileSearchDialog.waitFor({ state: 'visible' });
+  const mobileSearchGeometry = await mobileSearchDialog.evaluate((dialog) => {
+    const box = dialog.getBoundingClientRect();
+    return { x: box.x, y: box.y, width: box.width, height: box.height, viewportWidth: innerWidth, viewportHeight: innerHeight };
+  });
+  expect(mobileSearchGeometry.x === 0 && mobileSearchGeometry.y === 0 && mobileSearchGeometry.width === mobileSearchGeometry.viewportWidth && mobileSearchGeometry.height === mobileSearchGeometry.viewportHeight, `mobile search is not a full-viewport surface: ${JSON.stringify(mobileSearchGeometry)}`);
+  const mobileSearchInput = mobileSearchDialog.locator('input[type="text"], input[type="search"]').first();
+  await mobileSearchInput.waitFor({ state: 'visible' });
+  await mobileSearchInput.fill('codex');
+  await mobileSearchDialog.locator('.pagefind-ui__result').first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+  expect(await mobileSearchDialog.locator('.pagefind-ui__result').count() > 0, 'mobile search does not return indexed results');
+  await mobileSearchDialog.locator('[data-close-modal]').click();
+  expect(await mobileSearchDialog.getAttribute('open') === null, 'mobile search close control does not dismiss the dialog');
   const initialTheme = await page.locator('html').getAttribute('data-theme');
   const themeButton = page.locator('.theme-control');
   await themeButton.click();
@@ -358,17 +380,34 @@ try {
   expect(tabletStart.mobileToc?.visible && tabletStart.mobileToc.x === 68 && tabletStart.mobileToc.width === 700, '768px reading path does not account for the compact chapter rail');
   expect(!tabletStart.rightRail?.visible && !tabletStart.rightToggle?.visible, '768px tablet layout exposes the desktop reading rail');
 
+  const reloadContext = await browser.newContext({ viewport: { width: 768, height: 900 } });
+  await reloadContext.addInitScript(() => localStorage.setItem('coding-agent-tips:reading-rails', 'collapsed'));
+  const reloadPage = await reloadContext.newPage();
+  await reloadPage.goto(`${origin}/guides/codex/`, { waitUntil: 'domcontentloaded' });
+  const railAtFirstDocumentPaint = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => ({
+    width: sidebar.getBoundingClientRect().width,
+    runningWidthAnimations: sidebar.getAnimations().filter((animation) => animation.playState === 'running').length,
+    state: document.documentElement.dataset.leftRail,
+  }));
+  await reloadPage.waitForTimeout(220);
+  const railAfterHydration = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => sidebar.getBoundingClientRect().width);
+  expect(railAtFirstDocumentPaint.state === 'collapsed' && railAtFirstDocumentPaint.width === 68 && railAtFirstDocumentPaint.runningWidthAnimations === 0, `tablet rail state was not established before first paint: ${JSON.stringify(railAtFirstDocumentPaint)}`);
+  expect(railAfterHydration === railAtFirstDocumentPaint.width, `tablet rail flashes from expanded to collapsed on reload: ${railAtFirstDocumentPaint.width} -> ${railAfterHydration}`);
+  await reloadContext.close();
+
   const tabletMainBefore = tabletStart.main;
   await responsivePage.locator('[data-rail-toggle="left"]').click();
   await responsivePage.waitForTimeout(220);
   const tabletExpanded = await geometry();
   expect(tabletExpanded.sidebar?.width === 272, 'tablet chapter rail does not expand');
   expect(tabletExpanded.main?.x === tabletMainBefore?.x && tabletExpanded.main?.width === tabletMainBefore?.width, 'tablet chapter rail pushes or resizes the article instead of overlaying it');
-  expect(tabletExpanded.mobileToc?.x === 68 && tabletExpanded.mobileToc?.width === 700, 'overlay tablet reading path does not retain the compact rail inset');
+  expect(!tabletExpanded.mobileToc?.visible, 'overlay tablet reading path remains layered over the open chapter drawer');
   expect(await responsivePage.locator('.rail-scrim').evaluate((scrim) => getComputedStyle(scrim).pointerEvents === 'auto'), 'overlay tablet rail does not expose its dismissing scrim');
   await responsivePage.keyboard.press('Escape');
   await responsivePage.waitForTimeout(220);
-  expect((await geometry()).sidebar?.width === 68, 'Escape does not collapse the tablet chapter rail');
+  const tabletClosed = await geometry();
+  expect(tabletClosed.sidebar?.width === 68, 'Escape does not collapse the tablet chapter rail');
+  expect(tabletClosed.mobileToc?.visible && tabletClosed.mobileToc.x === 68 && tabletClosed.mobileToc.width === 700, 'tablet reading path does not return to the compact rail inset after closing the drawer');
   expect(await responsivePage.locator('[data-rail-toggle="left"]').evaluate((button) => document.activeElement === button), 'Escape does not return focus to the tablet rail control');
 
   await responsivePage.setViewportSize({ width: 896, height: 800 });
