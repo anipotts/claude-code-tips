@@ -5,14 +5,15 @@ type TocNode = { depth: number; slug: string; text: string; children: TocNode[] 
 type RailHeading = { depth: number; slug: string; text: string };
 
 const { toc } = Astro.locals.starlightRoute;
+const isOutline = Astro.locals.starlightRoute.entry.data.completion === 'outline';
 const flattenHeadings = (items: TocNode[]): RailHeading[] => items.flatMap((item) => [
   { depth: item.depth, slug: item.slug, text: item.text },
   ...flattenHeadings(item.children),
 ]);
-const headings = toc ? flattenHeadings(toc.items as TocNode[]).filter((item) => item.slug !== '_top' && item.depth <= 3) : [];
+const headings = toc && !isOutline ? flattenHeadings(toc.items as TocNode[]).filter((item) => item.slug !== '_top' && item.depth <= 3) : [];
 ---
 
-{toc && (
+{headings.length > 0 && (
   <>
     <nav class="handbook-mobile-toc lg:sl-hidden" aria-label="on this page">
       <details data-mobile-reading-path data-animated-disclosure>

@@ -1,0 +1,20 @@
+<script is:inline>
+  (() => {
+    const storageKey = 'coding-agent-tips:reading-rails';
+    const paired = matchMedia('(min-width: 80rem)').matches;
+    const overlay = matchMedia('(min-width: 48rem) and (max-width: 55.99rem)').matches;
+    let stored = null;
+    try { stored = localStorage.getItem(storageKey); } catch {}
+
+    const state = overlay
+      ? 'collapsed'
+      : stored === 'expanded' || stored === 'collapsed'
+        ? stored
+        : paired ? 'expanded' : 'collapsed';
+
+    document.documentElement.dataset.leftRail = state;
+    document.documentElement.dataset.rightRail = paired ? state : 'collapsed';
+    document.documentElement.dataset.drawerState = 'closed';
+    document.documentElement.dataset.railStateReady = '';
+  })();
+</script>

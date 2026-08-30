@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checked_on": "2026-08-28",
+  "checked_on": "2026-08-30",
   "product_versions": {
     "codex": "0.149.0",
     "claude_code": "2.1.240"
@@ -36,7 +36,7 @@
         "https://learn.chatgpt.com/docs/codex",
         "https://github.com/openai/codex"
       ],
-      "last_checked": "2026-08-07",
+      "last_checked": "2026-08-30",
       "evidence": "official-source",
       "watch": {
         "kind": "terms",
@@ -178,6 +178,28 @@
       "url": "https://learn.chatgpt.com/docs/cloud",
       "last_checked": "2026-08-27",
       "evidence": "official-source"
+    },
+    {
+      "id": "openai-remote-connections",
+      "title": "Remote connections",
+      "publisher": "openai",
+      "product": "codex",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://learn.chatgpt.com/docs/remote-connections",
+      "aliases": [
+        "https://learn.chatgpt.com/docs/remote-connections.md"
+      ],
+      "last_checked": "2026-08-30",
+      "evidence": "official-source",
+      "watch": {
+        "kind": "terms",
+        "terms": [
+          "Control other devices",
+          "SSH host",
+          "Remote"
+        ]
+      }
     },
     {
       "id": "anthropic-claude-overview",
@@ -403,7 +425,7 @@
       "layer": "surface",
       "status": "core",
       "url": "https://code.claude.com/docs/en/remote-control",
-      "last_checked": "2026-08-22",
+      "last_checked": "2026-08-30",
       "evidence": "official-source",
       "watch": {
         "kind": "terms",

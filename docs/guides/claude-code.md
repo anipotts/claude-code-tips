@@ -2,9 +2,10 @@
 title: claude code
 description: a practical map of claude code across terminal, desktop, editor, web, and remote workflows.
 products: [claude-code]
-updatedAt: "2026-08-29T19:04:00-04:00"
-checkedAt: "2026-08-28T00:00:00-04:00"
-status: pending
+updatedAt: "2026-08-30T14:33:21-04:00"
+checkedAt: "2026-08-30T14:33:21-04:00"
+status: current
+completion: complete
 evidence: [official-source, open-question]
 sources: [anthropic-claude-overview, anthropic-how-claude-code-works, anthropic-platforms, anthropic-features-overview, anthropic-memory, anthropic-settings, anthropic-skills, anthropic-mcp, anthropic-subagents, anthropic-hooks, anthropic-plugins, anthropic-desktop, anthropic-web, anthropic-remote-control, anthropic-cowork]
 redirects: []
@@ -46,7 +47,16 @@ repository change, an investigation, or a verified engineering decision.
 
 ### the repository gives the task its shape
 
-<!-- Ani voice pass: add the dated repository first observation here. -->
+Claude Code is where I first learned how much the repository can shape the
+agent. the files provide the immediate evidence, while `CLAUDE.md`, rules,
+settings, tools, and verification commands explain how work should happen
+there. that context becomes more valuable across repeated sessions because I
+do not have to rebuild the same operating assumptions in every prompt.
+
+the repository should still stay legible without Claude Code. instructions can
+point at the real commands and conventions, while the diff and its verification
+remain the shared proof. the agent benefits from durable context without
+turning that context into a second undocumented system.
 
 ## where claude code lives
 
@@ -115,7 +125,14 @@ decide how the session behaves.
 
 ### the interface changes what you can see
 
-<!-- Ani voice pass: compare the review experience without repeating surface mechanics. -->
+the terminal keeps the command, working directory, and interruption point
+close. the IDE keeps the selected code and diagnostics close. desktop makes
+several sessions and visual review easier to compare. web makes cloud execution
+visible, while Remote Control exposes a local session through another screen.
+
+I choose between those interfaces based on the evidence I need to judge next.
+the surface can make one kind of review easier, but it does not change the need
+for a named checkout, an inspectable artifact, and a pass condition.
 
 ### the interaction layer changes how claude code behaves
 
@@ -155,15 +172,40 @@ scope, and reason to remain.
 
 ### steering is different from hosting
 
-<!-- Ani voice pass: distinguish the control surface from the execution host. -->
+the browser or phone can be the place where I read, answer, and redirect a
+session without becoming its execution environment. Remote Control leaves the
+Claude Code process on the host machine, so that machine still owns the local
+repository, tools, MCP servers, credentials, and project configuration.
+
+that makes the host part of the task contract. if the process stops or the host
+goes offline, the remote session stops being available. moving the steering
+surface preserves local context only while the local process remains alive.
 
 ### web and Remote Control use different execution models
 
-<!-- Ani voice pass: deepen the current web and Remote Control distinction. -->
+[Claude Code on the web](https://code.claude.com/docs/en/claude-code-on-the-web)
+runs in Anthropic's cloud environment. [Remote
+Control](https://code.claude.com/docs/en/remote-control) uses the same broader
+web and mobile access pattern to steer a session that executes on my machine.
+the interfaces can look close while the reachable files, credentials, tools,
+and network are completely different.
+
+I use that execution question as the first branch in the decision. Remote
+Control fits work that already depends on my local environment. web fits work
+that should begin in a clean cloud environment, continue without my terminal,
+or run alongside other isolated tasks.
 
 ### mobile keeps the control loop close
 
-<!-- Ani voice pass: record the current mobile capabilities and limitations. -->
+Claude's mobile app can open and steer a Remote Control session and receive a
+push when the task finishes or needs a decision. the active Claude Code process
+still runs on the host, and one interactive process normally supports one
+remote session unless it is running in server mode.
+
+I treat that as a useful control surface whose current limits still need a
+paired field run before I turn them into a personal recommendation. the
+important product fact is already clear: mobile moves attention and approvals;
+it does not silently move execution away from the machine that owns the work.
 
 ## start with what you are trying to finish
 
@@ -180,8 +222,6 @@ decision. Cowork fits broader computer work and finished deliverables. the
 surface choice becomes clearer when I name what I expect to review at the end.
 
 ### Cowork begins with a finished deliverable
-
-<!-- Ani voice pass: develop the finished knowledge work boundary here. -->
 
 that review should include the remaining uncertainty. Claude Code can make a
 large amount of progress while carrying one wrong assumption about the branch,
