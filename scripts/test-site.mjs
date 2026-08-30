@@ -11,7 +11,12 @@ const failures = [];
 
 const scalar = (markdown, key) => markdown.match(new RegExp(`^${key}:\\s*(.+)$`, 'm'))?.[1].trim().replace(/^['"]|['"]$/g, '');
 const inlineList = (markdown, key) => (markdown.match(new RegExp(`^${key}:\\s*\\[([^\\]]*)\\]`, 'm'))?.[1] ?? '').split(',').map((item) => item.trim()).filter(Boolean);
-const text = (html) => html.replace(/<[^>]+>/g, ' ').replaceAll('&amp;', '&').replaceAll('&#x26;', '&').replaceAll('&#38;', '&').replace(/\s+/g, ' ').trim();
+const ampersandEntities = new Set(['&amp;', '&#x26;', '&#38;']);
+const text = (html) => html
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&(?:amp|#x26|#38);/g, (entity) => ampersandEntities.has(entity) ? '&' : entity)
+  .replace(/\s+/g, ' ')
+  .trim();
 const routeFile = (route) => route === '/' ? path.join(dist, 'index.html') : path.join(dist, route.replace(/^\//, ''), 'index.html');
 const publicFile = (pathname) => pathname.endsWith('.md') ? path.join(dist, pathname.replace(/^\//, '')) : routeFile(pathname.endsWith('/') ? pathname : `${pathname}/`);
 const markdownFiles = async (directory) => (await Promise.all((await readdir(directory, { withFileTypes: true })).map(async (entry) => {
