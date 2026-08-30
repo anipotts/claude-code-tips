@@ -2,26 +2,29 @@
 import { Icon } from 'astro-icon/components';
 import { getEntry, render } from 'astro:content';
 import { getHomepagePages, routeForEntry } from '../content';
+import ProviderProductIcon from '../components/ProviderProductIcon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatUpdatedAt } from '../date';
-import { site } from '../site';
+import { homepageHighlightsForScope, navigationScopes, site } from '../site';
 
 const home = await getEntry('home', 'home');
 if (!home) throw new Error('content/home.md is required');
 const { Content } = await render(home);
 const guides = await getHomepagePages();
-const guideGroups = [
-  {
-    id: 'provider-guides',
-    title: 'by provider',
-    guides: guides.filter((guide) => guide.data.navigation.scope !== 'general'),
-  },
-  {
-    id: 'shared-guides',
-    title: 'across agents',
-    guides: guides.filter((guide) => guide.data.navigation.scope === 'general'),
-  },
-];
+const providerGroups = navigationScopes
+  .filter((scope) => scope.id !== 'general')
+  .map((scope) => {
+    const pages = guides.filter((guide) => guide.data.navigation.scope === scope.id);
+    return {
+      ...scope,
+      pages,
+      overview: pages.find((page) => page.data.navigation.order === 10),
+      highlights: homepageHighlightsForScope(scope.id),
+      providerIconDark: 'providerIconDark' in scope ? scope.providerIconDark : undefined,
+    };
+  })
+  .filter((scope) => scope.pages.length > 0);
+const sharedGuides = guides.filter((guide) => guide.data.navigation.scope === 'general');
 ---
 
 <BaseLayout title={home.data.title} description={home.data.description}>
@@ -33,24 +36,44 @@ const guideGroups = [
         <p class="section-label">{site.interfaceCopy.guides}</p>
         <h2 id="guide-title">choose where to begin</h2>
       </header>
-      <div class="home-guide-groups">
-        {
-          guideGroups.map((group) => (
-            <section class="home-guide-group" aria-labelledby={group.id}>
-              <h3 id={group.id}>{group.title}</h3>
-              <div class="home-guide-list">
-                {group.guides.map((guide) => (
-                  <a href={routeForEntry(guide)}>
-                    <h3>{guide.data.title}</h3>
-                    <p>{guide.data.description}</p>
-                    <Icon name="ph:arrow-right" aria-hidden="true" />
-                  </a>
+      <div class="provider-handbook-grid">
+        {providerGroups.map((group) => (
+          <section class="provider-handbook" aria-labelledby={`provider-${group.id}`}>
+            <header>
+              <h3 id={`provider-${group.id}`}>
+                <ProviderProductIcon light={group.providerIcon} dark={group.providerIconDark} />
+                {group.label}
+              </h3>
+              {group.overview && <p>{group.overview.data.description}</p>}
+            </header>
+            <nav aria-label={`${group.label} distinct guide entry points`}>
+              <ul>
+                {group.highlights.map((highlight) => (
+                  <li>
+                    <a href={highlight.href}>
+                      <span class="provider-chapter-icon" aria-hidden="true"><Icon name={highlight.icon} /></span>
+                      <span>{highlight.label}</span>
+                      <Icon class="provider-chapter-arrow" name="ph:arrow-right" aria-hidden="true" />
+                    </a>
+                  </li>
                 ))}
-              </div>
-            </section>
-          ))
-        }
+              </ul>
+            </nav>
+          </section>
+        ))}
       </div>
+      <section class="shared-handbook" aria-labelledby="shared-guides">
+        <h3 id="shared-guides">{site.interfaceCopy.sharedFoundations}</h3>
+        <div class="home-guide-list">
+          {sharedGuides.map((guide) => (
+            <a href={routeForEntry(guide)}>
+              <h3>{guide.data.title}</h3>
+              <p>{guide.data.description}</p>
+              <Icon name="ph:arrow-right" aria-hidden="true" />
+            </a>
+          ))}
+        </div>
+      </section>
     </section>
 
   </main>

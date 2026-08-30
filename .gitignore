@@ -13,6 +13,9 @@ dist/
 playwright-report/
 test-results/
 .DS_Store
+!public/icons/
+!public/icons/publishers/
+!public/icons/publishers/*.png
 *.pyc
 __pycache__/
 *.egg-info/
