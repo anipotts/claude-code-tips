@@ -27,16 +27,16 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",
-    "@astrojs/starlight": "0.41.9",
+    "@astrojs/starlight": "0.41.10",
     "@fontsource-variable/instrument-sans": "5.3.0",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@iconify-json/ph": "1.2.2",
-    "astro": "7.2.8",
+    "astro": "7.2.9",
     "astro-icon": "1.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
-    "@astrojs/markdown-remark": "7.2.2",
+    "@astrojs/markdown-remark": "7.2.4",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.62.1",
     "ajv": "8.20.0",
