@@ -68,7 +68,7 @@ const allowedControllers = new Set([
 ]);
 for (const [file, source] of repositoryText) {
   if (file.startsWith('src/components/starwind/') || !file.startsWith('src/components/')) continue;
-  if (/<script(?:\s|>)/.test(source) && !allowedControllers.has(file)) failures.push(`${file}: custom browser controller is not in the ownership allowlist`);
+  if (/<script(?:\s|>)/i.test(source) && !allowedControllers.has(file)) failures.push(`${file}: custom browser controller is not in the ownership allowlist`);
 }
 
 if (failures.length) {
