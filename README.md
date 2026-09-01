@@ -8,7 +8,7 @@ this is my evidence backed guide to working with coding agents, whether you are 
 - [codex](https://agents.anipotts.com/guides/codex/)
 - [claude code](https://agents.anipotts.com/guides/claude-code/)
 - [grok](https://agents.anipotts.com/guides/grok/)
-- [working with coding agents](https://agents.anipotts.com/guides/operating-system/)
+- [techniques to operate agents](https://agents.anipotts.com/guides/operating-system/)
 - [how coding agents got here](https://agents.anipotts.com/history/)
 - [choosing a coding agent setup](https://agents.anipotts.com/market/)
 - [where this comes from](https://agents.anipotts.com/method/)

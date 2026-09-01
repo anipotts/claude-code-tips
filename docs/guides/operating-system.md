@@ -1,5 +1,5 @@
 ---
-title: working with coding agents
+title: techniques to operate agents
 description: durable instructions, evidence, isolation, approvals, verification, and handoffs across coding agent runtimes.
 products: [codex, claude-code]
 updatedAt: "2026-08-22T19:55:02-04:00"
@@ -13,7 +13,7 @@ navigation:
   order: 30
 ---
 
-codex and claude code expose different native controls. the durable engineering principles underneath them are similar.
+codex and claude code expose different controls in their native interfaces, but the engineering principles underneath them are similar.
 
 ## start with a github repository
 
