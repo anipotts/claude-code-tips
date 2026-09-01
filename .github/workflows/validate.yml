@@ -33,7 +33,7 @@ jobs:
 
       - name: type check and build
         run: |
-          bun run test:copy-review
+          bun run check:ui
           bun run check
           bun run build
 

@@ -198,7 +198,7 @@ jobs:
           python3 .github/scripts/check_freshness_diff.py --base HEAD
           python3 .github/scripts/check_sources.py
           bun install --frozen-lockfile
-          bun run check:field-runs
+          bun run check:ui
           bun run check:readme
           bun run check
           bun run build
