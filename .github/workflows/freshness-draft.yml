@@ -51,8 +51,8 @@ jobs:
           FRESHNESS_OUTCOME: ${{ steps.freshness.outcome }}
         shell: bash
         run: |
-          current_codex="$(jq -r '.product_versions.codex' docs/sources.json)"
-          current_claude="$(jq -r '.product_versions.claude_code' docs/sources.json)"
+          current_codex="$(jq -r '.product_versions.codex' editorial/sources.json)"
+          current_claude="$(jq -r '.product_versions.claude_code' editorial/sources.json)"
           if [[ "$LATEST_CODEX" == "unknown" || "$LATEST_CLAUDE_CODE" == "unknown" ]]; then
             echo "package registry lookup failed" >&2
             exit 1
@@ -133,11 +133,11 @@ jobs:
           codex-version: ${{ needs.detect.outputs.codex }}
           prompt: |
             Update this handbook for the detected Codex or Claude Code version change.
-            Read AGENTS.md, docs/sources.json, and the official snapshots under .freshness/.
+            Read AGENTS.md, editorial/sources.json, and the official snapshots under .freshness/.
             Update the version registry and only public claims directly supported by those official snapshots.
             Phrase date sensitive claims as "as of <month day, year>" in the existing lowercase voice.
             Preserve citations, limitations, and the distinction between official source and hands on evidence.
-            Do not invent a field run, benchmark, recommendation, or product capability.
+            Do not invent a test result, benchmark, recommendation, or product capability.
             Do not change any recommendations.md file.
             Remove .freshness before finishing. Run bun install --frozen-lockfile, bun run check, bun run build, and bun run test:site.
 
@@ -198,7 +198,7 @@ jobs:
           python3 .github/scripts/check_freshness_diff.py --base HEAD
           python3 .github/scripts/check_sources.py
           bun install --frozen-lockfile
-          bun run check:field-runs
+          bun run check:ui
           bun run check:readme
           bun run check
           bun run build

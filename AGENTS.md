@@ -1,12 +1,12 @@
 # coding agent tips
 
-this repository is an opinionated, source backed handbook for experienced coding agent users. codex and claude code are coequal primary guides. archived claude code plugins remain available only for the compatibility window documented in `docs/archive.md`.
+this repository is an opinionated, source backed handbook for experienced coding agent users. codex and claude code are coequal primary guides. archived claude code plugins remain available only for the compatibility window documented in `content/archive/claude-code-tools.md`.
 
 ## public standard
 
 - write for a staff engineer, hiring manager, or technically serious builder who may encounter one page without prior context.
 - separate tested behavior, official product facts, analysis, and open questions.
-- prefer primary sources and record them in `docs/sources.json`.
+- prefer primary sources and record them in `editorial/sources.json`.
 - do not use generated activity, commit frequency, or vendor benchmarks as evidence of quality.
 - keep the voice direct, lowercase, and professional. avoid hype, fan language, and unsupported authority claims.
 - treat Ani's submitted wording and manual browser edits as the primary voice reference. preserve his phrasing unless accuracy, safety, or clarity requires a change, and explain that conflict instead of silently polishing it away.
@@ -19,9 +19,10 @@ this repository is an opinionated, source backed handbook for experienced coding
 ## canonical ownership
 
 - `content/home.md` owns the homepage.
-- `docs/guides/*.md`, `docs/history.md`, `docs/market.md`, and `docs/method.md` own the principal handbook destinations.
-- `content/runs/*.md` owns field run metadata and prose.
-- `docs/sources.json` owns source metadata, current product versions, and evidence definitions.
+- `content/handbook/*.md` owns guidance shared across products.
+- `content/guides/<product>*.md` owns product overviews and chapters.
+- `content/archive/*.md` owns frozen compatibility material.
+- `editorial/sources.json` owns source metadata, current product versions, and evidence definitions.
 - `src/site.ts` owns shared navigation and interface copy.
 - components render canonical metadata. they do not own guide summaries, product explanations, recommendations, or versions.
 - run `bun run sync:readme` after changing a principal guide title or evidence label. the generated README blocks must match before validation passes.
@@ -30,7 +31,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 
 ## verification
 
-run the source, field run, Astro, generated route, Markdown, and shell checks before publishing a broad change. run `bun test plugins/cc/tests` and `pytest plugins/lore/tests` when archive files or shared runtime dependencies change, and during the scheduled full verification.
+run the source, Astro, generated route, Markdown, and shell checks before publishing a broad change. run `bun test plugins/cc/tests` and `pytest plugins/lore/tests` when archive files or shared runtime dependencies change, and during the scheduled full verification.
 
 - protected pull requests must use a committer identity GitHub recognizes. local cryptographic verification is supporting evidence; GitHub's `verified=true` result is the merge gate.
 - use `--body-file` for GitHub pull request or release text that contains Markdown code spans or shell syntax. never pass that content through an inline shell argument.

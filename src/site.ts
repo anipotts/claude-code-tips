@@ -31,7 +31,7 @@ export const handbookChapters = [
 ] as const;
 
 export const handbookScopes = [
-  { id: 'general', label: 'index', href: '/', order: 10, public: true, providerIcon: '/favicon.svg' },
+  { id: 'handbook', label: 'handbook', href: '/', order: 10, public: true, providerIcon: '/favicon.svg' },
   {
     id: 'codex', label: 'codex', href: '/guides/codex/', order: 20, public: true,
     providerIcon: '/icons/products/codex-light.png', providerIconDark: '/icons/products/codex-dark.png',
@@ -67,7 +67,7 @@ export const providerHomepageHighlights = {
   grok: [
     { label: 'Grok Build and Grok Bot', href: '/guides/grok/', icon: 'ph:app-window' },
     { label: 'settings and permissions', href: '/guides/grok/configuration/', icon: 'ph:sliders-horizontal' },
-    { label: 'what still needs a field run', href: '/guides/grok/recommendations/', icon: 'ph:compass' },
+    { label: 'what still needs hands on testing', href: '/guides/grok/recommendations/', icon: 'ph:compass' },
   ],
 } as const;
 
@@ -86,7 +86,7 @@ export function chapterForOrder(order: number): HandbookChapter | undefined {
 }
 
 export function scopeForPath(pathname: string): NavigationScope {
-  const provider = handbookScopes.find((scope) => scope.id !== 'general' && pathname.startsWith(`/guides/${scope.id}/`));
+  const provider = handbookScopes.find((scope) => scope.id !== 'handbook' && pathname.startsWith(`/guides/${scope.id}/`));
   if (provider) return provider.id;
-  return 'general';
+  return 'handbook';
 }

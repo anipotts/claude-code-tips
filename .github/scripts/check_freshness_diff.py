@@ -12,12 +12,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 ALLOWED_FILES = {
     "README.md",
-    "docs/history.md",
-    "docs/market.md",
-    "docs/method.md",
-    "docs/sources.json",
+    "editorial/sources.json",
 }
-ALLOWED_PREFIXES = ("content/", "docs/guides/")
+ALLOWED_PREFIXES = ("content/handbook/", "content/guides/")
 
 
 def parse_args() -> argparse.Namespace:

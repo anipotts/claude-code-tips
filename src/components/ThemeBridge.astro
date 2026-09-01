@@ -1,0 +1,17 @@
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const mirrorTheme = () => {
+      root.dataset.theme = root.classList.contains('dark') ? 'dark' : 'light';
+    };
+
+    mirrorTheme();
+    window.__publicationThemeObserver?.disconnect();
+    const observer = new MutationObserver(mirrorTheme);
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    window.__publicationThemeObserver = observer;
+  })();
+</script>

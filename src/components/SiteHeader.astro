@@ -1,14 +1,20 @@
 ---
-import { Icon } from 'astro-icon/components';
+import Search from '@astrojs/starlight/components/Search.astro';
+import BrandGithub from '@tabler/icons/outline/brand-github.svg';
+import Menu2 from '@tabler/icons/outline/menu-2.svg';
 import { getHandbookPages, routeForEntry } from '../content';
 import { chapterForOrder, navigationScopes, scopeForPath, site } from '../site';
-import ThemeControl from './ThemeControl.astro';
+import { Button } from './starwind/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './starwind/sheet';
+import { ThemeToggle } from './starwind/theme-toggle';
+import { Toaster } from './starwind/toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from './starwind/tooltip';
 
 const current = Astro.url.pathname;
 const activeScope = scopeForPath(current);
 const scopedPages = await getHandbookPages({ scope: activeScope });
-const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'general';
-const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScope === 'general'
+const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'handbook';
+const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScope === 'handbook'
   ? page.data.title
   : chapterForOrder(page.data.navigation.order)?.label ?? page.data.title;
 ---
@@ -20,34 +26,60 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
       <span>{site.name}</span>
     </a>
     <div class="header-actions">
-      <button class="search-trigger" type="button" data-search-trigger aria-label={site.interfaceCopy.search}>
-        <Icon name="ph:magnifying-glass" aria-hidden="true" />
-        <span>{site.interfaceCopy.search}</span>
-        <kbd>⌘K</kbd>
-      </button>
-      <ThemeControl />
-      <a
-        class="github-link"
-        href={site.repository}
-        aria-label={site.interfaceCopy.github}
-      >
-        <Icon name="ph:github-logo" aria-hidden="true" />
-      </a>
-      <details class="mobile-site-menu" data-animated-disclosure>
-        <summary aria-label={site.interfaceCopy.menu} aria-controls="mobile-scope-menu">
-          <Icon class="menu-open-icon" name="ph:list" aria-hidden="true" />
-          <Icon class="menu-close-icon" name="ph:x" aria-hidden="true" />
-        </summary>
-        <nav id="mobile-scope-menu" data-disclosure-content aria-label={`${activeScopeLabel} pages`}>
-          {scopedPages.map((page) => {
-            const href = routeForEntry(page);
-            return <a href={href} data-astro-prefetch="tap" aria-current={current === href ? 'page' : undefined}>{mobileNavigationLabel(page)}</a>;
-          })}
+      <div class="header-search" transition:persist><Search /></div>
+      <ThemeToggle class="site-header-control" variant="default" size="sm" ariaLabel="toggle color theme" />
+      <Tooltip>
+        <TooltipTrigger>
+          <Button
+            class="github-link site-header-control"
+            variant="ghost"
+            size="icon-sm"
+            href={site.repository}
+            aria-label={site.interfaceCopy.github}
+          >
+            <BrandGithub aria-hidden="true" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">GitHub</TooltipContent>
+      </Tooltip>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button
+            class="mobile-site-menu-trigger site-header-control"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={site.interfaceCopy.menu}
+          >
+            <Menu2 aria-hidden="true" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent class="mobile-site-menu" side="right">
+          <SheetHeader>
+            <SheetTitle>{activeScopeLabel}</SheetTitle>
+          </SheetHeader>
+          <nav aria-label={`${activeScopeLabel} pages`}>
+            {scopedPages.map((page) => {
+              const href = routeForEntry(page);
+              return (
+                <a
+                  href={href}
+                  data-astro-prefetch="tap"
+                  data-sw-drawer-close
+                  aria-current={current === href ? 'page' : undefined}
+                >
+                  {mobileNavigationLabel(page)}
+                </a>
+              );
+            })}
+          </nav>
           <footer>
-            <a href={site.repository}><Icon name="ph:github-logo" aria-hidden="true" /><span>GitHub</span></a>
+            <a href={site.repository} data-sw-drawer-close>
+              <BrandGithub aria-hidden="true" />
+              <span>GitHub</span>
+            </a>
           </footer>
-        </nav>
-      </details>
+        </SheetContent>
+      </Sheet>
     </div>
   </div>
   <nav class="provider-tabs" aria-label={site.interfaceCopy.guides}>
@@ -59,89 +91,4 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
     ))}
   </nav>
 </header>
-
-<script>
-  const disclosureDuration = 160;
-  const disclosureEasing = 'cubic-bezier(.2, .75, .25, 1)';
-  let cleanupAnimatedDisclosures: () => void = () => {};
-
-  const setupAnimatedDisclosures = () => {
-    cleanupAnimatedDisclosures();
-    const controller = new AbortController();
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    const cancelMotions: Array<() => void> = [];
-
-    document.querySelectorAll<HTMLDetailsElement>('[data-animated-disclosure]').forEach((details) => {
-      const summary = details.querySelector<HTMLElement>(':scope > summary');
-      const content = details.querySelector<HTMLElement>(':scope > [data-disclosure-content]');
-      if (!summary || !content) return;
-      let activeFrame = 0;
-      let activeTimer = 0;
-      let motionToken = 0;
-
-      const clearMotion = () => {
-        cancelAnimationFrame(activeFrame);
-        clearTimeout(activeTimer);
-        activeFrame = 0;
-        activeTimer = 0;
-      };
-
-      const finishMotion = (opening: boolean, token: number) => {
-        if (token !== motionToken) return;
-        clearMotion();
-        if (!opening) details.open = false;
-        delete details.dataset.disclosureState;
-        for (const property of ['overflow', 'block-size', 'opacity', 'transform', 'transition']) {
-          content.style.removeProperty(property);
-        }
-      };
-
-      details.dataset.disclosureMotion = 'ready';
-      cancelMotions.push(clearMotion);
-
-      summary.addEventListener('click', (event) => {
-        event.preventDefault();
-        const opening = !details.open || details.dataset.disclosureState === 'closing';
-        const token = ++motionToken;
-        const wasMoving = Boolean(details.dataset.disclosureState);
-        const currentHeight = wasMoving ? content.getBoundingClientRect().height : opening ? 0 : content.scrollHeight;
-        clearMotion();
-
-        if (reducedMotion.matches) {
-          details.open = opening;
-          delete details.dataset.disclosureState;
-          return;
-        }
-
-        if (opening) details.open = true;
-        details.dataset.disclosureState = opening ? 'opening' : 'closing';
-        const targetHeight = opening ? content.scrollHeight : 0;
-        content.style.overflow = 'hidden';
-        content.style.transition = 'none';
-        content.style.blockSize = `${currentHeight}px`;
-        content.style.opacity = opening && !wasMoving ? '0' : getComputedStyle(content).opacity;
-        content.style.transform = opening && !wasMoving ? 'translateY(-.35rem)' : getComputedStyle(content).transform;
-
-        activeFrame = requestAnimationFrame(() => {
-          content.style.transition = [
-            `block-size ${disclosureDuration}ms ${disclosureEasing}`,
-            `opacity ${disclosureDuration}ms ${disclosureEasing}`,
-            `transform ${disclosureDuration}ms ${disclosureEasing}`,
-          ].join(', ');
-          content.style.blockSize = `${targetHeight}px`;
-          content.style.opacity = opening ? '1' : '0';
-          content.style.transform = opening ? 'translateY(0)' : 'translateY(-.35rem)';
-          activeTimer = window.setTimeout(() => finishMotion(opening, token), disclosureDuration + 40);
-        });
-      }, { signal: controller.signal });
-    });
-
-    cleanupAnimatedDisclosures = () => {
-      controller.abort();
-      for (const cancelMotion of cancelMotions) cancelMotion();
-    };
-  };
-
-  document.addEventListener('astro:page-load', setupAnimatedDisclosures);
-  setupAnimatedDisclosures();
-</script>
+<Toaster position="bottom-right" duration={3200} />

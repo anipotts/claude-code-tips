@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import process from 'node:process';
-import registry from '../docs/sources.json' with { type: 'json' };
+import registry from '../editorial/sources.json' with { type: 'json' };
 import { canonicalContentFiles } from '../src/content-manifest.mjs';
 
 const normalizeUrl = (value) => {
@@ -25,7 +25,7 @@ const normalizedLabel = (value) => value
   .trim();
 const wordCount = (value) => normalizedLabel(value).split(/\s+/).filter(Boolean).length;
 const genericLabel = /^(?:read(?: the)? (?:paper|announcement|documentation)|official (?:overview|documentation)|documentation|learn more|click here|source|more)$/i;
-const pairedGuide = (file) => /docs\/guides\/(?:codex|claude-code)(?:\/|\.md$)/.test(file.replaceAll('\\', '/'));
+const pairedGuide = (file) => /content\/guides\/(?:codex|claude-code)(?:\/|\.md$)/.test(file.replaceAll('\\', '/'));
 const sentenceBounds = (markdown, index) => {
   const before = markdown.slice(0, index);
   const after = markdown.slice(index);

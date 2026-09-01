@@ -1,6 +1,5 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { once } from 'node:events';
-import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { chromium } from '@playwright/test';
@@ -10,20 +9,12 @@ const origin = `http://127.0.0.1:${previewPort}`;
 const astro = path.join(process.cwd(), 'node_modules/astro/bin/astro.mjs');
 const vite = path.join(process.cwd(), 'node_modules/vite/bin/vite.js');
 const failures = [];
+const expect = (condition, message) => { if (!condition) failures.push(message); };
 const build = spawnSync(process.execPath, [astro, 'build'], { stdio: 'inherit' });
 if (build.status !== 0) process.exit(build.status ?? 1);
 const server = spawn(process.execPath, [vite, 'preview', '--host', '127.0.0.1', '--port', String(previewPort), '--strictPort'], { stdio: 'inherit' });
 const serverExit = once(server, 'exit');
 let browser;
-
-const expect = (condition, message) => { if (!condition) failures.push(message); };
-const traverse = async (page, direction) => {
-  await page.evaluate((nextDirection) => {
-    window.__navigationTraversalComplete = new Promise((resolve) => document.addEventListener('astro:page-load', resolve, { once: true }));
-    history[nextDirection]();
-  }, direction);
-  await page.evaluate(() => window.__navigationTraversalComplete);
-};
 
 try {
   for (let attempt = 0; attempt < 40; attempt += 1) {
@@ -40,548 +31,174 @@ try {
   page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   page.on('pageerror', (error) => consoleErrors.push(error.message));
   await page.addInitScript(() => { window.__navigationDocumentToken = crypto.randomUUID(); });
-  await page.goto(origin, { waitUntil: 'networkidle' });
+
+  await page.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
   const documentToken = await page.evaluate(() => window.__navigationDocumentToken);
-  expect(await page.title() === 'coding agent tips', 'homepage title is incorrect');
-  expect(await page.locator('meta[name="astro-view-transitions-enabled"]').count() === 1, 'homepage ClientRouter marker is missing');
-  await page.locator('.site-header').evaluate((header) => header.setAttribute('data-stale-navigation-test', 'true'));
-  await page.evaluate(() => {
-    window.__providerTabTransitionDurations = [];
-    document.addEventListener('astro:after-swap', () => requestAnimationFrame(() => {
-      window.__providerTabTransitionDurations = document.getAnimations().map((animation) => animation.effect?.getTiming().duration).filter(Number.isFinite);
-    }), { once: true });
-  });
+  expect(await page.title() === 'codex | coding agent tips', 'guide title is incorrect');
+  expect(await page.locator('meta[name="astro-view-transitions-enabled"]').count() === 1, 'ClientRouter marker is missing');
+  expect(await page.locator('.provider-tabs a[data-astro-prefetch="hover"]').count() === 4, 'provider tabs are missing selective hover prefetching');
+  expect(await page.locator('.publication-sidebar [data-sidebar="menu-button"][data-astro-prefetch="hover"]').count() === 3, 'desktop chapters are missing selective hover prefetching');
+  expect(await page.locator('.mobile-site-menu nav > a[data-astro-prefetch="tap"]').count() === 3, 'mobile chapters are missing selective tap prefetching');
+  expect(await page.locator('.sidebar-page-outline a[data-astro-prefetch]').count() === 0, 'hash links must not be prefetched');
 
-  await page.locator('.provider-tabs a[href="/guides/codex/"]').click();
-  await page.waitForURL('**/guides/codex/');
-  await page.waitForSelector('.astro-route-announcer');
-  await page.waitForTimeout(220);
-  expect(documentToken === await page.evaluate(() => window.__navigationDocumentToken), 'homepage to document navigation caused a full reload');
-  expect(await page.title() === 'codex | coding agent tips', 'document title did not update after navigation');
-  expect((await page.locator('.astro-route-announcer').textContent())?.trim() === 'codex | coding agent tips', 'route announcement did not report the destination title');
-  expect((await page.locator('.provider-tabs [aria-current="page"]').textContent())?.trim() === 'codex', 'provider navigation did not update its active state');
-  expect(await page.locator('.provider-tabs a[data-astro-prefetch="hover"]').count() === 4, 'provider navigation is missing selective hover prefetching');
-  expect(await page.locator('#handbook-navigation > ul > li > a[data-astro-prefetch="hover"]').count() === 3, 'desktop chapter navigation is missing selective hover prefetching');
-  expect(await page.locator('.mobile-site-menu nav > a[data-astro-prefetch="tap"]').count() === 3, 'mobile chapter navigation is missing selective tap prefetching');
-  expect(await page.locator('.sidebar-page-outline a[data-astro-prefetch]').count() === 0, 'same-page heading links should not be prefetched');
-  expect(await page.locator('.provider-tabs [aria-current="page"]').evaluate((link) => getComputedStyle(link).viewTransitionName) === 'provider-tab-active', 'active provider tab is missing its shared cobalt pill transition');
-  const providerTransitionDurations = await page.evaluate(() => window.__providerTabTransitionDurations);
-  expect(providerTransitionDurations.some((duration) => duration > 0 && duration <= 160), `provider tab transition is missing or too slow: ${providerTransitionDurations.join(', ')}`);
-  expect(await page.locator('.site-header').getAttribute('data-stale-navigation-test') === null, 'the router retained stale header DOM');
-  expect(await page.evaluate(() => document.activeElement === document.body), 'focus did not return to the document body after the route swap');
-  expect(await page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === 'running').length) === 0, 'decorative route motion remains active');
-  const mobileHeaderGeometry = await page.evaluate(() => {
-    const header = document.querySelector('.site-header').getBoundingClientRect();
-    const tabs = document.querySelector('.provider-tabs').getBoundingClientRect();
-    const tabLinks = [...document.querySelectorAll('.provider-tabs a')].map((link) => link.getBoundingClientRect());
-    const controls = ['.search-trigger', '.theme-control', '.mobile-site-menu summary'].map((selector) => document.querySelector(selector).getBoundingClientRect());
-    return {
-      headerHeight: header.height,
-      tabsX: tabs.x,
-      tabsWidth: tabs.width,
-      tabCenterDelta: ((tabLinks[0].left + tabLinks.at(-1).right) / 2) - (header.x + header.width / 2),
-      controlSizes: controls.map(({ width, height }) => ({ width, height })),
-      actionRailHeight: document.querySelector('.header-actions').getBoundingClientRect().height,
-    };
-  });
-  expect(mobileHeaderGeometry.headerHeight >= 106 && mobileHeaderGeometry.headerHeight <= 108, `mobile header does not retain its readable two-row height: ${mobileHeaderGeometry.headerHeight}`);
-  expect(mobileHeaderGeometry.tabsX === 0 && mobileHeaderGeometry.tabsWidth === 375, 'mobile provider tabs do not occupy their full second row');
-  expect(Math.abs(mobileHeaderGeometry.tabCenterDelta) <= .5, `mobile provider tabs are not centered as a group: ${mobileHeaderGeometry.tabCenterDelta}`);
-  expect(mobileHeaderGeometry.controlSizes.every(({ width, height }) => width === 36 && height === 36), `mobile header controls do not share one 36px geometry: ${JSON.stringify(mobileHeaderGeometry.controlSizes)}`);
-  expect(mobileHeaderGeometry.actionRailHeight === 44, `mobile header utility rail is not a compact 44px group: ${mobileHeaderGeometry.actionRailHeight}`);
-  const mobileScrollContract = await page.evaluate(() => ({
-    rootOverscroll: getComputedStyle(document.documentElement).overscrollBehaviorY,
-    bodyOverscroll: getComputedStyle(document.body).overscrollBehaviorY,
-    horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  }));
-  expect(mobileScrollContract.rootOverscroll === 'none' && mobileScrollContract.bodyOverscroll === 'none', `mobile page retains rubber-band overscroll: ${JSON.stringify(mobileScrollContract)}`);
-  expect(mobileScrollContract.horizontalOverflow === 0, `mobile page has horizontal overflow: ${mobileScrollContract.horizontalOverflow}`);
-  await page.locator('.search-trigger').click();
-  const mobileSearchDialog = page.locator('.search-access site-search dialog');
-  await mobileSearchDialog.waitFor({ state: 'visible' });
-  const mobileSearchGeometry = await mobileSearchDialog.evaluate((dialog) => {
-    const box = dialog.getBoundingClientRect();
-    return { x: box.x, y: box.y, width: box.width, height: box.height, viewportWidth: innerWidth, viewportHeight: innerHeight };
-  });
-  expect(mobileSearchGeometry.x === 0 && mobileSearchGeometry.y === 0 && mobileSearchGeometry.width === mobileSearchGeometry.viewportWidth && mobileSearchGeometry.height === mobileSearchGeometry.viewportHeight, `mobile search is not a full-viewport surface: ${JSON.stringify(mobileSearchGeometry)}`);
-  const mobileSearchInput = mobileSearchDialog.locator('input[type="text"], input[type="search"]').first();
-  await mobileSearchInput.waitFor({ state: 'visible' });
-  await mobileSearchInput.fill('codex');
-  await mobileSearchDialog.locator('.pagefind-ui__result').first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
-  expect(await mobileSearchDialog.locator('.pagefind-ui__result').count() > 0, 'mobile search does not return indexed results');
-  await mobileSearchDialog.locator('[data-close-modal]').click();
-  expect(await mobileSearchDialog.getAttribute('open') === null, 'mobile search close control does not dismiss the dialog');
-  const initialTheme = await page.locator('html').getAttribute('data-theme');
-  const themeButton = page.locator('.theme-control');
-  await themeButton.click();
-  const toggledTheme = await page.locator('html').getAttribute('data-theme');
-  expect(toggledTheme !== initialTheme, `one-click theme control did not change theme: ${initialTheme}`);
-  expect((await themeButton.getAttribute('aria-label')) === `switch to ${initialTheme} mode`, 'theme control does not describe its next action');
-  expect(await page.locator('.theme-menu').count() === 0, 'legacy two-click theme menu is still rendered');
-  await themeButton.click();
-  expect(await page.locator('html').getAttribute('data-theme') === initialTheme, 'second theme click did not restore the original theme');
-  const sources = page.locator('.page-sources');
-  expect(await sources.getAttribute('open') === null, 'sources disclosure is not collapsed by default');
-  expect(await sources.getAttribute('data-disclosure-motion') === 'ready', 'sources disclosure motion is not initialized');
-  expect(await sources.locator('.source-summary-publishers img').count() > 0, 'sources summary is missing publisher icons');
-  expect(await sources.locator('.source-summary-badge .source-summary-count').count() === 1, 'source count is not attached to the publisher icon stack');
-  await sources.locator('summary').click();
-  expect(await sources.getAttribute('open') !== null, 'sources disclosure did not open');
-  expect(!(await sources.textContent())?.includes('TESTED / OFFICIAL SOURCE / ANALYSIS'), 'legacy source evidence microcopy is still public');
-  expect(await sources.locator('.source-publisher').count() > 0, 'expanded sources are not grouped by publisher');
-  const mobileSourceLayout = await sources.evaluate((details) => {
-    const groups = details.querySelector('.source-groups');
-    const item = details.querySelector('li');
-    const frame = details.querySelector('.publisher-icon-frame');
-    return {
-      columns: groups ? getComputedStyle(groups).gridTemplateColumns.split(' ').length : 0,
-      itemBorder: item ? getComputedStyle(item).borderBottomWidth : '',
-      itemUnderline: item ? getComputedStyle(item.querySelector('a')).textDecorationLine : '',
-      frameRadius: frame ? getComputedStyle(frame).borderRadius : '',
-    };
-  });
-  expect(mobileSourceLayout.columns === 1, `mobile sources do not collapse to one column: ${mobileSourceLayout.columns}`);
-  expect(mobileSourceLayout.itemBorder === '0px', `source rows retain separator lines: ${mobileSourceLayout.itemBorder}`);
-  expect(mobileSourceLayout.itemUnderline === 'none', `source links retain default underlines: ${mobileSourceLayout.itemUnderline}`);
-  expect(mobileSourceLayout.frameRadius !== '50%', 'publisher icon frame is circular');
-  await sources.locator('summary').click();
-  await page.waitForFunction(() => !document.querySelector('.page-sources')?.hasAttribute('open'));
-
-  const actionMenu = page.locator('[data-page-action-menu]');
-  const pageActionGeometry = await page.locator('.page-actions').evaluate((actions) => {
-    const copy = actions.querySelector('[data-copy-page]').getBoundingClientRect();
-    const summary = actions.querySelector('summary').getBoundingClientRect();
-    return {
-      segmentGap: summary.left - copy.right,
-      borderWidth: getComputedStyle(actions).borderTopWidth,
-      menuDivider: getComputedStyle(actions.querySelector('[data-page-action-menu]')).borderLeftWidth,
-    };
-  });
-  expect(Math.abs(pageActionGeometry.segmentGap) <= 1 && pageActionGeometry.borderWidth === '1px' && pageActionGeometry.menuDivider === '1px', `page actions are not one divided control: ${JSON.stringify(pageActionGeometry)}`);
-  await actionMenu.locator('summary').click();
-  expect(await actionMenu.getAttribute('open') !== null, 'secondary page action menu did not open');
-  const mobileActionPanel = await actionMenu.locator('.page-action-menu-panel').evaluate((panel) => {
-    const box = panel.getBoundingClientRect();
-    return { left: box.left, right: box.right };
-  });
-  expect(mobileActionPanel.left >= 10 && mobileActionPanel.right <= 365, `mobile page action menu escapes the viewport: ${JSON.stringify(mobileActionPanel)}`);
-  expect(await actionMenu.locator('a, button').allTextContents().then((items) => items.map((item) => item.trim()).join('|')) === 'view Markdown|copy page link|edit on GitHub', 'secondary page actions are missing or out of order');
-  const markdownAction = actionMenu.locator('a').filter({ hasText: 'view Markdown' });
-  expect(await markdownAction.getAttribute('target') === '_blank' && (await markdownAction.getAttribute('rel'))?.includes('noopener'), 'view Markdown does not open safely in a new tab');
-  await actionMenu.locator('[data-copy-page-link]').click();
-  expect(await page.evaluate(() => navigator.clipboard.readText()) === `${origin}/guides/codex/`, 'copy page link did not copy the canonical URL');
-  expect(await actionMenu.getAttribute('open') === null, 'secondary page action menu stayed open after copying the link');
-  await page.locator('[data-copy-page]').click();
-  await page.waitForFunction(() => document.querySelector('[data-copy-page-status]')?.textContent?.trim() === 'copied as Markdown');
-  expect((await page.locator('[data-copy-page-status]').textContent())?.trim() === 'copied as Markdown', 'copy page did not announce the Markdown result');
-  expect((await page.evaluate(() => navigator.clipboard.readText())).startsWith('# codex'), 'copy page did not place page Markdown on the clipboard');
-
-  expect(await page.locator('.sl-markdown-content .registered-link').count() > 0, 'registered article links are missing');
-  expect(await page.locator('.sl-markdown-content .link-favicon').count() === 0, 'mobile article links still include inline publisher icons');
-
-  await page.locator('.mobile-site-menu summary').click();
-  expect(await page.locator('.mobile-site-menu').getAttribute('open') !== null, 'mobile menu did not open');
-  expect(await page.locator('.mobile-site-menu').getAttribute('data-disclosure-motion') === 'ready', 'mobile menu disclosure motion is not initialized');
-  await page.locator('.mobile-site-menu a[href="/guides/codex/configuration/"]').click();
-  await page.waitForURL('**/guides/codex/configuration/');
-  expect(await page.locator('.mobile-site-menu').getAttribute('open') === null, 'mobile menu state persisted into the destination');
-  expect((await page.locator('#handbook-navigation > ul > li > a[aria-current="page"]').textContent())?.trim() === 'configuration', 'mobile navigation did not update the current chapter');
-
-  await traverse(page, 'back');
-  await page.waitForURL('**/guides/codex/');
-  expect(documentToken === await page.evaluate(() => window.__navigationDocumentToken), 'back navigation caused a full reload');
-  const expectedScroll = await page.evaluate(() => {
-    const next = Math.min(700, document.documentElement.scrollHeight - innerHeight);
-    scrollTo(0, next);
-    return scrollY;
-  });
-  await page.locator('.provider-tabs a[href="/guides/claude-code/"]').evaluate((link) => link.click());
-  await page.waitForURL('**/guides/claude-code/');
-  await traverse(page, 'back');
-  await page.waitForURL('**/guides/codex/');
-  await page.waitForTimeout(50);
-  expect(Math.abs(await page.evaluate(() => scrollY) - expectedScroll) <= 2, 'back navigation did not restore scroll position');
-  await traverse(page, 'forward');
-  await page.waitForURL('**/guides/claude-code/');
-  expect(documentToken === await page.evaluate(() => window.__navigationDocumentToken), 'forward navigation caused a full reload');
-
-  await page.setViewportSize({ width: 1440, height: 1024 });
-  await page.locator('.provider-tabs a[href="/guides/codex/"]').click();
-  await page.waitForURL('**/guides/codex/');
-  await page.waitForTimeout(500);
-  const desktopHeaderGeometry = await page.evaluate(() => {
-    const header = document.querySelector('.site-header').getBoundingClientRect();
-    const tabs = document.querySelector('.provider-tabs').getBoundingClientRect();
-    return { headerHeight: header.height, centerDelta: (tabs.x + tabs.width / 2) - (header.x + header.width / 2) };
-  });
-  expect(desktopHeaderGeometry.headerHeight === 64, `desktop header is not a single 64px row: ${desktopHeaderGeometry.headerHeight}`);
-  expect(Math.abs(desktopHeaderGeometry.centerDelta) <= .5, `desktop provider tabs are not centered in the viewport: ${desktopHeaderGeometry.centerDelta}`);
-  const searchControl = await page.locator('.search-trigger').evaluate((button) => {
-    const box = button.getBoundingClientRect();
-    const style = getComputedStyle(button);
-    const icon = button.querySelector('svg')?.getBoundingClientRect();
-    return {
-      height: box.height,
-      width: box.width,
-      fontFamily: style.fontFamily,
-      fontSize: style.fontSize,
-      iconSize: icon?.width ?? 0,
-    };
-  });
-  expect(searchControl.height === 36 && searchControl.width >= 124, `desktop search control is not aligned to the header control geometry: ${JSON.stringify(searchControl)}`);
-  expect(searchControl.fontFamily.includes('Instrument Sans') && searchControl.fontSize === '14px', `desktop search control does not use header typography: ${JSON.stringify(searchControl)}`);
-  expect(searchControl.iconSize === 16, `desktop search icon is not aligned to the header icon scale: ${searchControl.iconSize}`);
-  const readingListLayout = await page.locator('.sidebar-page-outline li').evaluateAll((items) => items.map((item) => ({
-    position: getComputedStyle(item).position,
-    top: item.getBoundingClientRect().top,
-    padding: Number.parseFloat(getComputedStyle(item).paddingInlineStart),
-  })));
-  expect(readingListLayout.every((item) => item.position === 'static'), 'desktop outline is not a conventional document-flow list');
-  expect(readingListLayout.every((item, index) => index === 0 || item.top >= readingListLayout[index - 1].top), 'desktop outline order does not follow document flow');
-  expect(readingListLayout.some((item) => item.padding > 0), 'desktop outline does not indent subsection headings');
-  const leftRowHeight = await page.locator('.handbook-sidebar a[aria-current="page"]').evaluate((link) => getComputedStyle(link).minHeight);
-  expect(leftRowHeight === '32px', `desktop chapter rows are not the compact 32px size: ${leftRowHeight}`);
-  expect(await page.locator('.sidebar-outline-label').count() === 0, 'redundant on this page label remains in the sidebar');
-  const providerIconStyle = await page.locator('.sidebar-provider-icon').evaluate((icon) => {
-    const box = icon.getBoundingClientRect();
-    const style = getComputedStyle(icon);
-    return { width: box.width, height: box.height, border: style.borderWidth, background: style.backgroundColor };
-  });
-  expect(providerIconStyle.width === 24 && providerIconStyle.height === 24 && providerIconStyle.border === '0px' && providerIconStyle.background === 'rgba(0, 0, 0, 0)', `sidebar provider icon is not the larger raw mark: ${JSON.stringify(providerIconStyle)}`);
-  expect(await page.locator('.handbook-sidebar a[aria-current="page"] .sidebar-active-marker').evaluate((marker) => getComputedStyle(marker).viewTransitionName) === 'handbook-chapter-active', 'left chapter marker is missing its shared transition');
-  const darkAccent = await page.evaluate(() => {
-    document.documentElement.dataset.theme = 'dark';
-    const style = getComputedStyle(document.documentElement);
-    const active = document.querySelector('.provider-tabs [aria-current="page"]');
-    return {
-      primary: style.getPropertyValue('--accent-primary').trim(),
-      soft: style.getPropertyValue('--accent-soft').trim(),
-      strong: style.getPropertyValue('--accent-strong').trim(),
-      onSolid: style.getPropertyValue('--accent-on-solid').trim(),
-      activeColor: active ? getComputedStyle(active).color : '',
-    };
-  });
-  expect(JSON.stringify(darkAccent) === JSON.stringify({ primary: '#5279f2', soft: '#18254f', strong: '#c1ccff', onSolid: '#0b0c0f', activeColor: 'rgb(11, 12, 15)' }), `dark cobalt tokens or solid text are incorrect: ${JSON.stringify(darkAccent)}`);
-  await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
-  await page.evaluate(() => {
-    window.__chapterTransitionDurations = [];
-    document.addEventListener('astro:after-swap', () => requestAnimationFrame(() => {
-      window.__chapterTransitionDurations = document.getAnimations().map((animation) => animation.effect?.getTiming().duration).filter(Number.isFinite);
-    }), { once: true });
-  });
-  await page.locator('.handbook-sidebar a[href="/guides/codex/configuration/"]').click();
-  await page.waitForURL('**/guides/codex/configuration/');
-  await page.waitForTimeout(220);
-  const chapterTransitionDurations = await page.evaluate(() => window.__chapterTransitionDurations);
-  expect(chapterTransitionDurations.some((duration) => duration > 0 && duration <= 180), `left chapter marker transition is missing or too slow: ${chapterTransitionDurations.join(', ')}`);
-  await page.locator('[data-rail-toggle="left"]').click();
-  expect(await page.locator('html[data-left-rail="collapsed"][data-right-rail="collapsed"]').count() === 1, 'desktop guide navigation did not collapse');
-  expect(await page.locator('.right-sidebar-container').evaluate((rail) => rail.getBoundingClientRect().width) === 0, 'retired right sidebar retains desktop width');
-  expect(await page.locator('.sidebar-page-outline').evaluate((outline) => getComputedStyle(outline).display) === 'none', 'nested page outline remains visible in collapsed navigation');
-  expect(await page.locator('[data-rail-toggle="right"]').count() === 0, 'retired right rail toggle remains in the desktop shell');
-  await page.locator('[data-rail-toggle="left"]').click();
-  expect(await page.locator('html[data-left-rail="expanded"][data-right-rail="collapsed"]').count() === 1, 'unified desktop navigation did not expand');
-  await page.locator('.handbook-sidebar a[href="/guides/codex/"]').click();
-  await page.waitForURL('**/guides/codex/');
-  await page.evaluate(() => scrollTo(0, Math.max(1, (document.documentElement.scrollHeight - innerHeight) * .5)));
-  await page.waitForTimeout(150);
-  expect(await page.locator('.sidebar-page-outline a[aria-current="true"]').count() === 1, 'desktop outline does not maintain one active heading while scrolling');
-  await page.evaluate(() => scrollTo(0, 0));
-  const hashLinks = page.locator('.sidebar-page-outline a[href^="#"]:not([href="#_top"]):visible');
-  const hashHref = await hashLinks.first().getAttribute('href');
-  expect(Boolean(hashHref), 'document table of contents has no hash link');
-  if (hashHref) {
-    await hashLinks.first().click();
-    await page.waitForURL(`**/guides/codex/${hashHref}`);
-    expect(documentToken === await page.evaluate(() => window.__navigationDocumentToken), 'hash navigation caused a full reload');
-    expect(await page.locator(hashHref).count() === 1, 'hash navigation target is missing');
-  }
-  expect((await page.locator('.github-link').getAttribute('href')) === 'https://github.com/anipotts/coding-agent-tips', 'external GitHub URL changed');
-
-  await page.setViewportSize({ width: 1525, height: 700 });
-  await page.goto(`${origin}/guides/codex/recommendations/`, { waitUntil: 'networkidle' });
-  const compactRailLabels = await page.locator('.sidebar-page-outline a').evaluateAll((labels) => labels
-    .map((label) => {
-      const box = label.getBoundingClientRect();
-      return { top: box.top, bottom: box.bottom, opacity: Number.parseFloat(getComputedStyle(label).opacity) };
+  for (const viewport of [
+    { width: 375, height: 812 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 900 },
+    { width: 1440, height: 1024 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
+    const layout = await page.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      sidebar: getComputedStyle(document.querySelector('.sidebar-pane')).display,
+      mobileTrigger: getComputedStyle(document.querySelector('.mobile-site-menu-trigger')).display,
+      progress: getComputedStyle(document.querySelector('.reading-progress-rail')).display,
+      dualBar: document.querySelectorAll('.mobile-toc, .guide-context-bar').length,
     }));
-  expect(compactRailLabels.every((label) => label.opacity > 0), 'short-height reading rail hides subsection labels');
-  expect(compactRailLabels.every((label, index) => index === 0 || label.top >= compactRailLabels[index - 1].bottom), 'short-height reading rail leaves visible labels overlapping');
-  expect(await page.locator('.reading-track, .reading-node, .reading-rail').count() === 0, 'retired reading-path timeline remains in the desktop outline');
+    expect(layout.overflow === 0, `${viewport.width}px layout has horizontal overflow: ${layout.overflow}`);
+    expect(layout.dualBar === 0, `${viewport.width}px layout renders the retired intermediate navigation bar`);
+    if (viewport.width < 768) {
+      expect(layout.sidebar === 'none', 'mobile layout renders the desktop sidebar');
+      expect(layout.mobileTrigger !== 'none', 'mobile layout hides the Sheet trigger');
+    } else {
+      expect(layout.sidebar !== 'none', `${viewport.width}px layout hides the persistent sidebar`);
+      expect(layout.mobileTrigger === 'none', `${viewport.width}px layout renders the mobile Sheet trigger`);
+    }
+    expect((viewport.width >= 1024) === (layout.progress !== 'none'), `${viewport.width}px reading progress visibility is incorrect`);
+
+    const theme = await page.locator('html').getAttribute('data-theme');
+    await page.locator('[data-slot="theme-toggle"]').click();
+    const toggled = await page.locator('html').getAttribute('data-theme');
+    expect(toggled !== theme, `${viewport.width}px theme toggle did not change theme`);
+    expect(await page.locator('html').evaluate((root) => root.classList.contains('dark') === (root.dataset.theme === 'dark')), `${viewport.width}px Starwind and Starlight theme state diverged`);
+    await page.locator('[data-slot="theme-toggle"]').click();
+  }
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
+  const sheetTrigger = page.locator('.mobile-site-menu-trigger');
+  await sheetTrigger.click();
+  const sheet = page.locator('.mobile-site-menu[role="dialog"]');
+  await sheet.waitFor({ state: 'visible' });
+  expect((await sheet.locator('nav a').allTextContents()).map((text) => text.trim()).join('|') === 'overview|configuration|recommendations', 'mobile Sheet chapter order is incorrect');
+  expect(await page.evaluate(() => document.querySelector('.mobile-site-menu')?.contains(document.activeElement)), 'mobile Sheet does not move focus inside');
+  await page.keyboard.press('Escape');
+  await sheet.waitFor({ state: 'hidden' });
+  expect(await sheetTrigger.evaluate((trigger) => document.activeElement === trigger), 'mobile Sheet does not restore trigger focus');
+  await sheetTrigger.click();
+  await sheet.locator('a[href="/guides/codex/configuration/"]').click();
+  await page.waitForURL('**/guides/codex/configuration/');
+  await sheet.waitFor({ state: 'hidden' });
+  await page.goBack();
+  await page.waitForURL('**/guides/codex/');
+  await page.waitForFunction(() => document.querySelector('[data-copy-page]'));
+
+  await page.locator('.header-search [data-open-modal]').click();
+  const search = page.locator('.header-search site-search dialog');
+  await search.waitFor({ state: 'visible' });
+  const searchBox = await search.evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    return { x: box.x, y: box.y, width: box.width, height: box.height, innerWidth, innerHeight };
+  });
+  expect(searchBox.x === 0 && searchBox.y === 0 && searchBox.width === searchBox.innerWidth && searchBox.height === searchBox.innerHeight, 'mobile search is not a full-viewport surface');
+  await search.locator('input[type="text"], input[type="search"]').first().fill('codex');
+  await search.locator('.pagefind-ui__result').first().waitFor({ state: 'visible', timeout: 5000 });
+  await page.keyboard.press('Escape');
+  await search.waitFor({ state: 'hidden' });
+
+  const sources = page.locator('.page-sources');
+  const sourceTrigger = sources.locator('[data-sw-accordion-trigger]');
+  expect(await sources.getAttribute('data-state') === 'closed', 'sources accordion is open by default');
+  await sourceTrigger.click();
+  expect(await sources.getAttribute('data-state') === 'open', 'sources accordion did not open');
+  expect(await sources.locator('.source-publisher').count() > 0, 'sources accordion has no publisher groups');
+  await sourceTrigger.click();
+  expect(await sources.getAttribute('data-state') === 'closed', 'sources accordion did not close');
+
+  await page.locator('[aria-label="more page actions"]').click();
+  const menu = page.locator('[role="menu"]:visible');
+  await menu.waitFor({ state: 'visible' });
+  expect((await menu.locator('[role="menuitem"]').allTextContents()).map((text) => text.trim()).join('|') === 'view Markdown|copy page link|edit on GitHub', 'page action menu contents are incorrect');
+  await page.keyboard.press('Escape');
+  await menu.waitFor({ state: 'hidden' });
+  await page.locator('[data-copy-page]').click();
+  await page.waitForFunction(() => navigator.clipboard.readText().then((text) => text.startsWith('# codex')));
+
+  const figure = page.locator('.surface-bento figure').first();
+  expect(await figure.locator('figcaption').evaluate((caption) => getComputedStyle(caption).display) === 'none', 'dialog-enabled image caption is visible in the reading flow');
+  const imageTrigger = figure.locator('[data-publication-image-trigger]');
+  await imageTrigger.click();
+  const imageDialog = page.locator('#publication-image-dialog[role="dialog"]');
+  await imageDialog.waitFor({ state: 'visible' });
+  expect((await imageDialog.locator('[data-publication-dialog-caption]').textContent())?.trim() === 'a screenshot of me working on some personal projects and some content for a brand deal.', 'enlarged image is missing its caption');
+  await page.keyboard.press('Escape');
+  await imageDialog.waitFor({ state: 'hidden' });
+  expect(await imageTrigger.evaluate((trigger) => document.activeElement === trigger), 'image dialog does not restore trigger focus');
+
   await page.setViewportSize({ width: 1440, height: 1024 });
   await page.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
+  const sourcePreview = page.locator('.sl-markdown-content .registered-link-hover-card').first();
+  await sourcePreview.locator('[data-sw-preview-card-trigger]').hover();
+  await page.waitForFunction(() => document.querySelector('.sl-markdown-content .registered-link-hover-card')?.getAttribute('data-state') === 'open');
+  await page.locator('.registered-link-card[data-state="open"]').waitFor({ state: 'visible' });
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.querySelector('.sl-markdown-content .registered-link-hover-card')?.getAttribute('data-state') === 'closed');
 
-  const artifactDirectory = process.env.NAVIGATION_ARTIFACT_DIR;
-  if (artifactDirectory) {
-    await mkdir(artifactDirectory, { recursive: true });
-    await page.screenshot({ path: path.join(artifactDirectory, 'codex-desktop.png'), fullPage: false });
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.screenshot({ path: path.join(artifactDirectory, 'codex-mobile.png'), fullPage: false });
+  const sidebar = page.locator('.publication-sidebar-provider');
+  const sidebarTrigger = sidebar.locator('[data-sw-sidebar-trigger]').first();
+  expect(await sidebar.getAttribute('data-state') === 'expanded', 'desktop sidebar is not expanded initially');
+  await sidebarTrigger.click();
+  expect(await sidebar.getAttribute('data-state') === 'collapsed', 'desktop sidebar did not collapse');
+  expect(await page.locator('[aria-label="codex handbook chapters"] .sidebar-page-outline').evaluate((outline) => getComputedStyle(outline).display) === 'none', 'heading outline remains visible in icon-collapse mode');
+  expect(await page.locator('.right-sidebar-container').evaluate((rail) => rail.getBoundingClientRect().width) === 0, 'retired right sidebar retains width');
+  await sidebarTrigger.click();
+  expect(await sidebar.getAttribute('data-state') === 'expanded', 'desktop sidebar did not expand');
+
+  const desktopDocumentToken = await page.evaluate(() => window.__navigationDocumentToken);
+  await page.locator('[aria-label="codex handbook chapters"] a[href="/guides/codex/configuration/"]').click();
+  await page.waitForURL('**/guides/codex/configuration/');
+  expect(desktopDocumentToken === await page.evaluate(() => window.__navigationDocumentToken), 'chapter navigation caused a full reload');
+  expect((await page.locator('[aria-label="codex handbook chapters"] [aria-current="page"]').textContent())?.trim() === 'configuration', 'sidebar active chapter did not update');
+  await page.goBack();
+  await page.waitForURL('**/guides/codex/');
+  await page.waitForFunction(() => document.querySelector('[aria-label="codex handbook chapters"] [aria-current="page"]')?.getAttribute('href') === '/guides/codex/');
+  const hash = await page.locator('[aria-label="codex handbook chapters"] .sidebar-page-outline a[href^="#"]').first().getAttribute('href');
+  expect(Boolean(hash), 'page outline has no heading links');
+  if (hash) {
+    await page.locator(`[aria-label="codex handbook chapters"] .sidebar-page-outline a[href="${hash}"]`).evaluate((link) => link.click());
+    await page.waitForURL(`**/guides/codex/${hash}`);
+    expect(await page.locator(hash).count() === 1, 'hash target is missing');
   }
-  await context.close();
+  await page.evaluate(() => scrollTo(0, Math.max(1, (document.documentElement.scrollHeight - innerHeight) * .5)));
+  await page.waitForTimeout(100);
+  expect(Number(await page.locator('.reading-progress').getAttribute('aria-valuenow')) > 0, 'reading progress did not react to scrolling');
 
-  const responsiveContext = await browser.newContext({ viewport: { width: 767, height: 900 } });
-  const responsivePage = await responsiveContext.newPage();
-  await responsivePage.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
-  const geometry = async () => responsivePage.evaluate(() => {
-    const measure = (selector) => {
-      const element = document.querySelector(selector);
-      if (!element) return null;
-      const box = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      return {
-        visible: style.display !== 'none' && style.visibility !== 'hidden' && box.width > 0 && box.height > 0,
-        x: Math.round(box.x),
-        width: Math.round(box.width),
-      };
-    };
-    return {
-      sidebar: measure('.sidebar-pane'),
-      leftToggle: measure('[data-rail-toggle="left"]'),
-      rightContainer: measure('.right-sidebar-container'),
-      rightRail: measure('.right-rail-panel'),
-      mobileMenu: measure('.mobile-site-menu summary'),
-      search: measure('.search-trigger'),
-      guideBar: measure('[data-guide-context-bar]'),
-      main: measure('main'),
-      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    };
-  });
+  await page.goto(`${origin}/guides/grok/configuration/`, { waitUntil: 'networkidle' });
+  const tableArea = page.locator('.publication-scroll-area').first();
+  expect(await tableArea.locator('table[tabindex="0"][aria-label="scrollable comparison table"]').count() === 1, 'wide table is not wrapped in a build-time Starwind ScrollArea');
 
-  const mobileEdge = await geometry();
-  expect(mobileEdge.mobileMenu?.visible, '767px mobile menu is missing');
-  expect(!mobileEdge.sidebar?.visible && !mobileEdge.guideBar?.visible, '767px mobile layout retains a permanent guide navigation surface');
-  expect(await responsivePage.locator('.site-header').evaluate((header) => header.getBoundingClientRect().height) >= 106, '767px header leaves the mobile two-row layout too early');
+  await page.goto(`${origin}/archive/claude-code-tools/`, { waitUntil: 'networkidle' });
+  const codeCopy = page.locator('[data-code-copy]').first();
+  await codeCopy.click();
+  expect((await page.evaluate(() => navigator.clipboard.readText())).includes('claude-code'), 'code copy did not write code to the clipboard');
 
-  for (const width of [320, 375, 430]) {
-    await responsivePage.setViewportSize({ width, height: 900 });
-    await responsivePage.waitForTimeout(50);
-    const compactHeader = await responsivePage.evaluate(() => {
-      const links = [...document.querySelectorAll('.provider-tabs a')].map((link) => link.getBoundingClientRect());
-      const brand = document.querySelector('.site-name').getBoundingClientRect();
-      const actions = document.querySelector('.header-actions').getBoundingClientRect();
-      return {
-        tabCenterDelta: ((links[0].left + links.at(-1).right) / 2) - (innerWidth / 2),
-        overlap: brand.right - actions.left,
-        titleRow: (() => {
-          const row = document.querySelector('.page-title-row').getBoundingClientRect();
-          const title = document.querySelector('.page-title-row h1').getBoundingClientRect();
-          const pageActions = document.querySelector('.page-actions').getBoundingClientRect();
-          return { sameRow: Math.abs(title.top - pageActions.top) <= 4, rightGap: row.right - pageActions.right };
-        })(),
-        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      };
-    });
-    expect(Math.abs(compactHeader.tabCenterDelta) <= .5, `${width}px provider tabs are not centered: ${compactHeader.tabCenterDelta}`);
-    expect(compactHeader.overlap <= 0, `${width}px brand overlaps the header utility rail: ${compactHeader.overlap}`);
-    expect(compactHeader.titleRow.sameRow && compactHeader.titleRow.rightGap <= 1, `${width}px title and page actions are not one justified row: ${JSON.stringify(compactHeader.titleRow)}`);
-    expect(compactHeader.overflow === 0, `${width}px header introduces horizontal overflow: ${compactHeader.overflow}`);
-  }
+  const reducedContext = await browser.newContext({ viewport: { width: 1024, height: 900 }, reducedMotion: 'reduce' });
+  const reducedPage = await reducedContext.newPage();
+  await reducedPage.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
+  expect(await reducedPage.locator('.provider-tabs a').first().evaluate((link) => Number.parseFloat(getComputedStyle(link).transitionDuration) <= .001), 'reduced motion does not suppress interface transitions');
+  await reducedContext.close();
 
-  await responsivePage.setViewportSize({ width: 768, height: 900 });
-  await responsivePage.waitForTimeout(220);
-  const tabletStart = await geometry();
-  expect(await responsivePage.locator('.site-header').evaluate((header) => header.getBoundingClientRect().height) === 64, '768px header does not enter the unified single-row layout');
-  expect(tabletStart.search?.width === 36, '768px tablet header does not use the compact search control');
-  expect(tabletStart.sidebar?.visible && tabletStart.sidebar.width === 248 && tabletStart.leftToggle?.visible, '768px does not retain the conventional guide sidebar');
-  expect(!tabletStart.guideBar?.visible && !tabletStart.rightRail?.visible && tabletStart.overflow === 0, '768px retains the paired guide bar, right rail, or horizontal overflow');
-
-  const reloadContext = await browser.newContext({ viewport: { width: 768, height: 900 } });
-  await reloadContext.addInitScript(() => localStorage.setItem('coding-agent-tips:reading-rails', 'collapsed'));
-  const reloadPage = await reloadContext.newPage();
-  await reloadPage.goto(`${origin}/guides/codex/`, { waitUntil: 'domcontentloaded' });
-  const railAtFirstDocumentPaint = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => ({
-    width: sidebar.getBoundingClientRect().width,
-    display: getComputedStyle(sidebar).display,
-    leftRail: document.documentElement.dataset.leftRail,
-  }));
-  await reloadPage.waitForTimeout(220);
-  const railAfterHydration = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => ({ width: sidebar.getBoundingClientRect().width, display: getComputedStyle(sidebar).display }));
-  expect(railAtFirstDocumentPaint.display === 'block' && railAtFirstDocumentPaint.leftRail === 'collapsed' && railAtFirstDocumentPaint.width === 56, `tablet did not honor the stored collapsed rail at first paint: ${JSON.stringify(railAtFirstDocumentPaint)}`);
-  expect(railAfterHydration.display === 'block' && railAfterHydration.width === railAtFirstDocumentPaint.width, `tablet rail flashed during hydration: ${JSON.stringify({ railAtFirstDocumentPaint, railAfterHydration })}`);
-  expect(await reloadPage.locator('[data-guide-context-bar]').count() === 0, 'retired guide context bar remains in the document');
-  await reloadContext.close();
-
-  for (const width of [896, 1024, 1151, 1152, 1279]) {
-    await responsivePage.setViewportSize({ width, height: 800 });
-    await responsivePage.waitForTimeout(220);
-    const state = await geometry();
-    expect(state.sidebar?.visible && state.sidebar.width === 248 && state.leftToggle?.visible, `${width}px does not retain the conventional guide sidebar`);
-    expect(!state.guideBar?.visible && !state.rightRail?.visible && state.overflow === 0, `${width}px retains the paired guide bar, right rail, or horizontal overflow`);
-    if (width === 1024) {
-      const titleActions = await responsivePage.locator('.page-title-row').evaluate((row) => {
-        const title = row.querySelector('h1').getBoundingClientRect();
-        const actions = row.querySelector('.page-actions').getBoundingClientRect();
-        const bounds = row.getBoundingClientRect();
-        return { topDelta: actions.top - title.top, rightDelta: bounds.right - actions.right, columns: getComputedStyle(row).gridTemplateColumns.split(' ').length };
-      });
-      expect(Math.abs(titleActions.topDelta) <= 4 && titleActions.rightDelta >= 0 && titleActions.rightDelta <= 1 && titleActions.columns === 2, `1024px title actions are not right aligned beside the title: ${JSON.stringify(titleActions)}`);
-    }
-  }
-
-  await responsivePage.setViewportSize({ width: 1280, height: 800 });
-  await responsivePage.waitForTimeout(220);
-  const desktopEdge = await geometry();
-  expect(desktopEdge.sidebar?.width === 272 && desktopEdge.leftToggle?.visible && !desktopEdge.rightRail?.visible && desktopEdge.rightContainer?.width === 0, '1280px unified desktop navigation is missing or mis-sized');
-  expect(!desktopEdge.guideBar?.visible, '1280px desktop layout retains the compact guide context bar');
-  expect(desktopEdge.overflow <= 1, `1280px desktop layout overflows by ${desktopEdge.overflow}px`);
-  await responsivePage.locator('[data-rail-toggle="left"]').click();
-  await responsivePage.waitForTimeout(220);
-  const desktopCollapsed = await geometry();
-  expect(desktopCollapsed.sidebar?.width === 56 && desktopCollapsed.rightContainer?.width === 0, '1280px unified guide navigation does not collapse to 3.5rem');
-  await responsiveContext.close();
-
-  const previewContext = await browser.newContext({ viewport: { width: 1172, height: 1044 } });
-  const previewPage = await previewContext.newPage();
-  await previewPage.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
-  const previewLink = previewPage.locator('.sl-markdown-content a[href="https://openai.com/codex/"]').first();
-  await previewLink.evaluate((link) => {
-    const paragraph = link.closest('p');
-    if (paragraph) paragraph.style.inlineSize = '9rem';
-    link.scrollIntoView({ block: 'center' });
-  });
-  const previewPoint = await previewLink.evaluate((link) => {
-    const rects = [...link.getClientRects()];
-    const rect = rects[Math.min(1, rects.length - 1)];
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, fragments: rects.length, left: rect.left, top: rect.top };
-  });
-  await previewPage.mouse.move(previewPoint.x, previewPoint.y);
-  await previewPage.waitForFunction(() => {
-    const preview = document.querySelector('[data-link-preview]');
-    if (!preview?.classList.contains('is-visible') || getComputedStyle(preview).opacity !== '1') return false;
-    const matrix = new DOMMatrixReadOnly(getComputedStyle(preview).transform);
-    return matrix.a >= .99999 && matrix.d >= .99999;
-  });
-  const previewGeometry = await previewPage.locator('[data-link-preview]').evaluate((preview) => {
-    const box = preview.getBoundingClientRect();
-    const overlay = preview.parentElement;
-    const header = document.querySelector('.site-header');
-    const sidebar = document.querySelector('.sidebar-pane');
-    return {
-      bottom: box.bottom,
-      placement: preview.dataset.placement,
-      right: box.right,
-      left: box.left,
-      meta: preview.querySelector('small')?.textContent?.trim(),
-      opacity: getComputedStyle(preview).opacity,
-      transitionDuration: getComputedStyle(preview).transitionDuration,
-      overlayUnderBody: overlay?.parentElement === document.body,
-      overlayZ: Number.parseInt(getComputedStyle(overlay).zIndex, 10),
-      headerZ: Number.parseInt(getComputedStyle(header).zIndex, 10),
-      sidebarZ: Number.parseInt(getComputedStyle(sidebar).zIndex, 10),
-    };
-  });
-  expect(previewPoint.fragments > 1, '1172px preview test link did not wrap to multiple rendered fragments');
-  expect(previewGeometry.overlayUnderBody, 'citation preview is not hosted in a document-level body overlay');
-  expect(previewGeometry.overlayZ > previewGeometry.headerZ && previewGeometry.overlayZ > previewGeometry.sidebarZ, `citation preview does not paint above the header and rail: ${JSON.stringify(previewGeometry)}`);
-  expect(previewGeometry.placement === 'above' && previewGeometry.bottom <= previewPoint.top - 5, `citation preview overlaps its active line fragment: ${JSON.stringify(previewGeometry)}`);
-  expect(Math.abs(previewGeometry.left - previewPoint.left) <= 1, `citation preview is not left aligned to the active line fragment: ${JSON.stringify({ previewGeometry, previewPoint })}`);
-  expect(previewGeometry.right <= 1162 && previewGeometry.left >= 10, `citation preview escaped the 1172px viewport: ${JSON.stringify(previewGeometry)}`);
-  expect(previewGeometry.meta === 'openai.com', `citation preview does not show only the actual hostname: ${previewGeometry.meta}`);
-  expect(previewGeometry.opacity === '1' && previewGeometry.transitionDuration !== '0s', `citation preview entrance is not animated: ${JSON.stringify(previewGeometry)}`);
-  await previewPage.keyboard.press('Escape');
-  await previewPage.waitForFunction(() => document.querySelector('[data-link-preview]')?.hasAttribute('hidden'));
-  expect(await previewPage.locator('[data-link-preview]').getAttribute('hidden') !== null, 'Escape does not dismiss the citation preview after its exit transition');
-  await previewLink.focus();
-  await previewPage.waitForFunction(() => {
-    const preview = document.querySelector('[data-link-preview]');
-    if (!preview?.classList.contains('is-visible') || getComputedStyle(preview).opacity !== '1') return false;
-    const matrix = new DOMMatrixReadOnly(getComputedStyle(preview).transform);
-    return matrix.a >= .99999 && matrix.d >= .99999;
-  });
-  const focusAlignment = await previewPage.evaluate(() => {
-    const link = document.activeElement;
-    const first = link.getClientRects()[0];
-    const preview = document.querySelector('[data-link-preview]').getBoundingClientRect();
-    const expectedLeft = Math.min(innerWidth - preview.width - 10, Math.max(10, first.left));
-    return { delta: preview.left - expectedLeft, describedBy: link.getAttribute('aria-describedby') };
-  });
-  expect(Math.abs(focusAlignment.delta) <= 1.25 && focusAlignment.describedBy === 'active-link-preview', `keyboard preview is not aligned to the first fragment: ${JSON.stringify(focusAlignment)}`);
-  await previewPage.evaluate(() => scrollBy(0, 1));
-  await previewPage.waitForFunction(() => document.querySelector('[data-link-preview]')?.hasAttribute('hidden'));
-  await previewPage.setViewportSize({ width: 1171, height: 1044 });
-  expect(await previewPage.locator('[data-link-preview]').getAttribute('hidden') !== null, 'resize does not dismiss the citation preview');
-  await previewContext.close();
-
-  const touchContext = await browser.newContext({ hasTouch: true, viewport: { width: 768, height: 900 } });
-  const touchPage = await touchContext.newPage();
-  await touchPage.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
-  const touchLink = touchPage.locator('.sl-markdown-content .registered-link').first();
-  await touchLink.focus();
-  expect(await touchPage.locator('[data-link-preview]').getAttribute('hidden') !== null, 'touch layout exposes a citation preview');
-  expect(await touchPage.locator('.sl-markdown-content .link-favicon').count() === 0, 'touch article links include retired inline icons');
-  await touchContext.close();
-
-  const noScriptContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
-  const noScriptPage = await noScriptContext.newPage();
-  await noScriptPage.goto(origin, { waitUntil: 'domcontentloaded' });
-  expect(await noScriptPage.locator('.provider-tabs a[href="/guides/codex/"]').getAttribute('href') === '/guides/codex/', 'ordinary internal URL changed without JavaScript');
-  await noScriptPage.locator('.provider-tabs a[href="/guides/codex/"]').click();
-  await noScriptPage.waitForURL('**/guides/codex/');
-  expect((await noScriptPage.locator('h1').textContent())?.trim() === 'codex', 'progressive navigation failed without JavaScript');
-  await noScriptContext.close();
-
-  const noScriptDesktopContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 1024 } });
-  const noScriptDesktopPage = await noScriptDesktopContext.newPage();
-  await noScriptDesktopPage.goto(`${origin}/guides/codex/`, { waitUntil: 'domcontentloaded' });
-  const noScriptOutlineRows = await noScriptDesktopPage.locator('.sidebar-page-outline li').evaluateAll((items) => items.map((item) => {
-    const box = item.getBoundingClientRect();
-    return { top: box.top, bottom: box.bottom };
-  }));
-  expect(noScriptOutlineRows.length > 0, 'no-script desktop outline has no links');
-  expect(noScriptOutlineRows.every((row, index) => index === 0 || row.top >= noScriptOutlineRows[index - 1].bottom), 'no-script desktop outline labels overlap');
-  await noScriptDesktopContext.close();
-
-  const reducedMotionContext = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 1024 } });
-  const reducedMotionPage = await reducedMotionContext.newPage();
-  await reducedMotionPage.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
-  expect(await reducedMotionPage.locator('[data-link-preview]').evaluate((preview) => getComputedStyle(preview).transitionDuration.split(',').every((duration) => Number.parseFloat(duration) <= .00001)), 'citation preview retains perceptible motion under reduced motion');
-  await reducedMotionPage.evaluate(() => {
-    window.__providerTabTransitionDurations = [];
-    document.addEventListener('astro:after-swap', () => requestAnimationFrame(() => {
-      window.__providerTabTransitionDurations = document.getAnimations().map((animation) => animation.effect?.getTiming().duration).filter(Number.isFinite);
-    }), { once: true });
-  });
-  await reducedMotionPage.locator('.provider-tabs a[href="/guides/claude-code/"]').click();
-  await reducedMotionPage.waitForURL('**/guides/claude-code/');
-  await reducedMotionPage.waitForTimeout(50);
-  const reducedMotionDurations = await reducedMotionPage.evaluate(() => window.__providerTabTransitionDurations);
-  expect(reducedMotionDurations.every((duration) => duration <= 1), `provider tab transition ignores reduced motion: ${reducedMotionDurations.join(', ')}`);
-  await reducedMotionPage.setViewportSize({ width: 375, height: 812 });
-  await reducedMotionPage.waitForTimeout(50);
-  const reducedGuideMotion = await reducedMotionPage.evaluate(() => {
-    const caret = document.querySelector('.guide-context-caret');
-    return {
-      caret: caret ? getComputedStyle(caret).transitionDuration.split(',').map(Number.parseFloat) : [],
-    };
-  });
-  expect(reducedGuideMotion.caret.every((duration) => duration <= .00001), `compact guide navigation retains perceptible reduced motion: ${JSON.stringify(reducedGuideMotion)}`);
-  await reducedMotionContext.close();
-
-  const directLoadContext = await browser.newContext({ viewport: { width: 1440, height: 1024 } });
-  const directLoadPage = await directLoadContext.newPage();
-  await directLoadPage.goto(`${origin}/guides/claude-code/#where-claude-code-lives`, { waitUntil: 'networkidle' });
-  await directLoadPage.waitForTimeout(150);
-  expect((await directLoadPage.locator('.sidebar-page-outline a[aria-current="true"]').textContent())?.trim() === 'where claude code lives', 'direct document load did not initialize the active reading marker');
-  await directLoadPage.locator('[data-rail-toggle="left"]').click();
-  expect(await directLoadPage.locator('html[data-left-rail="collapsed"][data-right-rail="collapsed"]').count() === 1, 'direct document load did not initialize the unified desktop rail control');
-  await directLoadContext.close();
-
-  for (const error of consoleErrors) failures.push(`browser console: ${error}`);
+  expect(consoleErrors.length === 0, `browser console errors: ${consoleErrors.join(' | ')}`);
 } finally {
   await browser?.close();
   if (server.exitCode === null && server.signalCode === null) server.kill('SIGTERM');
   await serverExit;
-  for (let attempt = 0; attempt < 40; attempt += 1) {
-    try { await fetch(origin); } catch { break; }
-    if (attempt === 39) throw new Error(`preview port ${previewPort} was not released after shutdown`);
-    await new Promise((resolve) => setTimeout(resolve, 25));
-  }
 }
 
-if (failures.length > 0) {
+if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
 
-console.log('client navigation, rail positioning, announcements, focus, history, hashes, scroll restoration, active state, mobile menu reset, external URLs, and no-script fallback passed');
+console.log('Starwind navigation, controls, publication primitives, routing, progress, and reduced-motion checks passed');

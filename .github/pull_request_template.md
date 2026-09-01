@@ -7,12 +7,10 @@ what reader or operator decision does this change improve?
 - primary sources:
 - tested artifacts:
 - inferences or unknowns:
-- field run impact:
 
 ## verification
 
 - [ ] source registry and frontmatter
-- [ ] field-run schema
 - [ ] astro type check and production build
 - [ ] generated routes, links, metadata, and sitemap
 - [ ] markdown and external links

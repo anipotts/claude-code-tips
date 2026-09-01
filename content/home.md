@@ -9,7 +9,7 @@ sources: []
 redirects: [/guides/]
 voice: personal
 navigation:
-  scope: general
+  scope: handbook
   order: 0
   hidden: true
 ---

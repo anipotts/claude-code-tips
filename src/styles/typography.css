@@ -90,7 +90,6 @@ body {
 .home-content h2 { margin-block: 3rem 1rem; }
 .home-guides h2 { margin-block: 0; }
 .home-guide-list h3, .home-guide-list p { margin: 0; }
-
 .sl-markdown-content h2, .run-page h2, .run-inventory h2, .page-sources h2 {
   margin-block: 4rem 1rem;
 }
@@ -117,6 +116,11 @@ body {
 }
 
 .home-content :where(p, ul, ol), .home-guides p, .sl-markdown-content :where(p, ul, ol), .run-page :where(p, ul, ol) { max-width: 66ch; }
+.home-guides .home-guide-description {
+  color: var(--slate);
+  font-size: var(--type-dense-size);
+  line-height: var(--type-dense-line);
+}
 .page-sources > p:last-child { max-width: 68ch; }
 .home-content :where(p, ul, ol) + :where(p, ul, ol),
 .sl-markdown-content :where(p, ul, ol) + :where(p, ul, ol),
@@ -141,7 +145,7 @@ body {
   line-height: var(--type-dense-line);
 }
 
-.site-name, .provider-tabs a, .search-trigger, .handbook-sidebar a, .right-sidebar a,
+.site-name, .provider-tabs a, .header-search, .publication-sidebar a, .right-sidebar a,
 .right-sidebar h2, .site-footer a {
   font-family: var(--font-sans);
   font-size: var(--type-navigation-size);
@@ -174,7 +178,7 @@ body {
 
 .source-domain { font-weight: 400; line-height: var(--type-metadata-line); }
 
-.site-name, .site-footer .footer-site-name, .provider-tabs a[aria-current='page'], .handbook-sidebar a[aria-current='page'],
+.site-name, .site-footer .footer-site-name, .provider-tabs a[aria-current='page'], .publication-sidebar a[aria-current='page'],
 .right-sidebar a[aria-current='true'] { font-weight: 600; }
 
 .mobile-site-menu nav a {
@@ -187,6 +191,16 @@ body {
 }
 
 .mobile-site-menu nav a[aria-current='page'] { font-weight: 600; }
+
+.publication-sidebar [data-sidebar='menu-button'] {
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.sidebar-page-outline [data-sidebar='menu-sub-button'] {
+  font-size: .78rem;
+  line-height: 1.2rem;
+}
 
 .section-label, .footer-meta,
 .sidebar-label, .page-meta, .surface-bento figcaption, .history-year,
@@ -216,9 +230,7 @@ body {
   line-height: var(--type-navigation-line);
 }
 
-.search-trigger kbd,
-.enlarge-image,
-.link-preview small,
+.header-search kbd,
 .code-copy {
   font-family: var(--font-sans);
   font-size: .75rem;
@@ -226,10 +238,24 @@ body {
   line-height: 1rem;
 }
 
-.page-actions :where(button, a),
-.link-preview strong {
+.page-actions :where(button, a) {
   font-family: var(--font-sans);
   font-size: .82rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.registered-link-card-heading strong {
+  font-family: var(--font-sans);
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.2rem;
+}
+
+.registered-link-card-heading small,
+.registered-link-card-kind {
+  font-family: var(--font-sans);
+  font-size: .75rem;
   font-weight: 400;
   line-height: 1rem;
 }
@@ -269,12 +295,6 @@ body {
   line-height: 1.375rem;
 }
 
-html[data-left-rail='collapsed'] .handbook-sidebar a::after {
-  font-family: var(--font-sans);
-  font-size: .75rem;
-  font-weight: 400;
-  line-height: 1rem;
-}
 .guide-rail-identity .sidebar-label > span:first-child {
   font-family: var(--font-sans);
   font-size: .875rem;
@@ -301,11 +321,11 @@ html[data-left-rail='collapsed'] .handbook-sidebar a::after {
   text-transform: none;
 }
 .guide-rail-identity .sidebar-label > span:first-child { font-weight: 600; }
-.handbook-sidebar > nav > ul > li > a,
-.sidebar-page-outline a {
+.publication-sidebar [data-sidebar='menu-button'],
+.publication-sidebar [data-sidebar='menu-sub-button'] {
   font-family: var(--font-sans);
   font-size: .8125rem;
   font-weight: 400;
   line-height: 1.125rem;
 }
-.sidebar-page-outline a[aria-current='true'] { font-weight: 600; }
+.sidebar-page-outline [data-active='true'] { font-weight: 600; }

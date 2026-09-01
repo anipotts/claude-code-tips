@@ -2,6 +2,18 @@
   "retrievedAt": "2026-08-27",
   "derivativeFormat": "webp",
   "derivativeWidths": [640, 1200],
+  "featuredImages": [
+    {
+      "id": "codex-handbook-workspace",
+      "path": "/media/guides/codex-handbook-workspace.png",
+      "width": 3600,
+      "height": 2260,
+      "bytes": 977228,
+      "sha256": "abcf82246f99ba8193901a175f655e0a02786ec77e5d847e49ef08ef9218bcd4",
+      "source": "Ani supplied screenshot",
+      "canonicalPages": ["/guides/codex/"]
+    }
+  ],
   "assets": [
     {
       "id": "codex-cli",

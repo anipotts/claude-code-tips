@@ -1,93 +1,133 @@
-/* Guide navigation */
-:root { --rail-expanded-width: 15.5rem; --rail-collapsed-width: 3.5rem; }
-.guide-rail-identity { min-width: 0; display: flex; align-items: center; gap: .5rem; }
-.guide-rail-identity .sidebar-label { display: flex; align-items: baseline; gap: .25rem; }
-.provider-product-icon.sidebar-provider-icon { inline-size: 1.5rem; block-size: 1.5rem; overflow: visible; border: 0; border-radius: 0; background: transparent; }
-.rail-toggle { inline-size: 2rem; block-size: 2rem; border-radius: .45rem; transition-duration: var(--motion-ui-duration); }
-.rail-toggle:hover { border-color: transparent; background: var(--soft); color: var(--ink); transform: none; }
-.handbook-sidebar { padding: .625rem .5rem .875rem; }
-.handbook-rail-head { min-height: 2rem; }
-.handbook-sidebar nav { margin-top: .5rem; }
-.handbook-sidebar li + li { margin-top: .0625rem; }
-.handbook-sidebar a {
-  min-height: 2rem;
-  grid-template-columns: 1rem minmax(0, 1fr);
-  gap: .45rem;
-  padding: .25rem .45rem;
-  border: 0;
-  border-radius: .35rem;
-  transition: color 120ms var(--motion-ui-ease), background-color 120ms var(--motion-ui-ease), box-shadow 120ms var(--motion-ui-ease);
+/* Starwind owns sidebar interaction. These rules only place it inside Starlight. */
+:root {
+  --rail-expanded-width: 17rem;
+  --rail-collapsed-width: 3.5rem;
 }
-.handbook-sidebar a:hover { border-color: transparent; background: var(--soft); color: var(--ink); }
-.handbook-sidebar a:focus-visible { outline: 0; background: var(--soft); color: var(--ink); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cobalt) 58%, transparent); }
-.handbook-sidebar a[aria-current='page'] { background: color-mix(in srgb, var(--accent-soft) 82%, var(--surface-raised)); color: var(--cobalt); }
-.handbook-sidebar a[aria-current='page']:hover,
-.handbook-sidebar a[aria-current='page']:focus-visible { background: var(--accent-soft); color: var(--accent-strong); }
-.sidebar-active-marker { inset: 0; border: 0; background: transparent; }
-.sidebar-active-marker::after { display: none; }
-.sidebar-icon, .sidebar-icon svg { inline-size: 1rem; block-size: 1rem; }
 
-.sidebar-page-outline { margin: .2rem 0 .45rem; padding-inline: 1.45rem .125rem; view-transition-name: handbook-page-outline; }
-.sidebar-page-outline ul { margin: 0; padding: 0; list-style: none; }
-.sidebar-page-outline li { margin: 0; }
-.sidebar-page-outline li + li { margin-top: .125rem; }
-.sidebar-page-outline li { padding-inline-start: calc(var(--heading-depth) * .7rem); }
-.sidebar-page-outline a {
-  position: relative;
-  min-height: 1.65rem;
+html:has(.publication-sidebar[data-state='expanded']) { --left-rail-width: var(--rail-expanded-width); }
+html:has(.publication-sidebar[data-state='collapsed']) { --left-rail-width: var(--rail-collapsed-width); }
+
+.publication-sidebar-provider {
+  min-block-size: 0;
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+.publication-sidebar {
   display: block;
-  padding: .18rem .35rem;
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+.publication-sidebar > [data-slot='sidebar-gap'] { display: none; }
+.publication-sidebar > [data-slot='sidebar-container'] {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto;
+  display: flex !important;
+  block-size: 100% !important;
+  inline-size: 100% !important;
   border: 0;
-  border-radius: .25rem;
-  color: var(--slate);
+}
+
+.publication-sidebar [data-slot='sidebar-inner'] { background: var(--surface-raised); }
+.handbook-rail-head {
+  min-block-size: 3.25rem;
+  padding: .625rem .5rem .375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+
+.guide-rail-identity { min-inline-size: 0; display: flex; align-items: center; gap: .55rem; }
+.guide-rail-identity .sidebar-label { min-inline-size: 0; margin: 0; display: flex; gap: .25rem; }
+.provider-product-icon.sidebar-provider-icon {
+  --provider-product-icon-size: 1.75rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.publication-sidebar-content {
+  gap: 0;
+  padding: .125rem .5rem .875rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.publication-sidebar-content::-webkit-scrollbar { display: none; }
+
+.publication-sidebar [data-sidebar='menu'] { gap: .125rem; }
+.publication-sidebar [data-sidebar='menu-button'] {
+  min-block-size: 2rem;
+  block-size: auto;
+  gap: .5rem;
+  padding: .35rem .5rem;
+  border-radius: .375rem;
   text-decoration: none;
   transition: color 120ms var(--motion-ui-ease), background-color 120ms var(--motion-ui-ease), box-shadow 120ms var(--motion-ui-ease);
 }
-.sidebar-page-outline a:hover { border-color: transparent; background: var(--soft); color: var(--ink); }
-.sidebar-page-outline a:focus-visible { outline: 0; background: var(--soft); color: var(--ink); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cobalt) 58%, transparent); }
-.sidebar-page-outline a[aria-current='true'] { background: color-mix(in srgb, var(--accent-soft) 62%, transparent); color: var(--cobalt); }
-.sidebar-outline-marker { display: none; }
-
-html[data-left-rail='collapsed'] .handbook-sidebar { padding-inline: .5rem; }
-html[data-left-rail='collapsed'] .guide-rail-identity { position: absolute; opacity: 0; pointer-events: none; }
-html[data-left-rail='collapsed'] .handbook-sidebar nav { margin-top: 1rem; }
-html[data-left-rail='collapsed'] .handbook-sidebar a { grid-template-columns: 1.125rem 0; min-height: 2.625rem; padding-inline: .9375rem; }
-html[data-left-rail='collapsed'] .sidebar-page-outline { display: none; }
-::view-transition-group(handbook-chapter-row-0),
-::view-transition-group(handbook-chapter-row-1),
-::view-transition-group(handbook-chapter-row-2),
-::view-transition-group(handbook-chapter-row-3),
-::view-transition-group(handbook-chapter-row-4),
-::view-transition-group(handbook-chapter-row-5),
-::view-transition-group(handbook-chapter-row-6),
-::view-transition-group(handbook-page-outline) {
-  animation-duration: 140ms;
-  animation-timing-function: var(--motion-ui-ease);
+.publication-sidebar [data-sidebar='menu-button']:focus-visible,
+.publication-sidebar [data-sidebar='menu-sub-button']:focus-visible {
+  outline: 0;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cobalt) 58%, transparent);
 }
-::view-transition-old(handbook-chapter-row-0),
-::view-transition-old(handbook-chapter-row-1),
-::view-transition-old(handbook-chapter-row-2),
-::view-transition-old(handbook-chapter-row-3),
-::view-transition-old(handbook-chapter-row-4),
-::view-transition-old(handbook-chapter-row-5),
-::view-transition-old(handbook-chapter-row-6),
-::view-transition-new(handbook-chapter-row-0),
-::view-transition-new(handbook-chapter-row-1),
-::view-transition-new(handbook-chapter-row-2),
-::view-transition-new(handbook-chapter-row-3),
-::view-transition-new(handbook-chapter-row-4),
-::view-transition-new(handbook-chapter-row-5),
-::view-transition-new(handbook-chapter-row-6) { animation: none; mix-blend-mode: normal; }
+.publication-sidebar [data-sidebar='menu-button'][data-active='true'] {
+  background: var(--accent-soft);
+  color: var(--cobalt);
+}
+.publication-sidebar [data-sidebar='menu-button'] > svg { inline-size: 1rem; block-size: 1rem; }
+
+.sidebar-page-outline {
+  margin: .125rem .125rem .375rem 1.45rem;
+  padding: .125rem 0;
+  border-inline-start: 1px solid var(--rule);
+  transform: none;
+}
+.sidebar-page-outline [data-slot='sidebar-menu-sub-item'] {
+  padding-inline-start: calc(var(--heading-depth) * .65rem);
+}
+.sidebar-page-outline [data-sidebar='menu-sub-button'] {
+  min-block-size: 1.65rem;
+  block-size: auto;
+  margin-inline-start: .3rem;
+  padding: .2rem .45rem;
+  border-radius: .3rem;
+  color: var(--slate);
+  white-space: normal;
+  text-decoration: none;
+}
+.sidebar-page-outline [data-sidebar='menu-sub-button'][data-active='true'] {
+  background: color-mix(in srgb, var(--accent-soft) 62%, transparent);
+  color: var(--cobalt);
+}
+
+.publication-sidebar[data-state='collapsed'] .guide-rail-identity,
+.publication-sidebar[data-state='collapsed'] .sidebar-page-outline { display: none; }
+.publication-sidebar[data-state='collapsed'] .handbook-rail-head { justify-content: center; }
+.publication-sidebar[data-state='collapsed'] [data-sidebar='menu-button'] {
+  inline-size: 2.5rem;
+  min-block-size: 2.5rem;
+  padding: .75rem;
+}
 
 @media (min-width: 48rem) {
   :root { --sl-sidebar-width: var(--left-rail-width); --right-rail-width: 0rem; --sl-mobile-toc-height: 0rem; }
-  html[data-left-rail='expanded'] { --left-rail-width: var(--rail-expanded-width); }
-  html[data-left-rail='collapsed'] { --left-rail-width: var(--rail-collapsed-width); }
-  .sidebar-pane { display: block !important; width: var(--left-rail-width) !important; visibility: visible !important; background: var(--surface-raised); }
-  nav.sidebar { display: block !important; }
+  .sidebar-pane {
+    display: block !important;
+    width: var(--left-rail-width) !important;
+    visibility: visible !important;
+    overflow: hidden;
+    background: var(--surface-raised);
+    transition: width 200ms ease-linear;
+  }
+  nav.sidebar { display: block !important; scrollbar-width: none; }
+  nav.sidebar::-webkit-scrollbar { display: none; }
   starlight-menu-button { display: none !important; }
   .right-sidebar-container { display: block !important; flex: 0 0 0 !important; width: 0 !important; }
   .right-sidebar { width: 0 !important; border-inline-start: 0 !important; }
+  .right-sidebar { overflow: visible !important; }
   .main-pane { min-width: 0; }
 }
 
@@ -96,26 +136,8 @@ html[data-left-rail='collapsed'] .sidebar-page-outline { display: none; }
   .main-pane .sl-container { max-width: 52rem; margin-inline: auto; }
 }
 
-@media (min-width: 48rem) and (max-width: 55.99rem) {
-  .search-trigger { inline-size: 2.25rem; min-inline-size: 2.25rem; padding: 0; justify-content: center; }
-  .search-trigger span, .search-trigger kbd { display: none; }
-}
-
 @media (min-width: 80rem) {
-  html[data-left-rail='expanded'] { --left-rail-width: 17rem; }
-  .sidebar-pane { width: var(--left-rail-width) !important; }
-  .right-sidebar-container { display: none !important; flex: 0 0 0 !important; width: 0 !important; }
+  .right-sidebar-container,
   .right-sidebar { display: none !important; width: 0 !important; }
   .main-pane .sl-container { margin-inline: 3.25rem auto; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(handbook-chapter-row-0),
-  ::view-transition-group(handbook-chapter-row-1),
-  ::view-transition-group(handbook-chapter-row-2),
-  ::view-transition-group(handbook-chapter-row-3),
-  ::view-transition-group(handbook-chapter-row-4),
-  ::view-transition-group(handbook-chapter-row-5),
-  ::view-transition-group(handbook-chapter-row-6),
-  ::view-transition-group(handbook-page-outline) { animation-duration: .01ms !important; }
 }

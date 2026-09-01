@@ -3,7 +3,7 @@
   "headingFormat": "Each heading inherits the guide evidenceType and sourceIds. Experience questions apply to every heading in the guide unless a more specific question is recorded during its checkpoint.",
   "guides": [
     {
-      "file": "docs/guides/codex.md",
+      "file": "content/guides/codex.md",
       "provider": "codex",
       "chapter": "overview",
       "evidenceType": "tested-and-official-source",
@@ -12,7 +12,7 @@
       "headings": ["## this is codex", "### one engineering loop, several control rooms", "### the task can be its own workspace", "## where codex lives", "### terminal and editor keep the evidence close", "### desktop coordinates parallel work", "### cloud and mobile change where you steer", "## the interface is not the whole system", "### the interface changes what you can see", "### the interaction layer changes what codex can reach", "## controlling codex across devices", "### steering is different from hosting", "### local, remote, and cloud execution are different", "### mobile keeps the control loop close", "## start with what you are trying to finish", "### code should end in the repository", "### ChatGPT Work begins with a finished deliverable"]
     },
     {
-      "file": "docs/guides/claude-code.md",
+      "file": "content/guides/claude-code.md",
       "provider": "claude-code",
       "chapter": "overview",
       "evidenceType": "tested-and-official-source",
@@ -21,7 +21,7 @@
       "headings": ["## this is claude code", "### one engineering loop, several interfaces", "### the repository gives the task its shape", "## where claude code lives", "### terminal and IDE keep the evidence close", "### desktop coordinates parallel work", "### web, mobile, and Remote Control change where you steer", "## the interface is not the whole system", "### the interface changes what you can see", "### the interaction layer changes how claude code behaves", "## controlling claude code across devices", "### steering is different from hosting", "### web and Remote Control use different execution models", "### mobile keeps the control loop close", "## start with what you are trying to finish", "### code should end in the repository", "### Cowork begins with a finished deliverable"]
     },
     {
-      "file": "docs/guides/codex/getting-started.md",
+      "file": "content/guides/codex/getting-started.md",
       "provider": "codex",
       "chapter": "getting-started",
       "evidenceType": "tested-and-official-source",
@@ -30,7 +30,7 @@
       "headings": ["## begin with one useful pass", "### use work you already understand", "### give it one visible finish line", "## choose the surface by how you want to review", "### keep commands and diffs close", "### use a visual surface when the review is visual", "### move the steering surface when it helps", "## give the repository durable context", "### AGENTS.md explains the repository", "### task context belongs to the current pass", "## define completion before the first prompt", "### name the artifact", "### name the verification command", "### name the decision that returns to you", "## close the loop with receipts", "### read the diff", "### rerun the proof", "### carry the open questions forward"]
     },
     {
-      "file": "docs/guides/claude-code/getting-started.md",
+      "file": "content/guides/claude-code/getting-started.md",
       "provider": "claude-code",
       "chapter": "getting-started",
       "evidenceType": "tested-and-official-source",
@@ -39,7 +39,7 @@
       "headings": ["## begin with one useful pass", "### use work you already understand", "### give it one visible finish line", "## choose the surface by how you want to review", "### keep commands and diffs close", "### use a visual surface when the review is visual", "### move the steering surface when it helps", "## give the repository durable context", "### CLAUDE.md explains the repository", "### task context belongs to the current pass", "## define completion before the first prompt", "### name the artifact", "### name the verification command", "### name the decision that returns to you", "## close the loop with receipts", "### read the diff", "### rerun the proof", "### carry the open questions forward"]
     },
     {
-      "file": "docs/guides/codex/configuration.md",
+      "file": "content/guides/codex/configuration.md",
       "provider": "codex",
       "chapter": "configuration",
       "evidenceType": "tested-and-official-source",
@@ -48,7 +48,7 @@
       "headings": ["## configuration has separate jobs", "### AGENTS.md explains the repository", "### config.toml chooses defaults", "## understand the scope before changing a value", "### personal configuration follows you", "### project configuration begins with trust", "### profiles group deliberate modes", "## separate instructions from memory", "### shared rules have one canonical source", "### memory records useful experience", "## permissions are two different questions", "### the sandbox defines reach", "### approval policy defines interruption", "## keep identity and secrets outside the repository", "### authentication belongs to the account", "### credentials belong in external storage", "## inspect the effective configuration", "### profiles can change several assumptions at once"]
     },
     {
-      "file": "docs/guides/claude-code/configuration.md",
+      "file": "content/guides/claude-code/configuration.md",
       "provider": "claude-code",
       "chapter": "configuration",
       "evidenceType": "tested-and-official-source",
@@ -57,7 +57,7 @@
       "headings": ["## configuration has separate jobs", "### CLAUDE.md explains the repository", "### settings choose behavior", "## understand the scope before changing a value", "### user settings follow you", "### project settings travel with the repository", "### local and managed settings change precedence", "## separate instructions from memory", "### shared rules have one canonical source", "### auto memory records useful experience", "## permissions answer two questions", "### rules define allow, ask, and deny", "### modes define the session posture", "## keep identity and secrets outside the repository", "### authentication belongs to the account", "### credentials belong in external storage", "## inspect the effective configuration", "### imports and precedence can hide the source"]
     },
     {
-      "file": "docs/guides/codex/safety.md",
+      "file": "content/guides/codex/safety.md",
       "provider": "codex",
       "chapter": "safety",
       "evidenceType": "analysis-with-official-source",
@@ -66,7 +66,7 @@
       "headings": ["## access should match the job", "### filesystem, network, and external systems are separate kinds of reach", "### remote and cloud execution change the reachable world", "## identity travels with the action", "### name the human, machine, and service identity", "### scoped identities fit unattended work", "## unattended work changes the risk", "### scheduled work needs predeclared boundaries", "### event triggered work needs a narrow reachable world", "## external actions need their own decision", "### preparing and executing are separate states", "### final authority belongs to the named human", "### merge, publish, deploy, send, pay, purchase, delete, and account changes return to the human", "## security review is its own workflow", "### Codex Security surfaces hypotheses", "### a finding still needs validation", "## finish with authority clear", "### name what happened under which identity", "### return the remaining decision"]
     },
     {
-      "file": "docs/guides/claude-code/safety.md",
+      "file": "content/guides/claude-code/safety.md",
       "provider": "claude-code",
       "chapter": "safety",
       "evidenceType": "analysis-with-official-source",
@@ -75,7 +75,7 @@
       "headings": ["## access should match the job", "### filesystem, network, and external systems are separate kinds of reach", "### remote and cloud execution change the reachable world", "## identity travels with the action", "### name the human, machine, and service identity", "### scoped identities fit unattended work", "## unattended work changes the risk", "### scheduled work needs predeclared boundaries", "### event triggered work needs a narrow reachable world", "## external actions need their own decision", "### preparing and executing are separate states", "### final authority belongs to the named human", "### merge, publish, deploy, send, pay, purchase, delete, and account changes return to the human", "## policy can set an organization floor", "### managed policy defines the floor", "### hooks can enforce specific events", "## finish with authority clear", "### name what happened under which identity", "### return the remaining decision"]
     },
     {
-      "file": "docs/guides/codex/workflows.md",
+      "file": "content/guides/codex/workflows.md",
       "provider": "codex",
       "chapter": "workflows",
       "evidenceType": "tested-and-official-source",
@@ -84,16 +84,16 @@
       "headings": ["## the everyday loop", "### scope the pass before the prompt", "### keep evidence close to the work", "## parallel work needs visible boundaries", "### one task owns one checkout", "### review capacity is the real limit", "## work that continues without you", "### goals preserve a durable objective", "### scheduled work needs a stable environment", "### cloud tasks return as new evidence", "## working across devices", "### mobile is a full codex surface", "### control other devices connects to a codex host", "### Remote SSH opens the remote machine directly", "### choose where execution should live", "## image generation belongs inside the build loop", "### generate from the project context", "### edit and refine existing images", "### turn visual output into reviewed assets", "## handoffs preserve state and authority", "### name the repository state", "### return with evidence and the remaining decision"]
     },
     {
-      "file": "docs/guides/claude-code/workflows.md",
+      "file": "content/guides/claude-code/workflows.md",
       "provider": "claude-code",
       "chapter": "workflows",
-      "evidenceType": "official-source-pending-field-run",
+      "evidenceType": "official-source-pending-test",
       "sourceIds": ["anthropic-features-overview", "anthropic-desktop", "anthropic-web", "anthropic-remote-control", "anthropic-commands", "anthropic-scheduled-tasks", "anthropic-routines", "anthropic-agents"],
       "experienceQuestions": ["Which dynamic workflow features has Ani actually run?", "What state survived resume, branch, Remote Control, or teleport?"],
       "headings": ["## the everyday loop", "### scope the pass before the prompt", "### keep evidence close to the work", "## parallel work needs visible boundaries", "### subagents protect the main context", "### background agents keep work moving", "### worktrees separate change ownership", "## dynamic workflows coordinate more than one step", "### agent view makes parallel work visible", "### batch work needs independent units", "### repeatable loops need explicit routing", "## work that continues without you", "### loop watches the current session", "### desktop scheduled tasks stay local", "### routines continue in the cloud", "## working across devices", "### Remote Control keeps execution local", "### Dispatch starts work from mobile", "### web moves execution to the cloud", "### teleport changes the steering surface", "## handoffs preserve state and authority", "### resume, branch, and teleport carry different state", "### return with evidence and the remaining decision"]
     },
     {
-      "file": "docs/guides/codex/extensions.md",
+      "file": "content/guides/codex/extensions.md",
       "provider": "codex",
       "chapter": "extensions",
       "evidenceType": "tested-and-official-source",
@@ -102,7 +102,7 @@
       "headings": ["## make operating knowledge reusable", "### instructions route the repository context", "### skills carry procedures, scripts, and references", "## connect a real system", "### MCP exposes tools and resources", "### authentication and reach stay explicit", "## make events deterministic", "### hooks run code at defined moments", "### failure should remain visible", "## give work its own context", "### subagents need a bounded problem", "### the return contract matters", "## package behavior for reuse", "### plugins move related behavior together", "### portable behavior needs an owner and version", "## compose without losing the plot", "### route context instead of preloading it", "### every layer needs one clear job", "### maintenance cost is part of the design"]
     },
     {
-      "file": "docs/guides/claude-code/extensions.md",
+      "file": "content/guides/claude-code/extensions.md",
       "provider": "claude-code",
       "chapter": "extensions",
       "evidenceType": "tested-and-official-source",
@@ -111,25 +111,25 @@
       "headings": ["## make repository context durable", "### CLAUDE.md and rules establish context", "### skills carry procedures", "### imports keep shared knowledge singular", "## connect a real system", "### MCP exposes tools and resources", "### authentication and reach stay explicit", "## make events deterministic", "### hooks run code at defined moments", "### failure should remain visible", "## give work its own context", "### subagents need a bounded problem", "### the return contract matters", "## package behavior for reuse", "### plugins move related behavior together", "### portable behavior needs an owner and version", "## compose without losing the plot", "### precedence decides which layer wins", "### context cost is part of the design", "### ownership makes removal possible"]
     },
     {
-      "file": "docs/guides/codex/recommendations.md",
+      "file": "content/guides/codex/recommendations.md",
       "provider": "codex",
       "chapter": "recommendations",
       "evidenceType": "personal-with-dated-sources",
       "sourceIds": ["openai-codex-product", "openai-codex-manual", "openai-codex-mobile", "openai-codex-app", "openai-work-and-codex", "onepassword-codex", "git-worktrees"],
-      "experienceQuestions": ["What does Ani actually default to, switch, avoid, and pay for?", "Which opinion changed after a field run?"],
+      "experienceQuestions": ["What does Ani actually default to, switch, avoid, and pay for?", "Which opinion changed after hands on testing?"],
       "headings": ["## my default codex setup", "### desktop is the coordination hub", "### CLI and mobile have clear supporting jobs", "## when i switch surfaces", "### the review surface follows the evidence", "### execution location is a separate decision", "## what codex does unusually well", "### projectless work broadens the starting point", "### visible orchestration makes parallel work easier to judge", "## where image generation earns its place", "### generate visual direction from project context", "### edit and refine existing images", "### turn visual experiments into reviewed assets", "## why i recommend one password", "### the full access model belongs across agents", "## what i would avoid", "### parallelism that outruns review", "### standing access without a bounded job", "## what changed my mind", "### worktrees replaced direct main work", "### scoped authority replaced blanket autonomy", "## how i use a paid plan", "### treat the week as a resource budget", "## what i am still watching", "### mobile and remote execution keep changing", "### security and model behavior need dated claims"]
     },
     {
-      "file": "docs/guides/claude-code/recommendations.md",
+      "file": "content/guides/claude-code/recommendations.md",
       "provider": "claude-code",
       "chapter": "recommendations",
       "evidenceType": "personal-with-dated-sources",
       "sourceIds": ["anthropic-claude-overview", "anthropic-platforms", "anthropic-desktop", "anthropic-remote-control", "anthropic-cowork", "onepassword-claude"],
-      "experienceQuestions": ["What does Ani actually default to, switch, avoid, and pay for?", "Which dynamic workflow claims still need a paired field run?"],
-      "headings": ["## my default claude code setup", "### terminal and repository context are my default", "### desktop and remote surfaces have clear supporting jobs", "## when i switch surfaces", "### the review surface follows the evidence", "### execution location is a separate decision", "## what claude code does unusually well", "### repository context compounds across real work", "### dynamic workflows can coordinate real operations", "## when dynamic workflows earn their complexity", "### use them when they simplify a multistep job", "### background work needs a visible owner", "### routines need stable boundaries", "## why i recommend one password", "### the full access model belongs across agents", "## what i would avoid", "### context that grows without an owner", "### automation before a pass condition", "## what changed my mind", "### provider roles are a lens rather than a rule", "### scoped authority replaced blanket autonomy", "## how i use a paid plan", "### treat the week as a resource budget", "## what i am still watching", "### mobile and Remote Control keep changing", "### current workflow features need a paired field run"]
+      "experienceQuestions": ["What does Ani actually default to, switch, avoid, and pay for?", "Which dynamic workflow claims still need a paired test?"],
+      "headings": ["## my default claude code setup", "### terminal and repository context are my default", "### desktop and remote surfaces have clear supporting jobs", "## when i switch surfaces", "### the review surface follows the evidence", "### execution location is a separate decision", "## what claude code does unusually well", "### repository context compounds across real work", "### dynamic workflows can coordinate real operations", "## when dynamic workflows earn their complexity", "### use them when they simplify a multistep job", "### background work needs a visible owner", "### routines need stable boundaries", "## why i recommend one password", "### the full access model belongs across agents", "## what i would avoid", "### context that grows without an owner", "### automation before a pass condition", "## what changed my mind", "### provider roles are a lens rather than a rule", "### scoped authority replaced blanket autonomy", "## how i use a paid plan", "### treat the week as a resource budget", "## what i am still watching", "### mobile and Remote Control keep changing", "### current workflow features need a paired test"]
     },
     {
-      "file": "docs/guides/credentials-and-access.md",
+      "file": "content/handbook/credentials-and-access.md",
       "provider": "shared",
       "chapter": "credentials-and-access",
       "evidenceType": "personal-with-official-source",

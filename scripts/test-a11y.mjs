@@ -77,11 +77,12 @@ try {
         checkRole(elements('.source-publisher h3'), { size: 16, line: 24, weight: 600, family: 'Instrument Sans', color: ink }, 'source publisher heading');
 
         const reading = elements('.home-content p, .home-guides p, .sl-markdown-content p, .run-page p, .source-groups > p')
-          .filter((element) => !element.matches('.section-label, .history-year, .run-header > p:first-child, .source-kinds, .page-meta'));
+          .filter((element) => !element.matches('.section-label, .history-year, .run-header > p:first-child, .source-kinds, .page-meta, [data-slot="item-description"]'));
         checkRole(reading, { size: 18, line: 30, weight: 400, family: 'Instrument Sans', color: ink }, 'reading prose');
         for (const element of reading.filter(visible)) if (element.getBoundingClientRect().width > 816) findings.push(`reading measure exceeds 68ch: ${element.textContent.trim().slice(0, 60)}`);
 
         checkRole(elements('td, .page-sources li, .run-inventory li, .artifact-list li, .run-page dd'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: ink }, 'dense content');
+        checkRole(elements('[data-slot="item-description"]'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: slate }, 'guide description');
         const metadata = elements('.section-label, .home-guide-list span, .footer-meta, .sidebar-label, .page-meta, figcaption, .history-year, .run-header > p:first-child, .run-page dt, .run-evidence, .run-inventory span, .source-kinds, th');
         checkRole(metadata, { size: 12, line: 18, weight: 400, family: 'IBM Plex Mono', color: slate }, 'metadata');
         checkRole(elements('.site-name, .provider-tabs a, .search-trigger, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 14, line: 20, family: 'Instrument Sans' }, 'navigation');
@@ -91,14 +92,15 @@ try {
       for (const finding of typographyFailures) failures.push(`${viewport.name} ${route}: ${finding}`);
 
       if (viewport.width === 375 && route === '/') {
-        const menu = page.locator('.mobile-site-menu summary');
-        const details = page.locator('.mobile-site-menu');
+        const menu = page.locator('.mobile-site-menu-trigger');
+        const sheet = page.locator('.mobile-site-menu[role="dialog"]');
         await menu.focus();
         await page.keyboard.press('Enter');
-        if (await details.getAttribute('open') === null) failures.push(`${viewport.name} ${route}: mobile menu does not open with Enter`);
-        await page.keyboard.press('Enter');
-        await page.waitForFunction(() => !document.querySelector('.mobile-site-menu')?.hasAttribute('open'));
-        if (await details.getAttribute('open') !== null) failures.push(`${viewport.name} ${route}: mobile menu does not close with Enter`);
+        await sheet.waitFor({ state: 'visible' });
+        if (await sheet.getAttribute('data-state') !== 'open') failures.push(`${viewport.name} ${route}: mobile Sheet does not open with Enter`);
+        await page.keyboard.press('Escape');
+        await sheet.waitFor({ state: 'hidden' });
+        if (!(await menu.evaluate((trigger) => document.activeElement === trigger))) failures.push(`${viewport.name} ${route}: mobile Sheet does not restore focus after Escape`);
       }
 
       const report = await new AxeBuilder({ page }).analyze();
