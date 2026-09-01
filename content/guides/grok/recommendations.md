@@ -21,4 +21,4 @@ computer, browser sessions, apps, and coordination across named agents.
 
 start with a reversible task, narrow access, and a result you can inspect. the
 official surface is moving quickly and my hands on evidence here is still thin.
-more detailed recommendations will follow a public field run.
+more detailed recommendations will follow hands on testing with inspectable evidence.

@@ -1,4 +1,4 @@
-> archive compatibility notice: `lore` is frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. see [archived tools](../../docs/archive.md).
+> archive compatibility notice: `lore` is frozen and supported only for security, data-loss, and installation blockers through 2026-11-05. see [archived tools](../../content/archive/claude-code-tools.md).
 
 <!-- tested with: claude code v2.1.220 -->
 

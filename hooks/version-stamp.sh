@@ -4,7 +4,7 @@ set -euo pipefail
 # =============================================================================
 # Version Stamp: SessionEnd auto-updater
 # =============================================================================
-# when a session modifies files in docs/, hooks/, plugins/, or scripts/,
+# when a session modifies files in content/, editorial/, hooks/, plugins/, or scripts/,
 # auto-updates "tested with: claude code vX.Y.Z" stamps to current version.
 #
 # Hook type: SessionEnd
@@ -23,7 +23,7 @@ if [ -z "$MODIFIED" ]; then
 fi
 
 # filter to relevant dirs and file types
-TARGETS=$(echo "$MODIFIED" | grep -E '^(docs/|hooks/|plugins/|scripts/)' | grep -E '\.(sh|md|py|json)$' || true)
+TARGETS=$(echo "$MODIFIED" | grep -E '^(content/|editorial/|hooks/|plugins/|scripts/)' | grep -E '\.(sh|md|py|json)$' || true)
 if [ -z "$TARGETS" ]; then
   exit 0
 fi

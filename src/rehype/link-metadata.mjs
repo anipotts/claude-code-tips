@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const registry = JSON.parse(readFileSync(new URL('../../docs/sources.json', import.meta.url), 'utf8'));
+const registry = JSON.parse(readFileSync(new URL('../../editorial/sources.json', import.meta.url), 'utf8'));
 const publisherById = new Map(registry.publishers.map((publisher) => [publisher.id, publisher]));
 
 const normalizeUrl = (value) => {

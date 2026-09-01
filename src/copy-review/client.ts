@@ -34,7 +34,7 @@ let publication: PublishRun | null = null;
 let mobilePanel: keyof typeof mobilePanels = 'editor';
 
 const statusLabels: Record<ReviewStatus, string> = { 'needs-review': 'needs review', vetted: 'vetted', 'changed-since-vetting': 'changed since vetting', 'needs-revision': 'needs revision' };
-const groups: Array<[ReviewDocument['group'], string]> = [['homepage', 'homepage'], ['shared', 'shared pages'], ['codex', 'codex'], ['claude-code', 'claude code'], ['grok', 'grok'], ['field-lab', 'field lab'], ['archive', 'archive']];
+const groups: Array<[ReviewDocument['group'], string]> = [['homepage', 'homepage'], ['handbook', 'handbook'], ['codex', 'codex'], ['claude-code', 'claude code'], ['grok', 'grok'], ['archive', 'archive']];
 const stages: PublishStage[] = ['local-draft', 'validated', 'signed-commit', 'pushed-branch', 'pull-request', 'required-checks', 'merged', 'github-pages-live'];
 
 function element<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) {
@@ -278,7 +278,7 @@ mobileMedia.addEventListener('change', () => setMobilePanel(mobilePanel));
 document.addEventListener('keydown', (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); search.focus(); } if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes((event.target as HTMLElement).tagName)) { event.preventDefault(); search.focus(); } });
 
 async function initialize() {
-  try { catalog = await api<CopyReviewCatalog>('catalog'); selectedOwner = catalog.surfaces.find((surface) => surface.owner === 'docs/guides/codex/configuration.md')?.owner ?? catalog.surfaces[0].owner; currentDocument = await api<ReviewDocument>(`document?owner=${encodeURIComponent(selectedOwner)}`); selectedBlock = currentDocument.blocks.find((block) => block.status !== 'vetted') ?? currentDocument.blocks[0] ?? null; renderAll(); setMobilePanel('editor'); refreshPreview(); }
+  try { catalog = await api<CopyReviewCatalog>('catalog'); selectedOwner = catalog.surfaces.find((surface) => surface.owner === 'content/guides/codex/configuration.md')?.owner ?? catalog.surfaces[0].owner; currentDocument = await api<ReviewDocument>(`document?owner=${encodeURIComponent(selectedOwner)}`); selectedBlock = currentDocument.blocks.find((block) => block.status !== 'vetted') ?? currentDocument.blocks[0] ?? null; renderAll(); setMobilePanel('editor'); refreshPreview(); }
   catch (error) { workspace.setAttribute('aria-busy', 'false'); showMessage(error instanceof Error ? error.message : String(error), 'error'); }
 }
 void initialize();

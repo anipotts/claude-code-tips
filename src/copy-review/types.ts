@@ -41,7 +41,7 @@ export type ReviewSurface = {
   owner: string;
   title: string;
   description: string;
-  group: 'homepage' | 'shared' | 'codex' | 'claude-code' | 'grok' | 'field-lab' | 'archive';
+  group: 'homepage' | 'handbook' | 'codex' | 'claude-code' | 'grok' | 'archive';
   order: number;
   frozen: boolean;
   counts: Record<ReviewStatus, number>;

@@ -47,4 +47,4 @@ boundary from drifting between agent specific files.
 
 the current Claude Code content here is source reviewed. configuration advice
 that depends on current runtime behavior stays marked as an open question until
-the paired field run is complete.
+the paired test is complete.

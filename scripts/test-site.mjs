@@ -35,7 +35,7 @@ for (const icon of ['codex-light.png', 'codex-dark.png', 'claude-code.png', 'gro
   try { await access(path.join(root, 'public/icons/products', icon)); } catch { failures.push(`product icon is missing: ${icon}`); }
 }
 
-const registry = JSON.parse(await readFile(path.join(root, 'docs/sources.json'), 'utf8'));
+const registry = JSON.parse(await readFile(path.join(root, 'editorial/sources.json'), 'utf8'));
 const metadata = [];
 for (const [route, source] of contentFiles) {
   const markdown = await readFile(source, 'utf8');
@@ -55,7 +55,7 @@ for (const [route, source] of contentFiles) {
   if (!html.includes(`<meta name="twitter:image" content="${origin}/social-card.png"`)) failures.push(`${route}: twitter preview image is missing`);
   if (!html.includes(`content="${description.replaceAll('&', '&amp;')}"`) && !text(html).includes(description)) failures.push(`${route}: canonical description is absent from rendered metadata`);
   if (!publicText.includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
-  if (route.startsWith('/guides/') || route === '/history/' || route === '/market/' || route === '/method/' || route === '/archive/') {
+  if (route !== '/') {
     const sourceIds = inlineList(markdown, 'sources');
     if (!/<details\b[^>]*\bclass="[^"]*\bpage-sources\b/.test(html)) failures.push(`${route}: collapsed sources disclosure is missing`);
     if (/TESTED \/ OFFICIAL SOURCE \/ ANALYSIS/i.test(publicText)) failures.push(`${route}: retired evidence microcopy appears in the source footer`);
@@ -65,9 +65,9 @@ for (const [route, source] of contentFiles) {
     }
     if (sourceIds.length > 0 && (!html.includes('source-summary-badge') || !html.includes('source-summary-count'))) failures.push(`${route}: source icon count badge is missing`);
   }
-  if (!route.startsWith('/field-lab/') && !publicText.includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
+  if (!publicText.includes('last updated')) failures.push(`${route}: exact update metadata is missing`);
   if ((route.startsWith('/guides/codex') || route.startsWith('/guides/claude-code')) && publicText.includes('last checked')) failures.push(`${route}: internal source check metadata is exposed in the public page header`);
-  for (const label of ['index', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
+  for (const label of ['handbook', 'codex', 'claude code', 'grok']) if (!publicText.includes(label)) failures.push(`${route}: provider scope tab is missing: ${label}`);
   if (/\bproduct guides\b/i.test(publicText)) failures.push(`${route}: retired product guides label appears in public output`);
   if (html.includes('·')) failures.push(`${route}: mid dot appears in public output`);
   if (!html.includes('coding agent tips on GitHub')) failures.push(`${route}: GitHub link is missing from the site header`);
@@ -99,13 +99,13 @@ try {
     if (!llms.includes(`[${title}](${origin}${markdownPath})`)) failures.push(`/llms.txt: missing public Markdown route ${markdownPath}`);
     if (kind === 'guide' && scalar(markdown, 'draft') === 'true') failures.push(`/llms.txt: draft route entered canonical content ${route}`);
   }
-  if (llms.includes('/changes/') || llms.includes('/field-lab/')) failures.push('/llms.txt: redirected or field-run route is present');
+  if (llms.includes('/changes/') || llms.includes('/field-lab/')) failures.push('/llms.txt: redirected route is present');
 } catch { failures.push('/llms.txt: generated index is missing'); }
 
-const activeGuideText = (await Promise.all(contentFiles.filter(([route]) => !route.startsWith('/field-lab/')).map(([, source]) => readFile(source, 'utf8')))).join('\n');
+const activeGuideText = (await Promise.all(contentFiles.map(([, source]) => readFile(source, 'utf8')))).join('\n');
 for (const version of Object.values(registry.product_versions)) {
   const occurrences = activeGuideText.split(String(version)).length - 1;
-  if (occurrences > 0) failures.push(`current product version ${version} is duplicated outside docs/sources.json`);
+  if (occurrences > 0) failures.push(`current product version ${version} is duplicated outside editorial/sources.json`);
 }
 
 const home = await readFile(routeFile('/'), 'utf8');
@@ -118,23 +118,23 @@ for (const expected of [
   'web, Remote Control, and mobile',
   'Grok Build and Grok Bot',
   'settings and permissions',
-  'what still needs a field run',
+  'what still needs hands on testing',
   'shared foundations',
 ]) if (!text(home).includes(expected)) failures.push(`/: homepage comparison is missing: ${expected}`);
 if (text(home).includes('across agents')) failures.push('/: retired shared-guide framing appears on the homepage');
 for (const icon of ['codex-light.png', 'claude-code.png', 'grok.png']) {
   if (!home.includes(`/icons/products/${icon}`)) failures.push(`/: product icon is absent from the homepage: ${icon}`);
 }
-const draftGuides = (await Promise.all((await markdownFiles(path.join(root, 'docs/guides'))).map(async (file) => ({ file, markdown: await readFile(file, 'utf8') }))))
+const draftGuides = (await Promise.all((await markdownFiles(path.join(root, 'content'))).map(async (file) => ({ file, markdown: await readFile(file, 'utf8') }))))
   .filter(({ markdown }) => scalar(markdown, 'draft') === 'true')
-  .map(({ file }) => `/guides/${path.relative(path.join(root, 'docs/guides'), file).replace(/\.md$/, '')}/`);
+  .map(({ file }) => `/${path.relative(path.join(root, 'content'), file).replace(/\.md$/, '')}/`);
 for (const route of draftGuides) {
   try { await access(routeFile(route)); failures.push(`${route}: draft route exists in production output`); } catch {}
   if (home.includes(`href="${route}"`)) failures.push(`${route}: draft route is linked from the production homepage`);
 }
 const h1Values = [...home.matchAll(/<h1\b[^>]*>(.*?)<\/h1>/gs)].map((match) => text(match[1]));
 if (h1Values.length !== 1 || h1Values[0] !== canonicalH1) failures.push(`/: expected one exact canonical h1, received ${JSON.stringify(h1Values)}`);
-for (const item of metadata.filter((item) => item.route !== '/' && item.route !== '/archive/' && (item.scope === 'general' || item.order === 10))) {
+for (const item of metadata.filter((item) => item.route !== '/' && !item.source.includes(`${path.sep}archive${path.sep}`) && (item.scope === 'handbook' || item.order === 10))) {
   if (!home.includes(`href="${item.route}"`)) failures.push(`/: canonical guide link is missing: ${item.route}`);
   if (!text(home).includes(item.description)) failures.push(`/: canonical guide description is missing: ${item.description}`);
 }

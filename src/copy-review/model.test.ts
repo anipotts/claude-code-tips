@@ -10,7 +10,7 @@ const repository = process.cwd();
 
 beforeAll(async () => {
   fixture = await mkdtemp(path.join(os.tmpdir(), 'copy-review-model-'));
-  for (const entry of ['content', 'docs', 'editorial']) await cp(path.join(repository, entry), path.join(fixture, entry), { recursive: true });
+  for (const entry of ['content', 'editorial']) await cp(path.join(repository, entry), path.join(fixture, entry), { recursive: true });
   await cp(path.join(repository, 'src/site.ts'), path.join(fixture, 'src/site.ts'), { recursive: true });
   execFileSync('git', ['init', '-b', 'feature'], { cwd: fixture });
   execFileSync('git', ['config', 'user.name', 'Copy Review Test'], { cwd: fixture });
@@ -38,23 +38,23 @@ describe('copy review content model', () => {
     expect(catalog.surfaces.length).toBeGreaterThan(25);
     expect(catalog.totals['needs-review']).toBeGreaterThan(100);
     expect(catalog.totals.vetted).toBe(0);
-    expect(catalog.surfaces.find((surface) => surface.owner === 'docs/archive.md')?.frozen).toBe(true);
+    expect(catalog.surfaces.find((surface) => surface.owner === 'content/archive/claude-code-tools.md')?.frozen).toBe(true);
   });
 
   test('parses markdown, interface, and evidence copy through constrained adapters', async () => {
-    const markdown = await loadDocument(fixture, 'docs/guides/codex/configuration.md');
+    const markdown = await loadDocument(fixture, 'content/guides/codex/configuration.md');
     expect(markdown.blocks.some((block) => block.kind === 'frontmatter')).toBe(true);
     expect(markdown.blocks.some((block) => block.kind === 'heading')).toBe(true);
     expect(markdown.blocks.some((block) => block.kind === 'list')).toBe(true);
     const site = await loadDocument(fixture, 'src/site.ts');
     expect(site.blocks.find((block) => block.id === 'site:interfaceCopy.search')?.value).toBe('search');
-    const evidence = await loadDocument(fixture, 'docs/sources.json');
+    const evidence = await loadDocument(fixture, 'editorial/sources.json');
     expect(evidence.blocks.some((block) => block.id.includes('evidence_labels.tested.description'))).toBe(true);
     await expectFailure(loadDocument(fixture, '../../etc/passwd'), 'unknown writing surface');
   });
 
   test('uses exact fingerprints for atomic edits and review state', async () => {
-    const owner = 'docs/guides/codex/configuration.md';
+    const owner = 'content/guides/codex/configuration.md';
     const initial = await loadDocument(fixture, owner);
     const paragraph = initial.blocks.find((block) => block.kind === 'paragraph')!;
     const nextValue = paragraph.value.replace('Codex loads', 'Copy review confirms Codex loads');

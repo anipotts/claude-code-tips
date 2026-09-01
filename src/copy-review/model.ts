@@ -29,7 +29,7 @@ const TOKEN_PATH = '.astro/copy-review-token';
 const COPY_BRANCH_PREFIX = 'codex/copy-review-';
 const TEXTUAL_FRONTMATTER_KEYS = new Set(['title', 'description', 'task', 'passCondition', 'notes', 'privacy', 'limitations', 'openQuestions']);
 const SHARED_INTERFACE_OWNER = 'src/site.ts';
-const SHARED_EVIDENCE_OWNER = 'docs/sources.json';
+const SHARED_EVIDENCE_OWNER = 'editorial/sources.json';
 
 type LocatedBlock = ReviewBlock & { start: number; end: number; adapter: 'markdown' | 'yaml' | 'typescript' | 'json'; source: string };
 type SurfaceDefinition = Omit<ReviewSurface, 'counts'>;
@@ -85,34 +85,32 @@ function parseSurfaceMetadata(source: string) {
 
 function routeForOwner(owner: string) {
   if (owner === 'content/home.md') return '/';
-  if (owner.startsWith('content/runs/')) return `/field-lab/runs/${path.basename(owner, '.md')}/`;
-  if (owner.startsWith('docs/')) return `/${owner.slice('docs/'.length, -3)}/`;
+  if (owner.startsWith('content/') && owner.endsWith('.md')) return `/${owner.slice('content/'.length, -3)}/`;
   return null;
 }
 
 function groupForOwner(owner: string): ReviewSurface['group'] {
   if (owner === 'content/home.md') return 'homepage';
-  if (owner === SHARED_INTERFACE_OWNER || owner === SHARED_EVIDENCE_OWNER || /^docs\/(?:history|market|method)\.md$/.test(owner) || owner === 'docs/guides/operating-system.md' || owner === 'docs/guides/credentials-and-access.md') return 'shared';
+  if (owner === SHARED_INTERFACE_OWNER || owner === SHARED_EVIDENCE_OWNER || owner.startsWith('content/handbook/')) return 'handbook';
   if (owner.includes('/guides/codex')) return 'codex';
   if (owner.includes('/guides/claude-code')) return 'claude-code';
   if (owner.includes('/guides/grok')) return 'grok';
-  if (owner.startsWith('content/runs/')) return 'field-lab';
   return 'archive';
 }
 
 async function surfaceDefinitions(root: string): Promise<SurfaceDefinition[]> {
   const owners = [
     'content/home.md',
-    ...await walkMarkdown(path.join(root, 'docs/guides'), root),
-    'docs/history.md', 'docs/market.md', 'docs/method.md', 'docs/archive.md',
-    ...await walkMarkdown(path.join(root, 'content/runs'), root),
+    ...await walkMarkdown(path.join(root, 'content/handbook'), root),
+    ...await walkMarkdown(path.join(root, 'content/guides'), root),
+    ...await walkMarkdown(path.join(root, 'content/archive'), root),
   ];
   const definitions: SurfaceDefinition[] = [];
   for (const owner of owners) {
     const source = await readFile(absoluteOwner(root, owner), 'utf8');
     const metadata = parseSurfaceMetadata(source);
     const navigation = (metadata.navigation ?? {}) as Record<string, unknown>;
-    const frozen = metadata.voice === 'frozen' || metadata.status === 'archive' || owner === 'docs/archive.md';
+    const frozen = metadata.voice === 'frozen' || metadata.status === 'archive' || owner === 'content/archive/claude-code-tools.md';
     definitions.push({
       id: owner,
       owner,
@@ -120,13 +118,13 @@ async function surfaceDefinitions(root: string): Promise<SurfaceDefinition[]> {
       title: String(metadata.title ?? path.basename(owner, '.md').replaceAll('-', ' ')),
       description: String(metadata.description ?? ''),
       group: groupForOwner(owner),
-      order: Number(navigation.order ?? (owner.startsWith('content/runs/') ? 900 : 500)),
+      order: Number(navigation.order ?? 500),
       frozen,
     });
   }
-  definitions.push({ id: 'shared-interface-copy', owner: SHARED_INTERFACE_OWNER, route: null, title: 'shared interface copy', description: 'navigation and shared interface labels', group: 'shared', order: 950, frozen: false });
-  definitions.push({ id: 'shared-evidence-copy', owner: SHARED_EVIDENCE_OWNER, route: null, title: 'evidence labels', description: 'shared evidence labels and explanations', group: 'shared', order: 960, frozen: false });
-  const groupOrder = ['homepage', 'shared', 'codex', 'claude-code', 'grok', 'field-lab', 'archive'];
+  definitions.push({ id: 'shared-interface-copy', owner: SHARED_INTERFACE_OWNER, route: null, title: 'shared interface copy', description: 'navigation and shared interface labels', group: 'handbook', order: 950, frozen: false });
+  definitions.push({ id: 'shared-evidence-copy', owner: SHARED_EVIDENCE_OWNER, route: null, title: 'evidence labels', description: 'shared evidence labels and explanations', group: 'handbook', order: 960, frozen: false });
+  const groupOrder = ['homepage', 'handbook', 'codex', 'claude-code', 'grok', 'archive'];
   return definitions.sort((left, right) => groupOrder.indexOf(left.group) - groupOrder.indexOf(right.group) || left.order - right.order || left.title.localeCompare(right.title));
 }
 
@@ -299,7 +297,7 @@ function siteCopyBlocks(source: string, ledger: ReviewLedger): LocatedBlock[] {
 
 function evidenceCopyBlocks(source: string, ledger: ReviewLedger): LocatedBlock[] {
   const tree = parseTree(source);
-  if (!tree) throw new Error('docs/sources.json is invalid');
+  if (!tree) throw new Error('editorial/sources.json is invalid');
   const blocks: LocatedBlock[] = [];
   const visit = (node: JsonNode, pathParts: string[]) => {
     if (node.type === 'property' && node.children?.length === 2) {

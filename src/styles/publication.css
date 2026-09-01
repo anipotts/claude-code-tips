@@ -161,15 +161,17 @@ html[data-left-rail='collapsed'] .handbook-sidebar a:focus-visible::after { opac
 .surface-bento figure { position: relative; }
 .surface-bento a { display: block; text-decoration: none; }
 .surface-bento img { display: block; inline-size: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--soft); }
+.surface-bento.intro-visual { grid-template-columns: minmax(0, 1fr); margin-top: 1rem; }
+.surface-bento.intro-visual img { aspect-ratio: 3600 / 2260; }
 .surface-bento figcaption { padding: .8rem .9rem; }
 .enlarge-image { position: absolute; inset: .55rem .55rem auto auto; min-block-size: 1.9rem; padding: .3rem .55rem; border: 1px solid rgba(255, 255, 255, .5); border-radius: var(--radius-pill); background: rgba(11, 12, 15, .78); color: #fff; opacity: 0; transform: translateY(-.2rem); cursor: pointer; transition: opacity var(--motion-ui-duration) var(--motion-ui-ease), transform var(--motion-ui-duration) var(--motion-ui-ease); }
 .surface-bento figure:hover .enlarge-image, .enlarge-image:focus-visible { opacity: 1; transform: translateY(0); }
-.image-dialog { max-inline-size: min(70rem, calc(100vw - 2rem)); max-block-size: calc(100vh - 2rem); padding: 0; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface-raised); color: var(--ink); box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, .3); }
+.image-dialog { inset: 0; inline-size: min(70rem, calc(100vw - 2rem)); block-size: fit-content; max-inline-size: calc(100vw - 2rem); max-block-size: calc(100vh - 2rem); margin: auto; padding: 0; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface-raised); color: var(--ink); box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, .3); }
 .image-dialog::backdrop { background: rgba(5, 7, 12, .72); }
 .image-dialog > button { position: absolute; z-index: 2; inset: .65rem .65rem auto auto; inline-size: 2.25rem; block-size: 2.25rem; display: grid; place-items: center; border: 1px solid var(--rule); border-radius: var(--radius-pill); background: var(--surface-raised); color: var(--ink); cursor: pointer; }
 .image-dialog > button svg { inline-size: 1rem; block-size: 1rem; }
-.image-dialog figure { margin: 0; }
-.image-dialog img { display: block; max-inline-size: 100%; max-block-size: calc(100vh - 7rem); object-fit: contain; }
+.image-dialog figure { display: grid; place-items: center; margin: 0; }
+.image-dialog img { display: block; max-inline-size: 100%; max-block-size: calc(100vh - 7rem); margin: auto; object-fit: contain; }
 .image-dialog figcaption { padding: .85rem 1rem; border-top: 1px solid var(--rule); color: var(--slate); }
 .registered-link { white-space: normal; }
 .publication-overlay { position: fixed; z-index: var(--z-preview); inset: 0; pointer-events: none; }

@@ -7,8 +7,8 @@ import ThemeControl from './ThemeControl.astro';
 const current = Astro.url.pathname;
 const activeScope = scopeForPath(current);
 const scopedPages = await getHandbookPages({ scope: activeScope });
-const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'general';
-const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScope === 'general'
+const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'handbook';
+const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScope === 'handbook'
   ? page.data.title
   : chapterForOrder(page.data.navigation.order)?.label ?? page.data.title;
 ---

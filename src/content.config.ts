@@ -2,12 +2,12 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { docsSchema } from '@astrojs/starlight/schema';
-import sourceRegistry from '../docs/sources.json';
+import sourceRegistry from '../editorial/sources.json';
 
 const sourceIds = new Set(sourceRegistry.sources.map((source) => source.id));
-const sourceId = z.string().refine((id) => sourceIds.has(id), 'source identifier is absent from docs/sources.json');
+const sourceId = z.string().refine((id) => sourceIds.has(id), 'source identifier is absent from editorial/sources.json');
 const evidenceStatus = z.enum(['tested', 'official-source', 'analysis', 'open-question']);
-const navigationScope = z.enum(['general', 'codex', 'claude-code', 'grok', 'opencode', 'qwen-code', 'kimi-code', 'aider']);
+const navigationScope = z.enum(['handbook', 'codex', 'claude-code', 'grok', 'opencode', 'qwen-code', 'kimi-code', 'aider']);
 const voice = z.enum(['personal', 'evidence', 'documentary', 'frozen']);
 const completion = z.enum(['outline', 'excerpt', 'complete']);
 const navigation = z.object({
@@ -29,7 +29,7 @@ const common = {
 };
 
 const docs = defineCollection({
-  loader: glob({ base: './docs', pattern: ['guides/**/*.md', 'history.md', 'market.md', 'method.md', 'archive.md'] }),
+  loader: glob({ base: './content', pattern: ['guides/**/*.md', 'handbook/**/*.md', 'archive/**/*.md'] }),
   schema: docsSchema({ extend: z.object(common) }),
 });
 
@@ -38,40 +38,4 @@ const home = defineCollection({
   schema: z.object({ title: z.string(), description: z.string(), ...common }),
 });
 
-const runs = defineCollection({
-  loader: glob({ base: './content/runs', pattern: '*.md' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.date(),
-    status: z.enum(['complete', 'partial', 'pending']),
-    evidence: z.array(evidenceStatus).min(1),
-    sources: z.array(sourceId),
-    voice,
-    product: z.string(),
-    model: z.string().nullable(),
-    version: z.string().nullable(),
-    surface: z.string(),
-    baseCommit: z.string(),
-    task: z.string(),
-    passCondition: z.string(),
-    humanInterventions: z.number().int().nonnegative().nullable(),
-    reviewMinutes: z.number().nonnegative().nullable(),
-    machine: z.object({
-      platform: z.string(),
-      architecture: z.string(),
-      memoryGb: z.number().nonnegative().nullable(),
-      notes: z.string(),
-    }),
-    artifacts: z.array(z.object({
-      kind: z.string(),
-      url: z.url(),
-      description: z.string(),
-    })),
-    privacy: z.array(z.string()),
-    limitations: z.array(z.string()),
-    openQuestions: z.array(z.string()),
-  }),
-});
-
-export const collections = { docs, home, runs };
+export const collections = { docs, home };

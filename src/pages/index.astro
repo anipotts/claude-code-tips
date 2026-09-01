@@ -12,7 +12,7 @@ if (!home) throw new Error('content/home.md is required');
 const { Content } = await render(home);
 const guides = await getHomepagePages();
 const providerGroups = navigationScopes
-  .filter((scope) => scope.id !== 'general')
+  .filter((scope) => scope.id !== 'handbook')
   .map((scope) => {
     const pages = guides.filter((guide) => guide.data.navigation.scope === scope.id);
     return {
@@ -24,7 +24,7 @@ const providerGroups = navigationScopes
     };
   })
   .filter((scope) => scope.pages.length > 0);
-const sharedGuides = guides.filter((guide) => guide.data.navigation.scope === 'general');
+const sharedGuides = guides.filter((guide) => guide.data.navigation.scope === 'handbook');
 ---
 
 <BaseLayout title={home.data.title} description={home.data.description}>

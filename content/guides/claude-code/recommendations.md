@@ -46,7 +46,7 @@ needs engineering review.
 
 ## what i am still watching
 
-### current workflow features need a paired field run
+### current workflow features need a paired test
 
 these are source based starting points. i will narrow them after a current
-paired field run produces inspectable examples.
+paired test produces inspectable examples.

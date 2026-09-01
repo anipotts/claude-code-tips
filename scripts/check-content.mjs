@@ -14,7 +14,6 @@ const checks = [
   [bun, ['run', 'check']],
   [bun, ['run', 'check:handbook']],
   [bun, ['run', 'check:completeness']],
-  [bun, ['run', 'check:field-runs']],
   [bun, ['run', 'check:readme']],
   [bun, ['run', 'check:links']],
   ['python3', ['.github/scripts/check_sources.py']],

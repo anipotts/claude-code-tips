@@ -25,19 +25,17 @@ function markdownFiles(directory: string): string[] {
 }
 
 const guideFiles = [
-  ...markdownFiles(resolve(root, 'docs/guides')),
-  resolve(root, 'docs/history.md'),
-  resolve(root, 'docs/market.md'),
-  resolve(root, 'docs/method.md'),
+  ...markdownFiles(resolve(root, 'content/guides')),
+  ...markdownFiles(resolve(root, 'content/handbook')),
 ];
-const scopeOrder = new Map([['codex', 10], ['claude-code', 20], ['grok', 30], ['general', 40]]);
+const scopeOrder = new Map([['codex', 10], ['claude-code', 20], ['grok', 30], ['handbook', 40]]);
 const guides = guideFiles
   .map((file) => {
     const markdown = readFileSync(file, 'utf8');
-    const path = relative(resolve(root, 'docs'), file).replace(/\.md$/, '');
+    const path = relative(resolve(root, 'content'), file).replace(/\.md$/, '');
     return { title: scalar(markdown, 'title'), scope: scalar(markdown, 'scope'), order: Number(scalar(markdown, 'order')), route: `/${path}/`, draft: scalar(markdown, 'draft') === 'true' };
   })
-  .filter((guide) => !guide.draft && (guide.scope === 'general' || guide.order === 10))
+  .filter((guide) => !guide.draft && (guide.scope === 'handbook' || guide.order === 10))
   .sort((left, right) => (scopeOrder.get(left.scope) ?? 99) - (scopeOrder.get(right.scope) ?? 99) || left.order - right.order || left.route.localeCompare(right.route));
 const guideBlock = guides.map((guide) => `- [${guide.title}](${origin}${guide.route})`).join('\n');
 const evidenceBlock = Object.values(evidenceLabels).map((item) => `- \`${item.label}\`: ${item.description}`).join('\n');

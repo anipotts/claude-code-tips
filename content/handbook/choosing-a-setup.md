@@ -7,11 +7,11 @@ checkedAt: "2026-08-29T18:57:04-04:00"
 status: current
 evidence: [tested, official-source, analysis, open-question]
 sources: [openai-codex-manual, anthropic-claude-overview, vscode-agent-host, cursor-docs, openai-cursor-contract, conductor-harnesses, t3-code, opencode, kimi-code, qwen-code, git-worktrees]
-redirects: [/market/hardware/]
+redirects: [/market/, /market/hardware/]
 voice: evidence
 navigation:
-  scope: general
-  order: 40
+  scope: handbook
+  order: 20
 ---
 
 choose the setup around the work you need to review, the machines you already

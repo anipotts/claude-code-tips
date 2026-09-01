@@ -12,7 +12,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE_ROOTS = (ROOT / "hooks", ROOT / "plugins", ROOT / "examples")
-CANONICAL_ARCHIVE = ROOT / "docs" / "archive.md"
+CANONICAL_ARCHIVE = ROOT / "content" / "archive" / "claude-code-tools.md"
 LINK_PATTERN = re.compile(r"!?\[[^\]]*\]\(([^)\s]+)(?:\s+[^)]*)?\)")
 INSTALL_COMMANDS = (
     "/plugin marketplace add anipotts/claude-code-tips",
@@ -61,12 +61,12 @@ def main() -> int:
     canonical_text = CANONICAL_ARCHIVE.read_text(encoding="utf-8")
     normalized = " ".join(canonical_text.split())
     if "november 5, 2026" not in normalized:
-        errors.append("docs/archive.md: exact november 5, 2026 promise is missing")
+        errors.append("content/archive/claude-code-tools.md: exact november 5, 2026 promise is missing")
     if "legacy-tools-final-2026-11-05" not in canonical_text:
-        errors.append("docs/archive.md: exact final archive tag is missing")
+        errors.append("content/archive/claude-code-tools.md: exact final archive tag is missing")
     for command in INSTALL_COMMANDS:
         if command not in canonical_text:
-            errors.append(f"docs/archive.md: installation path is missing: {command}")
+            errors.append(f"content/archive/claude-code-tools.md: installation path is missing: {command}")
 
     if errors:
         for error in errors:

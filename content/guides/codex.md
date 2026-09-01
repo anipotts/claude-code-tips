@@ -17,6 +17,10 @@ navigation:
 
 ## this is codex
 
+<div class="surface-bento intro-visual">
+  <figure><img src="/media/guides/codex-handbook-workspace.png" alt="Codex beside a coding agent tips task and its GitHub pull request with passing checks" loading="eager" fetchpriority="high" decoding="async" width="3600" height="2260" /><figcaption>a screenshot of me working on some personal projects and some content for a brand deal.</figcaption></figure>
+</div>
+
 codex is [OpenAI’s agent](https://learn.chatgpt.com/docs) for [software development](https://openai.com/codex/) and [technical work](https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex). the same
 account reaches a [terminal interface](https://learn.chatgpt.com/docs/codex/cli), [editor extension](https://learn.chatgpt.com/docs/codex/ide), [desktop app](https://learn.chatgpt.com/docs/app), [cloud
 tasks](https://learn.chatgpt.com/docs/cloud), and [mobile review](https://openai.com/index/work-with-codex-from-anywhere/). each surface changes how you steer and inspect the
@@ -61,12 +65,6 @@ should settle into a repository, a checkout, and a verification command that
 another person can inspect.
 
 ## where codex lives
-
-<div class="surface-bento">
-  <figure><a href="https://github.com/openai/codex"><img src="/media/publications/codex-cli-1200.webp" srcset="/media/publications/codex-cli-640.webp 640w, /media/publications/codex-cli-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="the Codex command line interface" loading="lazy" decoding="async" width="1200" height="753" /><figcaption>terminal and scripts</figcaption></a></figure>
-  <figure><a href="https://openai.com/index/introducing-the-codex-app/"><img src="/media/publications/codex-app-1200.webp" srcset="/media/publications/codex-app-640.webp 640w, /media/publications/codex-app-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="the Codex desktop app showing agent work" loading="lazy" decoding="async" width="1200" height="722" /><figcaption>desktop app and parallel work</figcaption></a></figure>
-  <figure><a href="https://openai.com/index/work-with-codex-from-anywhere/"><img src="/media/publications/codex-mobile-1200.webp" srcset="/media/publications/codex-mobile-640.webp 640w, /media/publications/codex-mobile-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="Codex running through the ChatGPT mobile app" loading="lazy" decoding="async" width="1200" height="675" /><figcaption>mobile steering and approvals</figcaption></a></figure>
-</div>
 
 as of august 22, 2026, the Codex documentation describes [skills](https://learn.chatgpt.com/docs/build-skills), [plugins](https://learn.chatgpt.com/docs/build-plugins), [hooks](https://learn.chatgpt.com/docs/hooks), [MCP](https://learn.chatgpt.com/docs/extend/mcp), [subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents),
 memory, worktrees, browser and computer use, scheduled tasks, and remote access

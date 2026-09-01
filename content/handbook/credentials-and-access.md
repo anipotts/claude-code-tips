@@ -9,11 +9,11 @@ completion: outline
 draft: true
 evidence: [official-source, analysis, open-question]
 sources: [onepassword-codex, onepassword-claude, onepassword-cli-secrets]
-redirects: []
+redirects: [/guides/credentials-and-access/]
 voice: personal
 navigation:
-  scope: general
-  order: 40
+  scope: handbook
+  order: 30
 ---
 
 ## credentials belong in an access layer

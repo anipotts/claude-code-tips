@@ -19,7 +19,7 @@ contributions should make the field guide more accurate, more useful in practice
 ## pull request standard
 
 1. explain the user decision the change improves.
-2. link every new product fact to an official source and add it to `docs/sources.json`.
+2. link every new product fact to an official source and add it to `editorial/sources.json`.
 3. label tested observations, official source facts, analysis, and open questions correctly.
 4. run the publication checks and any relevant archive compatibility tests.
 5. keep one logical change per commit and explain why it belongs in the repository.
@@ -31,10 +31,11 @@ security reports should follow [SECURITY.md](./SECURITY.md).
 public writing stays in ordinary source files:
 
 - `content/home.md` owns the homepage.
-- `docs/guides/*.md`, `docs/history.md`, `docs/market.md`, and `docs/method.md` own the handbook.
-- `content/runs/*.md` owns field run pages.
+- `content/handbook/*.md` owns guidance shared across coding agents.
+- `content/guides/<product>*.md` owns each product guide and its chapters.
+- `content/archive/*.md` owns frozen compatibility material.
 - `src/site.ts` owns shared navigation and interface labels.
-- `docs/sources.json` owns source metadata and evidence labels.
+- `editorial/sources.json` owns source metadata and evidence labels.
 
 run `bun run edit` from the worktree you want to change, then review and edit the canonical source in the local copy review workspace. Astro updates the rendered route during development. Run `bun run verify` before opening the pull request. A protected merge to `main` publishes the static site through GitHub Pages.
 

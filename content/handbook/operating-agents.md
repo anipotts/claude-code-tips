@@ -6,11 +6,11 @@ updatedAt: "2026-08-22T19:55:02-04:00"
 status: current
 evidence: [tested, official-source, analysis]
 sources: [openai-codex-manual, anthropic-features-overview, git-worktrees]
-redirects: []
+redirects: [/guides/operating-system/]
 voice: evidence
 navigation:
-  scope: general
-  order: 30
+  scope: handbook
+  order: 10
 ---
 
 codex and claude code expose different controls in their native interfaces, but the engineering principles underneath them are similar.

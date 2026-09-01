@@ -10,17 +10,17 @@ type SidebarHeading = { depth: number; slug: string; text: string };
 const current = Astro.url.pathname;
 const activeScope = scopeForPath(current);
 const pages = await getHandbookPages({ scope: activeScope });
-const label = handbookScopes.find((scope) => scope.id === activeScope)?.label ?? 'general';
+const label = handbookScopes.find((scope) => scope.id === activeScope)?.label ?? 'handbook';
 const activeScopeMetadata = handbookScopes.find((scope) => scope.id === activeScope);
 const providerIcon = activeScopeMetadata?.providerIcon ?? '/favicon.svg';
 const providerIconDark = activeScopeMetadata && 'providerIconDark' in activeScopeMetadata
   ? activeScopeMetadata.providerIconDark
   : undefined;
 
-const navigationLabel = (page: (typeof pages)[number]) => activeScope === 'general'
+const navigationLabel = (page: (typeof pages)[number]) => activeScope === 'handbook'
   ? page.data.title
   : chapterForOrder(page.data.navigation.order)?.label ?? page.data.title;
-const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'general'
+const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'handbook'
   ? 'ph:compass'
   : chapterForOrder(page.data.navigation.order)?.icon ?? 'ph:compass';
 
@@ -53,7 +53,7 @@ const headings = toc && !isOutline
       <Icon class="rail-toggle-expand" name="ph:caret-double-right" aria-hidden="true" />
     </button>
   </div>
-  <nav id="handbook-navigation" aria-label={activeScope === 'general' ? `${label} navigation` : `${label} handbook chapters`}>
+  <nav id="handbook-navigation" aria-label={activeScope === 'handbook' ? `${label} navigation` : `${label} handbook chapters`}>
     <ul>
       {pages.map((page, index) => {
         const href = routeForEntry(page);

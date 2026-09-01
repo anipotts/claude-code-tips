@@ -6,10 +6,10 @@ updatedAt: "2026-08-22T19:55:02-04:00"
 status: archive
 evidence: [official-source, open-question]
 sources: [anthropic-features-overview]
-redirects: [/legacy/]
+redirects: [/archive/, /legacy/]
 voice: frozen
 navigation:
-  scope: general
+  scope: handbook
   order: 90
 ---
 

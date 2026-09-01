@@ -8,10 +8,10 @@ this is my evidence backed guide to working with coding agents, whether you are 
 - [codex](https://agents.anipotts.com/guides/codex/)
 - [claude code](https://agents.anipotts.com/guides/claude-code/)
 - [grok](https://agents.anipotts.com/guides/grok/)
-- [techniques to operate agents](https://agents.anipotts.com/guides/operating-system/)
-- [how coding agents got here](https://agents.anipotts.com/history/)
-- [choosing a coding agent setup](https://agents.anipotts.com/market/)
-- [where this comes from](https://agents.anipotts.com/method/)
+- [techniques to operate agents](https://agents.anipotts.com/handbook/operating-agents/)
+- [choosing a coding agent setup](https://agents.anipotts.com/handbook/choosing-a-setup/)
+- [how coding agents got here](https://agents.anipotts.com/handbook/history/)
+- [where this comes from](https://agents.anipotts.com/handbook/method-and-sources/)
 <!-- generated:guides:end -->
 
 ## what this helps you decide
@@ -27,7 +27,7 @@ the handbook separates the surface where you steer work, the harness that runs t
 - `open question`: current evidence is missing or incomplete
 <!-- generated:evidence:end -->
 
-citations sit beside the claims they support. field runs publish inspectable artifacts and keep their limits visible.
+citations sit beside the claims they support. tested observations name their limits, while source based claims stay distinct from personal analysis.
 
 ## local verification
 

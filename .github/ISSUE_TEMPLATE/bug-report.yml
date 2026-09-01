@@ -6,7 +6,7 @@ body:
     id: component
     attributes:
       label: affected page or component
-      placeholder: docs/guides/codex.md or plugins/cc
+      placeholder: content/guides/codex.md or plugins/cc
     validations:
       required: true
   - type: textarea

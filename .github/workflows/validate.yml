@@ -28,10 +28,8 @@ jobs:
       - name: install pinned dependencies
         run: bun install --frozen-lockfile
 
-      - name: validate field runs
-        run: |
-          bun run check:field-runs
-          bun run check:readme
+      - name: validate generated handbook index
+        run: bun run check:readme
 
       - name: type check and build
         run: |
@@ -66,12 +64,6 @@ jobs:
             "SECURITY.md"
             ".github/**/*.md"
             "content/**/*.md"
-            "docs/guides/**/*.md"
-            "docs/archive.md"
-            "docs/history.md"
-            "docs/market.md"
-            "docs/method.md"
-            "docs/decisions/*.md"
           fail: true
 
       - name: scan mobile and desktop accessibility
@@ -143,7 +135,7 @@ jobs:
             exit 1
           fi
 
-          if git grep -n $'\u2014' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md '.github/**/*.md' 'content/**/*.md' 'docs/guides/**/*.md' docs/history.md docs/market.md docs/method.md docs/archive.md '.claude-plugin/*.json'; then
+          if git grep -n $'\u2014' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md '.github/**/*.md' 'content/**/*.md' 'content/guides/**/*.md' content/handbook/history.md content/handbook/choosing-a-setup.md content/handbook/method-and-sources.md content/archive/claude-code-tools.md '.claude-plugin/*.json'; then
             echo "em dashes are outside the repository style"
             exit 1
           fi
@@ -153,7 +145,7 @@ jobs:
             exit 1
           fi
 
-          if git grep -n -iE '\bnot (only|just|merely|simply|uncommon|insignificant|impossible|bad|wrong|unreasonable|unlikely|automatically|enough)\b|\bno (small|minor|mean|little)\b' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md 'content/**/*.md' 'docs/guides/**/*.md' docs/history.md docs/market.md docs/method.md docs/archive.md; then
+          if git grep -n -iE '\bnot (only|just|merely|simply|uncommon|insignificant|impossible|bad|wrong|unreasonable|unlikely|automatically|enough)\b|\bno (small|minor|mean|little)\b' -- README.md AGENTS.md CLAUDE.md CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md 'content/**/*.md' 'content/guides/**/*.md' content/handbook/history.md content/handbook/choosing-a-setup.md content/handbook/method-and-sources.md content/archive/claude-code-tools.md; then
             echo "litotes or negative comparison framing found"
             exit 1
           fi
@@ -176,9 +168,3 @@ jobs:
             SECURITY.md
             .github/**/*.md
             content/**/*.md
-            docs/guides/**/*.md
-            docs/archive.md
-            docs/history.md
-            docs/market.md
-            docs/method.md
-            docs/decisions/*.md

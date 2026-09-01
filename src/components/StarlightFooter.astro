@@ -1,8 +1,7 @@
 ---
-import { getCollection } from 'astro:content';
 import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
 import { Icon } from 'astro-icon/components';
-import registry from '../../docs/sources.json';
+import registry from '../../editorial/sources.json';
 import AccessibleTables from './AccessibleTables.astro';
 import PublicationEnhancements from './PublicationEnhancements.astro';
 
@@ -21,27 +20,8 @@ const pageSourceGroups = [...pageSources.reduce((groups, source) => {
   sources,
 })).filter((group) => group.publisher !== undefined);
 const sourceCountLabel = `${pageSources.length} ${pageSources.length === 1 ? 'source' : 'sources'}`;
-const runs = entry.id === 'method'
-  ? (await getCollection('runs')).sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf())
-  : [];
 ---
 
-{
-  runs.length > 0 && (
-    <section class="run-inventory" aria-labelledby="field-runs">
-      <h2 id="field-runs">field runs</h2>
-      <ul>
-        {runs.map((run) => (
-          <li>
-            <a href={`/field-lab/runs/${run.id}/`}>{run.data.title}</a>
-            <span>{run.data.date.toISOString().slice(0, 10)}</span>
-            <span>{run.data.status}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
-}
 {showSources && <details class="page-sources" data-animated-disclosure>
   <summary>
     <span id="page-sources-title" class="source-summary-title" role="heading" aria-level="2">sources</span>
@@ -74,10 +54,8 @@ const runs = entry.id === 'method'
 <DefaultFooter />
 
 <style>
-  .run-inventory { margin-top: 4rem; padding-top: 0; border-top: 1px solid var(--rule); }
   .page-sources { margin-top: 4rem; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface-raised); overflow: clip; }
-  .run-inventory ul, .page-sources ul { margin: 0; padding: 0; list-style: none; }
-  .run-inventory li { display: grid; grid-template-columns: minmax(16rem, 1fr) auto auto; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .page-sources ul { margin: 0; padding: 0; list-style: none; }
   .page-sources summary { min-height: 3rem; display: grid; grid-template-columns: minmax(0, 1fr) auto 1rem; align-items: center; gap: .75rem; padding: .55rem .75rem; cursor: pointer; list-style: none; transition: background-color var(--motion-ui-duration) var(--motion-ui-ease); }
   .page-sources summary:hover { background: var(--soft); }
   .page-sources summary::-webkit-details-marker { display: none; }
@@ -99,7 +77,6 @@ const runs = entry.id === 'method'
   .source-domain { justify-self: end; color: var(--slate); }
   .page-sources li { min-width: 0; padding: 0; border: 0; }
   .page-sources li + li { margin-top: 0; }
-  .run-inventory a { color: var(--cobalt); }
   .page-sources a {
     display: grid;
     grid-template-columns: minmax(0, 1fr) .9rem;

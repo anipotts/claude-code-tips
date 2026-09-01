@@ -30,7 +30,7 @@ subagents, and workflows. [Grok Bot provides](https://docs.x.ai/grok-bot/overvie
 persistent agents on a shared cloud computer.
 
 i use Grok less than Codex and Claude Code. these pages therefore stay concise,
-source based, and explicit about what still needs a real field run.
+source based, and explicit about what still needs hands on testing.
 
 continue with [configuration](/guides/grok/configuration/) or
 [recommendations](/guides/grok/recommendations/).

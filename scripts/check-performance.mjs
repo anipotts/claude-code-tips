@@ -13,6 +13,7 @@ const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
 const failures = [];
 const maxDerivativeBytes = 150 * 1024;
 const maxProviderBytes = 400 * 1024;
+const maxFeaturedProviderBytes = 1024 * 1024;
 const maxGuideHtmlGzipBytes = 22 * 1024;
 const maxGuideCssGzipBytes = 24 * 1024;
 const maxFontBytes = 80 * 1024;
@@ -29,6 +30,7 @@ if (JSON.stringify(manifest.derivativeWidths) !== '[640,1200]') failures.push('m
 
 const derivativePaths = new Set();
 const derivativeByPath = new Map();
+const featuredImageByPath = new Map();
 for (const [setId, derivatives] of Object.entries(manifest.derivativeSets)) {
   if (derivatives.length !== 2) failures.push(`${setId}: expected two responsive derivatives`);
   if (JSON.stringify(derivatives.map(({ width }) => width).sort((a, b) => a - b)) !== '[640,1200]') failures.push(`${setId}: derivative widths do not match the responsive policy`);
@@ -47,11 +49,26 @@ for (const [setId, derivatives] of Object.entries(manifest.derivativeSets)) {
   }
 }
 
+for (const image of manifest.featuredImages ?? []) {
+  const file = path.join(root, 'public', image.path.replace(/^\//, ''));
+  featuredImageByPath.set(image.path, image);
+  let buffer;
+  try { buffer = await readFile(file); } catch { failures.push(`${image.path}: featured image file is missing`); continue; }
+  const metadata = await sharp(buffer).metadata();
+  if (buffer.length !== image.bytes) failures.push(`${image.path}: byte count differs from the manifest`);
+  if (buffer.length > maxFeaturedProviderBytes) failures.push(`${image.path}: ${buffer.length} bytes exceeds 1 MiB`);
+  if (sha256(buffer) !== image.sha256) failures.push(`${image.path}: sha256 differs from the manifest`);
+  if (metadata.format !== 'png') failures.push(`${image.path}: expected png, received ${metadata.format}`);
+  if (metadata.width !== image.width || metadata.height !== image.height) failures.push(`${image.path}: intrinsic dimensions differ from the manifest`);
+  for (const route of image.canonicalPages ?? []) if (!canonicalRoutes.has(route)) failures.push(`${image.id}: unknown canonical page ${route}`);
+}
+
 const trackedMedia = (await readdir(mediaRoot)).filter((file) => file.endsWith('.webp')).map((file) => `/media/publications/${file}`);
 for (const file of trackedMedia) if (!derivativePaths.has(file)) failures.push(`${file}: derivative is absent from the manifest`);
 for (const file of derivativePaths) if (!trackedMedia.includes(file)) failures.push(`${file}: manifest entry has no derivative file`);
 
 const originalUrls = new Set();
+const sourceAssetIds = new Set(manifest.assets.map((asset) => asset.id));
 for (const asset of manifest.assets) {
   if (originalUrls.has(asset.originalUrl)) failures.push(`${asset.id}: original URL is duplicated in the manifest`);
   originalUrls.add(asset.originalUrl);
@@ -61,7 +78,6 @@ for (const asset of manifest.assets) {
   if (!asset.original?.width || !asset.original?.height || !/^[a-f0-9]{64}$/.test(asset.original?.sha256 ?? '')) failures.push(`${asset.id}: original dimensions or hash are invalid`);
   if (!manifest.derivativeSets[asset.derivativeSet]) failures.push(`${asset.id}: derivative set ${asset.derivativeSet} is missing`);
 }
-
 const tagsByRoute = new Map();
 for (const { route, file } of canonicalContentFiles()) {
   const source = await readFile(file, 'utf8');
@@ -70,6 +86,13 @@ for (const { route, file } of canonicalContentFiles()) {
   for (const tag of tags) {
     const src = attribute(tag, 'src');
     if (providerRouteSet.has(route) && /^https?:\/\//.test(src ?? '')) failures.push(`${route}: external raster image remains in provider overview`);
+    if (featuredImageByPath.has(src)) {
+      const image = featuredImageByPath.get(src);
+      if (attribute(tag, 'decoding') !== 'async') failures.push(`${route}: ${src} must decode asynchronously`);
+      if (!['eager', 'lazy'].includes(attribute(tag, 'loading'))) failures.push(`${route}: ${src} has no loading policy`);
+      if (Number(attribute(tag, 'width')) !== image.width || Number(attribute(tag, 'height')) !== image.height) failures.push(`${route}: ${src} markup dimensions differ from the featured image manifest`);
+      continue;
+    }
     if (!src?.startsWith('/media/publications/')) continue;
     const srcset = attribute(tag, 'srcset') ?? '';
     const sizes = attribute(tag, 'sizes');
@@ -85,7 +108,7 @@ for (const { route, file } of canonicalContentFiles()) {
   }
 }
 
-const imageLcpRoutes = new Set(['/guides/claude-code/', '/guides/grok/']);
+const imageLcpRoutes = new Set(providerRoutes);
 for (const route of providerRoutes) {
   const tags = tagsByRoute.get(route) ?? [];
   const eager = tags.filter((tag) => attribute(tag, 'loading') === 'eager');
@@ -97,12 +120,17 @@ for (const route of providerRoutes) {
   const mobileFiles = new Set(tags.map((tag) => (attribute(tag, 'srcset') ?? '').split(',').map((candidate) => candidate.trim()).find((candidate) => candidate.endsWith(' 640w'))?.split(' ')[0]).filter(Boolean));
   let bytes = 0;
   for (const file of mobileFiles) bytes += (await stat(path.join(root, 'public', file.replace(/^\//, '')))).size;
-  if (bytes > maxProviderBytes) failures.push(`${route}: ${bytes} mobile image bytes exceeds 400 KiB`);
+  for (const tag of tags) {
+    const src = attribute(tag, 'src');
+    if (featuredImageByPath.has(src)) bytes += (await stat(path.join(root, 'public', src.replace(/^\//, '')))).size;
+  }
+  const providerBudget = tags.some((tag) => featuredImageByPath.has(attribute(tag, 'src'))) ? maxFeaturedProviderBytes : maxProviderBytes;
+  if (bytes > providerBudget) failures.push(`${route}: ${bytes} mobile image bytes exceeds ${providerBudget / 1024} KiB`);
 }
 
-for (const tag of tagsByRoute.get('/history/') ?? []) {
-  if (attribute(tag, 'loading') !== 'lazy') failures.push('/history/: publication images must remain lazy');
-  if (attribute(tag, 'fetchpriority')) failures.push('/history/: below-fold images must not set fetch priority');
+for (const tag of tagsByRoute.get('/handbook/history/') ?? []) {
+  if (attribute(tag, 'loading') !== 'lazy') failures.push('/handbook/history/: publication images must remain lazy');
+  if (attribute(tag, 'fetchpriority')) failures.push('/handbook/history/: below-fold images must not set fetch priority');
 }
 
 const distRoot = path.join(root, 'dist');

@@ -17,7 +17,7 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[2]
-REGISTRY = ROOT / "docs" / "sources.json"
+REGISTRY = ROOT / "editorial" / "sources.json"
 REQUIRED_SOURCE_FIELDS = {
     "id",
     "title",

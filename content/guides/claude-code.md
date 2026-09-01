@@ -21,6 +21,12 @@ navigation:
 [desktop app](https://code.claude.com/docs/en/desktop), [supported editors](https://code.claude.com/docs/en/platforms), [web](https://code.claude.com/docs/en/claude-code-on-the-web), and [Remote Control](https://code.claude.com/docs/en/remote-control) surfaces while keeping
 [repository instructions](https://code.claude.com/docs/en/memory) and [tool configuration](https://code.claude.com/docs/en/settings) close to the code.
 
+<div class="surface-bento">
+  <figure><a href="https://code.claude.com/docs/en/overview"><img src="/media/publications/claude-code-1200.webp" srcset="/media/publications/claude-code-640.webp 640w, /media/publications/claude-code-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="Claude Code working in its coding interface" loading="eager" fetchpriority="high" decoding="async" width="1200" height="728" /><figcaption>code and repository work</figcaption></a></figure>
+  <figure><a href="https://code.claude.com/docs/en/desktop"><img src="/media/publications/claude-cowork-1200.webp" srcset="/media/publications/claude-cowork-640.webp 640w, /media/publications/claude-cowork-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="the Claude Cowork task interface" loading="lazy" decoding="async" width="1200" height="842" /><figcaption>desktop tasks and visual review</figcaption></a></figure>
+  <figure><a href="https://code.claude.com/docs/en/remote-control"><img src="/media/publications/claude-chat-1200.webp" srcset="/media/publications/claude-chat-640.webp 640w, /media/publications/claude-chat-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="Claude available through a remote conversation surface" loading="lazy" decoding="async" width="1200" height="728" /><figcaption>web and remote control</figcaption></a></figure>
+</div>
+
 Claude Code is where I started building my habits around coding agents. I have
 used Codex more recently, while Claude Code still gives me the clearest example
 of how much an agent can become part of a repository. its value comes from the
@@ -60,16 +66,10 @@ turning that context into a second undocumented system.
 
 ## where claude code lives
 
-<div class="surface-bento">
-  <figure><a href="https://code.claude.com/docs/en/overview"><img src="/media/publications/claude-code-1200.webp" srcset="/media/publications/claude-code-640.webp 640w, /media/publications/claude-code-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="Claude Code working in its coding interface" loading="eager" fetchpriority="high" decoding="async" width="1200" height="728" /><figcaption>code and repository work</figcaption></a></figure>
-  <figure><a href="https://code.claude.com/docs/en/desktop"><img src="/media/publications/claude-cowork-1200.webp" srcset="/media/publications/claude-cowork-640.webp 640w, /media/publications/claude-cowork-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="the Claude Cowork task interface" loading="lazy" decoding="async" width="1200" height="842" /><figcaption>desktop tasks and visual review</figcaption></a></figure>
-  <figure><a href="https://code.claude.com/docs/en/remote-control"><img src="/media/publications/claude-chat-1200.webp" srcset="/media/publications/claude-chat-640.webp 640w, /media/publications/claude-chat-1200.webp 1200w" sizes="(max-width: 48rem) calc(100vw - 2rem), (max-width: 72rem) calc((100vw - 20rem) / 2), 32rem" alt="Claude available through a remote conversation surface" loading="lazy" decoding="async" width="1200" height="728" /><figcaption>web and remote control</figcaption></a></figure>
-</div>
-
 as of august 22, 2026, Claude Code documents terminal, desktop, IDE, web, and
 remote workflows plus skills, hooks, subagents, plugins, MCP, memory, and scoped
 permissions. this guide treats those as current official capabilities. a paired
-hands on field run remains open.
+hands on testing remains open.
 
 ### terminal and IDE keep the evidence close
 
@@ -203,7 +203,7 @@ still runs on the host, and one interactive process normally supports one
 remote session unless it is running in server mode.
 
 I treat that as a useful control surface whose current limits still need a
-paired field run before I turn them into a personal recommendation. the
+paired test before I turn them into a personal recommendation. the
 important product fact is already clear: mobile moves attention and approvals;
 it does not silently move execution away from the machine that owns the work.
 

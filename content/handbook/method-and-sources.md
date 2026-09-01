@@ -6,10 +6,10 @@ updatedAt: "2026-08-22T19:55:02-04:00"
 status: current
 evidence: [tested, official-source, analysis, open-question]
 sources: []
-redirects: [/field-lab/]
+redirects: [/method/]
 voice: personal
 navigation:
-  scope: general
+  scope: handbook
   order: 50
 ---
 
@@ -19,11 +19,11 @@ examples support the tips. they are not a badge of authority.
 
 ## what i actually use
 
-i link the repository, field runs, commits, screenshots, failures, and source
-material that shaped a recommendation when those receipts are useful. some
-advice comes from repeated use. some comes from an official product update i
-have not reproduced yet. the label beside the source list keeps that distinction
-visible without taking over the page.
+i link the repository, commits, screenshots, failures, and source material that
+shaped a recommendation when those receipts are useful. some advice comes from
+repeated use. some comes from an official product update i have not reproduced
+yet. the label beside the source list keeps that distinction visible without
+taking over the page.
 
 ## how current claims get checked
 
@@ -39,16 +39,12 @@ meaning before public copy changes.
 | analysis | this is my conclusion from the examples shown |
 | open question | the current evidence is incomplete |
 
-## how a run is recorded
+## how tested claims are recorded
 
-field runs preserve the task, pass condition, what worked, what failed, human
-interventions, machine context, artifacts, redactions, and limitations in one
-record. a run can be partial and still be useful when the missing proof stays
-visible.
-
-the current Codex runs cover publishing this handbook and dependency
-maintenance. the equivalent Claude Code run is still open, so those pages rely
-on official sources instead of pretending i tested the latest release.
+when i mark a claim as tested, i keep the task, pass condition, environment,
+result, and limitations close enough to inspect. incomplete testing remains an
+open question. a product claim stays labeled as an official source until i have
+reproduced the behavior myself.
 
 ## what this does not settle
 

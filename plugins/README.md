@@ -4,4 +4,4 @@
 
 the plugins remain available so existing users can migrate deliberately. the active guide defines the repository's current direction, and the retirement plan excludes codex ports.
 
-read [archived tools](../docs/archive.md) before installing.
+read [archived tools](../content/archive/claude-code-tools.md) before installing.

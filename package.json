@@ -11,7 +11,6 @@
     "edit": "node scripts/start-copy-review.mjs",
     "build": "node node_modules/astro/bin/astro.mjs build",
     "check": "node node_modules/astro/bin/astro.mjs check",
-    "check:field-runs": "node scripts/check-field-runs.mjs",
     "check:handbook": "node scripts/check-handbook-structure.mjs",
     "check:completeness": "node scripts/check-handbook-completeness.mjs",
     "check:readme": "bun scripts/sync-readme.ts --check",

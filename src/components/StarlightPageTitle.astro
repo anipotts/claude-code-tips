@@ -6,8 +6,8 @@ import { Icon } from 'astro-icon/components';
 const entry = Astro.locals.starlightRoute.entry;
 const { title, updatedAt, draft } = entry.data;
 const markdownPath = `${Astro.url.pathname.replace(/\/$/, '') || '/index'}.md`;
-const editPath = `${site.repository}/edit/main/docs/${entry.id}.md`;
-const isProviderGuide = scopeForPath(Astro.url.pathname) !== 'general';
+const editPath = `${site.repository}/edit/main/content/${entry.id}.md`;
+const isProviderGuide = scopeForPath(Astro.url.pathname) !== 'handbook';
 ---
 
 <div class:list={['page-title-row', { 'provider-guide-title-row': isProviderGuide }]}>

@@ -6,12 +6,12 @@ updatedAt: "2026-08-29T19:04:00-04:00"
 status: current
 evidence: [official-source, analysis]
 sources: [transformer-paper, openai-gpt3, openai-codex-paper, github-copilot-preview, react-paper, aider-docs, cursor-2023-problems, swe-bench-paper, github-copilot-workspace, swe-agent-paper, anthropic-mcp-launch, github-copilot-agent-mode, anthropic-claude-code-preview, openai-codex-launch, openai-codex-app, cursor-3]
-redirects: []
+redirects: [/history/]
 tableOfContents: false
 voice: personal
 navigation:
-  scope: general
-  order: 35
+  scope: handbook
+  order: 40
 ---
 
 this is the line of development i use to understand the tools i am working with
