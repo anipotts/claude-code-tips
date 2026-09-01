@@ -327,3 +327,61 @@ html[data-right-rail='collapsed'] .reading-rail a::after {
   font-weight: 400;
   line-height: 1.25rem;
 }
+
+.guide-rail-identity .sidebar-label > span:first-child {
+  font-family: var(--font-sans);
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1rem;
+  text-transform: none;
+}
+.guide-rail-identity .sidebar-kind {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: 1rem;
+  text-transform: uppercase;
+}
+.guide-context-label {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: 1rem;
+  text-transform: uppercase;
+}
+.guide-context-current {
+  font-family: var(--font-sans);
+  font-size: .8125rem;
+  font-weight: 600;
+  line-height: 1rem;
+}
+.guide-context-panel a {
+  font-family: var(--font-sans);
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+.guide-context-panel a[aria-current='page'],
+.guide-context-panel a[aria-current='true'] { font-weight: 600; }
+
+.guide-rail-identity .sidebar-label { text-transform: none; }
+.guide-rail-identity .sidebar-label > span:first-child,
+.guide-rail-identity .sidebar-kind {
+  font-family: var(--font-sans);
+  font-size: .8125rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.125rem;
+  text-transform: none;
+}
+.guide-rail-identity .sidebar-label > span:first-child { font-weight: 600; }
+.handbook-sidebar > nav > ul > li > a,
+.sidebar-page-outline a {
+  font-family: var(--font-sans);
+  font-size: .8125rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+.sidebar-page-outline a[aria-current='true'] { font-weight: 600; }

@@ -181,7 +181,7 @@ try {
   await page.locator('.mobile-site-menu a[href="/guides/codex/configuration/"]').click();
   await page.waitForURL('**/guides/codex/configuration/');
   expect(await page.locator('.mobile-site-menu').getAttribute('open') === null, 'mobile menu state persisted into the destination');
-  expect((await page.locator('.handbook-sidebar [aria-current="page"]').textContent())?.trim() === 'configuration', 'nested navigation active state is incorrect');
+  expect((await page.locator('#handbook-navigation > ul > li > a[aria-current="page"]').textContent())?.trim() === 'configuration', 'mobile navigation did not update the current chapter');
 
   await traverse(page, 'back');
   await page.waitForURL('**/guides/codex/');
@@ -227,16 +227,23 @@ try {
   expect(searchControl.height === 36 && searchControl.width >= 124, `desktop search control is not aligned to the header control geometry: ${JSON.stringify(searchControl)}`);
   expect(searchControl.fontFamily.includes('Instrument Sans') && searchControl.fontSize === '14px', `desktop search control does not use header typography: ${JSON.stringify(searchControl)}`);
   expect(searchControl.iconSize === 16, `desktop search icon is not aligned to the header icon scale: ${searchControl.iconSize}`);
-  await page.waitForFunction(() => [...document.querySelectorAll('.reading-rail li')].every((item) => item.style.getPropertyValue('--heading-offset')));
-  const overviewMarkerOffsets = await page.locator('.reading-rail li').evaluateAll((items) => items.map((item) => Number.parseFloat(item.style.getPropertyValue('--heading-offset'))));
-  const overviewFirstMarker = overviewMarkerOffsets[0];
-  expect(Math.abs(overviewFirstMarker - 32) <= .5, `overview first reading marker is not normalized: ${overviewFirstMarker}`);
-  expect(overviewMarkerOffsets.every((offset, index) => index === 0 || offset - overviewMarkerOffsets[index - 1] >= 37.5), 'overview reading marker labels do not preserve collision spacing');
-  const compactReadingPanel = await page.locator('.right-rail-panel').evaluate((panel) => ({ bottom: panel.getBoundingClientRect().bottom, viewport: innerHeight }));
-  expect(compactReadingPanel.bottom < compactReadingPanel.viewport - 80, `reading path still stretches to the full viewport: ${compactReadingPanel.bottom} of ${compactReadingPanel.viewport}`);
+  const readingListLayout = await page.locator('.sidebar-page-outline li').evaluateAll((items) => items.map((item) => ({
+    position: getComputedStyle(item).position,
+    top: item.getBoundingClientRect().top,
+    padding: Number.parseFloat(getComputedStyle(item).paddingInlineStart),
+  })));
+  expect(readingListLayout.every((item) => item.position === 'static'), 'desktop outline is not a conventional document-flow list');
+  expect(readingListLayout.every((item, index) => index === 0 || item.top >= readingListLayout[index - 1].top), 'desktop outline order does not follow document flow');
+  expect(readingListLayout.some((item) => item.padding > 0), 'desktop outline does not indent subsection headings');
   const leftRowHeight = await page.locator('.handbook-sidebar a[aria-current="page"]').evaluate((link) => getComputedStyle(link).minHeight);
-  const rightRowHeight = await page.locator('.reading-rail a').first().evaluate((link) => getComputedStyle(link).minHeight);
-  expect(leftRowHeight === rightRowHeight, `left and right rail rows use different sizing: ${leftRowHeight} versus ${rightRowHeight}`);
+  expect(leftRowHeight === '32px', `desktop chapter rows are not the compact 32px size: ${leftRowHeight}`);
+  expect(await page.locator('.sidebar-outline-label').count() === 0, 'redundant on this page label remains in the sidebar');
+  const providerIconStyle = await page.locator('.sidebar-provider-icon').evaluate((icon) => {
+    const box = icon.getBoundingClientRect();
+    const style = getComputedStyle(icon);
+    return { width: box.width, height: box.height, border: style.borderWidth, background: style.backgroundColor };
+  });
+  expect(providerIconStyle.width === 24 && providerIconStyle.height === 24 && providerIconStyle.border === '0px' && providerIconStyle.background === 'rgba(0, 0, 0, 0)', `sidebar provider icon is not the larger raw mark: ${JSON.stringify(providerIconStyle)}`);
   expect(await page.locator('.handbook-sidebar a[aria-current="page"] .sidebar-active-marker').evaluate((marker) => getComputedStyle(marker).viewTransitionName) === 'handbook-chapter-active', 'left chapter marker is missing its shared transition');
   const darkAccent = await page.evaluate(() => {
     document.documentElement.dataset.theme = 'dark';
@@ -263,25 +270,20 @@ try {
   await page.waitForTimeout(220);
   const chapterTransitionDurations = await page.evaluate(() => window.__chapterTransitionDurations);
   expect(chapterTransitionDurations.some((duration) => duration > 0 && duration <= 180), `left chapter marker transition is missing or too slow: ${chapterTransitionDurations.join(', ')}`);
-  const configurationFirstMarker = await page.locator('.reading-rail li').first().evaluate((item) => Number.parseFloat(getComputedStyle(item).insetBlockStart));
-  expect(Math.abs(configurationFirstMarker - overviewFirstMarker) <= 1, `first reading marker changes between pages: ${overviewFirstMarker} versus ${configurationFirstMarker}`);
-  await page.locator('[data-rail-toggle="right"]').click();
-  expect(await page.locator('html[data-left-rail="collapsed"][data-right-rail="collapsed"]').count() === 1, 'paired reading rails did not collapse together');
-  await page.locator('[data-rail-toggle="right"]').click();
-  expect(await page.locator('html[data-left-rail="expanded"][data-right-rail="expanded"]').count() === 1, 'paired reading rails did not expand together');
+  await page.locator('[data-rail-toggle="left"]').click();
+  expect(await page.locator('html[data-left-rail="collapsed"][data-right-rail="collapsed"]').count() === 1, 'desktop guide navigation did not collapse');
+  expect(await page.locator('.right-sidebar-container').evaluate((rail) => rail.getBoundingClientRect().width) === 0, 'retired right sidebar retains desktop width');
+  expect(await page.locator('.sidebar-page-outline').evaluate((outline) => getComputedStyle(outline).display) === 'none', 'nested page outline remains visible in collapsed navigation');
+  expect(await page.locator('[data-rail-toggle="right"]').count() === 0, 'retired right rail toggle remains in the desktop shell');
+  await page.locator('[data-rail-toggle="left"]').click();
+  expect(await page.locator('html[data-left-rail="expanded"][data-right-rail="collapsed"]').count() === 1, 'unified desktop navigation did not expand');
   await page.locator('.handbook-sidebar a[href="/guides/codex/"]').click();
   await page.waitForURL('**/guides/codex/');
-  const initialReadingProgress = await page.locator('.reading-track-progress').evaluate((track) => track.getBoundingClientRect().height);
   await page.evaluate(() => scrollTo(0, Math.max(1, (document.documentElement.scrollHeight - innerHeight) * .5)));
   await page.waitForTimeout(150);
-  const progressedReadingPath = await page.locator('.reading-track-progress').evaluate((track) => ({
-    height: track.getBoundingClientRect().height,
-    color: getComputedStyle(track).backgroundColor,
-  }));
-  expect(progressedReadingPath.height > initialReadingProgress, 'cobalt reading-path highlight does not follow scroll distance');
-  expect(progressedReadingPath.color !== 'rgba(0, 0, 0, 0)', 'reading-path progress highlight is transparent');
+  expect(await page.locator('.sidebar-page-outline a[aria-current="true"]').count() === 1, 'desktop outline does not maintain one active heading while scrolling');
   await page.evaluate(() => scrollTo(0, 0));
-  const hashLinks = page.locator('.right-sidebar a[href^="#"]:not([href="#_top"]):visible');
+  const hashLinks = page.locator('.sidebar-page-outline a[href^="#"]:not([href="#_top"]):visible');
   const hashHref = await hashLinks.first().getAttribute('href');
   expect(Boolean(hashHref), 'document table of contents has no hash link');
   if (hashHref) {
@@ -294,20 +296,14 @@ try {
 
   await page.setViewportSize({ width: 1525, height: 700 });
   await page.goto(`${origin}/guides/codex/recommendations/`, { waitUntil: 'networkidle' });
-  await page.waitForFunction(() => document.querySelector('.reading-rail')?.style.getPropertyValue('--rail-label-size'));
-  const compactRailLabels = await page.locator('.reading-rail .reading-label').evaluateAll((labels) => labels
+  const compactRailLabels = await page.locator('.sidebar-page-outline a').evaluateAll((labels) => labels
     .map((label) => {
       const box = label.getBoundingClientRect();
       return { top: box.top, bottom: box.bottom, opacity: Number.parseFloat(getComputedStyle(label).opacity) };
     }));
   expect(compactRailLabels.every((label) => label.opacity > 0), 'short-height reading rail hides subsection labels');
   expect(compactRailLabels.every((label, index) => index === 0 || label.top >= compactRailLabels[index - 1].bottom), 'short-height reading rail leaves visible labels overlapping');
-  const inactiveSubsectionNodes = await page.locator('.reading-rail li[style*="--heading-depth: 1"] a:not([aria-current="true"]) .reading-node').evaluateAll((nodes) => nodes.map((node) => ({
-    width: node.getBoundingClientRect().width,
-    height: node.getBoundingClientRect().height,
-    opacity: Number.parseFloat(getComputedStyle(node).opacity),
-  })));
-  expect(inactiveSubsectionNodes.every((node) => node.width === 0 && node.height === 0 && node.opacity === 0), 'inactive subsection dots are still visible');
+  expect(await page.locator('.reading-track, .reading-node, .reading-rail').count() === 0, 'retired reading-path timeline remains in the desktop outline');
   await page.setViewportSize({ width: 1440, height: 1024 });
   await page.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
 
@@ -338,19 +334,19 @@ try {
     return {
       sidebar: measure('.sidebar-pane'),
       leftToggle: measure('[data-rail-toggle="left"]'),
-      rightToggle: measure('[data-rail-toggle="right"]'),
+      rightContainer: measure('.right-sidebar-container'),
       rightRail: measure('.right-rail-panel'),
       mobileMenu: measure('.mobile-site-menu summary'),
       search: measure('.search-trigger'),
-      mobileToc: measure('.handbook-mobile-toc'),
+      guideBar: measure('[data-guide-context-bar]'),
       main: measure('main'),
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
     };
   });
 
   const mobileEdge = await geometry();
-  expect(mobileEdge.mobileMenu?.visible && mobileEdge.mobileToc?.visible, '767px mobile controls are missing');
-  expect(!mobileEdge.sidebar?.visible && mobileEdge.mobileToc?.x === 0, '767px mobile layout retains a desktop rail inset');
+  expect(mobileEdge.mobileMenu?.visible, '767px mobile menu is missing');
+  expect(!mobileEdge.sidebar?.visible && !mobileEdge.guideBar?.visible, '767px mobile layout retains a permanent guide navigation surface');
   expect(await responsivePage.locator('.site-header').evaluate((header) => header.getBoundingClientRect().height) >= 106, '767px header leaves the mobile two-row layout too early');
 
   for (const width of [320, 375, 430]) {
@@ -363,11 +359,18 @@ try {
       return {
         tabCenterDelta: ((links[0].left + links.at(-1).right) / 2) - (innerWidth / 2),
         overlap: brand.right - actions.left,
+        titleRow: (() => {
+          const row = document.querySelector('.page-title-row').getBoundingClientRect();
+          const title = document.querySelector('.page-title-row h1').getBoundingClientRect();
+          const pageActions = document.querySelector('.page-actions').getBoundingClientRect();
+          return { sameRow: Math.abs(title.top - pageActions.top) <= 4, rightGap: row.right - pageActions.right };
+        })(),
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       };
     });
     expect(Math.abs(compactHeader.tabCenterDelta) <= .5, `${width}px provider tabs are not centered: ${compactHeader.tabCenterDelta}`);
     expect(compactHeader.overlap <= 0, `${width}px brand overlaps the header utility rail: ${compactHeader.overlap}`);
+    expect(compactHeader.titleRow.sameRow && compactHeader.titleRow.rightGap <= 1, `${width}px title and page actions are not one justified row: ${JSON.stringify(compactHeader.titleRow)}`);
     expect(compactHeader.overflow === 0, `${width}px header introduces horizontal overflow: ${compactHeader.overflow}`);
   }
 
@@ -376,9 +379,8 @@ try {
   const tabletStart = await geometry();
   expect(await responsivePage.locator('.site-header').evaluate((header) => header.getBoundingClientRect().height) === 64, '768px header does not enter the unified single-row layout');
   expect(tabletStart.search?.width === 36, '768px tablet header does not use the compact search control');
-  expect(tabletStart.sidebar?.width === 68 && tabletStart.leftToggle?.visible, '768px tablet chapter rail cannot be reopened');
-  expect(tabletStart.mobileToc?.visible && tabletStart.mobileToc.x === 68 && tabletStart.mobileToc.width === 700, '768px reading path does not account for the compact chapter rail');
-  expect(!tabletStart.rightRail?.visible && !tabletStart.rightToggle?.visible, '768px tablet layout exposes the desktop reading rail');
+  expect(tabletStart.sidebar?.visible && tabletStart.sidebar.width === 248 && tabletStart.leftToggle?.visible, '768px does not retain the conventional guide sidebar');
+  expect(!tabletStart.guideBar?.visible && !tabletStart.rightRail?.visible && tabletStart.overflow === 0, '768px retains the paired guide bar, right rail, or horizontal overflow');
 
   const reloadContext = await browser.newContext({ viewport: { width: 768, height: 900 } });
   await reloadContext.addInitScript(() => localStorage.setItem('coding-agent-tips:reading-rails', 'collapsed'));
@@ -386,47 +388,22 @@ try {
   await reloadPage.goto(`${origin}/guides/codex/`, { waitUntil: 'domcontentloaded' });
   const railAtFirstDocumentPaint = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => ({
     width: sidebar.getBoundingClientRect().width,
-    runningWidthAnimations: sidebar.getAnimations().filter((animation) => animation.playState === 'running').length,
-    state: document.documentElement.dataset.leftRail,
+    display: getComputedStyle(sidebar).display,
+    leftRail: document.documentElement.dataset.leftRail,
   }));
   await reloadPage.waitForTimeout(220);
-  const railAfterHydration = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => sidebar.getBoundingClientRect().width);
-  expect(railAtFirstDocumentPaint.state === 'collapsed' && railAtFirstDocumentPaint.width === 68 && railAtFirstDocumentPaint.runningWidthAnimations === 0, `tablet rail state was not established before first paint: ${JSON.stringify(railAtFirstDocumentPaint)}`);
-  expect(railAfterHydration === railAtFirstDocumentPaint.width, `tablet rail flashes from expanded to collapsed on reload: ${railAtFirstDocumentPaint.width} -> ${railAfterHydration}`);
+  const railAfterHydration = await reloadPage.locator('.sidebar-pane').evaluate((sidebar) => ({ width: sidebar.getBoundingClientRect().width, display: getComputedStyle(sidebar).display }));
+  expect(railAtFirstDocumentPaint.display === 'block' && railAtFirstDocumentPaint.leftRail === 'collapsed' && railAtFirstDocumentPaint.width === 56, `tablet did not honor the stored collapsed rail at first paint: ${JSON.stringify(railAtFirstDocumentPaint)}`);
+  expect(railAfterHydration.display === 'block' && railAfterHydration.width === railAtFirstDocumentPaint.width, `tablet rail flashed during hydration: ${JSON.stringify({ railAtFirstDocumentPaint, railAfterHydration })}`);
+  expect(await reloadPage.locator('[data-guide-context-bar]').count() === 0, 'retired guide context bar remains in the document');
   await reloadContext.close();
 
-  const tabletMainBefore = tabletStart.main;
-  await responsivePage.locator('[data-rail-toggle="left"]').click();
-  await responsivePage.waitForTimeout(220);
-  const tabletExpanded = await geometry();
-  expect(tabletExpanded.sidebar?.width === 272, 'tablet chapter rail does not expand');
-  expect(tabletExpanded.main?.x === tabletMainBefore?.x && tabletExpanded.main?.width === tabletMainBefore?.width, 'tablet chapter rail pushes or resizes the article instead of overlaying it');
-  expect(!tabletExpanded.mobileToc?.visible, 'overlay tablet reading path remains layered over the open chapter drawer');
-  expect(await responsivePage.locator('.rail-scrim').evaluate((scrim) => getComputedStyle(scrim).pointerEvents === 'auto'), 'overlay tablet rail does not expose its dismissing scrim');
-  await responsivePage.keyboard.press('Escape');
-  await responsivePage.waitForTimeout(220);
-  const tabletClosed = await geometry();
-  expect(tabletClosed.sidebar?.width === 68, 'Escape does not collapse the tablet chapter rail');
-  expect(tabletClosed.mobileToc?.visible && tabletClosed.mobileToc.x === 68 && tabletClosed.mobileToc.width === 700, 'tablet reading path does not return to the compact rail inset after closing the drawer');
-  expect(await responsivePage.locator('[data-rail-toggle="left"]').evaluate((button) => document.activeElement === button), 'Escape does not return focus to the tablet rail control');
-
-  await responsivePage.setViewportSize({ width: 896, height: 800 });
-  await responsivePage.waitForTimeout(220);
-  const pushCollapsed = await geometry();
-  await responsivePage.locator('[data-rail-toggle="left"]').click();
-  await responsivePage.waitForTimeout(220);
-  const pushExpanded = await geometry();
-  expect(pushExpanded.main?.x !== pushCollapsed.main?.x || pushExpanded.main?.width !== pushCollapsed.main?.width, '896px chapter rail does not push the article');
-  expect(pushExpanded.mobileToc?.x === 272 && pushExpanded.mobileToc?.width === 624, '896px reading path does not follow the expanded chapter rail');
-  await responsivePage.locator('[data-rail-toggle="left"]').click();
-
-  for (const width of [1024, 1151, 1152, 1279]) {
+  for (const width of [896, 1024, 1151, 1152, 1279]) {
     await responsivePage.setViewportSize({ width, height: 800 });
     await responsivePage.waitForTimeout(220);
     const state = await geometry();
-    expect(state.leftToggle?.visible, `${width}px chapter rail toggle is missing`);
-    expect(state.mobileToc?.visible && state.mobileToc.x === 68 && state.mobileToc.width === width - 68, `${width}px reading path is missing or misaligned`);
-    expect(!state.rightRail?.visible && state.overflow === 0, `${width}px compact layout exposes a right rail or overflows horizontally`);
+    expect(state.sidebar?.visible && state.sidebar.width === 248 && state.leftToggle?.visible, `${width}px does not retain the conventional guide sidebar`);
+    expect(!state.guideBar?.visible && !state.rightRail?.visible && state.overflow === 0, `${width}px retains the paired guide bar, right rail, or horizontal overflow`);
     if (width === 1024) {
       const titleActions = await responsivePage.locator('.page-title-row').evaluate((row) => {
         const title = row.querySelector('h1').getBoundingClientRect();
@@ -441,19 +418,18 @@ try {
   await responsivePage.setViewportSize({ width: 1280, height: 800 });
   await responsivePage.waitForTimeout(220);
   const desktopEdge = await geometry();
-  expect(desktopEdge.leftToggle?.visible && desktopEdge.rightToggle?.visible && desktopEdge.rightRail?.visible, '1280px desktop rail controls are missing');
-  expect(!desktopEdge.mobileToc?.visible, '1280px desktop layout retains the tablet reading path');
+  expect(desktopEdge.sidebar?.width === 272 && desktopEdge.leftToggle?.visible && !desktopEdge.rightRail?.visible && desktopEdge.rightContainer?.width === 0, '1280px unified desktop navigation is missing or mis-sized');
+  expect(!desktopEdge.guideBar?.visible, '1280px desktop layout retains the compact guide context bar');
   expect(desktopEdge.overflow <= 1, `1280px desktop layout overflows by ${desktopEdge.overflow}px`);
-  await responsivePage.locator('[data-rail-toggle="right"]').click();
+  await responsivePage.locator('[data-rail-toggle="left"]').click();
   await responsivePage.waitForTimeout(220);
-  expect(await responsivePage.locator('html[data-left-rail="expanded"][data-right-rail="expanded"]').count() === 1, '1280px desktop rails do not expand together');
+  const desktopCollapsed = await geometry();
+  expect(desktopCollapsed.sidebar?.width === 56 && desktopCollapsed.rightContainer?.width === 0, '1280px unified guide navigation does not collapse to 3.5rem');
   await responsiveContext.close();
 
   const previewContext = await browser.newContext({ viewport: { width: 1172, height: 1044 } });
   const previewPage = await previewContext.newPage();
   await previewPage.goto(`${origin}/guides/codex/`, { waitUntil: 'networkidle' });
-  await previewPage.locator('[data-rail-toggle="left"]').click();
-  await previewPage.waitForTimeout(220);
   const previewLink = previewPage.locator('.sl-markdown-content a[href="https://openai.com/codex/"]').first();
   await previewLink.evaluate((link) => {
     const paragraph = link.closest('p');
@@ -544,12 +520,12 @@ try {
   const noScriptDesktopContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 1024 } });
   const noScriptDesktopPage = await noScriptDesktopContext.newPage();
   await noScriptDesktopPage.goto(`${origin}/guides/codex/`, { waitUntil: 'domcontentloaded' });
-  const noScriptMarkerOffsets = await noScriptDesktopPage.locator('.reading-rail li').evaluateAll((items) => items.map((item) => {
+  const noScriptOutlineRows = await noScriptDesktopPage.locator('.sidebar-page-outline li').evaluateAll((items) => items.map((item) => {
     const box = item.getBoundingClientRect();
-    return box.top + (box.height / 2);
+    return { top: box.top, bottom: box.bottom };
   }));
-  expect(noScriptMarkerOffsets.length > 0, 'no-script reading rail has no markers');
-  expect(noScriptMarkerOffsets.every((offset, index) => index === 0 || offset - noScriptMarkerOffsets[index - 1] >= 37.5), 'no-script reading rail labels overlap before enhancement');
+  expect(noScriptOutlineRows.length > 0, 'no-script desktop outline has no links');
+  expect(noScriptOutlineRows.every((row, index) => index === 0 || row.top >= noScriptOutlineRows[index - 1].bottom), 'no-script desktop outline labels overlap');
   await noScriptDesktopContext.close();
 
   const reducedMotionContext = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 1024 } });
@@ -567,16 +543,24 @@ try {
   await reducedMotionPage.waitForTimeout(50);
   const reducedMotionDurations = await reducedMotionPage.evaluate(() => window.__providerTabTransitionDurations);
   expect(reducedMotionDurations.every((duration) => duration <= 1), `provider tab transition ignores reduced motion: ${reducedMotionDurations.join(', ')}`);
+  await reducedMotionPage.setViewportSize({ width: 375, height: 812 });
+  await reducedMotionPage.waitForTimeout(50);
+  const reducedGuideMotion = await reducedMotionPage.evaluate(() => {
+    const caret = document.querySelector('.guide-context-caret');
+    return {
+      caret: caret ? getComputedStyle(caret).transitionDuration.split(',').map(Number.parseFloat) : [],
+    };
+  });
+  expect(reducedGuideMotion.caret.every((duration) => duration <= .00001), `compact guide navigation retains perceptible reduced motion: ${JSON.stringify(reducedGuideMotion)}`);
   await reducedMotionContext.close();
 
   const directLoadContext = await browser.newContext({ viewport: { width: 1440, height: 1024 } });
   const directLoadPage = await directLoadContext.newPage();
   await directLoadPage.goto(`${origin}/guides/claude-code/#where-claude-code-lives`, { waitUntil: 'networkidle' });
   await directLoadPage.waitForTimeout(150);
-  expect((await directLoadPage.locator('.reading-rail a[aria-current="true"]').textContent())?.trim() === 'where claude code lives', 'direct document load did not initialize the active reading marker');
-  expect(await directLoadPage.locator('.reading-track-progress').evaluate((track) => track.getBoundingClientRect().height) > 0, 'direct document load did not initialize cobalt reading progress');
-  await directLoadPage.locator('[data-rail-toggle="right"]').click();
-  expect(await directLoadPage.locator('html[data-left-rail="collapsed"][data-right-rail="collapsed"]').count() === 1, 'direct document load did not initialize rail controls');
+  expect((await directLoadPage.locator('.sidebar-page-outline a[aria-current="true"]').textContent())?.trim() === 'where claude code lives', 'direct document load did not initialize the active reading marker');
+  await directLoadPage.locator('[data-rail-toggle="left"]').click();
+  expect(await directLoadPage.locator('html[data-left-rail="collapsed"][data-right-rail="collapsed"]').count() === 1, 'direct document load did not initialize the unified desktop rail control');
   await directLoadContext.close();
 
   for (const error of consoleErrors) failures.push(`browser console: ${error}`);

@@ -4,6 +4,9 @@ import { getHandbookPages, routeForEntry } from '../content';
 import { chapterForOrder, handbookScopes, scopeForPath } from '../site';
 import ProviderProductIcon from './ProviderProductIcon.astro';
 
+type TocNode = { depth: number; slug: string; text: string; children: TocNode[] };
+type SidebarHeading = { depth: number; slug: string; text: string };
+
 const current = Astro.url.pathname;
 const activeScope = scopeForPath(current);
 const pages = await getHandbookPages({ scope: activeScope });
@@ -20,18 +23,31 @@ const navigationLabel = (page: (typeof pages)[number]) => activeScope === 'gener
 const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'general'
   ? 'ph:compass'
   : chapterForOrder(page.data.navigation.order)?.icon ?? 'ph:compass';
+
+const { toc } = Astro.locals.starlightRoute;
+const isOutline = Astro.locals.starlightRoute.entry.data.completion === 'outline';
+const flattenHeadings = (items: TocNode[]): SidebarHeading[] => items.flatMap((item) => [
+  { depth: item.depth, slug: item.slug, text: item.text },
+  ...flattenHeadings(item.children),
+]);
+const headings = toc && !isOutline
+  ? flattenHeadings(toc.items as TocNode[]).filter((item) => item.slug !== '_top' && item.depth <= 3)
+  : [];
 ---
 
 <div class="handbook-sidebar">
   <div class="handbook-rail-head">
-    <p class="sidebar-label"><span><ProviderProductIcon class="sidebar-provider-icon" light={providerIcon} dark={providerIconDark} size={18} />{label}</span><span class="sidebar-kind">handbook</span></p>
+    <div class="guide-rail-identity">
+      <ProviderProductIcon class="sidebar-provider-icon" light={providerIcon} dark={providerIconDark} size={24} />
+      <p class="sidebar-label"><span>{label}</span><span class="sidebar-kind">guide</span></p>
+    </div>
     <button
       class="rail-toggle"
       type="button"
       data-rail-toggle="left"
       aria-expanded="true"
-      aria-controls="handbook-navigation reading-path"
-      aria-label="collapse navigation rails"
+      aria-controls="handbook-navigation"
+      aria-label="collapse guide navigation"
     >
       <Icon class="rail-toggle-collapse" name="ph:caret-double-left" aria-hidden="true" />
       <Icon class="rail-toggle-expand" name="ph:caret-double-right" aria-hidden="true" />
@@ -39,53 +55,56 @@ const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'genera
   </div>
   <nav id="handbook-navigation" aria-label={activeScope === 'general' ? `${label} navigation` : `${label} handbook chapters`}>
     <ul>
-      {pages.map((page) => {
+      {pages.map((page, index) => {
         const href = routeForEntry(page);
         const itemLabel = navigationLabel(page);
         return (
-          <li>
-            <a href={href} data-label={itemLabel} title={itemLabel} aria-label={itemLabel} aria-current={current === href ? 'page' : undefined}>
+          <li class:list={{ 'is-current-chapter': current === href }}>
+            <a
+              href={href}
+              data-label={itemLabel}
+              data-chapter-index={index}
+              style={`view-transition-name: handbook-chapter-row-${index}`}
+              title={itemLabel}
+              aria-label={itemLabel}
+              aria-current={current === href ? 'page' : undefined}
+            >
               <span class="sidebar-active-marker" aria-hidden="true"></span>
               <span class="sidebar-icon" aria-hidden="true"><Icon name={navigationIcon(page)} /></span>
               <span class="sidebar-link-copy">{itemLabel}</span>
             </a>
+            {current === href && headings.length > 0 && (
+              <div class="sidebar-page-outline" aria-label="on this page">
+                <ul>
+                  {headings.map((heading) => (
+                    <li style={`--heading-depth: ${Math.max(0, heading.depth - 2)}`}>
+                      <a href={`#${heading.slug}`} data-heading-id={heading.slug}>
+                        <span class="sidebar-outline-marker" aria-hidden="true"></span>
+                        <span>{heading.text}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </li>
         );
       })}
     </ul>
   </nav>
 </div>
-<button class="rail-scrim" type="button" data-rail-scrim aria-label="close chapter navigation" tabindex="-1"></button>
-
 <script>
   const railStorageKey = 'coding-agent-tips:reading-rails';
-  const pairedRailQuery = matchMedia('(min-width: 80rem)');
-  const overlayRailQuery = matchMedia('(min-width: 48rem) and (max-width: 55.99rem)');
-  let returnFocus: HTMLElement | null = null;
+  const desktopRailQuery = matchMedia('(min-width: 48rem)');
 
   const applyRailState = (state: 'expanded' | 'collapsed') => {
     document.documentElement.dataset.leftRail = state;
-    document.documentElement.dataset.rightRail = pairedRailQuery.matches ? state : 'collapsed';
-    document.querySelectorAll<HTMLButtonElement>('[data-rail-toggle]').forEach((button) => {
-      const controlsRightRail = button.dataset.railToggle === 'right';
-      const expanded = state === 'expanded' && (!controlsRightRail || pairedRailQuery.matches);
+    document.documentElement.dataset.rightRail = 'collapsed';
+    const expanded = state === 'expanded';
+    document.querySelectorAll<HTMLButtonElement>('[data-rail-toggle="left"]').forEach((button) => {
       button.setAttribute('aria-expanded', String(expanded));
-      button.setAttribute('aria-label', `${expanded ? 'collapse' : 'expand'} ${pairedRailQuery.matches ? 'navigation rails' : 'chapter navigation'}`);
+      button.setAttribute('aria-label', `${expanded ? 'collapse' : 'expand'} guide navigation`);
     });
-    const overlayOpen = overlayRailQuery.matches && state === 'expanded';
-    document.documentElement.dataset.drawerState = overlayOpen ? 'open' : 'closed';
-    document.body.classList.toggle('chapter-drawer-open', overlayOpen);
-    const main = document.querySelector<HTMLElement>('.main-frame');
-    const header = document.querySelector<HTMLElement>('header.header');
-    if (overlayOpen) {
-      main?.setAttribute('inert', '');
-      header?.querySelectorAll<HTMLElement>('a, button, summary').forEach((element) => {
-        if (!element.matches('[data-rail-toggle]')) element.setAttribute('inert', '');
-      });
-    } else {
-      main?.removeAttribute('inert');
-      header?.querySelectorAll<HTMLElement>('[inert]').forEach((element) => element.removeAttribute('inert'));
-    }
   };
 
   let cleanupRailControls: () => void = () => {};
@@ -95,16 +114,13 @@ const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'genera
     const controller = new AbortController();
     let storedRailState: string | null = null;
     try { storedRailState = localStorage.getItem(railStorageKey); } catch {}
-    const defaultRailState = pairedRailQuery.matches ? 'expanded' : 'collapsed';
-    const initialRailState = overlayRailQuery.matches
-      ? 'collapsed'
-      : storedRailState === 'expanded' || storedRailState === 'collapsed' ? storedRailState : defaultRailState;
+    const initialRailState = desktopRailQuery.matches && (storedRailState === 'expanded' || storedRailState === 'collapsed')
+      ? storedRailState
+      : 'expanded';
     applyRailState(initialRailState);
-    let wasOverlay = overlayRailQuery.matches;
 
-    document.querySelectorAll<HTMLButtonElement>('[data-rail-toggle]').forEach((button) => {
+    document.querySelectorAll<HTMLButtonElement>('[data-rail-toggle="left"]').forEach((button) => {
       button.addEventListener('click', () => {
-        returnFocus = button;
         const currentState = document.documentElement.dataset.leftRail;
         const nextState = currentState === 'collapsed' ? 'expanded' : 'collapsed';
         try { localStorage.setItem(railStorageKey, nextState); } catch {}
@@ -112,42 +128,12 @@ const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'genera
       }, { signal: controller.signal });
     });
 
-    document.querySelector<HTMLButtonElement>('[data-rail-scrim]')?.addEventListener('click', () => {
-      try { localStorage.setItem(railStorageKey, 'collapsed'); } catch {}
-      applyRailState('collapsed');
-      returnFocus?.focus();
-    }, { signal: controller.signal });
-
     const syncBreakpointState = () => {
-      if (overlayRailQuery.matches && !wasOverlay) {
-        wasOverlay = true;
-        applyRailState('collapsed');
-        return;
-      }
-      wasOverlay = overlayRailQuery.matches;
-      const currentState = document.documentElement.dataset.leftRail === 'expanded' ? 'expanded' : 'collapsed';
-      applyRailState(currentState);
+      let stored: string | null = null;
+      try { stored = localStorage.getItem(railStorageKey); } catch {}
+      applyRailState(desktopRailQuery.matches && (stored === 'expanded' || stored === 'collapsed') ? stored : 'expanded');
     };
-    pairedRailQuery.addEventListener('change', syncBreakpointState, { signal: controller.signal });
-    overlayRailQuery.addEventListener('change', syncBreakpointState, { signal: controller.signal });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || pairedRailQuery.matches || document.documentElement.dataset.leftRail !== 'expanded') return;
-      try { localStorage.setItem(railStorageKey, 'collapsed'); } catch {}
-      applyRailState('collapsed');
-      (returnFocus ?? document.querySelector<HTMLButtonElement>('[data-rail-toggle="left"]'))?.focus();
-    }, { signal: controller.signal });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Tab' || !overlayRailQuery.matches || document.documentElement.dataset.leftRail !== 'expanded') return;
-      const drawer = document.querySelector<HTMLElement>('.sidebar-pane');
-      const controls = drawer ? [...drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), summary')].filter((element) => !element.hasAttribute('inert')) : [];
-      if (controls.length === 0) return;
-      const first = controls[0];
-      const last = controls[controls.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    }, { signal: controller.signal });
+    desktopRailQuery.addEventListener('change', syncBreakpointState, { signal: controller.signal });
 
     cleanupRailControls = () => controller.abort();
   };

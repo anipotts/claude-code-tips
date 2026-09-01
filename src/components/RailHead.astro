@@ -1,20 +1,15 @@
 <script is:inline>
   (() => {
     const storageKey = 'coding-agent-tips:reading-rails';
-    const paired = matchMedia('(min-width: 80rem)').matches;
-    const overlay = matchMedia('(min-width: 48rem) and (max-width: 55.99rem)').matches;
+    const desktop = matchMedia('(min-width: 48rem)').matches;
     let stored = null;
     try { stored = localStorage.getItem(storageKey); } catch {}
 
-    const state = overlay
-      ? 'collapsed'
-      : stored === 'expanded' || stored === 'collapsed'
-        ? stored
-        : paired ? 'expanded' : 'collapsed';
+    const state = desktop && (stored === 'expanded' || stored === 'collapsed') ? stored : 'expanded';
 
     document.documentElement.dataset.leftRail = state;
-    document.documentElement.dataset.rightRail = paired ? state : 'collapsed';
-    document.documentElement.dataset.drawerState = 'closed';
+    document.documentElement.dataset.rightRail = 'collapsed';
+    document.documentElement.dataset.guideContextPanel = 'closed';
     document.documentElement.dataset.railStateReady = '';
   })();
 </script>

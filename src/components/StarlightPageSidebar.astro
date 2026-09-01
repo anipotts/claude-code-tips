@@ -1,126 +1,27 @@
----
-import { Icon } from 'astro-icon/components';
-
-type TocNode = { depth: number; slug: string; text: string; children: TocNode[] };
-type RailHeading = { depth: number; slug: string; text: string };
-
-const { toc } = Astro.locals.starlightRoute;
-const isOutline = Astro.locals.starlightRoute.entry.data.completion === 'outline';
-const flattenHeadings = (items: TocNode[]): RailHeading[] => items.flatMap((item) => [
-  { depth: item.depth, slug: item.slug, text: item.text },
-  ...flattenHeadings(item.children),
-]);
-const headings = toc && !isOutline ? flattenHeadings(toc.items as TocNode[]).filter((item) => item.slug !== '_top' && item.depth <= 3) : [];
----
-
-{headings.length > 0 && (
-  <>
-    <nav class="handbook-mobile-toc lg:sl-hidden" aria-label="on this page">
-      <details data-mobile-reading-path data-animated-disclosure>
-        <summary>
-          <span class="mobile-toc-label">on this page</span>
-          <span class="mobile-toc-current" data-mobile-current>{headings[0]?.text}</span>
-          <Icon class="mobile-toc-arrow" name="ph:arrow-right" aria-hidden="true" />
-        </summary>
-        <ul data-disclosure-content>
-          {headings.map((heading, index) => (
-            <li style={`--heading-depth: ${Math.max(0, heading.depth - 2)}; --heading-index: ${index}; --heading-position: ${headings.length > 1 ? (index / (headings.length - 1)) * 100 : 0}%`}><a href={`#${heading.slug}`}>{heading.text}</a></li>
-          ))}
-        </ul>
-      </details>
-    </nav>
-    <div class="right-rail-panel sl-hidden lg:sl-flex" style={`--heading-count: ${headings.length}`}>
-      <div class="handbook-rail-head right-rail-head">
-        <p class="sidebar-label"><span>reading</span><span class="sidebar-kind">path</span></p>
-        <button
-          class="rail-toggle"
-          type="button"
-          data-rail-toggle="right"
-          aria-expanded="true"
-          aria-controls="handbook-navigation reading-path"
-          aria-label="collapse navigation rails"
-        >
-          <Icon class="rail-toggle-collapse" name="ph:caret-double-right" aria-hidden="true" />
-          <Icon class="rail-toggle-expand" name="ph:caret-double-left" aria-hidden="true" />
-        </button>
-      </div>
-
-      <div class="reading-rail" id="reading-path">
-        <span class="reading-track" aria-hidden="true"><span class="reading-track-progress"></span></span>
-        <nav aria-label="on this page">
-          <ul>
-            {headings.map((heading, index) => (
-              <li style={`--heading-depth: ${Math.max(0, heading.depth - 2)}; --heading-index: ${index}; --heading-position: ${headings.length > 1 ? (index / (headings.length - 1)) * 100 : 0}%`}>
-                <a href={`#${heading.slug}`} data-heading-id={heading.slug} data-label={heading.text} aria-label={heading.text}>
-                  <span class="reading-node" aria-hidden="true"></span>
-                  <span class="reading-label">{heading.text}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-
-    </div>
-  </>
-)}
-
 <script>
-  let cleanupReadingRail: () => void = () => {};
+  let cleanupPageOutline: () => void = () => {};
 
-  const setupReadingRail = () => {
-    cleanupReadingRail();
+  const setupPageOutline = () => {
+    cleanupPageOutline();
     const controller = new AbortController();
     const headingLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-heading-id]')];
     const headingPairs = headingLinks
       .map((link) => ({ link, heading: document.getElementById(link.dataset.headingId ?? '') }))
       .filter((pair): pair is { link: HTMLAnchorElement; heading: HTMLElement } => Boolean(pair.heading));
-    const railPanel = document.querySelector<HTMLElement>('.right-rail-panel');
-    const readingRail = document.querySelector<HTMLElement>('.reading-rail');
-    const mobileCurrent = document.querySelector<HTMLElement>('[data-mobile-current]');
-    const mobilePath = document.querySelector<HTMLDetailsElement>('[data-mobile-reading-path]');
     let progressFrame = 0;
 
     const updateReadingState = () => {
       progressFrame = 0;
-      const scrollable = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-      const progress = Math.min(100, Math.max(0, (scrollY / scrollable) * 100));
-      railPanel?.style.setProperty('--reading-progress', `${progress.toFixed(2)}%`);
-
       const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
       const threshold = headerHeight + Math.min(120, innerHeight * 0.18);
-      if (readingRail) {
-        readingRail.style.setProperty('--rail-label-size', innerHeight < 760 ? '12px' : '13px');
-        const labelHeights = headingPairs.map(({ link }) => Math.max(28, link.querySelector<HTMLElement>('.reading-label')?.scrollHeight ?? 28));
-        const edge = 18;
-        const minimumGap = 10;
-        const minimumHeight = labelHeights.reduce((sum, height) => sum + height, edge * 2) + minimumGap * Math.max(0, headingPairs.length - 1);
-        const availableHeight = Math.max(40, innerHeight - headerHeight - 104);
-        const fixedHeight = Math.min(availableHeight, Math.max(minimumHeight, Math.min(520, innerHeight * .7)));
-        const documentMode = minimumHeight > fixedHeight;
-        document.documentElement.dataset.readingRailMode = documentMode ? 'document' : 'fixed';
-        readingRail.style.blockSize = `${documentMode ? minimumHeight : fixedHeight}px`;
-
-        const extra = documentMode || headingPairs.length < 2
-          ? 0
-          : Math.max(0, (fixedHeight - minimumHeight) / (headingPairs.length - 1));
-        let cursor = edge;
-        for (const [index, pair] of headingPairs.entries()) {
-          const height = labelHeights[index];
-          const center = cursor + height / 2;
-          pair.link.parentElement?.style.setProperty('--heading-offset', `${center.toFixed(2)}px`);
-          cursor += height + minimumGap + extra;
-        }
-      }
       let activeId = headingPairs[0]?.heading.id;
+
       for (const pair of headingPairs) {
         if (pair.heading.getBoundingClientRect().top <= threshold) activeId = pair.heading.id;
       }
       for (const pair of headingPairs) {
         pair.link.setAttribute('aria-current', pair.heading.id === activeId ? 'true' : 'false');
       }
-      const activeLink = headingPairs.find((pair) => pair.heading.id === activeId)?.link;
-      if (mobileCurrent && activeLink) mobileCurrent.textContent = activeLink.textContent?.trim() ?? '';
     };
 
     const scheduleReadingState = () => {
@@ -130,21 +31,14 @@ const headings = toc && !isOutline ? flattenHeadings(toc.items as TocNode[]).fil
     addEventListener('scroll', scheduleReadingState, { passive: true, signal: controller.signal });
     addEventListener('resize', scheduleReadingState, { passive: true, signal: controller.signal });
     addEventListener('hashchange', scheduleReadingState, { signal: controller.signal });
-    const railResizeObserver = readingRail ? new ResizeObserver(scheduleReadingState) : null;
-    railResizeObserver?.observe(readingRail!);
-    mobilePath?.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => { mobilePath.open = false; }, { signal: controller.signal });
-    });
     progressFrame = requestAnimationFrame(updateReadingState);
 
-    cleanupReadingRail = () => {
+    cleanupPageOutline = () => {
       controller.abort();
-      railResizeObserver?.disconnect();
       if (progressFrame) cancelAnimationFrame(progressFrame);
-      delete document.documentElement.dataset.readingRailMode;
     };
   };
 
-  document.addEventListener('astro:page-load', setupReadingRail);
-  setupReadingRail();
+  document.addEventListener('astro:page-load', setupPageOutline);
+  setupPageOutline();
 </script>
