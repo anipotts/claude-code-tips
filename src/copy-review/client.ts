@@ -65,8 +65,7 @@ function setMobilePanel(panel: keyof typeof mobilePanels, focus = false) {
 }
 
 async function api<T>(action: string, options: RequestInit = {}) {
-  const separator = action.includes('?') ? '&' : '?';
-  const response = await fetch(`/__copy-review/api/${action}${separator}token=${encodeURIComponent(token)}`, { ...options, headers: { ...(options.body ? { 'content-type': 'application/json' } : {}), 'x-copy-review-token': token, ...(options.headers ?? {}) } });
+  const response = await fetch(`/__copy-review/api/${action}`, { ...options, headers: { ...(options.body ? { 'content-type': 'application/json' } : {}), 'x-copy-review-token': token, ...(options.headers ?? {}) } });
   const result = await response.json();
   if (!response.ok) throw new Error(result.error ?? `copy review request failed (${response.status})`);
   return result as T;
@@ -236,13 +235,42 @@ document.querySelector<HTMLButtonElement>('[data-validate]')!.addEventListener('
   finally { button.disabled = false; button.textContent = 'run validation'; }
 });
 
-function observePublish(run: PublishRun) {
-  publication = run; renderBatch(); renderPipeline(); const events = new EventSource(`/__copy-review/api/events?id=${encodeURIComponent(run.id)}&token=${encodeURIComponent(token)}`);
-  events.addEventListener('update', async (event) => { publication = JSON.parse((event as MessageEvent).data) as PublishRun; renderBatch(); renderPipeline(); if (publication.status !== 'running') { events.close(); catalog = await api<CopyReviewCatalog>('catalog'); renderAll(); showMessage(publication.status === 'complete' ? 'the exact approved batch is live' : publication.error ?? 'publication stopped', publication.status === 'failed' ? 'error' : 'info'); } });
-  events.addEventListener('error', () => { if (publication?.status === 'running') showMessage('the publication stream disconnected; the server-side run is still preserved', 'error'); events.close(); });
+const wait = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+const publishStorageKey = (batchId: string) => `copy-review-publish-${batchId}`;
+
+function publicationIdempotencyKey() {
+  const storageKey = publishStorageKey(catalog.batch.id);
+  const existing = window.sessionStorage.getItem(storageKey);
+  if (existing) return existing;
+  const created = `${catalog.batch.id}-${window.crypto.randomUUID()}`;
+  window.sessionStorage.setItem(storageKey, created);
+  return created;
 }
 
-publishButton.addEventListener('click', async () => { publishButton.disabled = true; publishButton.textContent = 'starting protected publish…'; try { const run = await api<PublishRun>('publish', { method: 'POST', body: JSON.stringify({ idempotencyKey: `${catalog.batch.id}-${Date.now()}` }) }); observePublish(run); } catch (error) { showMessage(error instanceof Error ? error.message : String(error), 'error'); renderBatch(); } finally { publishButton.textContent = 'approve & publish'; } });
+async function observePublish(run: PublishRun) {
+  publication = run;
+  renderBatch();
+  renderPipeline();
+  let consecutiveFailures = 0;
+  while (publication.status === 'running') {
+    await wait(1_000);
+    try {
+      publication = await api<PublishRun>(`run?id=${encodeURIComponent(run.id)}`);
+      consecutiveFailures = 0;
+      renderBatch();
+      renderPipeline();
+    } catch {
+      consecutiveFailures += 1;
+      if (consecutiveFailures === 3) showMessage('publication status is temporarily unavailable; the server-side run is still preserved', 'error');
+    }
+  }
+  if (publication.status === 'failed' && !publication.receipt.commitSha && !publication.receipt.pullRequestUrl) window.sessionStorage.removeItem(publishStorageKey(publication.batchId));
+  catalog = await api<CopyReviewCatalog>('catalog');
+  renderAll();
+  showMessage(publication.status === 'complete' ? 'the exact approved batch is live' : publication.error ?? 'publication stopped', publication.status === 'failed' ? 'error' : 'info');
+}
+
+publishButton.addEventListener('click', async () => { publishButton.disabled = true; publishButton.textContent = 'starting protected publish…'; try { const run = await api<PublishRun>('publish', { method: 'POST', body: JSON.stringify({ idempotencyKey: publicationIdempotencyKey() }) }); void observePublish(run); } catch (error) { showMessage(error instanceof Error ? error.message : String(error), 'error'); renderBatch(); } finally { publishButton.textContent = 'approve & publish'; } });
 for (const button of mobilePanelButtons) button.addEventListener('click', () => setMobilePanel(button.dataset.mobilePanelTarget as keyof typeof mobilePanels));
 search.addEventListener('focus', () => { if (mobileMedia.matches) setMobilePanel('tree'); });
 search.addEventListener('input', renderTree);

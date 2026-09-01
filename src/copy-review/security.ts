@@ -6,7 +6,7 @@ export function authorizeCopyReviewRequest(input: { requestUrl: string; method: 
   if (!LOOPBACK_HOSTS.has(url.hostname)) throw new Error('copy review is available only on the loopback interface');
   if (!input.token || input.token !== input.expectedToken) throw new Error('copy review session token is missing or invalid');
   if (input.method !== 'GET' && input.origin !== url.origin) throw new Error('copy review rejected a cross-origin mutation');
-  if (input.method === 'GET' && input.referer && !input.referer.startsWith(`${url.origin}/__copy-review/`)) throw new Error('copy review rejected a cross-origin read');
+  if (input.method === 'GET' && !input.referer?.startsWith(`${url.origin}/__copy-review/`)) throw new Error('copy review rejected a cross-origin read');
 }
 
 export function parseCopyReviewJson<T>(source: string, contentType: string | null): T {
@@ -14,4 +14,3 @@ export function parseCopyReviewJson<T>(source: string, contentType: string | nul
   if (Buffer.byteLength(source, 'utf8') > MAX_COPY_REVIEW_BODY) throw new Error('request body is too large');
   return JSON.parse(source) as T;
 }
-

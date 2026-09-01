@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { execFile, execFileSync } from 'node:child_process';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -10,6 +10,8 @@ import type { PublishRun, PublishStage, ReviewLedger } from './types';
 const execFileAsync = promisify(execFile);
 const REPOSITORY = 'anipotts/coding-agent-tips';
 const REQUIRED_CHECKS = new Set(['site', 'handbook', 'markdown', 'compatibility']);
+const COMMITTER_NAME = 'Ani Potts';
+const COMMITTER_EMAIL = 'hello@anipotts.com';
 const runs = new Map<string, PublishRun>();
 const inFlight = new Map<string, Promise<void>>();
 
@@ -29,12 +31,36 @@ const resolveBun = () => {
   return 'bun';
 };
 
-const runFile = (root: string, id: string) => path.join(root, '.astro/copy-review-runs', `${id}.json`);
+const runDirectory = (root: string) => path.join(root, '.astro/copy-review-runs');
+const runFile = (root: string, id: string) => path.join(runDirectory(root), `${id}.json`);
 async function persist(root: string, run: PublishRun) {
   run.updatedAt = new Date().toISOString();
   runs.set(run.id, structuredClone(run));
   await mkdir(path.dirname(runFile(root, run.id)), { recursive: true });
   await writeFile(runFile(root, run.id), `${JSON.stringify(run, null, 2)}\n`, { mode: 0o600 });
+}
+
+export async function findPublishRunByIdempotency(root: string, idempotencyKey: string) {
+  for (const run of runs.values()) if (run.idempotencyKey === idempotencyKey) return structuredClone(run);
+  try {
+    const files = (await readdir(runDirectory(root))).filter((file) => file.endsWith('.json')).sort().reverse();
+    for (const file of files) {
+      try {
+        const run = JSON.parse(await readFile(path.join(runDirectory(root), file), 'utf8')) as PublishRun;
+        if (run.idempotencyKey === idempotencyKey) {
+          if (run.status === 'running') {
+            run.status = 'failed';
+            run.error = 'publication was interrupted when the local copy review server stopped; inspect the saved receipt before starting a new run';
+            run.message = run.error;
+            await persist(root, run);
+          }
+          runs.set(run.id, structuredClone(run));
+          return run;
+        }
+      } catch {}
+    }
+  } catch {}
+  return null;
 }
 
 async function advance(root: string, run: PublishRun, stage: PublishStage, message: string) {
@@ -197,7 +223,7 @@ async function publish(root: string, run: PublishRun, runner: PublisherCommandRu
     const dirty = await assertOwnedChanges(root, runner);
     if (dirty.length === 0) throw new Error('the approved batch has no repository changes');
     await runner('git', ['add', '--', ...[...new Set([...Object.values(batch.changes).map((change) => change.owner), LEDGER_PATH])]], { cwd: root });
-    await runner('git', ['commit', '-S', '-m', 'docs: approve copy review batch', '-m', `Reviewed in local copy review batch ${batch.id}.\n\nVerification: bun run check:content`], { cwd: root });
+    await runner('git', ['-c', `user.name=${COMMITTER_NAME}`, '-c', `user.email=${COMMITTER_EMAIL}`, 'commit', '-S', '-m', 'docs: approve copy review batch', '-m', `Reviewed in local copy review batch ${batch.id}.\n\nVerification: bun run check:content`], { cwd: root });
     let commitSha = await gitOutput(runner, root, ['rev-parse', 'HEAD']);
     run.receipt.commitSha = commitSha;
     run.receipt.branch = catalog.repository.branch;
@@ -206,7 +232,7 @@ async function publish(root: string, run: PublishRun, runner: PublisherCommandRu
     const mergeBase = await gitOutput(runner, root, ['merge-base', 'HEAD', 'origin/main']);
     const originMain = await gitOutput(runner, root, ['rev-parse', 'origin/main']);
     if (mergeBase !== originMain) {
-      await runner('git', ['rebase', 'origin/main'], { cwd: root });
+      await runner('git', ['-c', `user.name=${COMMITTER_NAME}`, '-c', `user.email=${COMMITTER_EMAIL}`, 'rebase', 'origin/main'], { cwd: root });
       await runner(bun, ['run', 'check:content'], { cwd: root, maxBuffer: 50 * 1024 * 1024 });
       commitSha = await gitOutput(runner, root, ['rev-parse', 'HEAD']);
       run.receipt.commitSha = commitSha;
@@ -237,18 +263,14 @@ async function publish(root: string, run: PublishRun, runner: PublisherCommandRu
     run.receipt.deploymentUrl = 'https://agents.anipotts.com/';
     await verifyLiveRoutes(root, run);
     await advance(root, run, 'github-pages-live', 'the exact merged copy is live and verified');
-    run.status = 'complete';
-    await persist(root, run);
     try {
-      await runner('git', ['switch', 'main'], { cwd: root });
-      await runner('git', ['pull', '--ff-only', 'origin', 'main'], { cwd: root });
-      await runner('git', ['branch', '-d', catalog.repository.branch], { cwd: root });
       const now = new Date().toISOString();
       await saveBatch(root, { id: randomUUID(), branch: null, baseSha: mergeSha, createdAt: now, updatedAt: now, changes: {} });
     } catch {
-      run.message = 'publication is live; local branch cleanup needs attention';
-      await persist(root, run);
+      run.message = 'publication is live; resetting the local review batch needs attention';
     }
+    run.status = 'complete';
+    await persist(root, run);
   } catch (error) {
     run.status = 'failed';
     run.error = error instanceof Error ? error.message : String(error);
@@ -259,7 +281,8 @@ async function publish(root: string, run: PublishRun, runner: PublisherCommandRu
 
 export async function startPublish(root: string, idempotencyKey: string, runner: PublisherCommandRunner = defaultRunner) {
   if (!/^[a-zA-Z0-9_-]{12,128}$/.test(idempotencyKey)) throw new Error('invalid publication idempotency key');
-  for (const run of runs.values()) if (run.idempotencyKey === idempotencyKey) return run;
+  const existing = await findPublishRunByIdempotency(root, idempotencyKey);
+  if (existing) return existing;
   const run: PublishRun = { id: randomUUID(), idempotencyKey, batchId: (await loadBatch(root)).id, status: 'running', stage: 'local-draft', message: 'preparing the exact review batch', startedAt: new Date().toISOString(), updatedAt: new Date().toISOString(), error: null, receipt: {} };
   await persist(root, run);
   const task = publish(root, run, runner).finally(() => inFlight.delete(run.id));

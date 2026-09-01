@@ -36,7 +36,7 @@ public writing stays in ordinary source files:
 - `src/site.ts` owns shared navigation and interface labels.
 - `docs/sources.json` owns source metadata and evidence labels.
 
-run `bun run edit`, change the canonical source, and review the affected public route directly. Astro updates the page during development. Run `bun run verify` before opening the pull request. A protected merge to `main` publishes the static site through GitHub Pages.
+run `bun run edit` from the worktree you want to change, then review and edit the canonical source in the local copy review workspace. Astro updates the rendered route during development. Run `bun run verify` before opening the pull request. A protected merge to `main` publishes the static site through GitHub Pages.
 
 ## verification
 

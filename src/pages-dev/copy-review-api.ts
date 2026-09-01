@@ -16,9 +16,8 @@ let mutationTail = Promise.resolve<unknown>(undefined);
 const json = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
 
 async function authorize(request: Request, requireOrigin = false) {
-  const url = new URL(request.url);
   const expected = await getSessionToken(root);
-  const token = request.headers.get('x-copy-review-token') ?? url.searchParams.get('token');
+  const token = request.headers.get('x-copy-review-token');
   authorizeCopyReviewRequest({ requestUrl: request.url, method: requireOrigin ? 'POST' : 'GET', token, expectedToken: expected, origin: request.headers.get('origin'), referer: request.headers.get('referer') });
 }
 
@@ -58,26 +57,6 @@ export const GET: APIRoute = async ({ params, request }) => {
         if (!id) return json({ error: 'run id is required' }, 400);
         const run = await getPublishRun(root, id);
         return run ? json(run) : json({ error: 'publication run was not found' }, 404);
-      }
-      case 'events': {
-        const id = url.searchParams.get('id');
-        if (!id) return json({ error: 'run id is required' }, 400);
-        const encoder = new TextEncoder();
-        let last = '';
-        const stream = new ReadableStream({
-          async start(controller) {
-            while (!request.signal.aborted) {
-              const run = await getPublishRun(root, id);
-              if (!run) { controller.enqueue(encoder.encode(`event: error\ndata: ${JSON.stringify({ error: 'publication run was not found' })}\n\n`)); break; }
-              const serialized = JSON.stringify(run);
-              if (serialized !== last) { controller.enqueue(encoder.encode(`event: update\ndata: ${serialized}\n\n`)); last = serialized; }
-              if (run.status !== 'running') break;
-              await new Promise((resolve) => setTimeout(resolve, 1_000));
-            }
-            controller.close();
-          },
-        });
-        return new Response(stream, { headers: { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive' } });
       }
       default: return json({ error: 'unknown copy review action' }, 404);
     }

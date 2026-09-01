@@ -9,6 +9,8 @@ describe('copy review request boundary', () => {
     expect(() => authorizeCopyReviewRequest({ ...valid, requestUrl: 'https://example.com/__copy-review/api/catalog' })).toThrow('loopback');
     expect(() => authorizeCopyReviewRequest({ ...valid, token: 'wrong' })).toThrow('token');
     expect(() => authorizeCopyReviewRequest({ ...valid, method: 'POST', origin: 'https://example.com' })).toThrow('cross-origin');
+    expect(() => authorizeCopyReviewRequest({ ...valid, referer: null })).toThrow('cross-origin');
+    expect(() => authorizeCopyReviewRequest({ ...valid, referer: 'https://example.com/__copy-review/' })).toThrow('cross-origin');
   });
   test('requires JSON and enforces the body limit', () => {
     expect(parseCopyReviewJson<{ ok: boolean }>('{"ok":true}', 'application/json').ok).toBe(true);
@@ -16,4 +18,3 @@ describe('copy review request boundary', () => {
     expect(() => parseCopyReviewJson(`"${'x'.repeat(MAX_COPY_REVIEW_BODY)}"`, 'application/json')).toThrow('too large');
   });
 });
-
