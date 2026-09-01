@@ -10,6 +10,7 @@ const childEnvironment = {
   PATH: `${path.dirname(bun)}:${process.env.PATH ?? ''}`,
 };
 const checks = [
+  [bun, ['run', 'test:copy-review']],
   [bun, ['run', 'check']],
   [bun, ['run', 'check:handbook']],
   [bun, ['run', 'check:completeness']],

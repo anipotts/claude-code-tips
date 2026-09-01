@@ -6,7 +6,6 @@ import { canonicalContentFiles, contentRedirects } from '../src/content-manifest
 const root = process.cwd();
 const dist = path.join(root, 'dist');
 const origin = 'https://agents.anipotts.com';
-const canonicalH1 = 'a guide to coding agents in production software (projects, startups & big tech)';
 const failures = [];
 
 const scalar = (markdown, key) => markdown.match(new RegExp(`^${key}:\\s*(.+)$`, 'm'))?.[1].trim().replace(/^['"]|['"]$/g, '');
@@ -17,6 +16,8 @@ const text = (html) => html
   .replace(/&(?:amp|#x26|#38);/g, (entity) => ampersandEntities.has(entity) ? '&' : entity)
   .replace(/\s+/g, ' ')
   .trim();
+const homeSource = await readFile(path.join(root, 'content/home.md'), 'utf8');
+const canonicalH1 = text(homeSource.match(/^#\s+(.+)$/m)?.[1] ?? '');
 const routeFile = (route) => route === '/' ? path.join(dist, 'index.html') : path.join(dist, route.replace(/^\//, ''), 'index.html');
 const publicFile = (pathname) => pathname.endsWith('.md') ? path.join(dist, pathname.replace(/^\//, '')) : routeFile(pathname.endsWith('/') ? pathname : `${pathname}/`);
 const markdownFiles = async (directory) => (await Promise.all((await readdir(directory, { withFileTypes: true })).map(async (entry) => {
