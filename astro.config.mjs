@@ -22,6 +22,17 @@ export default defineConfig({
   markdown: { processor: unified({ rehypePlugins: [linkMetadata] }) },
   redirects,
   integrations: [
+    {
+      name: 'local-copy-review',
+      hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+          if (command === 'dev') {
+            injectRoute({ pattern: '/__copy-review/', entrypoint: './src/pages-dev/copy-review.astro' });
+            injectRoute({ pattern: '/__copy-review/api/[action]', entrypoint: './src/pages-dev/copy-review-api.ts' });
+          }
+        },
+      },
+    },
     icon({
       include: {
         ph: [
@@ -47,13 +58,14 @@ export default defineConfig({
           'dots-three',
           'sliders-horizontal',
           'shield-check',
+          'check-circle',
           'x',
         ],
       },
     }),
     sitemap({ filter: (page) => {
       const pathname = new URL(page).pathname;
-      return !redirectedPaths.has(pathname);
+      return !pathname.startsWith('/__copy-review/') && !redirectedPaths.has(pathname);
     } }),
     starlight({
       title: site.name,

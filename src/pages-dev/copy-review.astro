@@ -1,0 +1,92 @@
+---
+import { Icon } from 'astro-icon/components';
+import '../styles/global.css';
+import './copy-review.css';
+import { getSessionToken } from '../copy-review/model';
+
+const sessionToken = await getSessionToken(process.cwd());
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>local copy review</title>
+  </head>
+  <body class="copy-review-page copy-review-app" data-copy-review-token={sessionToken} data-mobile-panel="editor">
+    <header class="review-topbar">
+      <div class="review-brand">
+        <span class="dev-label">dev only</span>
+        <h1>local copy review</h1>
+        <span class="repository-label">coding-agent-tips (<strong data-repository-branch>loading</strong>)</span>
+        <span class="freshness" data-freshness><span aria-hidden="true"></span>checking origin</span>
+      </div>
+      <label class="global-search">
+        <Icon name="ph:magnifying-glass" aria-hidden="true" />
+        <span class="sr-only">search writing tree or blocks</span>
+        <input type="search" placeholder="search writing tree or blocks" data-search />
+        <kbd>⌘ K</kbd>
+      </label>
+      <button class="quiet-button settings-button" type="button" data-settings aria-expanded="false">
+        <Icon name="ph:sliders-horizontal" aria-hidden="true" />settings<Icon name="ph:caret-down" aria-hidden="true" />
+      </button>
+    </header>
+
+    <main class="review-workspace" aria-busy="true">
+      <aside class="writing-rail" id="copy-review-pages" aria-label="writing tree">
+        <div class="panel-heading"><h2>writing tree</h2><button class="icon-button" type="button" data-collapse-tree aria-label="collapse writing tree"><Icon name="ph:caret-double-left" aria-hidden="true" /></button></div>
+        <div class="coverage-legend" data-coverage></div>
+        <nav class="writing-tree" data-writing-tree aria-label="writing surfaces"></nav>
+        <p class="keyboard-tip">press <kbd>/</kbd> to search</p>
+      </aside>
+
+      <section class="editor-workspace" id="copy-review-editor" aria-label="source and rendered preview">
+        <header class="document-bar">
+          <div><nav class="document-breadcrumb" aria-label="selected document" data-document-breadcrumb></nav><p class="document-owner" data-document-owner>loading canonical source</p></div>
+          <div class="document-meta"><span data-document-updated></span><button class="quiet-button" type="button" data-jump-block>jump to block</button></div>
+        </header>
+        <div class="view-toolbar">
+          <div class="mode-switch" role="tablist" aria-label="document view"><button role="tab" type="button" aria-selected="false" data-mode="source">source</button><button role="tab" type="button" aria-selected="true" data-mode="rendered">rendered</button></div>
+          <div class="viewport-switch" role="group" aria-label="rendered preview width">
+            <button type="button" data-viewport="desktop" aria-pressed="true"><Icon name="ph:desktop" aria-hidden="true" />desktop <span>1280px</span></button>
+            <button type="button" data-viewport="tablet" aria-pressed="false">tablet <span>768px</span></button>
+            <button type="button" data-viewport="mobile" aria-pressed="false">mobile <span>375px</span></button>
+          </div>
+          <span class="preview-freshness" data-preview-freshness><Icon name="ph:check-circle" aria-hidden="true" />up to date</span>
+        </div>
+        <div class="source-view" data-source-view hidden><div class="source-outline" data-source-outline></div><div class="source-inspector" data-source-inspector></div></div>
+        <div class="rendered-view" data-rendered-view><div class="preview-stage" data-preview-stage data-viewport-size="desktop"><iframe title="rendered Astro page" data-preview-frame></iframe></div></div>
+        <div class="workspace-message" data-workspace-message hidden role="status"></div>
+      </section>
+
+      <aside class="publish-rail" id="copy-review-review" aria-label="review and publish">
+        <div class="panel-heading"><h2>review &amp; publish</h2></div>
+        <div class="rail-scroll">
+          <section class="rail-section review-summary" aria-labelledby="batch-heading"><h3 id="batch-heading">review batch</h3><p class="section-note">exact set · approvals tied to content fingerprint</p><strong class="batch-size" data-batch-size>no edits yet</strong><button class="text-button" type="button" data-view-changes>view changed pages</button><div class="changed-pages" data-changed-pages></div></section>
+          <section class="rail-section validation-section" aria-labelledby="validation-heading"><h3 id="validation-heading">local validation</h3><div class="validation-status" data-validation-status><span class="validation-mark" aria-hidden="true"></span><div><strong>not run for this batch</strong><p>validation runs before any GitHub action</p></div></div><button class="quiet-button rail-action" type="button" data-validate>run validation <Icon name="ph:arrow-right" aria-hidden="true" /></button><pre class="validation-output" data-validation-output hidden></pre></section>
+          <section class="rail-section" aria-labelledby="pipeline-heading"><h3 id="pipeline-heading">publication pipeline</h3><ol class="publish-pipeline" data-pipeline>
+            <li data-stage="local-draft"><span aria-hidden="true"></span><div><strong>local draft</strong><small></small></div></li><li data-stage="validated"><span aria-hidden="true"></span><div><strong>validated</strong><small></small></div></li><li data-stage="signed-commit"><span aria-hidden="true"></span><div><strong>signed commit</strong><small></small></div></li><li data-stage="pushed-branch"><span aria-hidden="true"></span><div><strong>pushed branch</strong><small></small></div></li><li data-stage="pull-request"><span aria-hidden="true"></span><div><strong>pull request</strong><small></small></div></li><li data-stage="required-checks"><span aria-hidden="true"></span><div><strong>required checks</strong><small></small></div></li><li data-stage="merged"><span aria-hidden="true"></span><div><strong>merged</strong><small></small></div></li><li data-stage="github-pages-live"><span aria-hidden="true"></span><div><strong>GitHub Pages live</strong><small></small></div></li>
+          </ol></section>
+          <section class="rail-section current-review" aria-labelledby="current-review-heading"><h3 id="current-review-heading">current block review</h3><div data-current-block><p class="empty-copy">select a source block to review it.</p></div></section>
+          <section class="rail-section batch-actions" aria-labelledby="actions-heading"><h3 id="actions-heading">review batch actions</h3><button class="secondary-button" type="button" data-review-batch>review batch</button><button class="primary-button" type="button" data-publish disabled>approve &amp; publish</button><p class="publish-boundary">creates a signed commit, protected pull request, merge, and GitHub Pages deployment for this exact batch.</p></section>
+          <section class="rail-section receipt" aria-labelledby="receipt-heading"><h3 id="receipt-heading">receipt / history</h3><dl data-receipt><div><dt>batch</dt><dd>loading</dd></div></dl></section>
+        </div>
+      </aside>
+    </main>
+    <nav class="mobile-workbench-nav" aria-label="copy review workspace" role="tablist">
+      <button type="button" role="tab" aria-selected="false" aria-controls="copy-review-pages" data-mobile-panel-target="tree">
+        <Icon name="ph:list" aria-hidden="true" /><span>pages</span><strong data-mobile-pages-count>0</strong>
+      </button>
+      <button type="button" role="tab" aria-selected="true" aria-controls="copy-review-editor" data-mobile-panel-target="editor">
+        <Icon name="ph:pencil-simple" aria-hidden="true" /><span>review</span>
+      </button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="copy-review-review" data-mobile-panel-target="review">
+        <Icon name="ph:shield-check" aria-hidden="true" /><span>batch</span><strong data-mobile-batch-count hidden>0</strong>
+      </button>
+    </nav>
+    <script>import '../copy-review/client';</script>
+  </body>
+</html>

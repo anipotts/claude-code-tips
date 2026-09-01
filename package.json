@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "node node_modules/astro/bin/astro.mjs dev",
-    "edit": "node node_modules/astro/bin/astro.mjs dev --host 127.0.0.1 --port 4330 --open /",
+    "edit": "node scripts/start-copy-review.mjs",
     "build": "node node_modules/astro/bin/astro.mjs build",
     "check": "node node_modules/astro/bin/astro.mjs check",
     "check:field-runs": "node scripts/check-field-runs.mjs",
@@ -21,10 +21,11 @@
     "test:site": "node scripts/check-typography.mjs && node scripts/test-site.mjs",
     "test:navigation": "node scripts/test-navigation.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
+    "test:copy-review": "bun test src/copy-review",
     "audit:performance": "node scripts/audit-performance.mjs",
     "preview": "node node_modules/astro/bin/astro.mjs preview",
     "sync:readme": "bun scripts/sync-readme.ts",
-    "verify": "bun run check:content && bun run build && bun run test:site && bun run check:performance && bun run test:navigation && bun run test:a11y"
+    "verify": "bun run check:content && bun run test:copy-review && bun run build && bun run test:site && bun run check:performance && bun run test:navigation && bun run test:a11y"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
@@ -40,10 +41,18 @@
     "@astrojs/markdown-remark": "7.2.2",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.62.1",
+    "@types/bun": "1.3.4",
+    "@types/mdast": "4.0.4",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
+    "jsonc-parser": "3.3.1",
     "lighthouse": "13.4.1",
+    "mdast-util-to-string": "4.0.0",
+    "remark-gfm": "4.0.1",
+    "remark-parse": "11.0.0",
     "sharp": "0.35.4",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "unified": "11.0.5",
+    "yaml": "2.9.0"
   }
 }

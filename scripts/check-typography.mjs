@@ -20,7 +20,7 @@ const walk = async (directory) => {
 const lineFor = (source, offset) => source.slice(0, offset).split('\n').length;
 
 for (const file of await walk(sourceRoot)) {
-  if (file === owner || !/\.(?:astro|css)$/.test(file)) continue;
+  if (file === owner || file.startsWith(path.join(sourceRoot, 'pages-dev') + path.sep) || !/\.(?:astro|css)$/.test(file)) continue;
   const source = await readFile(file, 'utf8');
   const regions = file.endsWith('.astro')
     ? [

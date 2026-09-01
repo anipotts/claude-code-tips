@@ -632,6 +632,28 @@
       "evidence": "official-source"
     },
     {
+      "id": "x-trending-next-freakishly-smart-24yo",
+      "title": "Leopold Aschenbrenner",
+      "publisher": "xai",
+      "product": "x",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://x.com/i/trending/2082629237224374373",
+      "last_checked": "2026-08-31",
+      "evidence": "official-source"
+    },
+    {
+      "id": "x-trending-acquihired-10b",
+      "title": "acquihired for $10B",
+      "publisher": "xai",
+      "product": "x",
+      "layer": "surface",
+      "status": "watchlist",
+      "url": "https://x.com/i/trending/1995924355130310981",
+      "last_checked": "2026-08-31",
+      "evidence": "official-source"
+    },
+    {
       "id": "aider-docs",
       "title": "Aider documentation",
       "publisher": "aider",
