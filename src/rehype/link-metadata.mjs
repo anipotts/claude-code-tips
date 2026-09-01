@@ -20,6 +20,53 @@ for (const source of registry.sources) {
 
 const textContent = (node) => (node.children ?? []).map((child) => child.type === 'text' ? child.value : textContent(child)).join('').trim();
 const humanize = (value) => decodeURIComponent(value).replace(/^#|\/$/g, '').split('/').pop()?.replace(/[-_]/g, ' ') || 'coding agent tips';
+const element = (tagName, properties = {}, children = []) => ({ type: 'element', tagName, properties, children });
+const text = (value) => ({ type: 'text', value });
+
+const wrapSourceLink = (link, { icon, kind, publisherLabel, title, domain }) => element('span', {
+  className: ['registered-link-hover-card'],
+  'data-sw-preview-card': '',
+  'data-close-delay': '180',
+  'data-close-on-escape': 'true',
+  'data-close-on-outside-interact': 'true',
+  'data-content-hoverable': 'true',
+  'data-open-delay': '320',
+  'data-state': 'closed',
+}, [
+  link,
+  element('span', {
+    'data-sw-preview-card-portal': '',
+    'data-sw-portal-placement': 'runtime',
+    'data-placement': 'pending',
+  }, [element('span', {
+    className: ['registered-link-card-positioner'],
+    'data-sw-preview-card-positioner': '',
+    'data-state': 'closed',
+    'data-side': 'top',
+    'data-align': 'start',
+    'data-side-offset': '8',
+    'data-avoid-collisions': 'true',
+  }, [element('span', {
+    className: ['registered-link-card'],
+    'data-sw-preview-card-popup': '',
+    'data-state': 'closed',
+    'data-side': 'top',
+    'data-align': 'start',
+    'data-side-offset': '8',
+    'data-avoid-collisions': 'true',
+    role: 'tooltip',
+    hidden: true,
+  }, [
+    element('span', { className: ['registered-link-card-heading'] }, [
+      element('img', { src: icon, alt: '', width: 24, height: 24, loading: 'lazy' }),
+      element('span', {}, [
+        element('strong', {}, [text(title)]),
+        element('small', {}, [text(`${publisherLabel}, ${domain}`)]),
+      ]),
+    ]),
+    element('span', { className: ['registered-link-card-kind'] }, [text(kind)]),
+  ])])]),
+]);
 
 function annotate(node) {
   if (node?.type === 'element' && node.tagName === 'a' && typeof node.properties?.href === 'string') {
@@ -43,9 +90,16 @@ function annotate(node) {
       node.properties['data-link-publisher'] = publisherLabel;
       node.properties['data-link-icon'] = icon;
       node.properties['data-link-kind'] = kind;
+      node.properties['data-sw-preview-card-trigger'] = '';
+      node.properties['data-state'] = 'closed';
+      node.data = { ...(node.data ?? {}), previewCard: source ? { icon, kind, publisherLabel, title, domain } : undefined };
     }
   }
-  for (const child of node?.children ?? []) annotate(child);
+  if (!Array.isArray(node?.children)) return;
+  node.children = node.children.map((child) => {
+    annotate(child);
+    return child?.data?.previewCard ? wrapSourceLink(child, child.data.previewCard) : child;
+  });
 }
 
 export default function linkMetadata() {

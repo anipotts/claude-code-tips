@@ -1,11 +1,11 @@
 ---
 import DefaultHead from '@astrojs/starlight/components/Head.astro';
+import { ThemeInitScript } from '@starwind-ui/astro/theme';
 import { ClientRouter } from 'astro:transitions';
-import ThemeHead from './ThemeHead.astro';
-import RailHead from './RailHead.astro';
+import ThemeBridge from './ThemeBridge.astro';
 ---
 
 <DefaultHead />
-<ThemeHead />
-<RailHead />
+<ThemeInitScript />
+<ThemeBridge />
 <ClientRouter fallback="swap" />

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://starwind.dev/config-schema.v2.json",
+  "version": 2,
+  "framework": "astro",
+  "registry": {
+    "source": "bundled",
+    "version": "2.2.0"
+  },
+  "components": [
+    {
+      "name": "accordion",
+      "version": "2.0.3",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "button",
+      "version": "3.0.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "separator",
+      "version": "1.1.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "button-group",
+      "version": "1.1.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "card",
+      "version": "2.3.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "dialog",
+      "version": "2.0.2",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "dropdown",
+      "version": "3.2.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "hover-card",
+      "version": "2.2.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "image",
+      "version": "1.1.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "item",
+      "version": "1.2.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "kbd",
+      "version": "1.1.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "progress",
+      "version": "2.0.3",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "scroll-area",
+      "version": "2.0.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "sheet",
+      "version": "2.0.2",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "input",
+      "version": "2.0.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "skeleton",
+      "version": "1.3.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "tooltip",
+      "version": "2.2.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "sidebar",
+      "version": "2.1.1",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "theme-toggle",
+      "version": "2.0.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "toast",
+      "version": "2.1.0",
+      "framework": "astro",
+      "registry": "default"
+    }
+  ],
+  "tailwind": {
+    "css": "src/styles/starwind.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "componentDir": "src/components/starwind",
+  "utilsDir": "src/lib/utils"
+}

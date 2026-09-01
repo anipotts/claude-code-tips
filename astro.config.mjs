@@ -1,11 +1,12 @@
+import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import { unified } from '@astrojs/markdown-remark';
-import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
 import { contentRedirects } from './src/content-manifest.mjs';
 import { site } from './src/site';
 import linkMetadata from './src/rehype/link-metadata.mjs';
+import publicationElements from './src/rehype/publication-elements.mjs';
 
 const repository = site.repository;
 const socialImage = new URL(site.socialImage, site.url).href;
@@ -19,57 +20,16 @@ export default defineConfig({
   site: site.url,
   output: 'static',
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
-  markdown: { processor: unified({ rehypePlugins: [linkMetadata] }) },
+  markdown: { processor: unified({ rehypePlugins: [linkMetadata, publicationElements] }) },
   redirects,
   integrations: [
-    {
-      name: 'local-copy-review',
-      hooks: {
-        'astro:config:setup': ({ command, injectRoute }) => {
-          if (command === 'dev' && process.env.COPY_REVIEW_ENABLED === '1') {
-            injectRoute({ pattern: '/__copy-review/', entrypoint: './src/pages-dev/copy-review.astro' });
-            injectRoute({ pattern: '/__copy-review/api/[action]', entrypoint: './src/pages-dev/copy-review-api.ts' });
-          }
-        },
-      },
-    },
-    icon({
-      include: {
-        ph: [
-          'app-window',
-          'terminal-window',
-          'brain',
-          'git-branch',
-          'arrow-right',
-          'arrow-up-right',
-          'book-open-text',
-          'caret-down',
-          'caret-double-left',
-          'caret-double-right',
-          'compass',
-          'github-logo',
-          'magnifying-glass',
-          'desktop',
-          'sun',
-          'moon',
-          'copy',
-          'pencil-simple',
-          'list',
-          'dots-three',
-          'sliders-horizontal',
-          'shield-check',
-          'check-circle',
-          'x',
-        ],
-      },
-    }),
     sitemap({ filter: (page) => {
       const pathname = new URL(page).pathname;
-      return !pathname.startsWith('/__copy-review/') && !redirectedPaths.has(pathname);
+      return !redirectedPaths.has(pathname);
     } }),
     starlight({
       title: site.name,
-      customCss: ['./src/styles/global.css'],
+      customCss: ['./src/styles/starwind.css', './src/styles/global.css'],
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: socialImage } },
         { tag: 'meta', attrs: { property: 'og:image:width', content: '1280' } },
@@ -92,4 +52,8 @@ export default defineConfig({
       pagination: false,
     }),
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

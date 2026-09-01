@@ -37,7 +37,9 @@ public writing stays in ordinary source files:
 - `src/site.ts` owns shared navigation and interface labels.
 - `editorial/sources.json` owns source metadata and evidence labels.
 
-run `bun run edit` from the worktree you want to change, then review and edit the canonical source in the local copy review workspace. Astro updates the rendered route during development. Run `bun run verify` before opening the pull request. A protected merge to `main` publishes the static site through GitHub Pages.
+edit the canonical Markdown directly and run `bun run dev` to review the affected route. interactive public UI uses an installed Starwind component or an upstream Starlight component. generated Starwind source stays unchanged; site-specific appearance belongs in `src/styles/starwind.css` and layout placement belongs in the site styles. custom browser JavaScript requires a documented behavior that Starwind or Starlight cannot provide.
+
+run `bun run verify` before opening the pull request. A protected merge to `main` publishes the static site through GitHub Pages.
 
 ## verification
 

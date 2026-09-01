@@ -1,11 +1,11 @@
 ---
+import "@/styles/starwind.css";
 import '../styles/global.css';
+import { ThemeInitScript } from '@starwind-ui/astro/theme';
 import { ClientRouter } from 'astro:transitions';
 import SiteHeader from '../components/SiteHeader.astro';
-import AccessibleTables from '../components/AccessibleTables.astro';
-import ThemeHead from '../components/ThemeHead.astro';
+import ThemeBridge from '../components/ThemeBridge.astro';
 import PublicationEnhancements from '../components/PublicationEnhancements.astro';
-import SearchAccess from '../components/SearchAccess.astro';
 import { site } from '../site';
 
 interface Props {
@@ -42,15 +42,14 @@ const socialImage = new URL(site.socialImage, Astro.site);
     <meta name="twitter:image" content={socialImage} />
     <meta name="twitter:image:alt" content={site.socialImageAlt} />
     <title>{title}</title>
-    <ThemeHead />
+    <ThemeInitScript />
+    <ThemeBridge />
     <ClientRouter fallback="swap" />
   </head>
   <body>
     <a class="skip-link" href="#main">skip to content</a>
     <SiteHeader />
-    <SearchAccess />
     <slot />
-    <AccessibleTables />
     <PublicationEnhancements />
   </body>
 </html>

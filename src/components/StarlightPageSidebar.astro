@@ -1,44 +1,93 @@
-<script>
-  let cleanupPageOutline: () => void = () => {};
+---
+import { Progress } from './starwind/progress';
+---
 
-  const setupPageOutline = () => {
-    cleanupPageOutline();
+<div class="reading-progress-rail" aria-hidden="true">
+  <Progress class="reading-progress" value={0} variant="primary" label="reading progress" />
+</div>
+
+<script>
+  let cleanupReadingState = () => {};
+
+  const setupReadingState = () => {
+    cleanupReadingState();
     const controller = new AbortController();
+    const progress = document.querySelector<HTMLElement>('.reading-progress');
+    const indicator = progress?.querySelector<HTMLElement>('[data-slot="progress-indicator"]');
     const headingLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-heading-id]')];
     const headingPairs = headingLinks
       .map((link) => ({ link, heading: document.getElementById(link.dataset.headingId ?? '') }))
       .filter((pair): pair is { link: HTMLAnchorElement; heading: HTMLElement } => Boolean(pair.heading));
-    let progressFrame = 0;
+    let frame = 0;
+    let activeId = '';
 
-    const updateReadingState = () => {
-      progressFrame = 0;
-      const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
-      const threshold = headerHeight + Math.min(120, innerHeight * 0.18);
-      let activeId = headingPairs[0]?.heading.id;
-
-      for (const pair of headingPairs) {
-        if (pair.heading.getBoundingClientRect().top <= threshold) activeId = pair.heading.id;
-      }
-      for (const pair of headingPairs) {
-        pair.link.setAttribute('aria-current', pair.heading.id === activeId ? 'true' : 'false');
-      }
+    const updateProgress = () => {
+      frame = 0;
+      const scrollable = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      const percent = Math.min(100, Math.max(0, (scrollY / scrollable) * 100));
+      progress?.setAttribute('aria-valuenow', String(Math.round(percent)));
+      progress?.style.setProperty('--reading-progress', String(percent));
+      if (indicator) indicator.style.transform = `translateX(-${100 - percent}%)`;
     };
 
-    const scheduleReadingState = () => {
-      if (!progressFrame) progressFrame = requestAnimationFrame(updateReadingState);
+    const scheduleProgress = () => {
+      if (!frame) frame = requestAnimationFrame(updateProgress);
     };
 
-    addEventListener('scroll', scheduleReadingState, { passive: true, signal: controller.signal });
-    addEventListener('resize', scheduleReadingState, { passive: true, signal: controller.signal });
-    addEventListener('hashchange', scheduleReadingState, { signal: controller.signal });
-    progressFrame = requestAnimationFrame(updateReadingState);
+    const setActiveHeading = (id: string) => {
+      if (!id || id === activeId) return;
+      activeId = id;
+      for (const pair of headingPairs) pair.link.dataset.active = String(pair.heading.id === id);
+    };
 
-    cleanupPageOutline = () => {
+    const headingObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      const id = (visible[0]?.target as HTMLElement | undefined)?.id;
+      if (id) setActiveHeading(id);
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: [0, 1] });
+
+    for (const pair of headingPairs) headingObserver.observe(pair.heading);
+    setActiveHeading(location.hash.slice(1) || headingPairs[0]?.heading.id || '');
+    addEventListener('scroll', scheduleProgress, { passive: true, signal: controller.signal });
+    addEventListener('resize', scheduleProgress, { passive: true, signal: controller.signal });
+    scheduleProgress();
+
+    cleanupReadingState = () => {
       controller.abort();
-      if (progressFrame) cancelAnimationFrame(progressFrame);
+      headingObserver.disconnect();
+      if (frame) cancelAnimationFrame(frame);
     };
   };
 
-  document.addEventListener('astro:page-load', setupPageOutline);
-  setupPageOutline();
+  document.addEventListener('astro:page-load', setupReadingState);
+  setupReadingState();
 </script>
+
+<style>
+  .reading-progress-rail { display: none; }
+
+  @media (min-width: 64rem) {
+    .reading-progress-rail {
+      position: fixed;
+      z-index: var(--z-content);
+      inset: 50% 1.15rem auto auto;
+      inline-size: 2px;
+      block-size: min(12rem, 34vh);
+      display: block;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .reading-progress {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      inline-size: min(12rem, 34vh);
+      block-size: 2px;
+      border-radius: 999px;
+      transform: translate(-50%, -50%) rotate(90deg);
+      transform-origin: center;
+    }
+    .reading-progress :global([data-slot='progress-indicator']) { transition: none; }
+  }
+</style>

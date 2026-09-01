@@ -57,7 +57,7 @@ for (const [route, source] of contentFiles) {
   if (!publicText.includes(title)) failures.push(`${route}: canonical title is absent from the rendered page`);
   if (route !== '/') {
     const sourceIds = inlineList(markdown, 'sources');
-    if (!/<details\b[^>]*\bclass="[^"]*\bpage-sources\b/.test(html)) failures.push(`${route}: collapsed sources disclosure is missing`);
+    if (!/<div\b(?=[^>]*\bdata-sw-accordion\b)(?=[^>]*\bdata-state="closed")(?=[^>]*\bclass="[^"]*\bpage-sources\b)[^>]*>/.test(html)) failures.push(`${route}: collapsed Starwind sources accordion is missing`);
     if (/TESTED \/ OFFICIAL SOURCE \/ ANALYSIS/i.test(publicText)) failures.push(`${route}: retired evidence microcopy appears in the source footer`);
     for (const id of sourceIds) {
       const source = registry.sources.find((candidate) => candidate.id === id);

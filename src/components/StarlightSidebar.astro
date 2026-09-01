@@ -1,8 +1,26 @@
 ---
-import { Icon } from 'astro-icon/components';
+import Adjustments from '@tabler/icons/outline/adjustments.svg';
+import AppWindow from '@tabler/icons/outline/app-window.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import BrandGithub from '@tabler/icons/outline/brand-github.svg';
+import Compass from '@tabler/icons/outline/compass.svg';
+import GitBranch from '@tabler/icons/outline/git-branch.svg';
+import ShieldCheck from '@tabler/icons/outline/shield-check.svg';
 import { getHandbookPages, routeForEntry } from '../content';
 import { chapterForOrder, handbookScopes, scopeForPath } from '../site';
 import ProviderProductIcon from './ProviderProductIcon.astro';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from './starwind/sidebar';
 
 type TocNode = { depth: number; slug: string; text: string; children: TocNode[] };
 type SidebarHeading = { depth: number; slug: string; text: string };
@@ -20,9 +38,7 @@ const providerIconDark = activeScopeMetadata && 'providerIconDark' in activeScop
 const navigationLabel = (page: (typeof pages)[number]) => activeScope === 'handbook'
   ? page.data.title
   : chapterForOrder(page.data.navigation.order)?.label ?? page.data.title;
-const navigationIcon = (page: (typeof pages)[number]) => activeScope === 'handbook'
-  ? 'ph:compass'
-  : chapterForOrder(page.data.navigation.order)?.icon ?? 'ph:compass';
+const chapterIcons = [Compass, ArrowRight, Adjustments, GitBranch, AppWindow, ShieldCheck, Compass];
 
 const { toc } = Astro.locals.starlightRoute;
 const isOutline = Astro.locals.starlightRoute.entry.data.completion === 'outline';
@@ -35,110 +51,63 @@ const headings = toc && !isOutline
   : [];
 ---
 
-<div class="handbook-sidebar">
-  <div class="handbook-rail-head">
-    <div class="guide-rail-identity">
-      <ProviderProductIcon class="sidebar-provider-icon" light={providerIcon} dark={providerIconDark} size={24} />
-      <p class="sidebar-label"><span>{label}</span><span class="sidebar-kind">guide</span></p>
+<SidebarProvider
+  class="publication-sidebar-provider"
+  style={{ '--sidebar-width': '17rem', '--sidebar-width-icon': '3.5rem' }}
+  persistOpen
+  persistenceKey="publication-sidebar"
+  persistenceStorage="localStorage"
+  mobileQuery="(max-width: 47.99rem)"
+>
+  <Sidebar
+    class="publication-sidebar"
+    collapsible="icon"
+    side="left"
+    variant="sidebar"
+    aria-label={activeScope === 'handbook' ? `${label} navigation` : `${label} handbook chapters`}
+  >
+    <div class="handbook-rail-head">
+      <div class="guide-rail-identity">
+        <ProviderProductIcon class="sidebar-provider-icon" light={providerIcon} dark={providerIconDark} size={28} />
+        <p class="sidebar-label"><span>{label}</span><span class="sidebar-kind">guide</span></p>
+      </div>
+      <SidebarTrigger />
     </div>
-    <button
-      class="rail-toggle"
-      type="button"
-      data-rail-toggle="left"
-      aria-expanded="true"
-      aria-controls="handbook-navigation"
-      aria-label="collapse guide navigation"
-    >
-      <Icon class="rail-toggle-collapse" name="ph:caret-double-left" aria-hidden="true" />
-      <Icon class="rail-toggle-expand" name="ph:caret-double-right" aria-hidden="true" />
-    </button>
-  </div>
-  <nav id="handbook-navigation" aria-label={activeScope === 'handbook' ? `${label} navigation` : `${label} handbook chapters`}>
-    <ul>
-      {pages.map((page, index) => {
-        const href = routeForEntry(page);
-        const itemLabel = navigationLabel(page);
-        return (
-          <li class:list={{ 'is-current-chapter': current === href }}>
-            <a
-              href={href}
-              data-astro-prefetch="hover"
-              data-label={itemLabel}
-              data-chapter-index={index}
-              style={`view-transition-name: handbook-chapter-row-${index}`}
-              title={itemLabel}
-              aria-label={itemLabel}
-              aria-current={current === href ? 'page' : undefined}
-            >
-              <span class="sidebar-active-marker" aria-hidden="true"></span>
-              <span class="sidebar-icon" aria-hidden="true"><Icon name={navigationIcon(page)} /></span>
-              <span class="sidebar-link-copy">{itemLabel}</span>
-            </a>
-            {current === href && headings.length > 0 && (
-              <div class="sidebar-page-outline" aria-label="on this page">
-                <ul>
+    <SidebarContent class="publication-sidebar-content">
+      <SidebarMenu>
+        {pages.map((page, index) => {
+          const href = routeForEntry(page);
+          const itemLabel = navigationLabel(page);
+          const NavigationIcon = chapterIcons[index] ?? BrandGithub;
+          const active = current === href;
+          return (
+            <SidebarMenuItem class:list={{ 'is-current-chapter': active }}>
+              <SidebarMenuButton
+                href={href}
+                data-astro-prefetch="hover"
+                isActive={active}
+                tooltip={itemLabel}
+                size="sm"
+                aria-current={active ? 'page' : undefined}
+              >
+                <NavigationIcon aria-hidden="true" />
+                <span>{itemLabel}</span>
+              </SidebarMenuButton>
+              {active && headings.length > 0 && (
+                <SidebarMenuSub class="sidebar-page-outline" aria-label="on this page">
                   {headings.map((heading) => (
-                    <li style={`--heading-depth: ${Math.max(0, heading.depth - 2)}`}>
-                      <a href={`#${heading.slug}`} data-heading-id={heading.slug}>
-                        <span class="sidebar-outline-marker" aria-hidden="true"></span>
+                    <SidebarMenuSubItem style={`--heading-depth: ${Math.max(0, heading.depth - 2)}`}>
+                      <SidebarMenuSubButton href={`#${heading.slug}`} data-heading-id={heading.slug} size="sm">
                         <span>{heading.text}</span>
-                      </a>
-                    </li>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
                   ))}
-                </ul>
-              </div>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-</div>
-<script>
-  const railStorageKey = 'coding-agent-tips:reading-rails';
-  const desktopRailQuery = matchMedia('(min-width: 48rem)');
-
-  const applyRailState = (state: 'expanded' | 'collapsed') => {
-    document.documentElement.dataset.leftRail = state;
-    document.documentElement.dataset.rightRail = 'collapsed';
-    const expanded = state === 'expanded';
-    document.querySelectorAll<HTMLButtonElement>('[data-rail-toggle="left"]').forEach((button) => {
-      button.setAttribute('aria-expanded', String(expanded));
-      button.setAttribute('aria-label', `${expanded ? 'collapse' : 'expand'} guide navigation`);
-    });
-  };
-
-  let cleanupRailControls: () => void = () => {};
-
-  const setupRailControls = () => {
-    cleanupRailControls();
-    const controller = new AbortController();
-    let storedRailState: string | null = null;
-    try { storedRailState = localStorage.getItem(railStorageKey); } catch {}
-    const initialRailState = desktopRailQuery.matches && (storedRailState === 'expanded' || storedRailState === 'collapsed')
-      ? storedRailState
-      : 'expanded';
-    applyRailState(initialRailState);
-
-    document.querySelectorAll<HTMLButtonElement>('[data-rail-toggle="left"]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const currentState = document.documentElement.dataset.leftRail;
-        const nextState = currentState === 'collapsed' ? 'expanded' : 'collapsed';
-        try { localStorage.setItem(railStorageKey, nextState); } catch {}
-        applyRailState(nextState);
-      }, { signal: controller.signal });
-    });
-
-    const syncBreakpointState = () => {
-      let stored: string | null = null;
-      try { stored = localStorage.getItem(railStorageKey); } catch {}
-      applyRailState(desktopRailQuery.matches && (stored === 'expanded' || stored === 'collapsed') ? stored : 'expanded');
-    };
-    desktopRailQuery.addEventListener('change', syncBreakpointState, { signal: controller.signal });
-
-    cleanupRailControls = () => controller.abort();
-  };
-
-  document.addEventListener('astro:page-load', setupRailControls);
-  setupRailControls();
-</script>
+                </SidebarMenuSub>
+              )}
+            </SidebarMenuItem>
+          );
+        })}
+      </SidebarMenu>
+    </SidebarContent>
+  </Sidebar>
+</SidebarProvider>
