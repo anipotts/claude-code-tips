@@ -3,7 +3,10 @@ import { Icon } from 'astro-icon/components';
 import '../styles/global.css';
 import './copy-review.css';
 import { getSessionToken } from '../copy-review/model';
+import { assertCopyReviewClientAddress } from '../copy-review/security';
 
+export const prerender = false;
+assertCopyReviewClientAddress(Astro.clientAddress);
 const sessionToken = await getSessionToken(process.cwd());
 ---
 
@@ -58,7 +61,7 @@ const sessionToken = await getSessionToken(process.cwd());
           <span class="preview-freshness" data-preview-freshness><Icon name="ph:check-circle" aria-hidden="true" />up to date</span>
         </div>
         <div class="source-view" data-source-view hidden><div class="source-outline" data-source-outline></div><div class="source-inspector" data-source-inspector></div></div>
-        <div class="rendered-view" data-rendered-view><div class="preview-stage" data-preview-stage data-viewport-size="desktop"><iframe title="rendered Astro page" data-preview-frame></iframe></div></div>
+        <div class="rendered-view" data-rendered-view><div class="preview-stage" data-preview-stage data-viewport-size="desktop"><iframe title="rendered Astro page" sandbox="allow-same-origin" data-preview-frame></iframe></div></div>
         <div class="workspace-message" data-workspace-message hidden role="status"></div>
       </section>
 

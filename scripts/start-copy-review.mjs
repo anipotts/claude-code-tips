@@ -13,6 +13,6 @@ if (useMain) {
 }
 
 const astro = path.join(root, 'node_modules/astro/bin/astro.mjs');
-const child = spawn(process.execPath, [astro, 'dev', '--host', '127.0.0.1', '--port', '4330', '--open', '/__copy-review/'], { cwd: root, stdio: 'inherit', env: process.env });
+const child = spawn(process.execPath, [astro, 'dev', '--host', '127.0.0.1', '--port', '4330', '--open', '/__copy-review/'], { cwd: root, stdio: 'inherit', env: { ...process.env, COPY_REVIEW_ENABLED: '1' } });
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
 child.on('exit', (code, signal) => { if (signal) process.kill(process.pid, signal); else process.exit(code ?? 0); });

@@ -26,7 +26,7 @@ export default defineConfig({
       name: 'local-copy-review',
       hooks: {
         'astro:config:setup': ({ command, injectRoute }) => {
-          if (command === 'dev') {
+          if (command === 'dev' && process.env.COPY_REVIEW_ENABLED === '1') {
             injectRoute({ pattern: '/__copy-review/', entrypoint: './src/pages-dev/copy-review.astro' });
             injectRoute({ pattern: '/__copy-review/api/[action]', entrypoint: './src/pages-dev/copy-review-api.ts' });
           }

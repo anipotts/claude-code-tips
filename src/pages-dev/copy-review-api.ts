@@ -15,10 +15,10 @@ let mutationTail = Promise.resolve<unknown>(undefined);
 
 const json = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
 
-async function authorize(request: Request, requireOrigin = false) {
+async function authorize(request: Request, clientAddress: string, requireOrigin = false) {
   const expected = await getSessionToken(root);
   const token = request.headers.get('x-copy-review-token');
-  authorizeCopyReviewRequest({ requestUrl: request.url, method: requireOrigin ? 'POST' : 'GET', token, expectedToken: expected, origin: request.headers.get('origin'), referer: request.headers.get('referer') });
+  authorizeCopyReviewRequest({ requestUrl: request.url, method: requireOrigin ? 'POST' : 'GET', token, expectedToken: expected, origin: request.headers.get('origin'), referer: request.headers.get('referer'), clientAddress });
 }
 
 async function body<T>(request: Request): Promise<T> {
@@ -40,9 +40,9 @@ const resolveBun = () => {
   return 'bun';
 };
 
-export const GET: APIRoute = async ({ params, request }) => {
+export const GET: APIRoute = async ({ params, request, clientAddress }) => {
   try {
-    await authorize(request);
+    await authorize(request, clientAddress);
     const url = new URL(request.url);
     switch (params.action) {
       case 'catalog': return json(await buildCatalog(root));
@@ -65,9 +65,9 @@ export const GET: APIRoute = async ({ params, request }) => {
   }
 };
 
-export const POST: APIRoute = async ({ params, request }) => {
+export const POST: APIRoute = async ({ params, request, clientAddress }) => {
   try {
-    await authorize(request, true);
+    await authorize(request, clientAddress, true);
     switch (params.action) {
       case 'edit': {
         const input = await body<{ owner: string; blockId: string; baseFingerprint: string; value: string }>(request);

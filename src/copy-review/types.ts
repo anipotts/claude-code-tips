@@ -120,4 +120,3 @@ export type CopyReviewCatalog = {
   totals: Record<ReviewStatus, number>;
   batch: ReviewBatch;
 };
-
