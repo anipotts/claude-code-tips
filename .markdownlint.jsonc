@@ -1,4 +1,4 @@
-// markdownlint config for claude-code-tips
+// markdownlint config for coding-agent-tips
 //
 // this repo is prompt-heavy -- agents, skills, and commands contain
 // embedded markdown examples, compact tables, and bare code blocks.

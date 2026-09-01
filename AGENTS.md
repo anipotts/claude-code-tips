@@ -23,6 +23,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 - `content/runs/*.md` owns field run metadata and prose.
 - `docs/sources.json` owns source metadata, current product versions, and evidence definitions.
 - `src/site.ts` owns shared navigation and interface copy.
+- `design.md` owns the public visual, interaction, responsive, and design QA standard.
 - components render canonical metadata. they do not own guide summaries, product explanations, recommendations, or versions.
 - run `bun run sync:readme` after changing a principal guide title or evidence label. the generated README blocks must match before validation passes.
 - edit public prose in its canonical Markdown file and review the affected route in the normal Astro development server.
