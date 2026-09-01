@@ -62,6 +62,7 @@ const headings = toc && !isOutline
           <li class:list={{ 'is-current-chapter': current === href }}>
             <a
               href={href}
+              data-astro-prefetch="hover"
               data-label={itemLabel}
               data-chapter-index={index}
               style={`view-transition-name: handbook-chapter-row-${index}`}

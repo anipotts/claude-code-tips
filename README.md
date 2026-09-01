@@ -33,11 +33,7 @@ citations sit beside the claims they support. field runs publish inspectable art
 
 ```bash
 bun install --frozen-lockfile
-bun run check:readme
-bun run check
-bun run build
-bun run test:site
-bun run test:a11y
+bun run verify
 ```
 
 built and maintained by [ani potts](https://anipotts.com). corrections with primary sources or reproducible field evidence are welcome.

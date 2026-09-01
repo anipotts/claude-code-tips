@@ -41,7 +41,7 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
         <nav id="mobile-scope-menu" data-disclosure-content aria-label={`${activeScopeLabel} pages`}>
           {scopedPages.map((page) => {
             const href = routeForEntry(page);
-            return <a href={href} aria-current={current === href ? 'page' : undefined}>{mobileNavigationLabel(page)}</a>;
+            return <a href={href} data-astro-prefetch="tap" aria-current={current === href ? 'page' : undefined}>{mobileNavigationLabel(page)}</a>;
           })}
           <footer>
             <a href={site.repository}><Icon name="ph:github-logo" aria-hidden="true" /><span>GitHub</span></a>
@@ -52,7 +52,7 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
   </div>
   <nav class="provider-tabs" aria-label={site.interfaceCopy.guides}>
     {navigationScopes.map((scope) => (
-      <a href={scope.href} aria-current={activeScope === scope.id ? 'page' : undefined}>
+      <a href={scope.href} data-astro-prefetch="hover" aria-current={activeScope === scope.id ? 'page' : undefined}>
         <span class="provider-tab-highlight" aria-hidden="true"></span>
         <span class="provider-tab-label">{scope.label}</span>
       </a>

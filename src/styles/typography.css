@@ -1,5 +1,5 @@
 @import '@fontsource-variable/instrument-sans';
-@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
 
 :root {
   --font-sans: 'Instrument Sans Variable', 'Instrument Sans', sans-serif;
@@ -43,8 +43,7 @@ body {
 :where(button, input, select, summary, textarea) { font: inherit; }
 :where(strong, b) { font-weight: 600; }
 
-:where(main, .run-inventory, .page-sources) h1,
-.copy-review-page > header h1 {
+:where(main, .run-inventory, .page-sources) h1 {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--type-title-size);
@@ -92,7 +91,7 @@ body {
 .home-guides h2 { margin-block: 0; }
 .home-guide-list h3, .home-guide-list p { margin: 0; }
 
-.sl-markdown-content h2, .run-page h2, .run-inventory h2, .page-sources h2, .copy-review-page main h2 {
+.sl-markdown-content h2, .run-page h2, .run-inventory h2, .page-sources h2 {
   margin-block: 4rem 1rem;
 }
 
@@ -102,14 +101,13 @@ body {
 }
 
 .sl-markdown-content > h2:first-child { margin-top: 0; }
-.sl-markdown-content h3, .run-page h3, .copy-review-page main h3 { margin-block: 2.5rem .75rem; }
-.sl-markdown-content h4, .run-page h4, .copy-review-page main h4 { margin-block: 2rem .5rem; }
+.sl-markdown-content h3, .run-page h3 { margin-block: 2.5rem .75rem; }
+.sl-markdown-content h4, .run-page h4 { margin-block: 2rem .5rem; }
 
 .home-content :where(p, ul, ol),
 .home-guides :where(p, ul, ol),
 .sl-markdown-content :where(p, ul, ol),
-.run-page :where(p, ul, ol),
-.copy-review-page main :where(p, ul, ol) {
+.run-page :where(p, ul, ol) {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--type-body-size);
@@ -190,21 +188,10 @@ body {
 
 .mobile-site-menu nav a[aria-current='page'] { font-weight: 600; }
 
-.copy-review-page :where(input, button) {
-  font-family: var(--font-sans);
-  font-size: var(--type-navigation-size);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: var(--type-navigation-line);
-  text-transform: none;
-}
-
 .section-label, .footer-meta,
 .sidebar-label, .page-meta, .surface-bento figcaption, .history-year,
 .history-timeline figcaption, .run-header > p:first-child, .run-page dt,
 .run-evidence, .run-inventory span, .source-kinds,
-.copy-review-page .owner, .copy-review-page .voice,
-.copy-review-page .copy li > span:first-child,
 :where(.home-content, .sl-markdown-content, .run-body) th {
   font-family: var(--font-mono);
   font-size: var(--type-metadata-size);
@@ -247,19 +234,8 @@ body {
   line-height: 1rem;
 }
 
-.reading-label {
-  font-family: var(--font-sans);
-  font-size: var(--rail-label-size, .8125rem);
-  font-weight: 400;
-  line-height: 1.08;
-}
-
-.reading-rail a[aria-current='true'] .reading-label { font-weight: 600; }
-
 .sidebar-label, .page-meta, .surface-bento figcaption,
 .history-timeline figcaption, .run-inventory span, .source-kinds,
-.copy-review-page .owner, .copy-review-page .voice,
-.copy-review-page .copy li > span:first-child,
 :where(.home-content, .sl-markdown-content, .run-body) th { color: var(--slate); }
 
 .section-label, .footer-meta, .history-year,
@@ -268,66 +244,37 @@ body {
 .section-label, .footer-meta, .sidebar-label, .page-meta,
 .surface-bento figcaption, .history-year, .history-timeline figcaption,
 .run-header > p:first-child, .run-page dt, .run-evidence, .run-inventory span,
-.source-kinds, .copy-review-page .owner, .copy-review-page .voice,
-.copy-review-page .copy li > span:first-child { max-width: none; }
+.source-kinds { max-width: none; }
 
 .section-label, .footer-meta, .sidebar-label, .page-meta,
 .history-year, .run-header > p:first-child, .run-page dt, .run-evidence,
 .run-inventory span, .source-kinds,
 :where(.home-content, .sl-markdown-content, .run-body) th { text-transform: uppercase; }
 
-.surface-bento figcaption, .history-timeline figcaption,
-.copy-review-page .owner, .copy-review-page .voice,
-.copy-review-page .copy li > span:first-child { text-transform: none; }
+.surface-bento figcaption, .history-timeline figcaption { text-transform: none; }
 
-:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) :not(pre) > code {
+:where(.home-content, .sl-markdown-content, .run-page) :not(pre) > code {
   font-family: var(--font-mono);
   font-size: var(--type-dense-size);
   font-weight: 400;
   line-height: var(--type-dense-line);
 }
 
-:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) pre,
-:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) pre code,
-:where(.home-content, .sl-markdown-content, .run-page, .copy-review-page) pre code span {
+:where(.home-content, .sl-markdown-content, .run-page) pre,
+:where(.home-content, .sl-markdown-content, .run-page) pre code,
+:where(.home-content, .sl-markdown-content, .run-page) pre code span {
   font-family: var(--font-mono);
   font-size: var(--type-navigation-size);
   font-weight: 400;
   line-height: 1.375rem;
 }
 
-.copy-review-page header p { line-height: var(--type-body-line); }
-
-.reading-rail a[aria-current='true'] { font-weight: 600; }
-.reading-label { line-height: 1.25; }
-html[data-left-rail='collapsed'] .handbook-sidebar a::after,
-html[data-right-rail='collapsed'] .reading-rail a::after {
+html[data-left-rail='collapsed'] .handbook-sidebar a::after {
   font-family: var(--font-sans);
   font-size: .75rem;
   font-weight: 400;
   line-height: 1rem;
 }
-.mobile-toc-label {
-  font-family: var(--font-mono);
-  font-size: var(--type-metadata-size);
-  font-weight: 400;
-  letter-spacing: .04em;
-  line-height: var(--type-metadata-line);
-  text-transform: uppercase;
-}
-.mobile-toc-current {
-  font-family: var(--font-sans);
-  font-size: .875rem;
-  font-weight: 600;
-  line-height: 1rem;
-}
-.handbook-mobile-toc a {
-  font-family: var(--font-sans);
-  font-size: .875rem;
-  font-weight: 400;
-  line-height: 1.25rem;
-}
-
 .guide-rail-identity .sidebar-label > span:first-child {
   font-family: var(--font-sans);
   font-size: .875rem;
@@ -343,29 +290,6 @@ html[data-right-rail='collapsed'] .reading-rail a::after {
   line-height: 1rem;
   text-transform: uppercase;
 }
-.guide-context-label {
-  font-family: var(--font-mono);
-  font-size: .75rem;
-  font-weight: 400;
-  letter-spacing: .04em;
-  line-height: 1rem;
-  text-transform: uppercase;
-}
-.guide-context-current {
-  font-family: var(--font-sans);
-  font-size: .8125rem;
-  font-weight: 600;
-  line-height: 1rem;
-}
-.guide-context-panel a {
-  font-family: var(--font-sans);
-  font-size: .875rem;
-  font-weight: 400;
-  line-height: 1.25rem;
-}
-.guide-context-panel a[aria-current='page'],
-.guide-context-panel a[aria-current='true'] { font-weight: 600; }
-
 .guide-rail-identity .sidebar-label { text-transform: none; }
 .guide-rail-identity .sidebar-label > span:first-child,
 .guide-rail-identity .sidebar-kind {

@@ -25,7 +25,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 - `src/site.ts` owns shared navigation and interface copy.
 - components render canonical metadata. they do not own guide summaries, product explanations, recommendations, or versions.
 - run `bun run sync:readme` after changing a principal guide title or evidence label. the generated README blocks must match before validation passes.
-- review the active public surface at `/__copy-review/` during local development. production builds exclude this route.
+- edit public prose in its canonical Markdown file and review the affected route in the normal Astro development server.
 - normal public prose does not use hyphens. preserve them only for syntax, routes, filenames, commands, URLs, version identifiers, and official product names.
 
 ## verification

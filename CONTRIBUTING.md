@@ -26,16 +26,23 @@ contributions should make the field guide more accurate, more useful in practice
 
 security reports should follow [SECURITY.md](./SECURITY.md).
 
+## edit the site
+
+public writing stays in ordinary source files:
+
+- `content/home.md` owns the homepage.
+- `docs/guides/*.md`, `docs/history.md`, `docs/market.md`, and `docs/method.md` own the handbook.
+- `content/runs/*.md` owns field run pages.
+- `src/site.ts` owns shared navigation and interface labels.
+- `docs/sources.json` owns source metadata and evidence labels.
+
+run `bun run edit`, change the canonical source, and review the affected public route directly. Astro updates the page during development. Run `bun run verify` before opening the pull request. A protected merge to `main` publishes the static site through GitHub Pages.
+
 ## verification
 
 ```bash
 bun install --frozen-lockfile
-python3 .github/scripts/check_sources.py
-bun run check:field-runs
-bun run check
-bun run build
-bun run test:site
-bun run test:a11y
+bun run verify
 ```
 
 changes under `plugins/` or `hooks/` must also preserve the compatibility suite:

@@ -98,7 +98,7 @@ try {
     if (!llms.includes(`[${title}](${origin}${markdownPath})`)) failures.push(`/llms.txt: missing public Markdown route ${markdownPath}`);
     if (kind === 'guide' && scalar(markdown, 'draft') === 'true') failures.push(`/llms.txt: draft route entered canonical content ${route}`);
   }
-  if (llms.includes('__copy-review') || llms.includes('/changes/') || llms.includes('/field-lab/')) failures.push('/llms.txt: internal, redirected, or field-run route is present');
+  if (llms.includes('/changes/') || llms.includes('/field-lab/')) failures.push('/llms.txt: redirected or field-run route is present');
 } catch { failures.push('/llms.txt: generated index is missing'); }
 
 const activeGuideText = (await Promise.all(contentFiles.filter(([route]) => !route.startsWith('/field-lab/')).map(([, source]) => readFile(source, 'utf8')))).join('\n');
@@ -150,10 +150,8 @@ else {
   const locations = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]));
   for (const { route } of metadata) if (!locations.has(`${origin}${route}`)) failures.push(`${route}: absent from sitemap`);
   for (const route of draftGuides) if (locations.has(`${origin}${route}`)) failures.push(`${route}: draft route appears in sitemap`);
-  for (const alias of [...Object.keys(contentRedirects()), '/changes/', '/__copy-review/']) if (locations.has(`${origin}${alias}`)) failures.push(`${alias}: redirect or local review route appears in sitemap`);
+  for (const alias of [...Object.keys(contentRedirects()), '/changes/']) if (locations.has(`${origin}${alias}`)) failures.push(`${alias}: redirect route appears in sitemap`);
 }
-
-try { await access(path.join(dist, '__copy-review')); failures.push('/__copy-review/: production output exists'); } catch {}
 
 try {
   const robots = await readFile(path.join(dist, 'robots.txt'), 'utf8');

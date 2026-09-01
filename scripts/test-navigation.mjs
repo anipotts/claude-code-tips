@@ -60,6 +60,10 @@ try {
   expect(await page.title() === 'codex | coding agent tips', 'document title did not update after navigation');
   expect((await page.locator('.astro-route-announcer').textContent())?.trim() === 'codex | coding agent tips', 'route announcement did not report the destination title');
   expect((await page.locator('.provider-tabs [aria-current="page"]').textContent())?.trim() === 'codex', 'provider navigation did not update its active state');
+  expect(await page.locator('.provider-tabs a[data-astro-prefetch="hover"]').count() === 4, 'provider navigation is missing selective hover prefetching');
+  expect(await page.locator('#handbook-navigation > ul > li > a[data-astro-prefetch="hover"]').count() === 3, 'desktop chapter navigation is missing selective hover prefetching');
+  expect(await page.locator('.mobile-site-menu nav > a[data-astro-prefetch="tap"]').count() === 3, 'mobile chapter navigation is missing selective tap prefetching');
+  expect(await page.locator('.sidebar-page-outline a[data-astro-prefetch]').count() === 0, 'same-page heading links should not be prefetched');
   expect(await page.locator('.provider-tabs [aria-current="page"]').evaluate((link) => getComputedStyle(link).viewTransitionName) === 'provider-tab-active', 'active provider tab is missing its shared cobalt pill transition');
   const providerTransitionDurations = await page.evaluate(() => window.__providerTabTransitionDurations);
   expect(providerTransitionDurations.some((duration) => duration > 0 && duration <= 160), `provider tab transition is missing or too slow: ${providerTransitionDurations.join(', ')}`);

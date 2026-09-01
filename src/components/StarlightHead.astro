@@ -1,7 +1,6 @@
 ---
 import DefaultHead from '@astrojs/starlight/components/Head.astro';
 import { ClientRouter } from 'astro:transitions';
-import globalStyles from '../styles/global.css?inline';
 import ThemeHead from './ThemeHead.astro';
 import RailHead from './RailHead.astro';
 ---
@@ -9,5 +8,4 @@ import RailHead from './RailHead.astro';
 <DefaultHead />
 <ThemeHead />
 <RailHead />
-<style is:inline transition:persist="site-styles" set:html={globalStyles}></style>
 <ClientRouter fallback="swap" />
