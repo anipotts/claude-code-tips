@@ -1,15 +1,16 @@
 ---
 import { formatUpdatedAt } from '../date';
-import { site } from '../site';
+import { scopeForPath, site } from '../site';
 import { Icon } from 'astro-icon/components';
 
 const entry = Astro.locals.starlightRoute.entry;
 const { title, updatedAt, draft } = entry.data;
 const markdownPath = `${Astro.url.pathname.replace(/\/$/, '') || '/index'}.md`;
 const editPath = `${site.repository}/edit/main/docs/${entry.id}.md`;
+const isProviderGuide = scopeForPath(Astro.url.pathname) !== 'general';
 ---
 
-<div class="page-title-row">
+<div class:list={['page-title-row', { 'provider-guide-title-row': isProviderGuide }]}>
   <h1 id="_top">{title}</h1>
   {!draft && <div class="page-actions" aria-label="page actions">
     <button type="button" data-copy-page data-markdown-path={markdownPath} aria-label="copy page as Markdown" title="copy page as Markdown">

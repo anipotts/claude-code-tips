@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { gzipSync } from 'node:zlib';
 import sharp from 'sharp';
 import { canonicalContentFiles } from '../src/content-manifest.mjs';
 
@@ -12,6 +13,10 @@ const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
 const failures = [];
 const maxDerivativeBytes = 150 * 1024;
 const maxProviderBytes = 400 * 1024;
+const maxGuideHtmlGzipBytes = 22 * 1024;
+const maxGuideCssGzipBytes = 24 * 1024;
+const maxFontBytes = 80 * 1024;
+const maxFontFiles = 4;
 const canonicalRoutes = new Set(canonicalContentFiles().map(({ route }) => route));
 const providerRoutes = ['/guides/codex/', '/guides/claude-code/', '/guides/grok/'];
 const providerRouteSet = new Set(providerRoutes);
@@ -100,9 +105,36 @@ for (const tag of tagsByRoute.get('/history/') ?? []) {
   if (attribute(tag, 'fetchpriority')) failures.push('/history/: below-fold images must not set fetch priority');
 }
 
+const distRoot = path.join(root, 'dist');
+const assetRoot = path.join(distRoot, '_astro');
+const guideStylesheets = new Set();
+for (const { route } of canonicalContentFiles().filter(({ route }) => route.startsWith('/guides/'))) {
+  const htmlPath = path.join(distRoot, route.replace(/^\//, ''), 'index.html');
+  const html = await readFile(htmlPath);
+  const htmlGzipBytes = gzipSync(html).length;
+  if (htmlGzipBytes > maxGuideHtmlGzipBytes) failures.push(`${route}: ${htmlGzipBytes} compressed HTML bytes exceeds 22 KiB`);
+  const source = html.toString();
+  if (source.includes('--surface-canvas:') || source.includes('--rail-expanded-width:')) failures.push(`${route}: shared site CSS is inlined into generated HTML`);
+  for (const [tag] of source.matchAll(/<link\b[^>]*\brel="stylesheet"[^>]*>/g)) {
+    if (tag.includes('media="print"')) continue;
+    const href = attribute(tag, 'href');
+    if (href?.startsWith('/_astro/') && href.endsWith('.css')) guideStylesheets.add(href);
+  }
+}
+
+let guideCssGzipBytes = 0;
+for (const href of guideStylesheets) guideCssGzipBytes += gzipSync(await readFile(path.join(distRoot, href.replace(/^\//, '')))).length;
+if (guideCssGzipBytes > maxGuideCssGzipBytes) failures.push(`${guideCssGzipBytes} compressed guide CSS bytes exceeds 24 KiB`);
+
+const fontFiles = (await readdir(assetRoot)).filter((file) => /\.(?:woff2?|ttf|otf)$/.test(file));
+let fontBytes = 0;
+for (const file of fontFiles) fontBytes += (await stat(path.join(assetRoot, file))).size;
+if (fontFiles.length > maxFontFiles) failures.push(`${fontFiles.length} generated font files exceeds the ${maxFontFiles} file budget`);
+if (fontBytes > maxFontBytes) failures.push(`${fontBytes} generated font bytes exceeds 80 KiB`);
+
 if (failures.length > 0) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
 
-console.log(`validated ${manifest.assets.length} original media records and ${derivativePaths.size} responsive derivatives against performance budgets`);
+console.log(`validated media, guide HTML, ${guideStylesheets.size} shared stylesheets, and ${fontFiles.length} font files against performance budgets`);

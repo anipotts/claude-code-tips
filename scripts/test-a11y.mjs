@@ -84,7 +84,8 @@ try {
         checkRole(elements('td, .page-sources li, .run-inventory li, .artifact-list li, .run-page dd'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: ink }, 'dense content');
         const metadata = elements('.section-label, .home-guide-list span, .footer-meta, .sidebar-label, .page-meta, figcaption, .history-year, .run-header > p:first-child, .run-page dt, .run-evidence, .run-inventory span, .source-kinds, th');
         checkRole(metadata, { size: 12, line: 18, weight: 400, family: 'IBM Plex Mono', color: slate }, 'metadata');
-        checkRole(elements('.site-name, .provider-tabs a, .search-trigger, .handbook-sidebar a, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 14, line: 20, family: 'Instrument Sans' }, 'navigation');
+        checkRole(elements('.site-name, .provider-tabs a, .search-trigger, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 14, line: 20, family: 'Instrument Sans' }, 'navigation');
+        checkRole(elements('.handbook-sidebar a'), { size: 13, line: 18, family: 'Instrument Sans' }, 'guide navigation');
         return findings;
       }, { route, viewportWidth: viewport.width });
       for (const finding of typographyFailures) failures.push(`${viewport.name} ${route}: ${finding}`);

@@ -18,18 +18,10 @@ const redirectedPaths = new Set(Object.keys(redirects));
 export default defineConfig({
   site: site.url,
   output: 'static',
-  prefetch: false,
+  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   markdown: { processor: unified({ rehypePlugins: [linkMetadata] }) },
   redirects,
   integrations: [
-    {
-      name: 'local-copy-review',
-      hooks: {
-        'astro:config:setup': ({ command, injectRoute }) => {
-          if (command === 'dev') injectRoute({ pattern: '/__copy-review/', entrypoint: './src/pages-dev/copy-review.astro' });
-        },
-      },
-    },
     icon({
       include: {
         ph: [
@@ -61,10 +53,11 @@ export default defineConfig({
     }),
     sitemap({ filter: (page) => {
       const pathname = new URL(page).pathname;
-      return !pathname.startsWith('/__copy-review/') && !redirectedPaths.has(pathname);
+      return !redirectedPaths.has(pathname);
     } }),
     starlight({
       title: site.name,
+      customCss: ['./src/styles/global.css'],
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: socialImage } },
         { tag: 'meta', attrs: { property: 'og:image:width', content: '1280' } },
