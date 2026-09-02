@@ -52,9 +52,9 @@ html:has(.publication-sidebar[data-state='collapsed']) { --left-rail-width: var(
 }
 
 .publication-sidebar [data-sw-sidebar-trigger] {
-  inline-size: 2.25rem;
-  min-inline-size: 2.25rem;
-  block-size: 2.25rem;
+  inline-size: 2rem;
+  min-inline-size: 2rem;
+  block-size: 2rem;
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
@@ -135,7 +135,13 @@ html:has(.publication-sidebar[data-state='collapsed']) { --left-rail-width: var(
 
 .publication-sidebar[data-state='collapsed'] .guide-rail-identity,
 .publication-sidebar[data-state='collapsed'] .sidebar-page-outline { display: none; }
-.publication-sidebar[data-state='collapsed'] .handbook-rail-head { justify-content: center; padding-inline: 0; }
+.publication-sidebar[data-state='collapsed'] .handbook-rail-head {
+  min-block-size: var(--rail-collapsed-width);
+  block-size: var(--rail-collapsed-width);
+  justify-content: center;
+  padding: .75rem;
+}
+.publication-sidebar[data-state='collapsed'] .publication-sidebar-content { padding-inline: .5rem; }
 .publication-sidebar[data-state='collapsed'] [data-sidebar='menu-button'] {
   inline-size: 2.5rem;
   min-block-size: 2.5rem;
@@ -164,6 +170,10 @@ html:has(.publication-sidebar[data-state='collapsed']) { --left-rail-width: var(
 @media (min-width: 48rem) and (max-width: 71.99rem) {
   .main-frame { padding-inline-start: var(--left-rail-width) !important; }
   .main-pane .sl-container { max-width: 52rem; margin-inline: auto; }
+}
+
+@media (min-width: 48rem) and (max-width: 59.99rem) {
+  .handbook-rail-head { min-block-size: 3.25rem; }
 }
 
 @media (min-width: 80rem) {

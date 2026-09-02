@@ -55,9 +55,30 @@ try {
       mobileTrigger: getComputedStyle(document.querySelector('.mobile-site-menu-trigger')).display,
       progress: getComputedStyle(document.querySelector('.reading-progress-rail')).display,
       dualBar: document.querySelectorAll('.mobile-toc, .guide-context-bar').length,
+      headerHeight: document.querySelector('.site-header').getBoundingClientRect().height,
+      tabsHeight: Math.max(...[...document.querySelectorAll('.provider-tabs a')].map((link) => link.getBoundingClientRect().height)),
+      searchHeight: document.querySelector('.header-search site-search > button').getBoundingClientRect().height,
+      headerControlHeights: [...document.querySelectorAll('.site-header-control')]
+        .map((control) => control.getBoundingClientRect())
+        .filter((bounds) => bounds.width > 0)
+        .map((bounds) => bounds.height),
+      pageActionHeights: [...document.querySelectorAll('.page-actions button')].map((control) => control.getBoundingClientRect().height),
+      headerGroupsOverlap: (() => {
+        const groups = [...document.querySelectorAll('.site-name, .provider-tabs, .header-actions')]
+          .map((element) => element.getBoundingClientRect());
+        return groups.some((first, index) => groups.slice(index + 1).some((second) =>
+          first.left < second.right && first.right > second.left && first.top < second.bottom && first.bottom > second.top
+        ));
+      })(),
     }));
     expect(layout.overflow === 0, `${viewport.width}px layout has horizontal overflow: ${layout.overflow}`);
     expect(layout.dualBar === 0, `${viewport.width}px layout renders the retired intermediate navigation bar`);
+    expect(layout.tabsHeight <= 32, `${viewport.width}px provider tabs exceed the compact 32px rhythm`);
+    expect(layout.searchHeight === 32, `${viewport.width}px search trigger does not use the compact 32px height`);
+    expect(layout.headerControlHeights.every((height) => height === 32), `${viewport.width}px header actions do not share the compact 32px height`);
+    expect(layout.pageActionHeights.every((height) => height === 32), `${viewport.width}px page actions do not share the compact 32px height`);
+    expect(!layout.headerGroupsOverlap, `${viewport.width}px header groups overlap`);
+    expect(Math.abs(layout.headerHeight - (viewport.width < 960 ? 92 : 64)) <= 1, `${viewport.width}px header height does not match its responsive row layout`);
     if (viewport.width < 768) {
       expect(layout.sidebar === 'none', 'mobile layout renders the desktop sidebar');
       expect(layout.mobileTrigger !== 'none', 'mobile layout hides the Sheet trigger');
@@ -174,7 +195,7 @@ try {
       leftAlignmentDelta: Math.abs(siteMark.left - railMark.left),
     };
   });
-  expect(chromeStyles.controls.every((control) => control.width === 36 && control.height === 36), 'header and sidebar controls do not share a 36px footprint');
+  expect(chromeStyles.controls.every((control) => control.width === 32 && control.height === 32), 'header and sidebar controls do not share a compact 32px footprint');
   expect(chromeStyles.controls.every((control) => control.borderStyle !== 'outset'), 'native browser borders leak into Starwind controls');
   expect(chromeStyles.listMarkers === 0, 'browser list markers leak into the guide sidebar');
   expect(chromeStyles.outlineRule === '0px', 'the retired heading connector rule remains visible');
@@ -202,6 +223,25 @@ try {
   expect(await sidebar.getAttribute('data-state') === 'expanded', 'desktop sidebar is not expanded initially');
   await sidebarTrigger.click();
   expect(await sidebar.getAttribute('data-state') === 'collapsed', 'desktop sidebar did not collapse');
+  await page.waitForFunction(() => Math.abs(document.querySelector('.publication-sidebar')?.getBoundingClientRect().width - 56) < 1);
+  const collapsedAlignment = await page.evaluate(() => {
+    const visible = (selector) => [...document.querySelectorAll(selector)].find((element) => element.getClientRects().length > 0);
+    const rail = visible('.publication-sidebar').getBoundingClientRect();
+    const trigger = visible('[data-sw-sidebar-trigger]').getBoundingClientRect();
+    const chapterButtons = [...document.querySelectorAll('[data-sidebar="menu-button"]')]
+      .filter((element) => element.getClientRects().length > 0)
+      .map((element) => element.getBoundingClientRect());
+    const center = (bounds) => bounds.left + bounds.width / 2;
+    return {
+      triggerDelta: Math.abs(center(trigger) - center(rail)),
+      chapterDeltas: chapterButtons.map((button) => Math.abs(center(button) - center(rail))),
+      horizontalInset: (rail.width - trigger.width) / 2,
+      verticalInset: (visible('.handbook-rail-head').getBoundingClientRect().height - trigger.height) / 2,
+    };
+  });
+  expect(collapsedAlignment.triggerDelta < 1, 'collapsed sidebar trigger is not centered in the rail');
+  expect(collapsedAlignment.chapterDeltas.every((delta) => delta < 1), 'collapsed chapter buttons are not centered in the rail');
+  expect(Math.abs(collapsedAlignment.horizontalInset - collapsedAlignment.verticalInset) < 1, 'collapsed sidebar trigger does not have equal vertical and horizontal spacing');
   expect(await page.locator('[aria-label="codex handbook chapters"] .sidebar-page-outline').evaluate((outline) => getComputedStyle(outline).display) === 'none', 'heading outline remains visible in icon-collapse mode');
   expect(await page.locator('.right-sidebar-container').evaluate((rail) => rail.getBoundingClientRect().width) === 0, 'retired right sidebar retains width');
   await sidebarTrigger.click();
