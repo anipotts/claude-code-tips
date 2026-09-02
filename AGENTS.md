@@ -18,6 +18,7 @@ this repository is an opinionated, source backed handbook for experienced coding
 
 ## canonical ownership
 
+- `design.md` owns public visual, interaction, responsive, media presentation, and progressive agent-native design standards.
 - `content/home.md` owns the homepage.
 - `content/handbook/*.md` owns guidance shared across products.
 - `content/guides/<product>*.md` owns product overviews and chapters.
