@@ -30,12 +30,32 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .header-actions { grid-column: 3; grid-row: 1; display: flex; align-items: center; justify-self: end; gap: .45rem; }
 .github-link { display: inline-flex; align-items: center; gap: .4rem; justify-self: end; color: var(--ink); }
 .github-link { text-decoration: none; }
-.github-link svg { inline-size: 1.35rem; block-size: 1.35rem; }
+.github-link svg,
+.site-header-control [data-theme-icon-wrapper],
+.site-header-control [data-theme-icon] { inline-size: 1.125rem; block-size: 1.125rem; }
 .header-search site-search > button,
 .site-header-control { min-block-size: 2.25rem; border-radius: var(--radius-md); }
+.site-header-control {
+  inline-size: 2.25rem;
+  min-inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--slate);
+  box-shadow: none;
+}
+.site-header-control:hover { border-color: transparent; background: var(--soft); color: var(--ink); }
+.site-header-control:focus-visible { border-color: var(--cobalt); background: var(--soft); color: var(--ink); }
 .header-search site-search > button { min-inline-size: 7.75rem; block-size: 2.25rem; border: 1px solid var(--rule); background: color-mix(in srgb, var(--surface-subtle) 58%, transparent); color: var(--slate); }
 .header-search site-search > button:hover,
 .header-search site-search > button:focus-visible { border-color: color-mix(in srgb, var(--cobalt) 58%, var(--rule)); background: var(--soft); color: var(--ink); }
+.header-search site-search > button kbd {
+  border: 1px solid var(--rule);
+  background: var(--surface-subtle);
+  color: var(--slate);
+  box-shadow: none;
+}
 .header-search site-search dialog {
   z-index: var(--z-preview);
   border-color: var(--rule);

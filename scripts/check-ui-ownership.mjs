@@ -64,6 +64,7 @@ const allowedControllers = new Set([
   'src/components/PublicationEnhancements.astro',
   'src/components/StarlightPageSidebar.astro',
   'src/components/StarlightPageTitle.astro',
+  'src/components/StarlightThemeProvider.astro',
   'src/components/ThemeBridge.astro',
 ]);
 for (const [file, source] of repositoryText) {

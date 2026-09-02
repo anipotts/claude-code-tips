@@ -1,0 +1,10 @@
+<!--
+  Starwind is the sole theme preference and interaction owner. Starlight still
+  expects this compatibility object to exist, but must not read a second
+  storage key or independently mutate data-theme.
+-->
+<script is:inline>
+  window.StarlightThemeProvider = {
+    updatePickers() {},
+  };
+</script>

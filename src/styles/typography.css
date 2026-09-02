@@ -181,6 +181,8 @@ body {
 .site-name, .site-footer .footer-site-name, .provider-tabs a[aria-current='page'], .publication-sidebar a[aria-current='page'],
 .right-sidebar a[aria-current='true'] { font-weight: 600; }
 
+:where(button[data-slot], button[data-sidebar]) { font: inherit; }
+
 .mobile-site-menu nav a {
   font-family: var(--font-sans);
   font-size: 1rem;

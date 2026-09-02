@@ -148,7 +148,7 @@
   --outline: #5279f2;
 
   /* sidebars variables */
-  --sidebar-background: #12141a;
+  --sidebar-background: #0b0c0f;
   --sidebar-foreground: #f5f7fb;
   --sidebar-primary: #5279f2;
   --sidebar-primary-foreground: #fff;
@@ -159,6 +159,32 @@
 }
 
 @layer components {
+  /*
+   * Tailwind Preflight is deliberately omitted because Starlight owns the
+   * document reset. Restore only the neutral element defaults Starwind's
+   * component classes expect so browser-native buttons and list markers do
+   * not leak into the component system.
+   */
+  :where(button[data-slot], button[data-sidebar]) {
+    appearance: none;
+    margin: 0;
+    border-width: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+
+  :where(
+    [data-slot='sidebar-menu'],
+    [data-slot='sidebar-menu-sub'],
+    [data-slot='sidebar-menu-item'],
+    [data-slot='sidebar-menu-sub-item']
+  ) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
   [data-slot] {
     border-color: var(--border);
   }
