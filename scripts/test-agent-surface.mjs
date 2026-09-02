@@ -6,12 +6,15 @@ import path from 'node:path';
 import process from 'node:process';
 import { chromium } from '@playwright/test';
 import { AGENT_TOOL_NAMES, AGENT_TOOL_SCHEMAS, createHandbookTools } from '../src/agent-contract.mjs';
-import { buildAgentIndex, splitCanonicalMarkdown } from '../src/agent-index.mjs';
+import { buildAgentIndex, normalizePublicText, splitCanonicalMarkdown } from '../src/agent-index.mjs';
 import { canonicalContentFiles } from '../src/content-manifest.mjs';
 
 const root = process.cwd();
 const dist = path.join(root, 'dist');
 const index = JSON.parse(await readFile(path.join(dist, 'agent-index.json'), 'utf8'));
+assert.equal(normalizePublicText('&amp;lt;script&amp;gt;'), '&lt;script&gt;', 'entity decoding must remain single pass');
+assert.equal(normalizePublicText('&amp;amp;lt;'), '&amp;lt;', 'nested ampersand entities must decode by exactly one level');
+assert.notEqual(normalizePublicText('&amp;amp;lt;'), '&lt;', 'nested ampersand entities must never decode twice');
 assert.deepEqual(index, await buildAgentIndex(root), 'built agent index must exactly match canonical content');
 process.chdir(path.dirname(root));
 assert.deepEqual(index, await buildAgentIndex(root), 'explicit-root generation must be independent of caller cwd');

@@ -10,14 +10,14 @@ import { AGENT_INDEX_VERSION } from './agent-index-version.mjs';
 
 export { AGENT_INDEX_VERSION } from './agent-index-version.mjs';
 
-const decodeEntities = (value) => value
-  .replace(/&amp;/g, '&')
-  .replace(/&lt;/g, '<')
-  .replace(/&gt;/g, '>')
-  .replace(/&quot;/g, '"')
-  .replace(/&#39;|&apos;/g, "'")
-  .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
-  .replace(/&#x([\da-f]+);/gi, (_, code) => String.fromCodePoint(Number.parseInt(code, 16)));
+const namedEntities = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+const decodeEntities = (value) => value.replace(/&(?:amp|lt|gt|quot|apos|#39|#\d+|#x[\da-f]+);/gi, (entity) => {
+  const token = entity.slice(1, -1).toLocaleLowerCase();
+  if (token in namedEntities) return namedEntities[token];
+  if (token === '#39') return "'";
+  const codePoint = token.startsWith('#x') ? Number.parseInt(token.slice(2), 16) : Number(token.slice(1));
+  return Number.isSafeInteger(codePoint) && codePoint >= 0 && codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : entity;
+});
 
 export const normalizePublicText = (value) => decodeEntities(value)
   .replace(/<[^>]*>/g, ' ')
