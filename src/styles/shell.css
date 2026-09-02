@@ -12,9 +12,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .header-main { display: contents; }
 .site-name { grid-column: 1; grid-row: 1; display: inline-flex; align-items: center; gap: .7rem; width: max-content; text-decoration: none; }
 .site-name img { inline-size: 1.5rem; block-size: 1.5rem; flex: none; border-radius: var(--radius-ui); }
-.provider-tabs { grid-column: 2; grid-row: 1; min-inline-size: 0; padding: .3rem 0; display: flex; align-items: center; justify-content: center; gap: clamp(.45rem, 2vw, 1.35rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; }
+.provider-tabs { grid-column: 2; grid-row: 1; min-inline-size: 0; padding: .25rem 0; display: flex; align-items: center; justify-content: center; gap: clamp(.35rem, 1.4vw, 1rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; }
 .provider-tabs::-webkit-scrollbar { display: none; }
-.provider-tabs a { position: relative; isolation: isolate; min-height: 2.1rem; display: grid; place-items: center; padding: .35rem .72rem; border-radius: var(--radius-md); color: var(--slate); text-decoration: none; white-space: nowrap; }
+.provider-tabs a { position: relative; isolation: isolate; min-height: 2rem; display: grid; place-items: center; padding: .3rem .625rem; border-radius: var(--radius-md); color: var(--slate); text-decoration: none; white-space: nowrap; }
 .provider-tab-highlight { position: absolute; z-index: -1; inset: 0; border-radius: inherit; background: var(--cobalt); opacity: 0; }
 .provider-tab-label { position: relative; }
 .provider-tabs a:hover { background: var(--soft); color: var(--ink); }
@@ -34,11 +34,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .site-header-control [data-theme-icon-wrapper],
 .site-header-control [data-theme-icon] { inline-size: 1.125rem; block-size: 1.125rem; }
 .header-search site-search > button,
-.site-header-control { min-block-size: 2.25rem; border-radius: var(--radius-md); }
+.site-header-control { min-block-size: 2rem; border-radius: var(--radius-md); }
 .site-header-control {
-  inline-size: 2.25rem;
-  min-inline-size: 2.25rem;
-  block-size: 2.25rem;
+  inline-size: 2rem;
+  min-inline-size: 2rem;
+  block-size: 2rem;
   padding: 0;
   border: 1px solid transparent;
   background: transparent;
@@ -47,7 +47,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 }
 .site-header-control:hover { border-color: transparent; background: var(--soft); color: var(--ink); }
 .site-header-control:focus-visible { border-color: var(--cobalt); background: var(--soft); color: var(--ink); }
-.header-search site-search > button { min-inline-size: 7.75rem; block-size: 2.25rem; border: 1px solid var(--rule); background: color-mix(in srgb, var(--surface-subtle) 58%, transparent); color: var(--slate); }
+.header-search site-search > button { min-inline-size: 7rem; block-size: 2rem; padding-inline: .55rem; border: 1px solid var(--rule); background: color-mix(in srgb, var(--surface-subtle) 58%, transparent); color: var(--slate); }
 .header-search site-search > button:hover,
 .header-search site-search > button:focus-visible { border-color: color-mix(in srgb, var(--cobalt) 58%, var(--rule)); background: var(--soft); color: var(--ink); }
 .header-search site-search > button kbd {
@@ -140,26 +140,52 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
   :root { --sl-content-pad-x: 1.5rem; }
 }
 
+@media (min-width: 60rem) and (max-width: 71.99rem) {
+  .site-header { grid-template-columns: minmax(9.5rem, 1fr) auto minmax(10.5rem, 1fr); }
+  .provider-tabs { gap: .2rem; }
+  .provider-tabs a { padding-inline: .5rem; }
+  .header-actions { gap: .25rem; }
+  .header-search site-search > button { min-inline-size: 6.5rem; }
+  .header-search site-search > button kbd { display: none; }
+}
+
+@media (min-width: 48rem) and (max-width: 59.99rem) {
+  :root { --site-header-height: 5.75rem; --sl-mobile-toc-height: 0rem; }
+  .site-header { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 3.25rem 2.5rem; }
+  .site-name { grid-column: 1; grid-row: 1; }
+  .header-actions { grid-column: 2; grid-row: 1; gap: .25rem; }
+  .provider-tabs { grid-column: 1 / -1; grid-row: 2; gap: .2rem; padding: .125rem 0 .375rem; }
+  .provider-tabs a { min-height: 1.875rem; padding: .25rem .6rem; }
+  .header-search site-search > button {
+    inline-size: 2rem;
+    min-inline-size: 2rem;
+    padding: 0;
+    justify-content: center;
+  }
+  .header-search site-search > button span,
+  .header-search site-search > button kbd { display: none; }
+}
+
 @media (max-width: 47.99rem) {
-  :root { --site-header-height: 6.65rem; --sl-mobile-toc-height: 0rem; }
-  .site-header { padding-inline: 0; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 3.9rem 2.75rem; }
+  :root { --site-header-height: 5.75rem; --sl-mobile-toc-height: 0rem; }
+  .site-header { padding-inline: 0; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 3.25rem 2.5rem; }
   .site-name { grid-column: 1; grid-row: 1; margin-inline-start: var(--site-gutter); }
   .header-actions {
     grid-column: 2;
     grid-row: 1;
     gap: .125rem;
     margin-inline-end: var(--site-gutter);
-    padding: .1875rem;
+    padding: .125rem;
     border: 1px solid var(--rule);
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--surface-subtle) 58%, transparent);
   }
   .header-search site-search > button,
   .site-header-control {
-    inline-size: 2.25rem;
-    min-inline-size: 2.25rem;
-    block-size: 2.25rem;
-    min-block-size: 2.25rem;
+    inline-size: 2rem;
+    min-inline-size: 2rem;
+    block-size: 2rem;
+    min-block-size: 2rem;
     padding: 0;
     border: 0;
     border-radius: var(--radius-sm);
@@ -172,9 +198,9 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
   .site-header-control:focus-visible { border-color: transparent; background: var(--soft); }
   .header-search site-search > button span,
   .header-search site-search > button kbd { display: none; }
-  .header-actions > .github-link { display: none; }
-  .provider-tabs { grid-column: 1 / -1; grid-row: 2; justify-content: center; gap: .25rem; padding-inline: var(--site-gutter); }
-  .provider-tabs a { min-height: 2rem; padding-inline: .55rem; }
+  .header-actions .github-link { display: none; }
+  .provider-tabs { grid-column: 1 / -1; grid-row: 2; justify-content: center; gap: .125rem; padding: .125rem var(--site-gutter) .375rem; }
+  .provider-tabs a { min-height: 1.875rem; padding: .25rem .5rem; }
   .sidebar-pane { display: none !important; }
   .right-sidebar-container { display: block !important; flex: 0 0 0 !important; width: 0 !important; }
   .right-sidebar { width: 0 !important; border-inline-start: 0 !important; }
