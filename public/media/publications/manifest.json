@@ -1,7 +1,20 @@
 {
+  "schemaVersion": 2,
   "retrievedAt": "2026-08-27",
   "derivativeFormat": "webp",
   "derivativeWidths": [640, 1200],
+  "mediaPolicy": {
+    "thirdPartyUseRequirements": ["official-embed", "credited-link", "permission-granted", "reusable-license"],
+    "rehostedDisallowedStatuses": ["official-embed", "credited-link"],
+    "visibleCreditRequires": ["creator.name", "creator.handle", "originalPostUrl"],
+    "embedRequirements": {
+      "reservedDimensions": true,
+      "autoplay": false,
+      "reducedMotion": true,
+      "originalPostFallback": true
+    }
+  },
+  "externalMedia": [],
   "featuredImages": [
     {
       "id": "codex-handbook-workspace",
@@ -11,7 +24,24 @@
       "bytes": 977228,
       "sha256": "abcf82246f99ba8193901a175f655e0a02786ec77e5d847e49ef08ef9218bcd4",
       "source": "Ani supplied screenshot",
-      "canonicalPages": ["/guides/codex/"]
+      "canonicalPages": ["/guides/codex/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "Ani Potts", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "owner-supplied",
+      "permissionStatus": "owner-supplied",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [
+        {
+          "route": "/guides/codex/",
+          "alt": "Codex beside a coding agent tips task and its GitHub pull request with passing checks",
+          "caption": "a screenshot of me working on some personal projects and some content for a brand deal.",
+          "linkUrl": null
+        }
+      ]
     }
   ],
   "assets": [
@@ -20,6 +50,16 @@
       "originalUrl": "https://raw.githubusercontent.com/openai/codex/main/.github/codex-cli-splash.png",
       "sourcePages": ["https://github.com/openai/codex"],
       "canonicalPages": ["/guides/codex/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "OpenAI", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [],
       "original": { "width": 1898, "height": 1190, "sha256": "15b86fa9c0790a779ecdd84f1e7dee029ab79bfb093bd3c4876998696925b013" },
       "derivativeSet": "codex-cli"
     },
@@ -28,6 +68,16 @@
       "originalUrl": "https://images.ctfassets.net/kftzwdyauwt9/7eyalGUXstkzzzJ3Pb008m/9f71260a3f127dc142cc8c479d0cf68f/Installer4.png?fm=webp&q=90&w=1600",
       "sourcePages": ["https://openai.com/index/introducing-the-codex-app/", "https://openai.com/codex/"],
       "canonicalPages": ["/guides/codex/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "OpenAI", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [],
       "original": { "width": 1600, "height": 962, "sha256": "3c41d5bacd12bd6ddfe2a1c9df028674357a7156e273c1d52d77797b95721102" },
       "derivativeSet": "codex-app"
     },
@@ -36,6 +86,16 @@
       "originalUrl": "https://images.ctfassets.net/kftzwdyauwt9/4i08f39LTE7HOZ0R3EKaKA/74f6008bbde015cfef96a14209f7673b/16_9.png",
       "sourcePages": ["https://openai.com/index/work-with-codex-from-anywhere/"],
       "canonicalPages": ["/guides/codex/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "OpenAI", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [],
       "original": { "width": 1920, "height": 1080, "sha256": "4f013749c0b8e232a5c5a63b67a8bc37a65d056b8ccdf578faafe73b141769a9" },
       "derivativeSet": "codex-mobile"
     },
@@ -44,6 +104,23 @@
       "originalUrl": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/699e1b736d83c9fb55a56d2a_698be3342261cf694fdae301_698bdd78a6031117e6bb41d6_Screenshot%2525202026-02-09%252520at%25252012.52.07%2525E2%252580%2525AFPM.png",
       "sourcePages": ["https://code.claude.com/docs/en/overview"],
       "canonicalPages": ["/guides/claude-code/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "Anthropic", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [
+        {
+          "route": "/guides/claude-code/",
+          "alt": "Claude Code working in its coding interface",
+          "caption": "code and repository work",
+          "linkUrl": "https://code.claude.com/docs/en/overview"
+        }
+      ],
       "original": { "width": 2064, "height": 1252, "sha256": "40fbc77a34b0790f53acda7cc3b7ed0476ac386e6ca57f6131800573f424fb32" },
       "derivativeSet": "claude-code"
     },
@@ -52,6 +129,23 @@
       "originalUrl": "https://academy.claude.com/assets/media/6fcef3fffebbdcc24dfe51c43e57196dcec0402c986c32bb803a2bd6a6fcdffc.png",
       "sourcePages": ["https://claude.com/resources/tutorials/navigating-the-claude-desktop-app", "https://code.claude.com/docs/en/remote-control"],
       "canonicalPages": ["/guides/claude-code/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "Anthropic", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [
+        {
+          "route": "/guides/claude-code/",
+          "alt": "Claude available through a remote conversation surface",
+          "caption": "web and remote control",
+          "linkUrl": "https://code.claude.com/docs/en/remote-control"
+        }
+      ],
       "original": { "width": 2064, "height": 1252, "sha256": "6fcef3fffebbdcc24dfe51c43e57196dcec0402c986c32bb803a2bd6a6fcdffc" },
       "derivativeSet": "claude-chat"
     },
@@ -60,6 +154,23 @@
       "originalUrl": "https://academy.claude.com/assets/media/782ff424a16217adc2bf15d89f81250e2d2c9c4f112ddad39a28942c6ae43386.png",
       "sourcePages": ["https://code.claude.com/docs/en/desktop"],
       "canonicalPages": ["/guides/claude-code/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "Anthropic", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [
+        {
+          "route": "/guides/claude-code/",
+          "alt": "the Claude Cowork task interface",
+          "caption": "desktop tasks and visual review",
+          "linkUrl": "https://code.claude.com/docs/en/desktop"
+        }
+      ],
       "original": { "width": 2304, "height": 1616, "sha256": "782ff424a16217adc2bf15d89f81250e2d2c9c4f112ddad39a28942c6ae43386" },
       "derivativeSet": "claude-cowork"
     },
@@ -68,6 +179,23 @@
       "originalUrl": "https://media.x.ai/v1/website/grok-build-mode-og-1454d1ce.png",
       "sourcePages": ["https://docs.x.ai/build/overview"],
       "canonicalPages": ["/guides/grok/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "xAI", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [
+        {
+          "route": "/guides/grok/",
+          "alt": "Grok Build in its coding interface",
+          "caption": "Grok Build and Build Mode",
+          "linkUrl": "https://docs.x.ai/build/overview"
+        }
+      ],
       "original": { "width": 1200, "height": 630, "sha256": "df1fc4b220ca48749f61d9959446a39f1a118423d8acea47bb1d5f9417202894" },
       "derivativeSet": "grok-build"
     },
@@ -76,6 +204,23 @@
       "originalUrl": "https://media.x.ai/v1/website/open-source-cover-930d1067.png",
       "sourcePages": ["https://docs.x.ai/grok-bot/overview"],
       "canonicalPages": ["/guides/grok/"],
+      "retrievedAt": "2026-08-27",
+      "creator": { "name": "xAI", "handle": null },
+      "originalPostUrl": null,
+      "ownership": "provider-published",
+      "permissionStatus": "not-recorded",
+      "licenseStatus": "not-recorded",
+      "publicationStatus": "rehosted-file",
+      "creditVisible": false,
+      "embed": null,
+      "presentations": [
+        {
+          "route": "/guides/grok/",
+          "alt": "an xAI product graphic for Grok tools",
+          "caption": "Grok Bot and persistent cloud work",
+          "linkUrl": "https://docs.x.ai/grok-bot/overview"
+        }
+      ],
       "original": { "width": 1200, "height": 630, "sha256": "a0589b382026d4ee6120dd91f582c17ba79c914a5a51040550ead128711232a8" },
       "derivativeSet": "grok-bot"
     }

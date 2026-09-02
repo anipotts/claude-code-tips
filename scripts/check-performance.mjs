@@ -25,6 +25,67 @@ const providerRoutes = ['/guides/codex/', '/guides/claude-code/', '/guides/grok/
 const providerRouteSet = new Set(providerRoutes);
 const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex');
 const attribute = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
+const mediaRecords = [...(manifest.featuredImages ?? []), ...(manifest.assets ?? []), ...(manifest.externalMedia ?? [])];
+const ownershipClasses = new Set(['owner-supplied', 'provider-published', 'third-party', 'unknown']);
+const permissionStatuses = new Set(['owner-supplied', 'not-recorded', 'permission-granted']);
+const licenseStatuses = new Set(['not-recorded', 'reusable-license']);
+const publicationStatuses = new Set(['rehosted-file', 'official-embed', 'credited-link']);
+const expectedMediaPolicy = {
+  thirdPartyUseRequirements: ['official-embed', 'credited-link', 'permission-granted', 'reusable-license'],
+  rehostedDisallowedStatuses: ['official-embed', 'credited-link'],
+  visibleCreditRequires: ['creator.name', 'creator.handle', 'originalPostUrl'],
+  embedRequirements: { reservedDimensions: true, autoplay: false, reducedMotion: true, originalPostFallback: true },
+};
+
+if (manifest.schemaVersion !== 2) failures.push('media manifest schema version must be 2');
+if (JSON.stringify(manifest.mediaPolicy) !== JSON.stringify(expectedMediaPolicy)) failures.push('media manifest policy differs from the locked creator-media policy');
+if (!Array.isArray(manifest.externalMedia)) failures.push('media manifest externalMedia must be an array');
+const mediaIds = new Set();
+for (const record of mediaRecords) {
+  if (mediaIds.has(record.id)) failures.push(`${record.id}: media id is duplicated`);
+  mediaIds.add(record.id);
+}
+
+function validateEditorialMetadata(record, { rehosted }) {
+  if (!record.id || typeof record.id !== 'string') failures.push('media record id is missing');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(record.retrievedAt ?? '')) failures.push(`${record.id}: retrieval date is missing or invalid`);
+  if (!record.creator || !Object.hasOwn(record.creator, 'name') || !Object.hasOwn(record.creator, 'handle')) failures.push(`${record.id}: creator name and handle must be explicit, nullable fields`);
+  if (record.creator?.name !== null && typeof record.creator?.name !== 'string') failures.push(`${record.id}: creator name must be a string or null`);
+  if (record.creator?.handle !== null && !/^@[^\s]+$/.test(record.creator?.handle ?? '')) failures.push(`${record.id}: creator handle must begin with @ or be null`);
+  if (record.originalPostUrl !== null && !/^https:\/\//.test(record.originalPostUrl ?? '')) failures.push(`${record.id}: original post URL must be https or null`);
+  if (!ownershipClasses.has(record.ownership)) failures.push(`${record.id}: ownership classification is invalid`);
+  if (!permissionStatuses.has(record.permissionStatus)) failures.push(`${record.id}: permission status is invalid`);
+  if (!licenseStatuses.has(record.licenseStatus)) failures.push(`${record.id}: license status is invalid`);
+  if (!publicationStatuses.has(record.publicationStatus)) failures.push(`${record.id}: publication status is invalid`);
+  if (typeof record.creditVisible !== 'boolean') failures.push(`${record.id}: visible-credit status must be boolean`);
+  if (!Array.isArray(record.canonicalPages) || record.canonicalPages.length === 0) failures.push(`${record.id}: canonical pages are missing`);
+  for (const route of record.canonicalPages ?? []) if (!canonicalRoutes.has(route)) failures.push(`${record.id}: unknown canonical page ${route}`);
+  if (!Array.isArray(record.presentations)) failures.push(`${record.id}: current presentations must be an array`);
+
+  for (const presentation of record.presentations ?? []) {
+    if (!canonicalRoutes.has(presentation.route)) failures.push(`${record.id}: presentation uses unknown canonical route ${presentation.route}`);
+    if (typeof presentation.alt !== 'string' || presentation.alt.length === 0) failures.push(`${record.id}: presentation alt text must be exact and nonempty`);
+    if (presentation.caption !== null && typeof presentation.caption !== 'string') failures.push(`${record.id}: presentation caption must be a string or null`);
+    if (presentation.linkUrl !== null && !/^https:\/\//.test(presentation.linkUrl ?? '')) failures.push(`${record.id}: presentation link must be https or null`);
+  }
+
+  if (record.creditVisible && (!record.creator?.name || !record.creator?.handle || !record.originalPostUrl)) failures.push(`${record.id}: visible credit requires creator name, @handle, and original post URL`);
+
+  const thirdPartyUseAllowed = ['official-embed', 'credited-link'].includes(record.publicationStatus)
+    || record.permissionStatus === 'permission-granted'
+    || record.licenseStatus === 'reusable-license';
+  if (record.ownership === 'third-party' && !thirdPartyUseAllowed) failures.push(`${record.id}: third-party creator media needs an embed, credited link, permission, or reusable license`);
+
+  if (rehosted) {
+    if (record.publicationStatus !== 'rehosted-file') failures.push(`${record.id}: rehosted media cannot claim embed or link status`);
+    if (record.embed !== null) failures.push(`${record.id}: rehosted media cannot carry embed configuration`);
+  } else if (record.publicationStatus === 'official-embed') {
+    if (!record.embed || !Number.isInteger(record.embed.width) || record.embed.width <= 0 || !Number.isInteger(record.embed.height) || record.embed.height <= 0) failures.push(`${record.id}: embeds must reserve positive integer dimensions`);
+    if (record.embed?.autoplay !== false) failures.push(`${record.id}: embeds must disable autoplay`);
+    if (record.embed?.reducedMotion !== true) failures.push(`${record.id}: embeds must require reduced-motion behavior`);
+    if (!record.originalPostUrl || record.embed?.fallbackUrl !== record.originalPostUrl) failures.push(`${record.id}: embeds must retain the original-post fallback`);
+  } else if (record.embed !== null) failures.push(`${record.id}: non-embed media cannot carry embed configuration`);
+}
 
 if (!/^\d{4}-\d{2}-\d{2}$/.test(manifest.retrievedAt)) failures.push('media manifest retrieval date is missing or invalid');
 if (manifest.derivativeFormat !== 'webp') failures.push('media manifest derivative format must be webp');
@@ -52,6 +113,7 @@ for (const [setId, derivatives] of Object.entries(manifest.derivativeSets)) {
 }
 
 for (const image of manifest.featuredImages ?? []) {
+  validateEditorialMetadata(image, { rehosted: true });
   const file = path.join(root, 'public', image.path.replace(/^\//, ''));
   featuredImageByPath.set(image.path, image);
   let buffer;
@@ -72,6 +134,7 @@ for (const file of derivativePaths) if (!trackedMedia.includes(file)) failures.p
 const originalUrls = new Set();
 const sourceAssetIds = new Set(manifest.assets.map((asset) => asset.id));
 for (const asset of manifest.assets) {
+  validateEditorialMetadata(asset, { rehosted: true });
   if (originalUrls.has(asset.originalUrl)) failures.push(`${asset.id}: original URL is duplicated in the manifest`);
   originalUrls.add(asset.originalUrl);
   if (!Array.isArray(asset.sourcePages) || asset.sourcePages.length === 0) failures.push(`${asset.id}: source pages are missing`);
@@ -80,11 +143,36 @@ for (const asset of manifest.assets) {
   if (!asset.original?.width || !asset.original?.height || !/^[a-f0-9]{64}$/.test(asset.original?.sha256 ?? '')) failures.push(`${asset.id}: original dimensions or hash are invalid`);
   if (!manifest.derivativeSets[asset.derivativeSet]) failures.push(`${asset.id}: derivative set ${asset.derivativeSet} is missing`);
 }
+for (const external of manifest.externalMedia ?? []) {
+  validateEditorialMetadata(external, { rehosted: false });
+  if ((external.presentations ?? []).length > 0) failures.push(`${external.id}: external media cannot be rendered before a reviewed renderer exists`);
+}
+
+const recordByRenderedPath = new Map();
+const actualPresentationsById = new Map(mediaRecords.map((record) => [record.id, []]));
+for (const image of manifest.featuredImages ?? []) recordByRenderedPath.set(image.path, image);
+for (const asset of manifest.assets ?? []) {
+  for (const derivative of manifest.derivativeSets[asset.derivativeSet] ?? []) recordByRenderedPath.set(derivative.path, asset);
+}
 const tagsByRoute = new Map();
 for (const { route, file } of canonicalContentFiles()) {
   const source = await readFile(file, 'utf8');
   const tags = [...source.matchAll(/<img\b[^>]*>/g)].map(([tag]) => tag);
   tagsByRoute.set(route, tags);
+  for (const [, figure] of source.matchAll(/<figure>([\s\S]*?)<\/figure>/g)) {
+    const imageTag = figure.match(/<img\b[^>]*>/)?.[0];
+    const src = imageTag ? attribute(imageTag, 'src') : undefined;
+    const record = src ? recordByRenderedPath.get(src) : undefined;
+    if (!record || !imageTag) continue;
+    const captionMatch = figure.match(/<figcaption>([\s\S]*?)<\/figcaption>/);
+    const linkTag = figure.match(/<a\b[^>]*>/)?.[0];
+    actualPresentationsById.get(record.id).push({
+      route,
+      alt: attribute(imageTag, 'alt') ?? null,
+      caption: captionMatch ? captionMatch[1].replace(/<[^>]+>/g, '').trim() : null,
+      linkUrl: linkTag ? attribute(linkTag, 'href') ?? null : null,
+    });
+  }
   for (const tag of tags) {
     const src = attribute(tag, 'src');
     if (providerRouteSet.has(route) && /^https?:\/\//.test(src ?? '')) failures.push(`${route}: external raster image remains in provider overview`);
@@ -108,6 +196,13 @@ for (const { route, file } of canonicalContentFiles()) {
     if (!['eager', 'lazy'].includes(attribute(tag, 'loading'))) failures.push(`${route}: ${src} has no loading policy`);
     if (derivative && (width !== derivative.width || height !== derivative.height)) failures.push(`${route}: ${src} markup dimensions differ from the fallback derivative`);
   }
+}
+
+const presentationSort = (left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right));
+for (const record of [...(manifest.featuredImages ?? []), ...(manifest.assets ?? [])]) {
+  const expected = [...(record.presentations ?? [])].sort(presentationSort);
+  const actual = [...(actualPresentationsById.get(record.id) ?? [])].sort(presentationSort);
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) failures.push(`${record.id}: manifest alt, caption, link, or route differs from canonical Markdown`);
 }
 
 const imageLcpRoutes = new Set(providerRoutes);
