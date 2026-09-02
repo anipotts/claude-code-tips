@@ -20,12 +20,13 @@
     "check:performance": "node scripts/check-performance.mjs",
     "test:site": "node scripts/check-typography.mjs && node scripts/test-site.mjs",
     "test:navigation": "node scripts/test-navigation.mjs",
+    "test:agent": "node scripts/test-agent-surface.mjs",
     "test:dev-search": "node scripts/test-dev-search.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
     "audit:performance": "node scripts/audit-performance.mjs",
     "preview": "node node_modules/astro/bin/astro.mjs preview",
     "sync:readme": "bun scripts/sync-readme.ts",
-    "verify": "bun run check:content && bun run check:ui && bun run build && bun run test:site && bun run check:performance && bun run test:navigation && bun run test:dev-search && bun run test:a11y"
+    "verify": "bun run check:content && bun run check:ui && bun run build && bun run test:site && bun run check:performance && bun run test:agent && bun run test:navigation && bun run test:dev-search && bun run test:a11y"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
@@ -51,6 +52,7 @@
     "@types/mdast": "4.0.4",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
+    "github-slugger": "2.0.0",
     "jsonc-parser": "3.3.1",
     "lighthouse": "13.4.1",
     "mdast-util-to-string": "4.0.0",

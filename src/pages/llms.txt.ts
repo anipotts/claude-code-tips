@@ -17,6 +17,8 @@ export async function GET() {
     '',
     '> approved public handbook pages in Markdown for readers, agents, and language models.',
     '',
+    `Structured index: ${new URL('/agent-index.json', site.url).href}`,
+    '',
     ...pages,
     '',
   ].join('\n');

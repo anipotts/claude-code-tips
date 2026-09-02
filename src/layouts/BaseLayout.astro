@@ -6,6 +6,7 @@ import { ClientRouter } from 'astro:transitions';
 import SiteHeader from '../components/SiteHeader.astro';
 import ThemeBridge from '../components/ThemeBridge.astro';
 import PublicationEnhancements from '../components/PublicationEnhancements.astro';
+import WebMcpSurface from '../components/WebMcpSurface.astro';
 import { site } from '../site';
 
 interface Props {
@@ -44,6 +45,7 @@ const socialImage = new URL(site.socialImage, Astro.site);
     <title>{title}</title>
     <ThemeInitScript />
     <ThemeBridge />
+    <WebMcpSurface />
     <ClientRouter fallback="swap" />
   </head>
   <body>
