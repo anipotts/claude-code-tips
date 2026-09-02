@@ -223,6 +223,25 @@ try {
   expect(await sidebar.getAttribute('data-state') === 'expanded', 'desktop sidebar is not expanded initially');
   await sidebarTrigger.click();
   expect(await sidebar.getAttribute('data-state') === 'collapsed', 'desktop sidebar did not collapse');
+  await page.waitForFunction(() => Math.abs(document.querySelector('.publication-sidebar')?.getBoundingClientRect().width - 56) < 1);
+  const collapsedAlignment = await page.evaluate(() => {
+    const visible = (selector) => [...document.querySelectorAll(selector)].find((element) => element.getClientRects().length > 0);
+    const rail = visible('.publication-sidebar').getBoundingClientRect();
+    const trigger = visible('[data-sw-sidebar-trigger]').getBoundingClientRect();
+    const chapterButtons = [...document.querySelectorAll('[data-sidebar="menu-button"]')]
+      .filter((element) => element.getClientRects().length > 0)
+      .map((element) => element.getBoundingClientRect());
+    const center = (bounds) => bounds.left + bounds.width / 2;
+    return {
+      triggerDelta: Math.abs(center(trigger) - center(rail)),
+      chapterDeltas: chapterButtons.map((button) => Math.abs(center(button) - center(rail))),
+      horizontalInset: (rail.width - trigger.width) / 2,
+      verticalInset: (visible('.handbook-rail-head').getBoundingClientRect().height - trigger.height) / 2,
+    };
+  });
+  expect(collapsedAlignment.triggerDelta < 1, 'collapsed sidebar trigger is not centered in the rail');
+  expect(collapsedAlignment.chapterDeltas.every((delta) => delta < 1), 'collapsed chapter buttons are not centered in the rail');
+  expect(Math.abs(collapsedAlignment.horizontalInset - collapsedAlignment.verticalInset) < 1, 'collapsed sidebar trigger does not have equal vertical and horizontal spacing');
   expect(await page.locator('[aria-label="codex handbook chapters"] .sidebar-page-outline').evaluate((outline) => getComputedStyle(outline).display) === 'none', 'heading outline remains visible in icon-collapse mode');
   expect(await page.locator('.right-sidebar-container').evaluate((rail) => rail.getBoundingClientRect().width) === 0, 'retired right sidebar retains width');
   await sidebarTrigger.click();

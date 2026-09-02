@@ -7,6 +7,7 @@
     "ajv": "8.20.0"
   },
   "scripts": {
+    "predev": "node node_modules/astro/bin/astro.mjs build",
     "dev": "node node_modules/astro/bin/astro.mjs dev",
     "build": "node node_modules/astro/bin/astro.mjs build",
     "check": "node node_modules/astro/bin/astro.mjs check",
@@ -19,11 +20,12 @@
     "check:performance": "node scripts/check-performance.mjs",
     "test:site": "node scripts/check-typography.mjs && node scripts/test-site.mjs",
     "test:navigation": "node scripts/test-navigation.mjs",
+    "test:dev-search": "node scripts/test-dev-search.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
     "audit:performance": "node scripts/audit-performance.mjs",
     "preview": "node node_modules/astro/bin/astro.mjs preview",
     "sync:readme": "bun scripts/sync-readme.ts",
-    "verify": "bun run check:content && bun run check:ui && bun run build && bun run test:site && bun run check:performance && bun run test:navigation && bun run test:a11y"
+    "verify": "bun run check:content && bun run check:ui && bun run build && bun run test:site && bun run check:performance && bun run test:navigation && bun run test:dev-search && bun run test:a11y"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

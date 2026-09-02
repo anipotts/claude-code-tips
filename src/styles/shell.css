@@ -74,7 +74,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   --pagefind-ui-border-radius: var(--radius-md);
   --pagefind-ui-font: 'Instrument Sans', system-ui, sans-serif;
 }
-.header-search #starlight__search .pagefind-ui__search-input { min-block-size: 3.15rem; border-radius: var(--radius-md); background: var(--surface-subtle); color: var(--ink); }
+.header-search #starlight__search .pagefind-ui__search-input {
+  min-block-size: 3.15rem;
+  padding-inline-start: 3rem !important;
+  padding-inline-end: 3.75rem !important;
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
 .header-search #starlight__search .pagefind-ui__search-input:focus { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--accent-soft); }
 .header-search #starlight__search .pagefind-ui__result { padding-block: 1rem; border-top-color: var(--rule); }
 .header-search #starlight__search .pagefind-ui__result-link { color: var(--ink); text-decoration: none; }

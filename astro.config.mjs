@@ -5,6 +5,7 @@ import { unified } from '@astrojs/markdown-remark';
 import { defineConfig } from 'astro/config';
 import { contentRedirects } from './src/content-manifest.mjs';
 import { site } from './src/site';
+import starlightDevSearch from './src/integrations/starlight-dev-search.mjs';
 import linkMetadata from './src/rehype/link-metadata.mjs';
 import publicationElements from './src/rehype/publication-elements.mjs';
 
@@ -55,6 +56,6 @@ export default defineConfig({
   ],
 
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [starlightDevSearch(), tailwindcss()],
   },
 });
