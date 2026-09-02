@@ -83,8 +83,19 @@ html[data-theme='dark'] {
   --accent-on-solid: #0b0c0f;
   --status-warning: #ff776b;
   --sl-color-accent-low: var(--accent-soft);
+  --sl-color-accent: var(--cobalt);
   --sl-color-accent-high: var(--accent-strong);
+  --sl-color-white: var(--ink);
+  --sl-color-gray-1: #e7eaf0;
+  --sl-color-gray-2: #c7ccd5;
+  --sl-color-gray-3: var(--slate);
+  --sl-color-gray-4: #6f7682;
+  --sl-color-gray-5: var(--rule);
+  --sl-color-gray-6: var(--surface-subtle);
+  --sl-color-black: var(--white);
+  --sl-color-bg: var(--white);
   --sl-color-bg-nav: rgba(11, 12, 15, .96);
+  --sl-color-bg-sidebar: var(--white);
   color-scheme: dark;
 }
 

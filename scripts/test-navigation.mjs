@@ -147,6 +147,58 @@ try {
 
   const sidebar = page.locator('.publication-sidebar-provider');
   const sidebarTrigger = sidebar.locator('[data-sw-sidebar-trigger]').first();
+  const chromeStyles = await page.evaluate(() => {
+    const box = (selector) => {
+      const element = document.querySelector(selector);
+      const styles = getComputedStyle(element);
+      const bounds = element.getBoundingClientRect();
+      return {
+        borderStyle: styles.borderStyle,
+        height: bounds.height,
+        width: bounds.width,
+      };
+    };
+    const siteMark = document.querySelector('.site-name img').getBoundingClientRect();
+    const railMark = document.querySelector('.sidebar-provider-icon').getBoundingClientRect();
+    return {
+      controls: [
+        box('[data-slot="theme-toggle"]'),
+        box('.github-link'),
+        box('[data-sw-sidebar-trigger]'),
+      ],
+      listMarkers: [...document.querySelectorAll('.publication-sidebar li')]
+        .filter((item) => getComputedStyle(item).listStyleType !== 'none').length,
+      outlineRule: getComputedStyle(document.querySelector('.sidebar-page-outline')).borderInlineStartWidth,
+      railHeaderHeight: document.querySelector('.handbook-rail-head').getBoundingClientRect().height,
+      siteHeaderHeight: document.querySelector('.site-header').getBoundingClientRect().height,
+      leftAlignmentDelta: Math.abs(siteMark.left - railMark.left),
+    };
+  });
+  expect(chromeStyles.controls.every((control) => control.width === 36 && control.height === 36), 'header and sidebar controls do not share a 36px footprint');
+  expect(chromeStyles.controls.every((control) => control.borderStyle !== 'outset'), 'native browser borders leak into Starwind controls');
+  expect(chromeStyles.listMarkers === 0, 'browser list markers leak into the guide sidebar');
+  expect(chromeStyles.outlineRule === '0px', 'the retired heading connector rule remains visible');
+  expect(chromeStyles.railHeaderHeight === chromeStyles.siteHeaderHeight, 'sidebar and site headers use different vertical rhythms');
+  expect(chromeStyles.leftAlignmentDelta < 1, 'sidebar identity does not align with the site header gutter');
+
+  await page.locator('[data-slot="theme-toggle"]').click();
+  const darkChrome = await page.evaluate(() => {
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--surface-subtle)';
+    document.body.append(probe);
+    const surfaceSubtle = getComputedStyle(probe).color;
+    probe.remove();
+    return {
+      kbdBackground: getComputedStyle(document.querySelector('.header-search kbd')).backgroundColor,
+      surfaceSubtle,
+      sidebarBackground: getComputedStyle(document.querySelector('.publication-sidebar [data-slot="sidebar-inner"]')).backgroundColor,
+      canvasBackground: getComputedStyle(document.body).backgroundColor,
+    };
+  });
+  expect(darkChrome.kbdBackground === darkChrome.surfaceSubtle, 'dark search shortcut does not use the dark subtle surface');
+  expect(darkChrome.sidebarBackground === darkChrome.canvasBackground, 'dark sidebar uses a mismatched surface color');
+  await page.locator('[data-slot="theme-toggle"]').click();
+
   expect(await sidebar.getAttribute('data-state') === 'expanded', 'desktop sidebar is not expanded initially');
   await sidebarTrigger.click();
   expect(await sidebar.getAttribute('data-state') === 'collapsed', 'desktop sidebar did not collapse');
@@ -159,6 +211,7 @@ try {
   await page.locator('[aria-label="codex handbook chapters"] a[href="/guides/codex/configuration/"]').click();
   await page.waitForURL('**/guides/codex/configuration/');
   expect(desktopDocumentToken === await page.evaluate(() => window.__navigationDocumentToken), 'chapter navigation caused a full reload');
+  expect(await page.locator('html').evaluate((root) => root.classList.contains('dark') === (root.dataset.theme === 'dark')), 'Starwind and Starlight theme state diverged after chapter navigation');
   expect((await page.locator('[aria-label="codex handbook chapters"] [aria-current="page"]').textContent())?.trim() === 'configuration', 'sidebar active chapter did not update');
   await page.goBack();
   await page.waitForURL('**/guides/codex/');

@@ -46,6 +46,7 @@ export default defineConfig({
         MarkdownContent: './src/components/StarlightMarkdownContent.astro',
         Footer: './src/components/StarlightFooter.astro',
         Sidebar: './src/components/StarlightSidebar.astro',
+        ThemeProvider: './src/components/StarlightThemeProvider.astro',
       },
       social: [{ icon: 'github', label: 'GitHub', href: repository }],
       lastUpdated: false,
