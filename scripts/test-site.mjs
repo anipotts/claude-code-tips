@@ -92,6 +92,7 @@ for (const [route, source] of contentFiles) {
 
 try {
   const llms = await readFile(path.join(dist, 'llms.txt'), 'utf8');
+  if (!llms.includes(`${origin}/agent-index.json`)) failures.push('/llms.txt: structured agent index discovery link is missing');
   for (const { route, file, kind } of canonicalContentFiles().filter((entry) => entry.kind === 'home' || entry.kind === 'guide')) {
     const markdown = await readFile(file, 'utf8');
     const title = scalar(markdown, 'title');
@@ -101,6 +102,18 @@ try {
   }
   if (llms.includes('/changes/') || llms.includes('/field-lab/')) failures.push('/llms.txt: redirected route is present');
 } catch { failures.push('/llms.txt: generated index is missing'); }
+
+try {
+  const agentIndex = JSON.parse(await readFile(path.join(dist, 'agent-index.json'), 'utf8'));
+  if (agentIndex.discovery?.llms !== '/llms.txt' || agentIndex.discovery?.index !== '/agent-index.json') failures.push('/agent-index.json: discovery metadata is incorrect');
+  if (agentIndex.pages?.length !== contentFiles.length) failures.push('/agent-index.json: canonical route parity is incorrect');
+} catch { failures.push('/agent-index.json: generated structured index is missing or invalid'); }
+
+try {
+  const homepageMarkdown = await readFile(path.join(dist, 'index.md'), 'utf8');
+  const canonicalBody = homeSource.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '').trim();
+  if (homepageMarkdown !== `${canonicalBody}\n`) failures.push('/index.md: generated homepage Markdown differs from canonical content');
+} catch { failures.push('/index.md: generated homepage Markdown is missing'); }
 
 const activeGuideText = (await Promise.all(contentFiles.map(([, source]) => readFile(source, 'utf8')))).join('\n');
 for (const version of Object.values(registry.product_versions)) {

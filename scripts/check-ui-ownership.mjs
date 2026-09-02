@@ -52,6 +52,8 @@ const prohibited = [
   ['native dialog state machine', /\.showModal\s*\(/],
   ['custom page-action disclosure', /<details[^>]+page-action/],
   ['custom mobile navigation disclosure', /<details[^>]+mobile-site-menu/],
+  ['deprecated navigator WebMCP alias', /navigator\.modelContext/],
+  ['WebMCP origin trial', new RegExp(`origin${'-'}trial`, 'i')],
 ];
 
 for (const [file, source] of repositoryText) {
@@ -66,6 +68,7 @@ const allowedControllers = new Set([
   'src/components/StarlightPageTitle.astro',
   'src/components/StarlightThemeProvider.astro',
   'src/components/ThemeBridge.astro',
+  'src/components/WebMcpSurface.astro',
 ]);
 for (const [file, source] of repositoryText) {
   if (file.startsWith('src/components/starwind/') || !file.startsWith('src/components/')) continue;

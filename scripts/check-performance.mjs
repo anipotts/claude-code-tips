@@ -19,6 +19,7 @@ const maxGuideCssGzipBytes = 32 * 1024;
 const maxGuideJavaScriptGzipBytes = 72 * 1024;
 const maxFontBytes = 80 * 1024;
 const maxFontFiles = 4;
+const maxAgentIndexGzipBytes = 32 * 1024;
 const canonicalRoutes = new Set(canonicalContentFiles().map(({ route }) => route));
 const providerRoutes = ['/guides/codex/', '/guides/claude-code/', '/guides/grok/'];
 const providerRouteSet = new Set(providerRoutes);
@@ -135,6 +136,8 @@ for (const tag of tagsByRoute.get('/handbook/history/') ?? []) {
 }
 
 const distRoot = path.join(root, 'dist');
+const agentIndexGzipBytes = gzipSync(await readFile(path.join(distRoot, 'agent-index.json'))).length;
+if (agentIndexGzipBytes > maxAgentIndexGzipBytes) failures.push(`${agentIndexGzipBytes} compressed agent index bytes exceeds 32 KiB`);
 const assetRoot = path.join(distRoot, '_astro');
 const guideStylesheets = new Set();
 const guideScripts = new Set();
@@ -144,6 +147,7 @@ for (const { route } of canonicalContentFiles().filter(({ route }) => route.star
   const htmlGzipBytes = gzipSync(html).length;
   if (htmlGzipBytes > maxGuideHtmlGzipBytes) failures.push(`${route}: ${htmlGzipBytes} compressed HTML bytes exceeds 24 KiB`);
   const source = html.toString();
+  if (new RegExp(`origin${'-'}trial|navigator\\.modelContext`).test(source)) failures.push(`${route}: unsupported WebMCP compatibility code is present`);
   if (source.includes('--surface-canvas:') || source.includes('--rail-expanded-width:')) failures.push(`${route}: shared site CSS is inlined into generated HTML`);
   for (const [tag] of source.matchAll(/<link\b[^>]*\brel="stylesheet"[^>]*>/g)) {
     if (tag.includes('media="print"')) continue;
@@ -188,4 +192,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`validated media, guide HTML, ${guideStylesheets.size} shared stylesheets, ${reachableScripts.size} reachable scripts, and ${fontFiles.length} font files against performance budgets`);
+console.log(`validated media, guide HTML, ${agentIndexGzipBytes} compressed agent-index bytes, ${guideStylesheets.size} shared stylesheets, ${reachableScripts.size} reachable scripts, and ${fontFiles.length} font files against performance budgets`);
