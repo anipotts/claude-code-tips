@@ -39,6 +39,28 @@ try {
   await page.locator('.header-search [data-open-modal]').click();
   const search = page.locator('.header-search site-search dialog');
   await search.waitFor({ state: 'visible' });
+  const popoverGeometry = await page.evaluate(() => {
+    const trigger = document.querySelector('.header-search [data-open-modal]').getBoundingClientRect();
+    const dialog = document.querySelector('.header-search site-search dialog');
+    const bounds = dialog.getBoundingClientRect();
+    const backdrop = getComputedStyle(dialog, '::backdrop');
+    return {
+      triggerTop: trigger.top,
+      triggerRight: trigger.right,
+      left: bounds.left,
+      right: bounds.right,
+      top: bounds.top,
+      width: bounds.width,
+      height: bounds.height,
+      viewportHeight: innerHeight,
+      backdropColor: backdrop.backgroundColor,
+      backdropFilter: backdrop.backdropFilter,
+    };
+  });
+  if (Math.abs(popoverGeometry.top - popoverGeometry.triggerTop) > 2) throw new Error('local search does not expand from the header trigger');
+  if (Math.abs(popoverGeometry.right - popoverGeometry.triggerRight) > 2) throw new Error('local search is not aligned to its trigger');
+  if (popoverGeometry.width > 432 || popoverGeometry.height >= popoverGeometry.viewportHeight * .75) throw new Error('local search is not a compact popover');
+  if (popoverGeometry.backdropColor !== 'rgba(0, 0, 0, 0)' || popoverGeometry.backdropFilter !== 'none') throw new Error('local search still obscures or blurs the page');
   const input = search.locator('input[type="text"], input[type="search"]').first();
   const inputSpacing = await input.evaluate((element) => {
     const inputStyles = getComputedStyle(element);

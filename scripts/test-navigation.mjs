@@ -118,11 +118,30 @@ try {
   await page.locator('.header-search [data-open-modal]').click();
   const search = page.locator('.header-search site-search dialog');
   await search.waitFor({ state: 'visible' });
+  await page.waitForTimeout(180);
   const searchBox = await search.evaluate((element) => {
     const box = element.getBoundingClientRect();
-    return { x: box.x, y: box.y, width: box.width, height: box.height, innerWidth, innerHeight };
+    const trigger = document.querySelector('.header-search [data-open-modal]').getBoundingClientRect();
+    const backdrop = getComputedStyle(element, '::backdrop');
+    return {
+      x: box.x,
+      y: box.y,
+      width: box.width,
+      height: box.height,
+      innerWidth,
+      innerHeight,
+      triggerTop: trigger.top,
+      triggerLeft: trigger.left,
+      triggerRight: trigger.right,
+      triggerWidth: trigger.width,
+      backdropColor: backdrop.backgroundColor,
+      backdropFilter: backdrop.backdropFilter,
+    };
   });
-  expect(searchBox.x === 0 && searchBox.y === 0 && searchBox.width === searchBox.innerWidth && searchBox.height === searchBox.innerHeight, 'mobile search is not a full-viewport surface');
+  expect(Math.abs(searchBox.y - searchBox.triggerTop) <= 2 && searchBox.x <= searchBox.triggerLeft && searchBox.x + searchBox.width >= searchBox.triggerRight, 'mobile search does not expand through the header trigger');
+  expect(searchBox.width > searchBox.triggerWidth * 4, 'mobile search does not expand into an input surface');
+  expect(searchBox.x >= 15 && searchBox.width <= searchBox.innerWidth - 30 && searchBox.height < searchBox.innerHeight * .75, 'mobile search is not a compact inset popover');
+  expect(searchBox.backdropColor === 'rgba(0, 0, 0, 0)' && searchBox.backdropFilter === 'none', 'mobile search still obscures or blurs the page');
   await search.locator('input[type="text"], input[type="search"]').first().fill('codex');
   await search.locator('.pagefind-ui__result').first().waitFor({ state: 'visible', timeout: 5000 });
   await page.keyboard.press('Escape');
