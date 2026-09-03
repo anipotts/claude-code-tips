@@ -36,6 +36,21 @@ const expectedMediaPolicy = {
   visibleCreditRequires: ['creator.name', 'creator.handle', 'originalPostUrl'],
   embedRequirements: { reservedDimensions: true, autoplay: false, reducedMotion: true, originalPostFallback: true },
 };
+const hasCompleteThirdPartyCredit = (record) => record.creditVisible === true
+  && typeof record.creator?.name === 'string'
+  && record.creator.name.length > 0
+  && typeof record.creator?.handle === 'string'
+  && /^@[^\s]+$/.test(record.creator.handle)
+  && typeof record.originalPostUrl === 'string'
+  && /^https:\/\//.test(record.originalPostUrl);
+
+const thirdPartyCreditRegressionCases = [
+  { expected: false, record: { creditVisible: false, creator: { name: 'Creator', handle: '@creator' }, originalPostUrl: 'https://x.com/creator/status/1' } },
+  { expected: false, record: { creditVisible: true, creator: { name: 'Creator', handle: null }, originalPostUrl: 'https://x.com/creator/status/1' } },
+  { expected: false, record: { creditVisible: true, creator: { name: 'Creator', handle: '@creator' }, originalPostUrl: null } },
+  { expected: true, record: { creditVisible: true, creator: { name: 'Creator', handle: '@creator' }, originalPostUrl: 'https://x.com/creator/status/1' } },
+];
+if (thirdPartyCreditRegressionCases.some(({ expected, record }) => hasCompleteThirdPartyCredit(record) !== expected)) failures.push('third-party visible-credit regression cases failed');
 
 if (manifest.schemaVersion !== 2) failures.push('media manifest schema version must be 2');
 if (JSON.stringify(manifest.mediaPolicy) !== JSON.stringify(expectedMediaPolicy)) failures.push('media manifest policy differs from the locked creator-media policy');
@@ -75,6 +90,7 @@ function validateEditorialMetadata(record, { rehosted }) {
     || record.permissionStatus === 'permission-granted'
     || record.licenseStatus === 'reusable-license';
   if (record.ownership === 'third-party' && !thirdPartyUseAllowed) failures.push(`${record.id}: third-party creator media needs an embed, credited link, permission, or reusable license`);
+  if (record.ownership === 'third-party' && !hasCompleteThirdPartyCredit(record)) failures.push(`${record.id}: third-party creator media requires visible creator name, @handle, and original post URL`);
 
   if (rehosted) {
     if (record.publicationStatus !== 'rehosted-file') failures.push(`${record.id}: rehosted media cannot claim embed or link status`);
