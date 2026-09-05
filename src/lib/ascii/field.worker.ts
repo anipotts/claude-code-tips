@@ -2,7 +2,7 @@ import { AsciiField, type FieldSize, type Mask } from './field';
 let field: AsciiField | undefined;
 let atlas: ImageBitmap | undefined;
 let timer: ReturnType<typeof setTimeout> | undefined;
-let active = false, reduced = false, time = 7, last = 0, interval = 1000 / 30;
+let active = false, reduced = false, time = 10, last = 0, interval = 1000 / 30;
 function stop() { active = false; clearTimeout(timer); timer = undefined; }
 function tick() {
   if (!active || !field) return;

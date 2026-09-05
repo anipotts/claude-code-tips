@@ -11,6 +11,7 @@ const masks = await providerMasks();
   data-pause={site.interfaceCopy.pauseAnimation} data-resume={site.interfaceCopy.resumeAnimation}>
   {site.interfaceCopy.pauseAnimation}
 </Button>
+<noscript><style is:inline>.home-with-ascii .home-content { padding-top: 3.5rem; }</style></noscript>
 <script>
   import { mountAsciiBackground } from '../lib/ascii/controller';
   let dispose: (() => void) | undefined;

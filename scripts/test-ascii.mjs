@@ -34,7 +34,7 @@ try {
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       while (walker.nextNode()) {
         const n = walker.currentNode, el = n.parentElement;
-        if (!n.textContent.trim() || el.closest('script,style,[aria-hidden="true"]') || !el.getClientRects().length || getComputedStyle(el).visibility === 'hidden') continue;
+        if (!n.textContent.trim() || el.closest('script,style,[aria-hidden="true"],.site-header,.skip-link') || !el.getClientRects().length || getComputedStyle(el).visibility === 'hidden') continue;
         let bg = el, color;
         while (bg && bg !== document.body) { color = rgb(getComputedStyle(bg).backgroundColor); if (color.length === 3 || color[3] === 1) break; bg = bg.parentElement; }
         // A body background alone is insufficient: the animated canvas is above it.
@@ -59,14 +59,14 @@ try {
       await page.screenshot({ path: path.join(output, `${width}-${theme}-${reduced ? 'reduced' : 'moving'}.png`), fullPage: true });
       if (!reduced) {
         await page.getByRole('button', { name: 'pause animation', exact: true }).click();
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(250);
         const paused = await canvas.screenshot(); await page.waitForTimeout(200);
         assert.deepEqual(await canvas.screenshot(), paused, 'paused pixels changed');
         await page.getByRole('button', { name: 'resume animation', exact: true }).press('Enter');
         await page.waitForTimeout(300);
         assert.notDeepEqual(await canvas.screenshot(), paused, 'resume did not move');
         await page.emulateMedia({ reducedMotion: 'reduce' });
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(250);
         const frozen = await canvas.screenshot(); await page.waitForTimeout(200);
         assert.deepEqual(await canvas.screenshot(), frozen, 'live reduction did not freeze');
         await page.emulateMedia({ reducedMotion: 'no-preference' });

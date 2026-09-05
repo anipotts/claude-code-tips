@@ -21,7 +21,7 @@ export function mountAsciiBackground() {
   };
   async function atlas() {
     const style = getComputedStyle(host!);
-    await document.fonts.load(`${style.fontSize} ${style.fontFamily}`);
+    await document.fonts.load(`${style.fontSize} ${style.fontFamily}`).catch(() => {});
     const sheet = document.createElement('canvas'); sheet.width = glyphs.length * 24; sheet.height = 32;
     const c = sheet.getContext('2d')!;
     c.font = `24px ${style.fontFamily}`;
@@ -47,7 +47,7 @@ export function mountAsciiBackground() {
       if (!canvas!.transferControlToOffscreen || !window.Worker) { await staticFallback(); return; }
       const bitmap = await createImageBitmap(sheet); if (dead) { bitmap.close(); return; }
       worker = new Worker(new URL('./field.worker.ts', import.meta.url), { type: 'module' });
-      worker.onerror = () => { void staticFallback(); };
+      worker.onerror = (event) => { event.preventDefault(); void staticFallback(); };
       worker.onmessage = (event) => {
         if (event.data.type === 'unavailable') { void staticFallback(); return; }
         if (event.data.type === 'ready') { ready = true; worker?.postMessage({ type: 'size', size: size() }); sync(); }
