@@ -331,3 +331,6 @@ body {
   line-height: 1.125rem;
 }
 .sidebar-page-outline [data-active='true'] { font-weight: 600; }
+
+/* Bitmap atlas source; canvas glyphs are artwork, separate from reading type. */
+.ascii-background { font-family: var(--font-mono); font-size: var(--type-metadata-size); }

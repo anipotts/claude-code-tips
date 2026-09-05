@@ -6,6 +6,8 @@ export const site = {
   socialImageAlt: 'coding agent tips: a guide to coding agents in production software',
   releaseHistory: 'https://github.com/anipotts/coding-agent-tips/releases',
   interfaceCopy: {
+    pauseAnimation: 'pause animation',
+    resumeAnimation: 'resume animation',
     menu: 'menu',
     search: 'search',
     sources: 'sources',

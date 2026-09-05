@@ -26,7 +26,9 @@
     "audit:performance": "node scripts/audit-performance.mjs",
     "preview": "node node_modules/astro/bin/astro.mjs preview",
     "sync:readme": "bun scripts/sync-readme.ts",
-    "verify": "bun run check:content && bun run check:ui && bun run build && bun run test:site && bun run check:performance && bun run test:agent && bun run test:navigation && bun run test:dev-search && bun run test:a11y"
+    "verify": "bun run check:content && bun run check:ui && bun run build && bun run test:site && bun run check:performance && bun run test:agent && bun run test:navigation && bun run test:dev-search && bun run test:a11y && bun run test:ascii",
+    "test:ascii": "node scripts/test-ascii.mjs",
+    "audit:ascii": "node scripts/audit-ascii-homepage.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
