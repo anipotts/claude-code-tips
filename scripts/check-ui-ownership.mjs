@@ -63,6 +63,8 @@ for (const [file, source] of repositoryText) {
 }
 
 const allowedControllers = new Set([
+  // Homepage canvas lifecycle: approved exception in design.md.
+  'src/components/AsciiBackground.astro',
   'src/components/PublicationEnhancements.astro',
   'src/components/StarlightPageSidebar.astro',
   'src/components/StarlightPageTitle.astro',

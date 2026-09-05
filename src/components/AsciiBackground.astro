@@ -1,0 +1,21 @@
+---
+import { providerMasks } from '../lib/ascii/masks';
+import { site } from '../site';
+import { Button } from './starwind/button';
+const masks = await providerMasks();
+---
+<div class="ascii-background" aria-hidden="true" data-masks={JSON.stringify(masks)}>
+  <canvas class="ascii-canvas"></canvas>
+</div>
+<Button class="ascii-motion-control" variant="outline" size="sm" hidden
+  data-pause={site.interfaceCopy.pauseAnimation} data-resume={site.interfaceCopy.resumeAnimation}>
+  {site.interfaceCopy.pauseAnimation}
+</Button>
+<script>
+  import { mountAsciiBackground } from '../lib/ascii/controller';
+  let dispose: (() => void) | undefined;
+  const mount = () => { dispose?.(); dispose = mountAsciiBackground(); };
+  document.addEventListener('astro:page-load', mount);
+  mount();
+  document.addEventListener('astro:before-swap', () => { dispose?.(); dispose = undefined; });
+</script>

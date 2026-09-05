@@ -95,7 +95,7 @@ Compare matching routes, viewport sizes, themes, scroll positions, focus states,
 
 The homepage introduces one clear thesis and routes the reader into the handbook. Its hierarchy comes from a strong opening, compact guide groups, and direct shared-guide links.
 
-Keep the first screen legible without decorative hero art. Use open rows and restrained cards only where a group needs a boundary. Provider groups may share a grid because they have the same conceptual structure. Shared guides remain a simple publication list.
+Keep the first screen legible. The homepage ASCII field follows the scoped exception under motion and reduced motion. Use open rows and restrained cards only where a group needs a boundary. Provider groups may share a grid because they have the same conceptual structure. Shared guides remain a simple publication list.
 
 ### provider guide pages
 
@@ -364,6 +364,22 @@ Default to stillness. The interface continuity token is `160ms` with `cubic-bezi
 Use motion to preserve spatial understanding when provider state moves, a sidebar changes width, a disclosure opens, or a menu appears. Client route swaps remain immediate. Do not add page crossfades, scroll reveals, parallax, simulated typing, pulsing status, bouncing controls, or animation that delays reading.
 
 Under `prefers-reduced-motion: reduce`, remove nonessential transition and animation duration, disable smooth scrolling, and preserve the final state without an intermediate effect. No information, focus change, or control outcome may depend on motion.
+
+### approved exception: homepage ASCII field
+
+Ani explicitly requested a full viewport cobalt ASCII animation for the homepage on September 5, 2026. This is the single scoped exception to stillness, ambient hero art, decorative provider scale, and cobalt used solely for interface state. The reader outcome is an identifiable introduction to the three provider families while the complete handbook remains immediately readable and usable.
+
+The field searches in flowing ribbons, gathers into a verified provider silhouette, holds its form with small internal movement, and releases into the next current. Codex, Claude Code, and Grok receive equal time. The shape sequence repeats every 66 seconds; independent flow and glyph phases continue across that boundary. Sample the registered local product assets at build time. Preserve their source identity in `src/site.ts`; the animation carries no claim of endorsement, agent activity, or product performance.
+
+`AsciiBackground.astro` owns this homepage enhancement and its explicit navigation lifecycle. `src/lib/ascii/` owns build time silhouette sampling, the shared renderer, and its worker. Starwind owns the visible pause button. The glyph atlas inherits cobalt and IBM Plex Mono from the existing color and typography authorities. No animation dependency, terminal chrome, typing simulation, ticker, scroll effect, or runtime image fetch is permitted.
+
+The canvas sits behind the entire homepage and stays fixed to the viewport. Desktop composition leaves room for a large mark beside the title. Narrow layouts reserve a stage above the title. Opaque canvas colored reading surfaces protect headings, paragraphs, guide groups, and footer independently of animation phase. Existing header and overlay surfaces preserve control contrast. These reading surfaces may extend by ten pixels to protect glyph edges; this is occlusion using the canvas color, with no ornamental shadow or elevation.
+
+Use a worker and OffscreenCanvas for continuous drawing, a cached glyph atlas, at most 3,000 desktop or 1,500 mobile characters, at most 30 desktop or 24 mobile frames per second, and a backing store capped at 2.5 million pixels and 1.5 device pixels per CSS pixel. Initialization yields through two paints and an idle callback. Hidden documents suspend the loop. Pause persists when storage is available. Route departure terminates the worker and removes observers and listeners. Unsupported worker or canvas transfer behavior renders one static frame where possible; ordinary content survives failed enhancement.
+
+Reduced motion renders a stable Codex frame and schedules no animation timer. Live preference changes stop animation as well. Theme and viewport changes may repaint that same frame. A reader's pause freezes the current frame and resumes from that point. The pause control stays available during animation and remains hidden when the system requires stillness.
+
+Protect this exception with `bun run test:ascii`, the full publication checks, a paired cold homepage Lighthouse comparison, and actual light and dark visual review at desktop and mobile widths. Measure text contrast against the opaque foreground surfaces throughout the page. Guide routes keep their existing motion policy. This exception replaces the rejected small relay and static logo crossfade concepts; it authorizes this field only.
 
 ## responsive contracts
 

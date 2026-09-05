@@ -7,6 +7,7 @@ import BrandGithub from '@tabler/icons/outline/brand-github.svg';
 import Compass from '@tabler/icons/outline/compass.svg';
 import { getEntry, render } from 'astro:content';
 import { getHomepagePages, routeForEntry } from '../content';
+import AsciiBackground from '../components/AsciiBackground.astro';
 import ProviderProductIcon from '../components/ProviderProductIcon.astro';
 import { Card } from '../components/starwind/card';
 import { Item, ItemContent, ItemDescription, ItemTitle } from '../components/starwind/item';
@@ -43,7 +44,8 @@ const highlightIcons = {
 ---
 
 <BaseLayout title={home.data.title} description={home.data.description}>
-  <main id="main">
+  <AsciiBackground />
+  <main id="main" class="home-with-ascii">
     <article class="home-content"><Content /></article>
 
     <section class="home-guides" id="guides" aria-labelledby="guide-title">
