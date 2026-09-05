@@ -27,7 +27,7 @@ const isProviderGuide = scopeForPath(Astro.url.pathname) !== 'handbook';
 <div class:list={['page-title-row', { 'provider-guide-title-row': isProviderGuide }]}>
   <h1 id="_top">{title}</h1>
   {!draft && (
-    <ButtonGroup class="page-actions" aria-label="page actions">
+    <ButtonGroup class="page-actions" aria-label="page actions" data-pagefind-ignore>
       <Button
         class="page-copy-button"
         variant="outline"
@@ -69,11 +69,21 @@ const isProviderGuide = scopeForPath(Astro.url.pathname) !== 'handbook';
 
 <script>
   import { toast } from '@starwind-ui/astro/toast';
+  import { createMenu } from '@starwind-ui/runtime/menu';
 
   let cleanupPageActions = () => {};
   const setupPageActions = () => {
     cleanupPageActions();
     const controller = new AbortController();
+
+    // Page actions belong to their title row. Let Starwind close its own menu
+    // when the document moves, without interrupting scrolling within an overlay.
+    document.addEventListener('scroll', (event) => {
+      if (event.target !== document) return;
+      document.querySelectorAll<HTMLElement>('.page-actions [data-sw-menu][data-state="open"]').forEach((root) => {
+        createMenu(root).close();
+      });
+    }, { passive: true, signal: controller.signal });
 
     document.querySelectorAll<HTMLButtonElement>('[data-copy-page]').forEach((button) => {
       let markdownRequest: Promise<string> | undefined;

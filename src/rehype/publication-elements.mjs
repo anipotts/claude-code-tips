@@ -68,7 +68,7 @@ function transformChildren(parent) {
             'code-copy', 'inline-flex', 'items-center', 'justify-center', 'gap-1.5', 'rounded-md',
             'font-medium', 'whitespace-nowrap', 'transition-all', 'outline-none', 'focus-visible:ring-3',
             'bg-foreground', 'text-background', 'hover:bg-foreground/90', 'focus-visible:ring-outline/50',
-            'h-9', 'px-4', 'text-sm',
+            'h-8', 'px-3', 'text-sm',
           ],
           'data-code-copy': '',
           'data-slot': 'button',
