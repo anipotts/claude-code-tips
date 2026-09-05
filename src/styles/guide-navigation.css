@@ -199,7 +199,7 @@ html:has(.publication-sidebar[data-state='collapsed']) { --left-rail-width: var(
 .mobile-page-picker-trigger { inline-size: 100%; justify-content: space-between; }
 .mobile-page-picker-trigger span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mobile-page-options { max-block-size: min(30rem, calc(100dvh - 8rem)); overflow-y: auto; inline-size: min(20.5rem, calc(100dvw - 2.5rem)); }
-.mobile-page-options [data-slot='dropdown-link-item'] { text-decoration: none; }
+.mobile-page-options [data-slot='dropdown-link-item'] { padding-inline-start: 1.2rem; text-decoration: none; }
 .mobile-page-options [data-slot='dropdown-label'] { color: var(--slate); }
 .mobile-page-options [aria-current='page'] { background: var(--accent-soft); color: var(--accent-strong); }
 .mobile-page-navigation { flex: 1; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; }
