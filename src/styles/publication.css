@@ -63,12 +63,11 @@ header.header { z-index: var(--z-navigation); height: var(--site-header-height);
 }
 
 .surface-bento { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; margin: 1.75rem 0 2.5rem; }
-.surface-bento figure { min-width: 0; margin: 0; border: 1px solid var(--rule); border-radius: var(--radius-ui); overflow: hidden; background: var(--soft); }
+.surface-bento figure { min-width: 0; margin: 0; border: 0; background: transparent; }
 .surface-bento figure { position: relative; }
 .surface-bento a { display: block; text-decoration: none; }
-.surface-bento img { display: block; inline-size: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--soft); }
+.surface-bento img { display: block; inline-size: 100%; block-size: auto; background: transparent; }
 .surface-bento.intro-visual { grid-template-columns: minmax(0, 1fr); margin-top: 1rem; }
-.surface-bento.intro-visual img { aspect-ratio: 3600 / 2260; }
 .surface-bento figure[data-image-dialog-ready] figcaption { display: none; }
 .publication-image-trigger { display: block; inline-size: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
 .publication-image-dialog { inline-size: min(70rem, calc(100vw - 2rem)); max-inline-size: calc(100vw - 2rem); max-block-size: calc(100dvh - 2rem); padding: 0; overflow: auto; }
