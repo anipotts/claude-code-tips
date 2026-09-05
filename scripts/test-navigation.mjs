@@ -3,6 +3,7 @@ import { once } from 'node:events';
 import path from 'node:path';
 import process from 'node:process';
 import { chromium } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 const previewPort = 4175;
 const origin = `http://127.0.0.1:${previewPort}`;
@@ -38,7 +39,7 @@ try {
   expect(await page.locator('meta[name="astro-view-transitions-enabled"]').count() === 1, 'ClientRouter marker is missing');
   expect(await page.locator('.provider-tabs a[data-astro-prefetch="hover"]').count() === 4, 'provider tabs are missing selective hover prefetching');
   expect(await page.locator('.publication-sidebar [data-sidebar="menu-button"][data-astro-prefetch="hover"]').count() === 3, 'desktop chapters are missing selective hover prefetching');
-  expect(await page.locator('.mobile-site-menu nav > a[data-astro-prefetch="tap"]').count() === 3, 'mobile chapters are missing selective tap prefetching');
+  expect(await page.locator('.mobile-page-options a[data-astro-prefetch="tap"]').count() >= 13, 'mobile page picker is missing selective tap prefetching');
   expect(await page.locator('.sidebar-page-outline a[data-astro-prefetch]').count() === 0, 'hash links must not be prefetched');
 
   for (const viewport of [
@@ -93,6 +94,26 @@ try {
     const toggled = await page.locator('html').getAttribute('data-theme');
     expect(toggled !== theme, `${viewport.width}px theme toggle did not change theme`);
     expect(await page.locator('html').evaluate((root) => root.classList.contains('dark') === (root.dataset.theme === 'dark')), `${viewport.width}px Starwind and Starlight theme state diverged`);
+    for (let state = 0; state < 2; state++) {
+      await page.locator('.header-search [data-open-modal]').click();
+      const dialog = page.locator('.header-search dialog');
+      await dialog.waitFor({ state: 'visible' });
+      await page.waitForTimeout(200);
+      const geometry = await dialog.evaluate((element) => {
+        const input = element.querySelector('input');
+        const rect = input.getBoundingClientRect();
+        const logo = document.querySelector('.site-name img').getBoundingClientRect();
+        const theme = document.querySelector('[data-slot="theme-toggle"]').getBoundingClientRect();
+        return { height: rect.height, font: getComputedStyle(input).fontSize, fits: rect.left >= logo.right && rect.right <= theme.left };
+      });
+      expect(geometry.height === 32 && geometry.font === '12px' && geometry.fits, `${viewport.width}px search must fit between brand and utilities in both themes`);
+      await dialog.locator('input').fill('configuration');
+      expect(await dialog.locator('input').getAttribute('aria-label') === 'Search', 'search input needs an explicit accessible name');
+      await dialog.locator('.pagefind-ui__result').first().waitFor();
+      expect(await dialog.locator('.pagefind-ui__drawer').evaluate((element) => element.scrollWidth <= element.clientWidth + 1), `${viewport.width}px search results overflow horizontally`);
+      await page.keyboard.press('Escape');
+      await page.locator('[data-slot="theme-toggle"]').click();
+    }
     await page.locator('[data-slot="theme-toggle"]').click();
   }
 
@@ -102,18 +123,35 @@ try {
   await sheetTrigger.click();
   const sheet = page.locator('.mobile-site-menu[role="dialog"]');
   await sheet.waitFor({ state: 'visible' });
-  expect((await sheet.locator('nav a').allTextContents()).map((text) => text.trim()).join('|') === 'overview|configuration|recommendations', 'mobile Sheet chapter order is incorrect');
+  const mobileHeadings = await sheet.locator('.mobile-page-outline a').allTextContents();
+  const desktopHeadings = await page.locator('.sidebar-page-outline').first().locator('a').allTextContents();
+  expect(JSON.stringify(mobileHeadings.map((text) => text.trim())) === JSON.stringify(desktopHeadings.map((text) => text.trim())), 'mobile and desktop heading outlines differ');
+  expect(await sheet.locator('.mobile-page-outline li[style*="1"]').count() > 0, 'mobile outline is missing subsection indentation');
+  const sheetAccessibility = await new AxeBuilder({ page }).include('.mobile-site-menu').analyze();
+  expect(sheetAccessibility.violations.length === 0, `mobile Sheet accessibility: ${sheetAccessibility.violations.map(({ id }) => id).join(', ')}`);
+  expect(await sheet.evaluate((element) => element.scrollWidth <= element.clientWidth), 'mobile Sheet overflows horizontally');
   expect(await page.evaluate(() => document.querySelector('.mobile-site-menu')?.contains(document.activeElement)), 'mobile Sheet does not move focus inside');
   await page.keyboard.press('Escape');
   await sheet.waitFor({ state: 'hidden' });
   expect(await sheetTrigger.evaluate((trigger) => document.activeElement === trigger), 'mobile Sheet does not restore trigger focus');
   await sheetTrigger.click();
-  await sheet.locator('a[href="/guides/codex/configuration/"]').click();
+  await sheet.getByRole('button', { name: 'choose page', exact: true }).click();
+  await page.keyboard.press('Escape');
+  expect(await sheet.isVisible(), 'closing the page picker also closed the Sheet');
+  await sheet.getByRole('button', { name: 'choose page', exact: true }).click();
+  await page.locator('.mobile-page-options a[href="/guides/codex/configuration/"]').click();
   await page.waitForURL('**/guides/codex/configuration/');
   await sheet.waitFor({ state: 'hidden' });
   await page.goBack();
   await page.waitForURL('**/guides/codex/');
   await page.waitForFunction(() => document.querySelector('[data-copy-page]'));
+
+  await sheetTrigger.click();
+  const mobileHeading = sheet.locator('.mobile-page-outline a').first();
+  const mobileHash = await mobileHeading.getAttribute('href');
+  await mobileHeading.click();
+  await sheet.waitFor({ state: 'hidden' });
+  expect(new URL(page.url()).hash === mobileHash, 'mobile heading navigation lost its anchor');
 
   await page.locator('.header-search [data-open-modal]').click();
   const search = page.locator('.header-search site-search dialog');
@@ -139,7 +177,9 @@ try {
     };
   });
   expect(Math.abs(searchBox.y - searchBox.triggerTop) <= 2 && searchBox.x <= searchBox.triggerLeft && searchBox.x + searchBox.width >= searchBox.triggerRight, 'mobile search does not expand through the header trigger');
-  expect(searchBox.width > searchBox.triggerWidth * 4, 'mobile search does not expand into an input surface');
+  expect(searchBox.width > 180 && Math.abs(searchBox.width - searchBox.triggerWidth) < 2, 'mobile search does not occupy its reserved header space');
+  const inputStyle = await search.locator('input').first().evaluate((input) => ({ height: input.getBoundingClientRect().height, font: getComputedStyle(input).fontSize, shadow: getComputedStyle(input).boxShadow }));
+  expect(inputStyle.height === 32 && inputStyle.font === '12px' && inputStyle.shadow === 'none', 'search input diverges from compact control sizing');
   expect(searchBox.x >= 15 && searchBox.width <= searchBox.innerWidth - 30 && searchBox.height < searchBox.innerHeight * .75, 'mobile search is not a compact inset popover');
   expect(searchBox.backdropColor === 'rgba(0, 0, 0, 0)' && searchBox.backdropFilter === 'none', 'mobile search still obscures or blurs the page');
   await search.locator('input[type="text"], input[type="search"]').first().fill('codex');
@@ -160,8 +200,13 @@ try {
   const menu = page.locator('[role="menu"]:visible');
   await menu.waitFor({ state: 'visible' });
   expect((await menu.locator('[role="menuitem"]').allTextContents()).map((text) => text.trim()).join('|') === 'view Markdown|copy page link|edit on GitHub', 'page action menu contents are incorrect');
+  expect(await menu.locator('[role="menuitem"]').evaluateAll((items) => items.every((item) => getComputedStyle(item).fontSize === '12px' && getComputedStyle(item).textDecorationLine === 'none')), 'portaled menu items must retain compact typography without prose underlines');
   await page.keyboard.press('Escape');
   await menu.waitFor({ state: 'hidden' });
+  await page.locator('[aria-label="more page actions"]').click();
+  await page.evaluate(() => window.scrollBy(0, 150));
+  await menu.waitFor({ state: 'hidden' });
+  expect(await page.evaluate(() => window.scrollY >= 150), 'scroll dismissal must not jump back to the page-action trigger');
   await page.locator('[data-copy-page]').click();
   await page.waitForFunction(() => navigator.clipboard.readText().then((text) => text.startsWith('# codex')));
 

@@ -9,8 +9,10 @@ import ShieldCheck from '@tabler/icons/outline/shield-check.svg';
 import { getHandbookPages, routeForEntry } from '../content';
 import { chapterForOrder, handbookScopes, scopeForPath } from '../site';
 import ProviderProductIcon from './ProviderProductIcon.astro';
+import { pageOutline } from '../navigation';
+import SidebarPrimitive from '@starwind-ui/astro/sidebar';
+import { sidebar, sidebarContainer, sidebarInner } from './starwind/sidebar/variants';
 import {
-  Sidebar,
   SidebarContent,
   SidebarMenu,
   SidebarMenuButton,
@@ -21,9 +23,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from './starwind/sidebar';
-
-type TocNode = { depth: number; slug: string; text: string; children: TocNode[] };
-type SidebarHeading = { depth: number; slug: string; text: string };
 
 const current = Astro.url.pathname;
 const activeScope = scopeForPath(current);
@@ -42,13 +41,7 @@ const chapterIcons = [Compass, ArrowRight, Adjustments, GitBranch, AppWindow, Sh
 
 const { toc } = Astro.locals.starlightRoute;
 const isOutline = Astro.locals.starlightRoute.entry.data.completion === 'outline';
-const flattenHeadings = (items: TocNode[]): SidebarHeading[] => items.flatMap((item) => [
-  { depth: item.depth, slug: item.slug, text: item.text },
-  ...flattenHeadings(item.children),
-]);
-const headings = toc && !isOutline
-  ? flattenHeadings(toc.items as TocNode[]).filter((item) => item.slug !== '_top' && item.depth <= 3)
-  : [];
+const headings = pageOutline(toc?.items, isOutline);
 ---
 
 <SidebarProvider
@@ -59,13 +52,22 @@ const headings = toc && !isOutline
   persistenceStorage="localStorage"
   mobileQuery="(max-width: 47.99rem)"
 >
-  <Sidebar
-    class="publication-sidebar"
+  {/* The header owns the mobile Sheet. Compose Starwind's desktop primitive
+      and stock variants here so the same content is not emitted in a second drawer. */}
+  <SidebarPrimitive.Sidebar
+    class={sidebar({ class: 'publication-sidebar' })}
+    data-state="expanded"
+    data-collapsible=""
+    data-collapsible-mode="icon"
+    data-variant="sidebar"
+    data-side="left"
+    data-slot="sidebar"
     collapsible="icon"
     side="left"
     variant="sidebar"
-    aria-label={activeScope === 'handbook' ? `${label} navigation` : `${label} handbook chapters`}
   >
+    <div class={sidebarContainer({ side: 'left', variant: 'sidebar' })} data-slot="sidebar-container" aria-label={activeScope === 'handbook' ? `${label} navigation` : `${label} handbook chapters`}>
+    <div class={sidebarInner({ variant: 'sidebar' })} data-sidebar="sidebar" data-slot="sidebar-inner">
     <div class="handbook-rail-head">
       <div class="guide-rail-identity">
         <ProviderProductIcon class="sidebar-provider-icon" light={providerIcon} dark={providerIconDark} size={28} />
@@ -109,5 +111,7 @@ const headings = toc && !isOutline
         })}
       </SidebarMenu>
     </SidebarContent>
-  </Sidebar>
+    </div>
+    </div>
+  </SidebarPrimitive.Sidebar>
 </SidebarProvider>

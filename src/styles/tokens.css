@@ -33,6 +33,8 @@
   --radius-md: .5rem;
   --radius-pill: 999px;
   --radius-ui: var(--radius-sm);
+  --control-size: 2rem;
+  --control-icon-size: 1rem;
   --motion-ui-duration: 160ms;
   --motion-ui-ease: cubic-bezier(.2, .75, .25, 1);
   --z-navigation: 50;

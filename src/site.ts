@@ -7,6 +7,8 @@ export const site = {
   releaseHistory: 'https://github.com/anipotts/coding-agent-tips/releases',
   interfaceCopy: {
     menu: 'menu',
+    choosePage: 'choose page',
+    onThisPage: 'on this page',
     search: 'search',
     sources: 'sources',
     sharedFoundations: 'shared foundations',
