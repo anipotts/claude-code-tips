@@ -3,6 +3,7 @@ import { once } from 'node:events';
 import path from 'node:path';
 import process from 'node:process';
 import { chromium } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 const previewPort = 4175;
 const origin = `http://127.0.0.1:${previewPort}`;
@@ -38,7 +39,7 @@ try {
   expect(await page.locator('meta[name="astro-view-transitions-enabled"]').count() === 1, 'ClientRouter marker is missing');
   expect(await page.locator('.provider-tabs a[data-astro-prefetch="hover"]').count() === 4, 'provider tabs are missing selective hover prefetching');
   expect(await page.locator('.publication-sidebar [data-sidebar="menu-button"][data-astro-prefetch="hover"]').count() === 3, 'desktop chapters are missing selective hover prefetching');
-  expect(await page.locator('.mobile-site-menu nav > a[data-astro-prefetch="tap"]').count() === 3, 'mobile chapters are missing selective tap prefetching');
+  expect(await page.locator('.mobile-page-options a[data-astro-prefetch="tap"]').count() >= 13, 'mobile page picker is missing selective tap prefetching');
   expect(await page.locator('.sidebar-page-outline a[data-astro-prefetch]').count() === 0, 'hash links must not be prefetched');
 
   for (const viewport of [
@@ -122,18 +123,35 @@ try {
   await sheetTrigger.click();
   const sheet = page.locator('.mobile-site-menu[role="dialog"]');
   await sheet.waitFor({ state: 'visible' });
-  expect((await sheet.locator('nav a').allTextContents()).map((text) => text.trim()).join('|') === 'overview|configuration|recommendations', 'mobile Sheet chapter order is incorrect');
+  const mobileHeadings = await sheet.locator('.mobile-page-outline a').allTextContents();
+  const desktopHeadings = await page.locator('.sidebar-page-outline').first().locator('a').allTextContents();
+  expect(JSON.stringify(mobileHeadings.map((text) => text.trim())) === JSON.stringify(desktopHeadings.map((text) => text.trim())), 'mobile and desktop heading outlines differ');
+  expect(await sheet.locator('.mobile-page-outline li[style*="1"]').count() > 0, 'mobile outline is missing subsection indentation');
+  const sheetAccessibility = await new AxeBuilder({ page }).include('.mobile-site-menu').analyze();
+  expect(sheetAccessibility.violations.length === 0, `mobile Sheet accessibility: ${sheetAccessibility.violations.map(({ id }) => id).join(', ')}`);
+  expect(await sheet.evaluate((element) => element.scrollWidth <= element.clientWidth), 'mobile Sheet overflows horizontally');
   expect(await page.evaluate(() => document.querySelector('.mobile-site-menu')?.contains(document.activeElement)), 'mobile Sheet does not move focus inside');
   await page.keyboard.press('Escape');
   await sheet.waitFor({ state: 'hidden' });
   expect(await sheetTrigger.evaluate((trigger) => document.activeElement === trigger), 'mobile Sheet does not restore trigger focus');
   await sheetTrigger.click();
-  await sheet.locator('a[href="/guides/codex/configuration/"]').click();
+  await sheet.getByRole('button', { name: 'choose page', exact: true }).click();
+  await page.keyboard.press('Escape');
+  expect(await sheet.isVisible(), 'closing the page picker also closed the Sheet');
+  await sheet.getByRole('button', { name: 'choose page', exact: true }).click();
+  await page.locator('.mobile-page-options a[href="/guides/codex/configuration/"]').click();
   await page.waitForURL('**/guides/codex/configuration/');
   await sheet.waitFor({ state: 'hidden' });
   await page.goBack();
   await page.waitForURL('**/guides/codex/');
   await page.waitForFunction(() => document.querySelector('[data-copy-page]'));
+
+  await sheetTrigger.click();
+  const mobileHeading = sheet.locator('.mobile-page-outline a').first();
+  const mobileHash = await mobileHeading.getAttribute('href');
+  await mobileHeading.click();
+  await sheet.waitFor({ state: 'hidden' });
+  expect(new URL(page.url()).hash === mobileHash, 'mobile heading navigation lost its anchor');
 
   await page.locator('.header-search [data-open-modal]').click();
   const search = page.locator('.header-search site-search dialog');

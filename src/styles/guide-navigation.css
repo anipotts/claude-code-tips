@@ -181,3 +181,33 @@ html:has(.publication-sidebar[data-state='collapsed']) { --left-rail-width: var(
   .right-sidebar { display: none !important; width: 0 !important; }
   .main-pane .sl-container { margin-inline: 3.25rem auto; }
 }
+.mobile-site-menu {
+  inline-size: min(22rem, calc(100dvw - 1rem));
+  max-inline-size: none;
+  padding: .75rem;
+  gap: .75rem;
+  color: var(--ink);
+  background: var(--surface-canvas);
+  border: 0;
+  border-inline-start: 1px solid var(--rule);
+}
+.mobile-menu-heading { padding: 0 2.5rem 0 .5rem; min-block-size: 2rem; justify-content: center; }
+.mobile-site-menu :where(button[data-slot], .mobile-menu-footer a) { block-size: var(--control-size); min-block-size: var(--control-size); }
+.mobile-menu-heading [data-slot='sheet-title'] { margin: 0; }
+.mobile-site-menu [data-slot='sheet-close'] { inset-block-start: .75rem; inset-inline-end: .75rem; inline-size: var(--control-size); border-radius: var(--radius-md); }
+.mobile-site-menu [data-slot='sheet-close'] svg { inline-size: 1rem; block-size: 1rem; }
+.mobile-page-picker-trigger { inline-size: 100%; justify-content: space-between; }
+.mobile-page-picker-trigger span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mobile-page-options { max-block-size: min(30rem, calc(100dvh - 8rem)); overflow-y: auto; inline-size: min(20.5rem, calc(100dvw - 2.5rem)); }
+.mobile-page-options [data-slot='dropdown-link-item'] { text-decoration: none; }
+.mobile-page-options [data-slot='dropdown-label'] { color: var(--slate); }
+.mobile-page-options [aria-current='page'] { background: var(--accent-soft); color: var(--accent-strong); }
+.mobile-page-navigation { flex: 1; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; }
+.mobile-page-outline { list-style: none; margin: 0; padding: 0; }
+.mobile-page-outline li { list-style: none; margin: 0; padding-inline-start: calc(var(--heading-depth) * .7rem); }
+.mobile-page-outline a { display: block; min-block-size: 1.65rem; padding: .2rem .5rem; border-radius: .3rem; color: var(--slate); text-decoration: none; }
+.mobile-page-outline a:hover { background: var(--soft); color: var(--ink); }
+.mobile-page-outline a[data-active='true'] { background: color-mix(in srgb, var(--accent-soft) 62%, transparent); color: var(--accent-strong); }
+.mobile-page-outline a:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: -2px; }
+.mobile-menu-footer { padding-block-start: .5rem; border-block-start: 1px solid var(--rule); }
+.mobile-menu-footer a { text-decoration: none; }

@@ -2,9 +2,12 @@
 import Search from '@astrojs/starlight/components/Search.astro';
 import BrandGithub from '@tabler/icons/outline/brand-github.svg';
 import Menu2 from '@tabler/icons/outline/menu-2.svg';
+import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
 import { getHandbookPages, routeForEntry } from '../content';
+import { pageOutline } from '../navigation';
 import { chapterForOrder, navigationScopes, scopeForPath, site } from '../site';
 import { Button } from './starwind/button';
+import { Dropdown, DropdownContent, DropdownGroup, DropdownLabel, DropdownLinkItem, DropdownTrigger } from './starwind/dropdown';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './starwind/sheet';
 import { ThemeToggle } from './starwind/theme-toggle';
 import { Toaster } from './starwind/toast';
@@ -13,11 +16,15 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './starwind/tooltip';
 const current = Astro.url.pathname;
 const HeaderTag = Astro.props.embedded ? 'div' : 'header';
 const activeScope = scopeForPath(current);
-const scopedPages = await getHandbookPages({ scope: activeScope });
+const pages = await getHandbookPages({ includeArchive: false });
 const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'handbook';
-const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScope === 'handbook'
+const mobileNavigationLabel = (page: (typeof pages)[number]) => scopeForPath(routeForEntry(page)) === 'handbook'
   ? page.data.title
   : chapterForOrder(page.data.navigation.order)?.label ?? page.data.title;
+const activePage = pages.find((page) => routeForEntry(page) === current);
+const selectedPageLabel = activePage ? `${activeScopeLabel}: ${mobileNavigationLabel(activePage)}` : 'handbook';
+const route = Astro.props.embedded ? Astro.locals.starlightRoute : undefined;
+const headings = pageOutline(route?.toc?.items, route?.entry.data.completion === 'outline');
 ---
 
 <HeaderTag class="site-header">
@@ -55,30 +62,46 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
           </Button>
         </SheetTrigger>
         <SheetContent class="mobile-site-menu" side="right">
-          <SheetHeader>
-            <SheetTitle>{activeScopeLabel}</SheetTitle>
+          <SheetHeader class="mobile-menu-heading">
+            <SheetTitle>{site.interfaceCopy.guides}</SheetTitle>
           </SheetHeader>
-          <nav aria-label={`${activeScopeLabel} pages`}>
-            {scopedPages.map((page) => {
-              const href = routeForEntry(page);
-              return (
-                <a
-                  href={href}
-                  data-astro-prefetch="tap"
-                  data-sw-drawer-close
-                  aria-current={current === href ? 'page' : undefined}
-                >
-                  {mobileNavigationLabel(page)}
-                </a>
-              );
-            })}
+          <div class="mobile-page-picker">
+            <Dropdown>
+              <DropdownTrigger asChild>
+                <Button class="mobile-page-picker-trigger" variant="outline" size="sm" aria-label={site.interfaceCopy.choosePage}>
+                  <span>{selectedPageLabel}</span><ChevronDown aria-hidden="true" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownContent class="mobile-page-options" align="start">
+                {navigationScopes.map((scope) => (
+                  <DropdownGroup>
+                    <DropdownLabel>{scope.label}</DropdownLabel>
+                    {scope.id === 'handbook' && <DropdownLinkItem href="/" closeOnClick data-sw-drawer-close>handbook home</DropdownLinkItem>}
+                    {pages.filter((page) => scopeForPath(routeForEntry(page)) === scope.id).map((page) => (
+                      <DropdownLinkItem href={routeForEntry(page)} closeOnClick data-sw-drawer-close data-astro-prefetch="tap" aria-current={current === routeForEntry(page) ? 'page' : undefined}>
+                        {mobileNavigationLabel(page)}
+                      </DropdownLinkItem>
+                    ))}
+                  </DropdownGroup>
+                ))}
+              </DropdownContent>
+            </Dropdown>
+          </div>
+          <nav class="mobile-page-navigation" aria-label={site.interfaceCopy.onThisPage}>
+            {headings.length > 0 && <ul class="mobile-page-outline" role="list">
+              {headings.map((heading) => (
+                <li style={`--heading-depth: ${Math.max(0, heading.depth - 2)}`}>
+                  <a href={`#${heading.slug}`} data-heading-id={heading.slug} data-sw-drawer-close>{heading.text}</a>
+                </li>
+              ))}
+            </ul>}
           </nav>
-          <footer>
-            <a href={site.repository} data-sw-drawer-close>
+          <div class="mobile-menu-footer">
+            <Button href={site.repository} variant="ghost" size="sm" data-sw-drawer-close>
               <BrandGithub aria-hidden="true" />
               <span>GitHub</span>
-            </a>
-          </footer>
+            </Button>
+          </div>
         </SheetContent>
       </Sheet>
     </div>

@@ -194,6 +194,13 @@ body {
 
 .mobile-site-menu nav a[aria-current='page'] { font-weight: 600; }
 
+.mobile-site-menu,
+.mobile-menu-heading [data-slot='sheet-title'],
+.mobile-page-options [data-slot='dropdown-link-item'],
+.mobile-page-options [data-slot='dropdown-label'],
+.mobile-menu-footer a { font-size: var(--type-navigation-size); line-height: var(--type-navigation-line); }
+.mobile-menu-heading [data-slot='sheet-title'] { font-weight: 600; }
+
 .publication-sidebar [data-sidebar='menu-button'] {
   font-size: var(--type-navigation-size);
   line-height: var(--type-navigation-line);

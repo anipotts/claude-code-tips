@@ -267,13 +267,6 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
   .main-pane .sl-container { max-width: 52rem; margin-inline: auto; }
   button[aria-label='Menu'] { display: none !important; }
   .mobile-site-menu-trigger { display: inline-flex !important; }
-  .mobile-site-menu nav { display: grid; padding: .5rem 1rem 1rem; }
-  .mobile-site-menu nav a { padding: .75rem; border-radius: var(--radius-ui); color: var(--ink); text-decoration: none; }
-  .mobile-site-menu nav a + a { border-top: 1px solid var(--rule); }
-  .mobile-site-menu nav a:hover, .mobile-site-menu nav a[aria-current='page'] { background: var(--accent-soft); color: var(--cobalt); }
-  .mobile-site-menu footer { margin-top: .45rem; padding-top: .45rem; border-top: 1px solid var(--rule); }
-  .mobile-site-menu footer a { display: flex; align-items: center; gap: .55rem; }
-  .mobile-site-menu footer svg { inline-size: 1rem; block-size: 1rem; }
   .header-search site-search dialog {
     inset: .625rem var(--site-gutter) auto auto;
     inline-size: calc(100dvw - 2 * var(--site-gutter));
@@ -309,10 +302,10 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
 
 @media (max-width: 59.99rem) {
   .header-search { inline-size: var(--control-size); }
-  .site-header:has(dialog[open]) { grid-template-columns: 1.5rem minmax(0, 1fr); column-gap: .75rem; padding-inline: var(--site-gutter); }
-  .site-header:has(dialog[open]) .site-name { margin: 0; }
-  .site-header:has(dialog[open]) .site-name span { display: none; }
-  .site-header:has(dialog[open]) .header-actions { justify-self: stretch; margin: 0; padding: 0; border: 0; background: transparent; }
+  .site-header:has(.header-search dialog[open]) { grid-template-columns: 1.5rem minmax(0, 1fr); column-gap: .75rem; padding-inline: var(--site-gutter); }
+  .site-header:has(.header-search dialog[open]) .site-name { margin: 0; }
+  .site-header:has(.header-search dialog[open]) .site-name span { display: none; }
+  .site-header:has(.header-search dialog[open]) .header-actions { justify-self: stretch; margin: 0; padding: 0; border: 0; background: transparent; }
   .header-search:has(dialog[open]) { flex: 1; min-inline-size: 0; inline-size: auto; }
   .header-search site-search dialog { inset: .625rem auto auto calc(var(--site-gutter) + 2.25rem); inline-size: calc(100dvw - 2 * var(--site-gutter) - 6.75rem); margin: 0; translate: 0; }
   @supports (width: anchor-size(width)) {
