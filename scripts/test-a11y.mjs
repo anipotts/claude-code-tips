@@ -32,16 +32,21 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   browser = await chromium.launch({ headless: true });
+  for (const colorScheme of ['light', 'dark']) {
   for (const viewport of viewports) {
-    const context = await browser.newContext({ viewport });
+    const context = await browser.newContext({ viewport, colorScheme });
     const page = await context.newPage();
     for (const route of routes) {
-      await page.goto(`${origin}${route}`, { waitUntil: 'networkidle' });
+      await page.goto(`${origin}${route}`, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => document.fonts.ready);
+      // Expressive Code adds keyboard focus after its resize/idle observation.
+      await page.waitForFunction(() => [...document.querySelectorAll('.expressive-code pre')].every((pre) => pre.scrollWidth <= pre.clientWidth || pre.tabIndex === 0));
       if (await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)) failures.push(`${viewport.name} ${route}: horizontal overflow`);
       const typographyFailures = await page.evaluate(({ route, viewportWidth }) => {
         const findings = [];
-        const ink = 'rgb(16, 17, 20)';
-        const slate = 'rgb(80, 87, 96)';
+        const dark = document.documentElement.dataset.theme === 'dark';
+        const ink = dark ? 'rgb(245, 247, 251)' : 'rgb(16, 17, 20)';
+        const slate = dark ? 'rgb(167, 173, 183)' : 'rgb(80, 87, 96)';
         const close = (actual, expected, tolerance = 0.25) => Math.abs(actual - expected) <= tolerance;
         const visible = (element) => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden';
         const directText = (element) => [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
@@ -81,12 +86,13 @@ try {
         checkRole(reading, { size: 18, line: 30, weight: 400, family: 'Instrument Sans', color: ink }, 'reading prose');
         for (const element of reading.filter(visible)) if (element.getBoundingClientRect().width > 816) findings.push(`reading measure exceeds 68ch: ${element.textContent.trim().slice(0, 60)}`);
 
-        checkRole(elements('td, .page-sources li, .run-inventory li, .artifact-list li, .run-page dd'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: ink }, 'dense content');
+        checkRole(elements('td, .run-inventory li, .artifact-list li, .run-page dd'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: ink }, 'dense content');
+        checkRole(elements('.page-sources li'), { size: 12, line: 16, weight: 400, family: 'Instrument Sans', color: ink }, 'source links');
         checkRole(elements('[data-slot="item-description"]'), { size: 16, line: 24, weight: 400, family: 'Instrument Sans', color: slate }, 'guide description');
         const metadata = elements('.section-label, .home-guide-list span, .footer-meta, .sidebar-label, .page-meta, figcaption, .history-year, .run-header > p:first-child, .run-page dt, .run-evidence, .run-inventory span, .source-kinds, th');
         checkRole(metadata, { size: 12, line: 18, weight: 400, family: 'IBM Plex Mono', color: slate }, 'metadata');
-        checkRole(elements('.site-name, .provider-tabs a, .search-trigger, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 14, line: 20, family: 'Instrument Sans' }, 'navigation');
-        checkRole(elements('.handbook-sidebar a'), { size: 13, line: 18, family: 'Instrument Sans' }, 'guide navigation');
+        checkRole(elements('.site-name, .provider-tabs a, .search-trigger, .right-sidebar a, .right-sidebar h2, .site-footer a'), { size: 12, line: 16, family: 'Instrument Sans' }, 'navigation');
+        checkRole(elements('.publication-sidebar [data-sidebar="menu-button"], .publication-sidebar [data-sidebar="menu-sub-button"]'), { size: 12, line: 18, family: 'Instrument Sans' }, 'guide navigation');
         return findings;
       }, { route, viewportWidth: viewport.width });
       for (const finding of typographyFailures) failures.push(`${viewport.name} ${route}: ${finding}`);
@@ -140,6 +146,7 @@ try {
     }
     await context.close();
   }
+  }
 } finally {
   await browser?.close();
   if (server.exitCode === null && server.signalCode === null) server.kill('SIGTERM');
@@ -147,4 +154,4 @@ try {
 }
 
 if (failures.length > 0) { console.error(failures.join('\n')); process.exit(1); }
-console.log(`typography, reflow, text spacing, text resize, and axe checks passed across ${routes.length} routes at ${viewports.length} required widths`);
+console.log(`typography, reflow, text spacing, text resize, and axe checks passed across ${routes.length} routes at ${viewports.length} required widths in both themes`);

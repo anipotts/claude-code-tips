@@ -7,10 +7,8 @@ header.header { z-index: var(--z-navigation); height: var(--site-header-height);
 }
 .sidebar-content { height: 100%; min-height: 0 !important; padding: 0 !important; }
 .sidebar-content::after { display: none !important; }
-.handbook-rail-head { position: relative; min-height: 2.75rem; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
 .sidebar-label > span:first-child { color: var(--ink); }
 .sidebar-label > span:first-child { display: flex; align-items: center; gap: .45rem; }
-.sidebar-provider-icon { inline-size: 1.1rem; block-size: 1.1rem; border-radius: .22rem; background: var(--surface-raised); }
 .sidebar-kind { color: var(--slate); }
 .content-panel { border-top: 0 !important; }
 .main-frame { transition: padding-inline-start var(--motion-ui-duration) var(--motion-ui-ease); }

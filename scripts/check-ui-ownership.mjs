@@ -63,6 +63,7 @@ for (const [file, source] of repositoryText) {
 }
 
 const allowedControllers = new Set([
+  'src/components/SiteHeader.astro', // Pagefind accessible-name adapter only.
   'src/components/PublicationEnhancements.astro',
   'src/components/StarlightPageSidebar.astro',
   'src/components/StarlightPageTitle.astro',

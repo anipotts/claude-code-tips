@@ -93,6 +93,26 @@ try {
     const toggled = await page.locator('html').getAttribute('data-theme');
     expect(toggled !== theme, `${viewport.width}px theme toggle did not change theme`);
     expect(await page.locator('html').evaluate((root) => root.classList.contains('dark') === (root.dataset.theme === 'dark')), `${viewport.width}px Starwind and Starlight theme state diverged`);
+    for (let state = 0; state < 2; state++) {
+      await page.locator('.header-search [data-open-modal]').click();
+      const dialog = page.locator('.header-search dialog');
+      await dialog.waitFor({ state: 'visible' });
+      await page.waitForTimeout(200);
+      const geometry = await dialog.evaluate((element) => {
+        const input = element.querySelector('input');
+        const rect = input.getBoundingClientRect();
+        const logo = document.querySelector('.site-name img').getBoundingClientRect();
+        const theme = document.querySelector('[data-slot="theme-toggle"]').getBoundingClientRect();
+        return { height: rect.height, font: getComputedStyle(input).fontSize, fits: rect.left >= logo.right && rect.right <= theme.left };
+      });
+      expect(geometry.height === 32 && geometry.font === '12px' && geometry.fits, `${viewport.width}px search must fit between brand and utilities in both themes`);
+      await dialog.locator('input').fill('configuration');
+      expect(await dialog.locator('input').getAttribute('aria-label') === 'Search', 'search input needs an explicit accessible name');
+      await dialog.locator('.pagefind-ui__result').first().waitFor();
+      expect(await dialog.locator('.pagefind-ui__drawer').evaluate((element) => element.scrollWidth <= element.clientWidth + 1), `${viewport.width}px search results overflow horizontally`);
+      await page.keyboard.press('Escape');
+      await page.locator('[data-slot="theme-toggle"]').click();
+    }
     await page.locator('[data-slot="theme-toggle"]').click();
   }
 
@@ -139,7 +159,9 @@ try {
     };
   });
   expect(Math.abs(searchBox.y - searchBox.triggerTop) <= 2 && searchBox.x <= searchBox.triggerLeft && searchBox.x + searchBox.width >= searchBox.triggerRight, 'mobile search does not expand through the header trigger');
-  expect(searchBox.width > searchBox.triggerWidth * 4, 'mobile search does not expand into an input surface');
+  expect(searchBox.width > 180 && Math.abs(searchBox.width - searchBox.triggerWidth) < 2, 'mobile search does not occupy its reserved header space');
+  const inputStyle = await search.locator('input').first().evaluate((input) => ({ height: input.getBoundingClientRect().height, font: getComputedStyle(input).fontSize, shadow: getComputedStyle(input).boxShadow }));
+  expect(inputStyle.height === 32 && inputStyle.font === '12px' && inputStyle.shadow === 'none', 'search input diverges from compact control sizing');
   expect(searchBox.x >= 15 && searchBox.width <= searchBox.innerWidth - 30 && searchBox.height < searchBox.innerHeight * .75, 'mobile search is not a compact inset popover');
   expect(searchBox.backdropColor === 'rgba(0, 0, 0, 0)' && searchBox.backdropFilter === 'none', 'mobile search still obscures or blurs the page');
   await search.locator('input[type="text"], input[type="search"]').first().fill('codex');
@@ -160,8 +182,13 @@ try {
   const menu = page.locator('[role="menu"]:visible');
   await menu.waitFor({ state: 'visible' });
   expect((await menu.locator('[role="menuitem"]').allTextContents()).map((text) => text.trim()).join('|') === 'view Markdown|copy page link|edit on GitHub', 'page action menu contents are incorrect');
+  expect(await menu.locator('[role="menuitem"]').evaluateAll((items) => items.every((item) => getComputedStyle(item).fontSize === '12px' && getComputedStyle(item).textDecorationLine === 'none')), 'portaled menu items must retain compact typography without prose underlines');
   await page.keyboard.press('Escape');
   await menu.waitFor({ state: 'hidden' });
+  await page.locator('[aria-label="more page actions"]').click();
+  await page.evaluate(() => window.scrollBy(0, 150));
+  await menu.waitFor({ state: 'hidden' });
+  expect(await page.evaluate(() => window.scrollY >= 150), 'scroll dismissal must not jump back to the page-action trigger');
   await page.locator('[data-copy-page]').click();
   await page.waitForFunction(() => navigator.clipboard.readText().then((text) => text.startsWith('# codex')));
 

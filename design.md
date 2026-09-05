@@ -186,6 +186,19 @@ Use the established roles:
 | navigation | header, rail, and controls |
 | metadata | dates, labels, source counts, and operational identifiers |
 
+Compact interface text uses the copy page control as its baseline: `12px` type,
+`16px` line height, `32px` control height, and `16px` action icons. Outline rows
+use `18px` line height for scanning. Keep document headings, prose, tables, and
+code in their reading roles. Portaled menus and tooltips must retain the same
+interface typography as their triggers, with no inherited prose underlines.
+
+Search expands in the header at the existing control height. On small screens,
+the brand mark remains at the left and the input uses the space before the theme
+and menu buttons. Only results extend below the row; the page remains visible.
+Use a restrained neutral input border and preserve keyboard focus and Escape.
+Page action menus close through Starwind when the document scrolls; scrolling
+inside an overlay does not dismiss it.
+
 Use IBM Plex Mono for code, commands, paths, timestamps, and short operational identifiers. Do not set a sentence or table in Mono because it contains one identifier.
 
 Build vertical rhythm from relationships. Keep a heading close to its first paragraph, a caption close to its evidence, and a new major section visibly separate from the preceding group. Fix measure and composition before shrinking text.
@@ -340,6 +353,10 @@ Search is a core route behavior, not a production-only convenience. Starlight an
 `bun run dev` first builds the static output so a current Pagefind index exists. `src/integrations/starlight-dev-search.mjs` serves that generated index through the Astro development server. Local search must open from the visible header control, accept a query without icon overlap, return current guide results, support keyboard and Escape behavior, and remain free of console errors.
 
 Do not add a separate local search implementation, hard-coded mock results, or a custom command palette. `bun run test:dev-search` is the focused contract; `bun run verify` must continue to include it.
+
+SiteHeader supplies an accessible input name because the installed Pagefind UI
+exposes only a title label. This adapter disconnects after labeling the input and
+on route swaps; it owns no search, menu, focus, or keyboard state.
 
 ### invisible progressive agent-native behavior
 
@@ -515,6 +532,21 @@ At minimum, visually inspect:
 - mobile Sheet, search, page actions, tables, image dialog, disclosures, and footer;
 - keyboard focus, Escape, back and forward, hash links, and scroll restoration;
 - 200 percent resize, text spacing, reduced motion, console output, and overflow.
+
+The consistency coverage inventory is:
+
+| surface | owner and regression coverage |
+| --- | --- |
+| header, provider tabs, theme, mobile Sheet | SiteHeader; navigation and accessibility checks |
+| search trigger, input, results, clear and dismissal | upstream Starlight with shell styles; navigation and development search checks |
+| chapter rail, outline, collapse and progress | StarlightSidebar; navigation and accessibility checks |
+| page actions, portaled menu, clipboard and toast | StarlightPageTitle; navigation checks including scroll dismissal and typography |
+| sources, hover cards, code controls, tables and image dialog | Markdown transformation and PublicationEnhancements; navigation and accessibility checks |
+| homepage groups, footer, document typography and metadata | canonical route rendering; site and accessibility checks |
+
+The accessibility sweep covers all canonical routes at eight widths in both
+themes. Search also receives boundary-width visual checks. This is a defined
+coverage matrix, not a guarantee about every browser or future content change.
 
 ## definition of done
 

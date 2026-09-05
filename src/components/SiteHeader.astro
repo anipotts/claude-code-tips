@@ -11,6 +11,7 @@ import { Toaster } from './starwind/toast';
 import { Tooltip, TooltipContent, TooltipTrigger } from './starwind/tooltip';
 
 const current = Astro.url.pathname;
+const HeaderTag = Astro.props.embedded ? 'div' : 'header';
 const activeScope = scopeForPath(current);
 const scopedPages = await getHandbookPages({ scope: activeScope });
 const activeScopeLabel = navigationScopes.find((scope) => scope.id === activeScope)?.label ?? 'handbook';
@@ -19,7 +20,7 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
   : chapterForOrder(page.data.navigation.order)?.label ?? page.data.title;
 ---
 
-<header class="site-header">
+<HeaderTag class="site-header">
   <div class="header-main">
     <a class="site-name" href="/" aria-label={site.interfaceCopy.home}>
       <img src="/favicon.svg" alt="" width="24" height="24" />
@@ -90,5 +91,29 @@ const mobileNavigationLabel = (page: (typeof scopedPages)[number]) => activeScop
       </a>
     ))}
   </nav>
-</header>
+</HeaderTag>
 <Toaster position="bottom-right" duration={3200} />
+
+<script>
+  // Pagefind currently exposes a title-only input label and no input-attribute
+  // configuration. Supply an explicit accessible name without owning search state.
+  let labelObserver: MutationObserver | undefined;
+  const labelSearch = () => {
+    labelObserver?.disconnect();
+    const search = document.querySelector('.header-search');
+    if (!search) return;
+    const labelInput = () => {
+      const input = search.querySelector('input');
+      if (!input) return false;
+      input.setAttribute('aria-label', input.title || 'Search');
+      labelObserver?.disconnect();
+      return true;
+    };
+    if (labelInput()) return;
+    labelObserver = new MutationObserver(labelInput);
+    labelObserver.observe(search, { childList: true, subtree: true });
+  };
+  document.addEventListener('astro:page-load', labelSearch);
+  document.addEventListener('astro:before-swap', () => labelObserver?.disconnect());
+  labelSearch();
+</script>
