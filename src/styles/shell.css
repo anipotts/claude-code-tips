@@ -133,11 +133,10 @@ body[data-search-modal-open] { overflow: auto; }
 
 /* Reserve real header space for the input; the native search dialog keeps keyboard
    and dismissal behavior while only the result list extends below the row. */
-.header-search { --search-expanded-width: clamp(12rem, 24vw, 24rem); inline-size: 7rem; transition: inline-size var(--motion-ui-duration) var(--motion-ui-ease); }
+.header-search { --search-expanded-width: clamp(10rem, 18vw, 16rem); inline-size: var(--search-expanded-width); }
+.header-search site-search > button { inline-size: 100%; }
 .header-search:has(dialog[open]) { inline-size: var(--search-expanded-width); }
 .header-search:has(dialog[open]) site-search > button { inline-size: 100%; max-inline-size: none; opacity: 0; pointer-events: none; }
-.site-header:has(dialog[open]) { grid-template-columns: auto auto minmax(0, 1fr); column-gap: 1rem; }
-.site-header:has(dialog[open]) .site-name span { display: none; }
 [data-slot='dropdown-content'] [role='menuitem'] { min-block-size: var(--control-size); padding: .5rem; gap: .5rem; color: inherit; text-decoration: none; }
 [data-slot='dropdown-content'] [role='menuitem'] svg { inline-size: var(--control-icon-size); block-size: var(--control-icon-size); }
 .outline-review-state { max-width: 42rem; padding: 1rem 1.1rem; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface-subtle); }
@@ -229,17 +228,16 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
 
 @media (max-width: 47.99rem) {
   :root { --site-header-height: 5.75rem; --sl-mobile-toc-height: 0rem; }
-  .site-header { padding-inline: 0; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 3.25rem 2.5rem; }
-  .site-name { grid-column: 1; grid-row: 1; margin-inline-start: var(--site-gutter); }
+  .site-header { padding-inline: var(--site-gutter); grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 3.25rem 2.5rem; }
+  .site-name { grid-column: 1; grid-row: 1; margin-inline-start: 0; }
   .header-actions {
     grid-column: 2;
     grid-row: 1;
-    gap: .125rem;
-    margin-inline-end: var(--site-gutter);
-    padding: .125rem;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--surface-subtle) 58%, transparent);
+    gap: .25rem;
+    margin-inline-end: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
   }
   .header-search site-search > button,
   .site-header-control {
@@ -249,7 +247,7 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
     min-block-size: 2rem;
     padding: 0;
     border: 0;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     background: transparent;
   }
   .header-search site-search > button { justify-content: center; }
@@ -260,7 +258,7 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
   .header-search site-search > button span,
   .header-search site-search > button kbd { display: none; }
   .header-actions .github-link { display: none; }
-  .provider-tabs { grid-column: 1 / -1; grid-row: 2; justify-content: center; gap: .125rem; padding: .125rem var(--site-gutter) .375rem; }
+  .provider-tabs { grid-column: 1 / -1; grid-row: 2; justify-content: center; gap: .125rem; padding: .125rem 0 .375rem; }
   .provider-tabs a { min-height: 1.875rem; padding: .25rem .5rem; }
   .sidebar-pane { display: none !important; }
   .right-sidebar-container { display: block !important; flex: 0 0 0 !important; width: 0 !important; }
@@ -313,6 +311,7 @@ html[data-theme='dark'] .provider-product-icon.has-theme-pair .provider-product-
   .header-search { inline-size: var(--control-size); }
   .site-header:has(dialog[open]) { grid-template-columns: 1.5rem minmax(0, 1fr); column-gap: .75rem; padding-inline: var(--site-gutter); }
   .site-header:has(dialog[open]) .site-name { margin: 0; }
+  .site-header:has(dialog[open]) .site-name span { display: none; }
   .site-header:has(dialog[open]) .header-actions { justify-self: stretch; margin: 0; padding: 0; border: 0; background: transparent; }
   .header-search:has(dialog[open]) { flex: 1; min-inline-size: 0; inline-size: auto; }
   .header-search site-search dialog { inset: .625rem auto auto calc(var(--site-gutter) + 2.25rem); inline-size: calc(100dvw - 2 * var(--site-gutter) - 6.75rem); margin: 0; translate: 0; }
